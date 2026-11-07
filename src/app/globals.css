@@ -405,7 +405,8 @@ a {
   max-width: 42rem;
   font-family: var(--font-body);
   font-size: var(--text-body);
-  line-height: var(--leading-body);
+  /* Pills are taller than the 24px body line, so this paragraph opens to 32px. */
+  line-height: var(--space-4);
   letter-spacing: 0;
   color: var(--text);
   text-wrap: pretty;
