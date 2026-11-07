@@ -397,7 +397,7 @@ a {
 }
 
 .hero-copy {
-  --pill-font-size: var(--text-caption);
+  --pill-font-size: var(--text-body);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
