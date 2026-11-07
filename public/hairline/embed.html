@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tray</title>
+<style>
+  /* Same paper as the portfolio, so the frame does not read as a card. */
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #f3f3f1;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+  /* Same paper as the page, so this reads as air above the tray, not a new bar.
+     A back-row name sits in this band instead of being cut by the frame. */
+  body {
+    position: relative;
+    padding-top: 2.25rem;
+  }
+  #stage {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    aspect-ratio: auto;
+    --hairline-plate: #f3f3f1;
+    --hairline-hi: #121211;
+    --hairline-edge: #8d8d86;
+    --hairline-mid: #b9b9b2;
+    --hairline-lo: #d8d8d2;
+  }
+  /* Lifted tile only. Resting creases stay on the lighter line above. */
+  #stage svg path.crease-lift { stroke: #a3a39c; }
+  /* The name sits above the mark, outside the drawing. It only shows while the pointer is on that tile. */
+  #caption {
+    position: absolute;
+    z-index: 2;
+    margin: 0;
+    padding: 0.1rem 0.5rem 0.14rem;
+    border: 1px solid rgba(18, 18, 17, 0.14);
+    border-radius: 999px;
+    background: #fbfbfa;
+    color: #5c5c57;
+    font: 400 0.75rem/1.3 ui-sans-serif, system-ui, sans-serif;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 6px));
+    transition: opacity 160ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  #caption.on { opacity: 1; }
+  /* Centered on the tray, just under it. placeNote() shifts it onto the drawing. */
+  #note {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    height: auto;
+    margin: 0.15rem 0 0;
+    padding-top: 0;
+    color: #8a8a84;
+    font: 400 0.68rem/1.15rem ui-sans-serif, system-ui, sans-serif;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<p id="caption" aria-hidden="true">Figma</p>
+<p id="note">Toolkit til Oct 2026; Expanding Ongoing</p>
+<script src="/hairline/kernel.js"></script>
+<script>
+  /* The figure calls hairline() as soon as it loads. This is the page it lands on. */
+  window.hairline = (figure) => {
+    const stage = document.getElementById("stage");
+    HL.inject(document);
+    stage.setAttribute("data-hairline", figure.name);
+    stage.setAttribute("role", "img");
+    stage.setAttribute("aria-label", figure.means);
+    /* Cropped to the tray, with room above for a lifted tile. The drawing scale is unchanged.
+       The bottom sits a hair under the painted shadow. The fade is back to paper by y 266. */
+    const svg = HL.mk("svg", { viewBox: "35 65.3 330.1 201.7", preserveAspectRatio: "xMidYMid meet", "aria-hidden": "true" }, stage);
+    const label = document.getElementById("caption");
+    let caption = "";
+    let tracking = 0;
+    /* Follow the active mark while its name is showing, so the label stays above it as the tile lifts. */
+    function placeLabel() {
+      const mark = caption
+        ? stage.querySelector(`svg svg[data-mark="${CSS.escape(caption)}"]`)
+        : null;
+      if (!mark) return;
+      const rootBox = document.body.getBoundingClientRect();
+      const box = mark.getBoundingClientRect();
+      const above = label.offsetHeight + 6;
+      label.style.left = (box.left - rootBox.left + box.width / 2) + "px";
+      label.style.top = Math.max(box.top - rootBox.top, above) + "px";
+      label.textContent = caption;
+    }
+    function track() {
+      placeLabel();
+      tracking = requestAnimationFrame(track);
+    }
+    const read = {
+      get textContent() { return caption; },
+      set textContent(value) {
+        caption = value == null ? "" : String(value);
+        /* Tool names from TILE_MARKS; "rest" / "slot N" stay quiet. */
+        const showing = !!caption && caption !== "rest" && !caption.startsWith("slot ");
+        label.classList.toggle("on", showing);
+        label.setAttribute("aria-hidden", showing ? "false" : "true");
+        if (showing && !tracking) tracking = requestAnimationFrame(track);
+        if (!showing && tracking) { cancelAnimationFrame(tracking); tracking = 0; }
+      },
+    };
+    const mounted = figure.mount({ stage, svg, read }, figure.range[1]);
+    const note = document.getElementById("note");
+    const drawn = svg.getBBox();
+    /* The line's center meets the tray's center. Meet letterboxing is included,
+       so a cropped frame still lines the words up with the drawing. */
+    function placeNote() {
+      const vb = svg.viewBox.baseVal;
+      const stageBox = stage.getBoundingClientRect();
+      const scale = Math.min(stageBox.width / vb.width, stageBox.height / vb.height);
+      const padX = (stageBox.width - vb.width * scale) / 2;
+      const trayCenter = padX + (drawn.x + drawn.width / 2 - vb.x) * scale;
+      note.style.transform = "translateX(" + (trayCenter - stageBox.width / 2) + "px)";
+    }
+    placeNote();
+    addEventListener("resize", placeNote);
+    const route = mounted && mounted.tour ? mounted.tour : figure.tour;
+    if (route) HL.tour(stage, route);
+  };
+</script>
+<script src="/hairline/tray.js"></script>
+</body>
+</html>

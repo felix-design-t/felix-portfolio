@@ -1,0 +1,127 @@
+import { Fragment, Suspense } from "react";
+import { ExperiencePill } from "@/components/experience-pill";
+import { TrayFigure } from "@/components/tray-figure";
+import { heroSkills, siteCopy, type HeroPill } from "@/content/site";
+
+/**
+ * The introduction is one text block, like a short bio in a document.
+ * The greeting is a serif heading at reading size.
+ * Two sans paragraphs follow, with the tray drawing to their right.
+ * The years and the skills are inline chips.
+ * The experience chip opens a live timer. The other chips only react to hover.
+ */
+export function Hero() {
+  return (
+    <section className="hero" aria-labelledby="hero-heading">
+      <h1 id="hero-heading" className="hero-greeting">
+        {siteCopy.greeting}
+      </h1>
+      <div className="hero-body">
+        <div className="hero-copy">
+          <p>
+            A product designer through an engineering lens, with{" "}
+            <Suspense fallback={<span className="skill-pill">…</span>}>
+              <ExperiencePill />
+            </Suspense>{" "}
+            of experience building B2B products across startups and enterprises.
+          </p>
+          <p>
+            I own my work from concept to shipped product outcomes, specializing
+            in <SkillSentence pills={heroSkills} />.
+          </p>
+        </div>
+        <TrayFigure />
+      </div>
+    </section>
+  );
+}
+
+function SkillSentence({ pills }: { pills: readonly HeroPill[] }) {
+  return pills.map((pill, index) => {
+    const isLast = index === pills.length - 1;
+    const isJustBeforeLast = index === pills.length - 2;
+
+    let separator = "";
+    // The last chip stays attached to "and", so the line does not break between them.
+    if (!isLast) separator = isJustBeforeLast ? ", and\u00a0" : ", ";
+
+    return (
+      <Fragment key={pill.id}>
+        <SkillPill pill={pill} />{separator}
+      </Fragment>
+    );
+  });
+}
+
+const skillAccent = {
+  strategy: "slate",
+  systems: "teal",
+  agentic: "olive",
+  "systems-design": "bronze",
+  code: "rose",
+} as const;
+
+function SkillPill({ pill }: { pill: HeroPill }) {
+  return (
+    <span className="skill-pill" data-accent={skillAccent[pill.id]}>
+      <SkillIcon id={pill.id} />
+      {pill.label}
+    </span>
+  );
+}
+
+function SkillIcon({ id }: { id: HeroPill["id"] }) {
+  if (id === "strategy") return <StrategyIcon />;
+  if (id === "systems") return <SystemsIcon />;
+  if (id === "agentic") return <AgenticIcon />;
+  if (id === "systems-design") return <DesignSystemsIcon />;
+  return <CodeIcon />;
+}
+
+function StrategyIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className="skill-pill-icon">
+      <circle cx="8" cy="8" r="2.1" />
+      <path d="M8 2.2v2.1M8 11.7v2.1M2.2 8h2.1M11.7 8h2.1" />
+    </svg>
+  );
+}
+
+function SystemsIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className="skill-pill-icon">
+      <circle cx="4.2" cy="4.2" r="1.35" />
+      <circle cx="11.8" cy="4.2" r="1.35" />
+      <circle cx="4.2" cy="11.8" r="1.35" />
+      <circle cx="11.8" cy="11.8" r="1.35" />
+      <path d="M5.6 4.2h5.6M4.2 5.6v5.6M11.8 5.6v5.6M5.6 11.8h5.6" />
+    </svg>
+  );
+}
+
+function AgenticIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className="skill-pill-icon">
+      <path d="M8 1.8 9.1 6.2 13.6 7.4 9.1 8.6 8 13.2 6.9 8.6 2.4 7.4 6.9 6.2Z" />
+    </svg>
+  );
+}
+
+function DesignSystemsIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className="skill-pill-icon">
+      <rect x="2.4" y="2.4" width="4.6" height="4.6" rx="0.6" />
+      <rect x="9" y="2.4" width="4.6" height="4.6" rx="0.6" />
+      <rect x="2.4" y="9" width="4.6" height="4.6" rx="0.6" />
+      <rect x="9" y="9" width="4.6" height="4.6" rx="0.6" />
+    </svg>
+  );
+}
+
+function CodeIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className="skill-pill-icon">
+      <path d="M6.2 3.6 3.2 8l3 4.4M9.8 3.6 12.8 8l-3 4.4" />
+    </svg>
+  );
+}
