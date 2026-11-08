@@ -83,8 +83,9 @@
   --icon-size: 16px;
   --icon-stroke: 1.5;
 
+  /* Radius: covers/frames 8 · small UI 4 · pills full */
+  --radius-xs: 4px;
   --radius-sm: 8px;
-  --radius-md: 16px;
   --radius-pill: 999px;
   --ease-out: cubic-bezier(0.2, 0, 0, 1);
 }
@@ -527,7 +528,7 @@ button.skill-pill {
   padding: 0.55rem 0.55rem 0.4rem;
   translate: -50% 0;
   border: 1px solid var(--hairline);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xs);
   background: var(--surface);
   box-shadow: var(--shadow-pop);
 }
@@ -551,7 +552,7 @@ button.skill-pill {
   width: 2.55rem;
   height: 2.3rem;
   overflow: hidden;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
   background: var(--fg);
   color: var(--bg);
   font-size: 1.15rem;
@@ -679,9 +680,9 @@ button.skill-pill {
 .work-slot-cover {
   display: block;
   aspect-ratio: 16 / 10;
-  /* Borderless, sharp plates — no radius, no stroke */
+  /* Borderless plates — Cambio 8px corners, no stroke */
   background: var(--mat);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
 }
 
 .work-slot-caption {
