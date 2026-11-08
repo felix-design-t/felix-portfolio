@@ -45,17 +45,17 @@
   --ink: var(--text);
   --line: var(--border);
 
-  /* Type */
+  /* Type — Jinny light scale (px / line-height) */
   --font-serif: var(--font-geist-serif), "Times New Roman", serif;
   --font-body: var(--font-geist-sans), sans-serif;
   --font-display: var(--font-serif);
-  --text-hero: 24px;
-  --leading-hero: 32px;
+  --text-hero: 22px;
+  --leading-hero: 28px;
   --tracking-hero: -0.02em;
   --text-section: 16px;
-  --leading-section: 24px;
-  --text-body: 16px;
-  --leading-body: 24px;
+  --leading-section: 20px;
+  --text-body: 15px;
+  --leading-body: 28px;
   --text-caption: 14px;
   --leading-caption: 21px;
   --text-footer: 14px;
@@ -338,7 +338,7 @@ a {
   padding-inline: 0.8rem;
   border-radius: var(--nav-highlight-radius);
   color: var(--muted);
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
   line-height: 1;
   text-decoration: none;
   white-space: nowrap;
@@ -418,8 +418,8 @@ a {
   width: 100%;
   font-family: var(--font-body);
   font-size: var(--text-body);
-  /* Pills are taller than the 24px body line, so this paragraph opens to 32px. */
-  line-height: var(--space-4);
+  /* 15/28 body; open enough for inline skill pills to sit in the line. */
+  line-height: var(--leading-body);
   letter-spacing: 0;
   /* Craft muted paragraph — secondary, not primary title ink */
   color: var(--text-secondary);
@@ -596,7 +596,7 @@ button.skill-pill {
   display: inline-flex;
   align-items: center;
   gap: 0.28rem;
-  font-size: 0.9375rem;
+  font-size: var(--text-body);
   text-underline-offset: 0.25em;
   text-decoration-thickness: 1px;
   transition: color 150ms var(--ease-out);
