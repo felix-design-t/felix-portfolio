@@ -620,7 +620,9 @@ button.skill-pill {
 }
 
 .selected-work {
-  margin-top: var(--space-16);
+  /* Next block after the hero. The hero's own bottom padding is the gap;
+     the old 128px step pushed this section too far down the page. */
+  margin-top: 0;
   padding-bottom: var(--space-section);
   scroll-margin-top: var(--space-3);
 }
@@ -691,16 +693,21 @@ button.skill-pill {
   line-height: var(--leading-caption);
   color: var(--text);
   text-align: left;
-  transition: color 150ms var(--ease-out);
 }
 
+/* Title and the short label keep their idle inks. Hover does not retint them. */
 .work-slot:hover .work-slot-caption,
 .work-slot:focus-visible .work-slot-caption {
-  color: var(--accent-blue);
+  color: var(--text);
 }
 
 .work-slot-meta {
   font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.work-slot:hover .work-slot-meta,
+.work-slot:focus-visible .work-slot-meta {
   color: var(--text-secondary);
 }
 
