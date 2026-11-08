@@ -1,5 +1,5 @@
 /**
- * The tray drawing, to the right of the introduction.
+ * The tray drawing, stacked under the introduction in the home column.
  *
  * The drawing is its own small page. A frame keeps its clock and its pointer
  * on that page, the way a picture frame keeps a drawing off the wall.

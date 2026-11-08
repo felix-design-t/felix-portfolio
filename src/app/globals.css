@@ -71,8 +71,12 @@
   --space-6: 48px;
   --space-8: 64px;
   --space-16: 128px;
-  --page-width: 72rem;
-  --page-pad: clamp(16px, 4vw, 40px);
+  /* One reading column: Jinny-width content, side gutters */
+  --content-max: 680px;
+  --gutter: 1.5rem; /* 24px */
+  --gutter-sm: 2rem; /* 32px from sm / 640px */
+  --page-width: var(--content-max);
+  --page-pad: var(--gutter);
   --space-section: clamp(72px, 9vw, 112px);
 
   /* Icons: Geist set, 16px, stroke 1.5. Custom pill icons use the same size. */
@@ -165,11 +169,18 @@ a {
   color: inherit;
 }
 
-/* Shared column. Header, page, and footer all sit in this measure. */
+/* Shared column. Main + footer sit in this centered measure.
+   Pill nav stays viewport-centered on its own and does not use this shell. */
 .shell-inner {
-  width: min(100%, var(--page-width));
+  width: min(100%, var(--content-max));
   margin-inline: auto;
-  padding-inline: var(--page-pad);
+  padding-inline: var(--gutter);
+}
+
+@media (min-width: 640px) {
+  .shell-inner {
+    padding-inline: var(--gutter-sm);
+  }
 }
 
 .skip-link {
@@ -378,8 +389,6 @@ a {
 
 .hero-greeting {
   width: 100%;
-  max-width: 42rem;
-  margin-inline: auto;
   font-family: var(--font-serif);
   font-size: var(--text-hero);
   font-weight: 400;
@@ -389,13 +398,13 @@ a {
 }
 
 /*
-  The paragraphs and the tray share one row on a wide page.
-  On a narrow page the tray follows the text, so the sentence is read first.
+  One column: intro text first, toolkit tray stacked under it.
+  No side-by-side row at any breakpoint.
 */
 .hero-body {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: var(--space-3);
   margin-top: var(--space-3);
   container-type: inline-size;
@@ -407,7 +416,6 @@ a {
   flex-direction: column;
   gap: var(--space-3);
   width: 100%;
-  max-width: 42rem;
   font-family: var(--font-body);
   font-size: var(--text-body);
   /* Pills are taller than the 24px body line, so this paragraph opens to 32px. */
@@ -423,14 +431,13 @@ a {
   canvas instead of on a white card. The engine reads these names.
 */
 .hero-figure {
-  /* A step inside the paragraph column. Height follows that width,
+  /* Full column width under the intro. Height follows that width,
      plus the name band above the tray and the line under it. */
-  /* 8% larger than the column fit. The drawing inside scales with the frame. */
-  --tray-w: calc(min(88cqi, 36.96rem) * 1.08);
-  align-self: center;
+  --tray-w: 100%;
+  align-self: stretch;
   width: var(--tray-w);
-  margin-top: -0.9rem;
-  height: calc(var(--tray-w) * 201.7 / 330.1 + 1.15rem + 2.25rem);
+  margin-top: var(--space-1);
+  height: calc(100cqi * 201.7 / 330.1 + 1.15rem + 2.25rem);
   aspect-ratio: auto;
 }
 
@@ -807,33 +814,6 @@ button.skill-pill {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-  }
-}
-
-@media (min-width: 960px) {
-  .hero-greeting {
-    max-width: none;
-    margin-inline: 0;
-  }
-
-  .hero-body {
-    display: block;
-    position: relative;
-  }
-
-  .hero-copy {
-    max-width: calc(100% - clamp(25.39rem, 35.97vw, 35.97rem) * 0.82525 * 1.08 - clamp(1.25rem, 2.75vw, 3rem) - 2rem - 16px);
-  }
-
-  /* The line under the tray meets the bottom edge of the second paragraph. */
-  .hero-figure {
-    --tray-full: calc(clamp(25.39rem, 35.97vw, 35.97rem) * 1.08);
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    margin-top: 0;
-    width: calc(var(--tray-full) * 0.82525);
-    height: calc(var(--tray-full) * 0.5043 + 1.15rem + 2.25rem);
   }
 }
 

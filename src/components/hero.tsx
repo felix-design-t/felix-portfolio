@@ -6,7 +6,8 @@ import { heroSkills, siteCopy, type HeroPill } from "@/content/site";
 /**
  * The introduction is one text block, like a short bio in a document.
  * The greeting is a serif heading at reading size.
- * Two sans paragraphs follow, with the tray drawing to their right.
+ * Two sans paragraphs follow; the toolkit tray stacks under them
+ * in the same centered reading column.
  * The years and the skills are inline chips.
  * The experience chip opens a live timer. The other chips only react to hover.
  */
