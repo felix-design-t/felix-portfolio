@@ -5,8 +5,8 @@
   Prompt with: "Use the tokens in src/app/globals.css. Do not invent hex or font sizes."
 
   Roles
-  - --text on reading text (greeting, titles, paragraphs)
-  - --text-secondary on captions, footer, supporting lines
+  - --text on primary titles only (greeting, section headings)
+  - --text-secondary on hero body paragraphs, skill-pill labels, captions, footer
   - Accents (Craft *-600) only on small marks (skill icons) and quiet link hover. A filled accent pill uses --on-accent
   - Serif: greeting + section titles. Sans: body, captions, footer, pills. Mono: short labels
   - Spacing steps are 8px. Hairline color stays as tuned.
@@ -413,7 +413,8 @@ a {
   /* Pills are taller than the 24px body line, so this paragraph opens to 32px. */
   line-height: var(--space-4);
   letter-spacing: 0;
-  color: var(--text);
+  /* Craft muted paragraph — secondary, not primary title ink */
+  color: var(--text-secondary);
   text-wrap: pretty;
 }
 
