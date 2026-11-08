@@ -20,9 +20,9 @@ export const experienceStartedOn = { year: 2023, month: 2, day: 1 } as const;
 export const heroSkills = [
   { id: "strategy", label: "product strategy" },
   { id: "systems", label: "systems thinking" },
-  { id: "agentic", label: "agentic workflows" },
-  { id: "code", label: "prototyping in code" },
   { id: "systems-design", label: "design systems" },
+  { id: "code", label: "prototyping in code" },
+  { id: "agentic", label: "agentic workflows" },
 ] as const;
 
 export type HeroPill = (typeof heroSkills)[number];
@@ -31,8 +31,8 @@ export const siteCopy = {
   name: "Felix Teng",
   greeting: "Hi, I'm Felix.",
   description:
-    "A product designer through an engineering lens, with 3 years 9 months of experience building B2B products across startups and enterprises.",
-  positioningLine: "Product designer · 3 years 9 months · B2B products",
+    "A product designer through an engineering lens, with 3 years 9 months of experience building B2B SaaS products across startups and enterprises.",
+  positioningLine: "Product designer · 3 years 9 months · B2B SaaS",
 } as const;
 
 /** Footer bar, left to right. Swap the addresses when the real ones are ready. */

@@ -1,4 +1,4 @@
-import { Fragment, Suspense } from "react";
+import { Suspense } from "react";
 import { ExperiencePill } from "@/components/experience-pill";
 import { TrayFigure } from "@/components/tray-figure";
 import { heroSkills, siteCopy, type HeroPill } from "@/content/site";
@@ -23,34 +23,22 @@ export function Hero() {
             <Suspense fallback={<span className="skill-pill">…</span>}>
               <ExperiencePill />
             </Suspense>{" "}
-            of experience building B2B products across startups and enterprises.
+            of experience building B2B SaaS products across startups and
+            enterprises.
           </p>
           <p>
-            I own my work from concept to shipped product outcomes, specializing
-            in <SkillSentence pills={heroSkills} />.
+            I own my work from concept to shipped outcomes across{" "}
+            <SkillPill pill={heroSkills[0]} />,{" "}
+            <SkillPill pill={heroSkills[1]} />, and{" "}
+            <SkillPill pill={heroSkills[2]} />, and I use{" "}
+            <SkillPill pill={heroSkills[3]} /> to craft and test{" "}
+            <SkillPill pill={heroSkills[4]} /> that drive real business results.
           </p>
         </div>
         <TrayFigure />
       </div>
     </section>
   );
-}
-
-function SkillSentence({ pills }: { pills: readonly HeroPill[] }) {
-  return pills.map((pill, index) => {
-    const isLast = index === pills.length - 1;
-    const isJustBeforeLast = index === pills.length - 2;
-
-    let separator = "";
-    // The last chip stays attached to "and", so the line does not break between them.
-    if (!isLast) separator = isJustBeforeLast ? ", and\u00a0" : ", ";
-
-    return (
-      <Fragment key={pill.id}>
-        <SkillPill pill={pill} />{separator}
-      </Fragment>
-    );
-  });
 }
 
 /* Craft accent map: strategy→blue, systems→emerald, design systems→amber,
