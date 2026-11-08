@@ -824,11 +824,9 @@ button.skill-pill {
   }
 }
 
+/* Selected Work stays one project per row at every breakpoint
+   (.selected-grid is always 1fr; no two-up from sm/md). */
 @media (min-width: 800px) {
-  .selected-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .work-row {
     grid-template-columns: minmax(11rem, 16rem) minmax(0, 1fr) auto;
     align-items: baseline;
