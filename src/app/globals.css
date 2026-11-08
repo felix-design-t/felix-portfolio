@@ -14,7 +14,7 @@
 
 :root {
   /* Color — Craft light tokens (craft.gustavofior.com) */
-  --bg: #f3f3f1;
+  --bg: #fafafa; /* Craft --background */
   --surface: #fbfbfa;
   --mat: #e7e7e3;
   --text: #171717; /* Craft --foreground */
@@ -34,7 +34,7 @@
   --fg-soft: rgba(23, 23, 23, 0.06);
   --fg-mid: rgba(23, 23, 23, 0.1);
   --border-strong: rgba(23, 23, 23, 0.28);
-  --on-fg-soft: rgba(243, 243, 241, 0.35);
+  --on-fg-soft: rgba(250, 250, 250, 0.35);
   --shadow-nav: 0 10px 28px var(--fg-soft);
   --shadow-pop: 0 12px 28px var(--fg-mid);
 
@@ -115,10 +115,10 @@ html {
 
 body {
   min-height: 100%;
-  /* Soft vertical wash so the page is not flat paper-white */
+  /* Soft top wash over Craft page ground; no hard-coded wash hex */
   background:
     radial-gradient(120% 70% at 50% -10%, rgba(255, 255, 255, 0.55), transparent 55%),
-    linear-gradient(180deg, #f6f6f4 0%, var(--bg) 38%, #f0f0ed 100%);
+    var(--bg);
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
