@@ -53,12 +53,14 @@ function SkillSentence({ pills }: { pills: readonly HeroPill[] }) {
   });
 }
 
+/* Craft accent map: strategy→blue, systems→emerald, design systems→amber,
+   code→violet, agentic→rose. Orange + cyan stay available as tokens. */
 const skillAccent = {
-  strategy: "slate",
-  systems: "teal",
-  agentic: "olive",
-  "systems-design": "bronze",
-  code: "rose",
+  strategy: "blue",
+  systems: "emerald",
+  agentic: "rose",
+  "systems-design": "amber",
+  code: "violet",
 } as const;
 
 function SkillPill({ pill }: { pill: HeroPill }) {

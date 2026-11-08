@@ -7,30 +7,33 @@
   Roles
   - --text on reading text (greeting, titles, paragraphs)
   - --text-secondary on captions, footer, supporting lines
-  - Accents only on small marks (skill icons). A filled accent pill uses --on-accent
+  - Accents (Craft *-600) only on small marks (skill icons) and quiet link hover. A filled accent pill uses --on-accent
   - Serif: greeting + section titles. Sans: body, captions, footer, pills. Mono: short labels
   - Spacing steps are 8px. Hairline color stays as tuned.
 */
 
 :root {
-  /* Color */
+  /* Color — Craft light tokens (craft.gustavofior.com) */
   --bg: #f3f3f1;
   --surface: #fbfbfa;
   --mat: #e7e7e3;
-  --text: #121211;
-  --text-secondary: #5c5c57;
+  --text: #171717; /* Craft --foreground */
+  --text-secondary: #737373; /* Craft --muted-foreground */
   --on-accent: #ffffff;
-  --accent-slate: #2e5874;
-  --accent-teal: #1e655c;
-  --accent-olive: #4a5e38;
-  --accent-bronze: #7a542c;
-  --accent-rose: #6e4552;
-  --border: rgba(18, 18, 17, 0.14);
+  /* Craft section icon *-600 hues. Accents stay on small marks only. */
+  --accent-orange: #f05100;
+  --accent-blue: #155dfc;
+  --accent-rose: #e70044;
+  --accent-amber: #dd7400;
+  --accent-violet: #7f22fe;
+  --accent-emerald: #009767;
+  --accent-cyan: #0092b5;
+  --border: rgba(23, 23, 23, 0.14);
   --hairline: var(--border);
   --focus: var(--text);
-  --fg-soft: rgba(18, 18, 17, 0.06);
-  --fg-mid: rgba(18, 18, 17, 0.1);
-  --border-strong: rgba(18, 18, 17, 0.28);
+  --fg-soft: rgba(23, 23, 23, 0.06);
+  --fg-mid: rgba(23, 23, 23, 0.1);
+  --border-strong: rgba(23, 23, 23, 0.28);
   --on-fg-soft: rgba(243, 243, 241, 0.35);
   --shadow-nav: 0 10px 28px var(--fg-soft);
   --shadow-pop: 0 12px 28px var(--fg-mid);
@@ -94,11 +97,13 @@
   --color-line: var(--line);
   --color-border: var(--border);
   --color-mat: var(--mat);
-  --color-accent-slate: var(--accent-slate);
-  --color-accent-teal: var(--accent-teal);
-  --color-accent-olive: var(--accent-olive);
-  --color-accent-bronze: var(--accent-bronze);
+  --color-accent-orange: var(--accent-orange);
+  --color-accent-blue: var(--accent-blue);
   --color-accent-rose: var(--accent-rose);
+  --color-accent-amber: var(--accent-amber);
+  --color-accent-violet: var(--accent-violet);
+  --color-accent-emerald: var(--accent-emerald);
+  --color-accent-cyan: var(--accent-cyan);
   --font-sans: var(--font-body);
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
@@ -470,11 +475,21 @@ a {
   color: var(--text);
 }
 
-.skill-pill[data-accent="slate"] .skill-pill-icon { color: var(--accent-slate); }
-.skill-pill[data-accent="teal"] .skill-pill-icon { color: var(--accent-teal); }
-.skill-pill[data-accent="olive"] .skill-pill-icon { color: var(--accent-olive); }
-.skill-pill[data-accent="bronze"] .skill-pill-icon { color: var(--accent-bronze); }
+.skill-pill[data-accent="orange"] .skill-pill-icon { color: var(--accent-orange); }
+.skill-pill[data-accent="blue"] .skill-pill-icon { color: var(--accent-blue); }
 .skill-pill[data-accent="rose"] .skill-pill-icon { color: var(--accent-rose); }
+.skill-pill[data-accent="amber"] .skill-pill-icon { color: var(--accent-amber); }
+.skill-pill[data-accent="violet"] .skill-pill-icon { color: var(--accent-violet); }
+.skill-pill[data-accent="emerald"] .skill-pill-icon { color: var(--accent-emerald); }
+.skill-pill[data-accent="cyan"] .skill-pill-icon { color: var(--accent-cyan); }
+
+.skill-pill[data-accent="orange"]:hover { color: var(--accent-orange); }
+.skill-pill[data-accent="blue"]:hover { color: var(--accent-blue); }
+.skill-pill[data-accent="rose"]:hover { color: var(--accent-rose); }
+.skill-pill[data-accent="amber"]:hover { color: var(--accent-amber); }
+.skill-pill[data-accent="violet"]:hover { color: var(--accent-violet); }
+.skill-pill[data-accent="emerald"]:hover { color: var(--accent-emerald); }
+.skill-pill[data-accent="cyan"]:hover { color: var(--accent-cyan); }
 
 button.skill-pill,
 button.skill-pill span {
@@ -591,8 +606,9 @@ button.skill-pill {
   transition: translate 180ms var(--ease-out);
 }
 
-.text-link:hover {
-  color: var(--muted);
+.text-link:hover,
+.text-link:focus-visible {
+  color: var(--accent-blue);
 }
 
 .selected-work {
@@ -627,8 +643,9 @@ button.skill-pill {
   color: var(--text-secondary);
 }
 
-.section-heading .text-link:hover {
-  color: inherit;
+.section-heading .text-link:hover,
+.section-heading .text-link:focus-visible {
+  color: var(--accent-blue);
 }
 
 .section-heading .text-link:hover .text-link-icon {
@@ -666,6 +683,12 @@ button.skill-pill {
   line-height: var(--leading-caption);
   color: var(--text);
   text-align: left;
+  transition: color 150ms var(--ease-out);
+}
+
+.work-slot:hover .work-slot-caption,
+.work-slot:focus-visible .work-slot-caption {
+  color: var(--accent-blue);
 }
 
 .work-slot-meta {
@@ -770,10 +793,12 @@ button.skill-pill {
 .footer-links a {
   color: var(--text-secondary);
   text-decoration: none;
+  transition: color 150ms var(--ease-out);
 }
 
-.footer-links a:hover {
-  color: var(--text);
+.footer-links a:hover,
+.footer-links a:focus-visible {
+  color: var(--accent-blue);
 }
 
 @media (min-width: 720px) {
