@@ -56,12 +56,10 @@
   --leading-section: 20px;
   --text-body: 15px;
   --leading-body: 28px;
-  --text-caption: 14px;
-  --leading-caption: 21px;
+  --text-caption: 12px;
+  --leading-caption: 16px;
   --text-footer: 14px;
   --leading-footer: 20px;
-  --text-meta: 12px;
-  --leading-meta: 16px;
 
   /* Spacing, 8px steps */
   --space-1: 8px;
@@ -370,10 +368,10 @@ a {
 
 .kicker {
   font-family: var(--font-mono);
-  font-size: var(--text-meta);
+  font-size: var(--text-caption);
   font-weight: 400;
   letter-spacing: 0;
-  line-height: var(--leading-meta);
+  line-height: var(--leading-caption);
   text-transform: uppercase;
   color: var(--text-secondary);
 }
@@ -574,10 +572,10 @@ button.skill-pill {
 .experience-unit-label {
   color: var(--text-secondary);
   font-family: var(--font-mono);
-  font-size: var(--text-meta);
+  font-size: var(--text-caption);
   font-weight: 500;
   letter-spacing: 0;
-  line-height: var(--leading-meta);
+  line-height: var(--leading-caption);
   text-transform: uppercase;
 }
 
@@ -713,9 +711,9 @@ button.skill-pill {
 
 .work-row-meta {
   font-family: var(--font-mono);
-  font-size: var(--text-meta);
+  font-size: var(--text-caption);
   letter-spacing: 0;
-  line-height: var(--leading-meta);
+  line-height: var(--leading-caption);
   color: var(--text-secondary);
 }
 
