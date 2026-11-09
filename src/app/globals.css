@@ -509,6 +509,80 @@ button.skill-pill {
   cursor: pointer;
 }
 
+/* Fexi's Morph mark (loading.dev). */
+.fexi-morph {
+  flex: none;
+  color: var(--text-secondary);
+}
+
+/*
+  Fexi in the bio: the mark, then the name in mono. No pill.
+  The word sits on the sentence baseline; the mark centers on the line.
+  Hover and focus match the Paycom word: ink color, then a line draws in.
+*/
+.fexi-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* The library writes its size inline, so the icon token needs !important to win. */
+.fexi-link .fexi-morph {
+  --ld-size: var(--icon-size) !important;
+  align-self: center;
+}
+
+/* Keeps "ask", the mark, and the word on one line, so the mark never starts a line. */
+.fexi-phrase {
+  white-space: nowrap;
+}
+
+/* Natural line height, so the underline sits where it does under Paycom. */
+.fexi-word {
+  position: relative;
+  font-family: var(--font-mono);
+  line-height: normal;
+  transition: color 180ms var(--ease-out) 280ms;
+}
+
+.fexi-word::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.08em;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 280ms var(--ease-out);
+}
+
+.fexi-link:hover .fexi-word,
+.fexi-link:focus-visible .fexi-word {
+  color: var(--text);
+  transition-delay: 0ms;
+}
+
+.fexi-link:hover .fexi-word::after,
+.fexi-link:focus-visible .fexi-word::after {
+  transform: scaleX(1);
+  transition-delay: 180ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fexi-word,
+  .fexi-word::after {
+    transition: none;
+  }
+}
+
 .experience-anchor {
   position: relative;
   display: inline-flex;

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "geist": "^1.9.1",
+    "loading-dev": "^0.3.8",
     "next": "16.4.5",
     "react": "19.3.0",
     "react-dom": "19.3.0"
