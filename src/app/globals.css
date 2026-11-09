@@ -79,9 +79,9 @@
   --page-pad: var(--gutter);
   --space-section: clamp(72px, 9vw, 112px);
 
-  /* Icons: Geist set, 16px, stroke 1.5. Custom pill icons use the same size. */
+  /* Icons: Geist set, 16px, stroke 1px. Custom pill icons use the same size. */
   --icon-size: 16px;
-  --icon-stroke: 1.5;
+  --icon-stroke: 1px;
 
   --radius-sm: 8px;
   --radius-md: 16px;
@@ -363,7 +363,7 @@ a {
   height: 1rem;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.5;
+  stroke-width: var(--icon-stroke);
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -608,7 +608,7 @@ button.skill-pill {
   flex: none;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.5;
+  stroke-width: var(--icon-stroke);
   stroke-linecap: round;
   stroke-linejoin: round;
   transition: translate 180ms var(--ease-out);
