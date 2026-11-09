@@ -532,8 +532,10 @@ button.skill-pill {
   cursor: pointer;
 }
 
-/* The library writes its size inline, so the icon token needs !important to win. */
-.fexi-link .fexi-morph {
+/* The library writes its size inline, so the icon token needs !important to win.
+   The nav tab uses the same 16px token. Color stays on .fexi-morph. */
+.fexi-link .fexi-morph,
+.pill-tab .fexi-morph {
   --ld-size: var(--icon-size) !important;
   align-self: center;
 }

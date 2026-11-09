@@ -1,90 +1,105 @@
 "use client";
 
 import Link from "next/link";
+import { FexiMorph } from "@/components/fexi-morph";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+  type PointerEvent,
+  type ReactNode,
+} from "react";
 
 /**
  * Floating pill navigation.
  *
  * Think of it as one component with two frames nested inside:
  * 1. The outer capsule is the whole control.
- * 2. The top row is a status cluster: theme, clock, menu.
+ * 2. The top row is a status cluster: menu, clock, light and dark.
  * 3. The tab row is the site map. The selected tab is an inner pill,
  *    the same way a selected segment sits inside a control in Figma.
  *
- * The menu is a checkbox tucked behind the icon. It starts unchecked,
+ * The menu is a checkbox tucked behind the left icon. It starts unchecked,
  * so the capsule is only the status cluster. Checking it opens the tab
- * row. The theme button does not change colors yet.
+ * row. On a mouse, hovering that icon opens the row too, and leaving the
+ * whole pill closes it, so the pointer can still travel down to a tab.
+ * The CV download sits in its own control at the right of the column.
  *
- * Destinations follow the current site map: Home and Contact.
- * Contact jumps to the footer on whatever page you are on.
+ * Destinations: Home, Writing, and /about. The about tab reads “Ask Fexi”.
  */
 
-type TabId = "home" | "contact";
+type TabId = "home" | "writing" | "about";
 
 const tabs: { id: TabId; label: string; href: string }[] = [
   { id: "home", label: "Home", href: "/" },
-  { id: "contact", label: "Contact", href: "#contact" },
+  { id: "writing", label: "Writing", href: "/writing" },
+  { id: "about", label: "Ask Fexi", href: "/about" },
 ];
 
 export function SiteHeaderBar({ clock }: { clock: ReactNode }) {
   const pathname = usePathname();
-  const [hash, setHash] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  // True only after a mouse hover. A click from that hover must not
+  // toggle the menu shut. Touch and keyboard still toggle it.
+  const menuOpenedByMouse = useRef(false);
 
-  useEffect(() => {
-    const syncHash = () => setHash(window.location.hash);
-    syncHash();
-    window.addEventListener("hashchange", syncHash);
-    return () => window.removeEventListener("hashchange", syncHash);
-  }, [pathname]);
+  const activeTab = getActiveTab(pathname);
 
-  const activeTab = getActiveTab(hash);
+  function showMenuOnMouseHover(event: PointerEvent<HTMLLabelElement>) {
+    if (event.pointerType !== "mouse") return;
+    menuOpenedByMouse.current = true;
+    setMenuOpen(true);
+  }
+
+  function hideMenuWhenPointerLeaves(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType !== "mouse") return;
+    menuOpenedByMouse.current = false;
+    setMenuOpen(false);
+  }
+
+  function keepHoverMenuOpen(event: MouseEvent<HTMLLabelElement>) {
+    if (!menuOpenedByMouse.current) return;
+    event.preventDefault();
+  }
 
   return (
     <header className="pill-nav">
-      <div className="pill-nav-shell">
+      <div className="pill-nav-shell" onPointerLeave={hideMenuWhenPointerLeaves}>
         <div className="pill-nav-tools">
-          <button type="button" className="pill-icon-button" aria-label="Theme">
-            <SunIcon />
-          </button>
-          {clock}
           <input
             id="site-tabs-toggle"
             className="pill-tabs-toggle"
             type="checkbox"
             aria-label="Menu"
             aria-controls="site-tabs"
+            checked={menuOpen}
+            onChange={(event) => setMenuOpen(event.target.checked)}
           />
-          <label htmlFor="site-tabs-toggle" className="pill-icon-button" aria-hidden="true">
+          <label
+            htmlFor="site-tabs-toggle"
+            className="pill-icon-button"
+            aria-hidden="true"
+            onPointerEnter={showMenuOnMouseHover}
+            onClick={keepHoverMenuOpen}
+          >
             <MenuIcon />
           </label>
+          {clock}
+          <ThemeToggle />
         </div>
 
         <nav id="site-tabs" className="pill-nav-tabs" aria-label="Primary">
           {tabs.map((tab) => {
             const isCurrent = tab.id === activeTab;
-            const className = "pill-tab";
-
-            if (tab.id === "contact") {
-              return (
-                <a
-                  key={tab.id}
-                  href={tab.href}
-                  className={className}
-                  aria-current={isCurrent ? "page" : undefined}
-                >
-                  <TabIcon name={tab.id} />
-                  {tab.label}
-                </a>
-              );
-            }
 
             return (
               <Link
                 key={tab.id}
                 href={tab.href}
-                className={className}
+                className="pill-tab"
                 aria-current={isCurrent ? "page" : undefined}
               >
                 <TabIcon name={tab.id} />
@@ -119,8 +134,9 @@ export function PillClock() {
   );
 }
 
-function getActiveTab(hash: string): TabId {
-  if (hash === "#contact") return "contact";
+function getActiveTab(pathname: string): TabId {
+  if (pathname.startsWith("/writing")) return "writing";
+  if (pathname.startsWith("/about")) return "about";
   return "home";
 }
 
@@ -143,16 +159,9 @@ function formatClock(date: Date): string {
 
 function TabIcon({ name }: { name: TabId }) {
   if (name === "home") return <HomeIcon />;
-  return <ContactIcon />;
-}
-
-function SunIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className="pill-svg">
-      <circle cx="8" cy="8" r="2.2" />
-      <path d="M8 1.6v1.6M8 12.8v1.6M1.6 8h1.6M12.8 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M12.6 3.4l-1.1 1.1M4.5 11.5l-1.1 1.1" />
-    </svg>
-  );
+  if (name === "writing") return <WritingIcon />;
+  // Same mark as the hero line: slow idle, 16px, --text-secondary.
+  return <FexiMorph speed="idle" />;
 }
 
 function MenuIcon() {
@@ -171,11 +180,12 @@ function HomeIcon() {
   );
 }
 
-function ContactIcon() {
+function WritingIcon() {
   return (
     <svg viewBox="0 0 16 16" aria-hidden="true" className="pill-svg">
-      <path d="M2.2 8.1 13.6 3.4 9.1 13.2 7.5 9.2 2.2 8.1Z" />
-      <path d="M7.5 9.2 13.6 3.4" />
+      <path d="M9.1 2.7 13.3 6.9 6.2 14H2.2v-4L9.1 2.7Z" />
+      <path d="M7.6 4.2 11.8 8.4" />
     </svg>
   );
 }
+
