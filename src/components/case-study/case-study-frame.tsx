@@ -20,10 +20,10 @@ type CaseStudyFrameProps = {
 /**
  * One visual frame.
  *
- * The outer box is a filled placeholder: a 1px border, then the matte
- * color in the padding. The inner sheet is a card on the page ground.
- * Its corner is 8px. The outer corner is that 8px plus the 8px padding
- * plus the 1px border, so the gap stays even around the curve.
+ * The frame is the matte fill, with a 1px border. Whatever is inside
+ * sits on that fill. There is no extra card wrapping the content.
+ * The outer corner is 8px plus the 8px padding plus the 1px border,
+ * so it stays even with an 8px card sitting in the padding.
  * A mono label names the visual until the real one is passed in.
  */
 export function CaseStudyFrame({
@@ -44,16 +44,14 @@ export function CaseStudyFrame({
         style={{ aspectRatio }}
         data-state={isPlaceholder ? "placeholder" : "filled"}
       >
-        <div className="case-study-sheet">
-          {isPlaceholder ? (
-            <p className="case-study-placeholder">
-              <span>{name}</span>
-              {note ? <span>{note}</span> : null}
-            </p>
-          ) : (
-            children
-          )}
-        </div>
+        {isPlaceholder ? (
+          <p className="case-study-placeholder">
+            <span>{name}</span>
+            {note ? <span>{note}</span> : null}
+          </p>
+        ) : (
+          children
+        )}
       </div>
       {caption ? (
         <figcaption className="case-study-caption">{caption}</figcaption>

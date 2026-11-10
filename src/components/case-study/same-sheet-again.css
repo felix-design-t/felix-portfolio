@@ -1,8 +1,7 @@
 /*
   The same sheet, again.
 
-  The pile sits on the placeholder's inner card. That card is the
-  page ground, and the matte fill stays in the frame's padding.
+  The sheets sit directly on the placeholder's matte fill.
   Each sheet is a site card: page ground, a 1px hairline, and the
   8px corner. The row type and the accent line are unchanged.
 */
@@ -37,8 +36,8 @@
 
 /*
   The stack's positioning box. It does not paint its own plate.
-  The placeholder's inner card is the surface, and this box only
-  clips a copy that steps past the card's corner.
+  The matte fill of the frame shows through, and this box only
+  clips a copy that steps past a corner.
 */
 .same-sheet-stage {
   position: relative;

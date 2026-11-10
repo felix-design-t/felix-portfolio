@@ -144,14 +144,13 @@
 }
 
 /* ---------- Visual frame ----------
-   A filled placeholder. The matte color sits in the padding, outside
-   the inner card and inside the 1px border. The card is the page
-   ground, so it reads as white paper on the light theme.
+   A filled placeholder. The matte color is the frame itself.
+   Content sits directly on that fill. There is no wrapping card.
 
    Nested radius, from craft.gustavofior.com/nested-border-radius:
-   the outer corner is the inner corner plus the padding plus the
+   the outer corner is the content corner plus the padding plus the
    border, so the two curves stay the same distance apart.
-   Inner card: --radius-sm (8px). Padding: --space-1 (8px).
+   Content cards: --radius-sm (8px). Padding: --space-1 (8px).
    Border: 1px. Outer corner: 17px. No new token. */
 
 .case-study-figure {
@@ -171,28 +170,16 @@
 }
 
 .case-study-frame {
+  position: relative;
   box-sizing: border-box;
-  display: flex;
+  display: grid;
+  place-items: center;
   width: 100%;
   padding: var(--space-1);
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: calc(var(--radius-sm) + var(--space-1) + 1px);
   background: var(--mat);
-}
-
-/* The white card. Visuals and the placeholder label sit on this sheet. */
-.case-study-sheet {
-  position: relative;
-  display: grid;
-  place-items: center;
-  flex: 1;
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-  border-radius: var(--radius-sm);
-  background: var(--bg);
 }
 
 .case-study-placeholder {
