@@ -32,7 +32,7 @@ export const timeOffCopilot: CaseStudy = {
       visual: {
         name: "Blank setup form",
         caption: "Six rows, one mismatched accrual",
-        aspectRatio: "4 / 3",
+        aspectRatio: "16 / 10",
       },
     },
     {
@@ -54,7 +54,7 @@ export const timeOffCopilot: CaseStudy = {
       visual: {
         name: "Unasked draft",
         caption: "Extra parts marked, checklist unchanged",
-        aspectRatio: "4 / 3",
+        aspectRatio: "16 / 10",
       },
     },
     {
@@ -76,7 +76,7 @@ export const timeOffCopilot: CaseStudy = {
       visual: {
         name: "Decided request",
         caption: "Day 40, approved, rule changed after",
-        aspectRatio: "16 / 9",
+        aspectRatio: "16 / 10",
       },
     },
     {
@@ -87,7 +87,7 @@ export const timeOffCopilot: CaseStudy = {
       visual: {
         name: "Draft and current rules",
         caption: "Compare, one Conflict marked",
-        aspectRatio: "4 / 3",
+        aspectRatio: "16 / 10",
       },
     },
     {

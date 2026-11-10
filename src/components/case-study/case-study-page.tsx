@@ -3,7 +3,7 @@ import { CaseStudyCover } from "./case-study-cover";
 import { CaseStudySection } from "./case-study-section";
 import { CaseStudyWayfinding } from "./case-study-wayfinding";
 import { formatSectionIndex, type CaseStudy } from "./types";
-import styles from "./case-study.module.css";
+import "./case-study.css";
 
 type CaseStudyPageProps = {
   study: CaseStudy;
@@ -26,11 +26,11 @@ export function CaseStudyPage({ study, visuals = {}, cover }: CaseStudyPageProps
   }));
 
   return (
-    <article className={styles.page} aria-labelledby={topId}>
+    <article className="case-study-page" aria-labelledby={topId}>
       <CaseStudyWayfinding items={wayfindingItems} topId={topId} />
 
-      <header className={styles.header}>
-        <h1 id={topId} className={styles.title}>
+      <header className="case-study-header">
+        <h1 id={topId} className="case-study-title">
           {study.title}
         </h1>
       </header>
@@ -39,7 +39,7 @@ export function CaseStudyPage({ study, visuals = {}, cover }: CaseStudyPageProps
         {cover}
       </CaseStudyCover>
 
-      <div className={styles.sections}>
+      <div className="case-study-sections">
         {study.sections.map((section, position) => (
           <CaseStudySection
             key={section.id}

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import styles from "./case-study.module.css";
 
 export type WayfindingItem = { id: string; index: string; title: string };
 
@@ -82,16 +81,16 @@ export function CaseStudyWayfinding({ items, topId }: CaseStudyWayfindingProps) 
 
   return (
     <>
-      <nav className={styles.rail} aria-label="Sections">
-        <ol className={styles.railList}>
+      <nav className="case-study-rail" aria-label="Sections">
+        <ol className="case-study-rail-list">
           {items.map((item, position) => (
             <li key={item.id}>
               <a
                 href={`#${item.id}`}
-                className={styles.railLink}
+                className="case-study-rail-link"
                 aria-current={position === activeIndex ? "location" : undefined}
               >
-                <span className={styles.railIndex}>{item.index}</span>
+                <span className="case-study-rail-index">{item.index}</span>
                 <span>{item.title}</span>
               </a>
             </li>
@@ -99,9 +98,9 @@ export function CaseStudyWayfinding({ items, topId }: CaseStudyWayfindingProps) 
         </ol>
       </nav>
 
-      <nav className={styles.stepper} aria-label="Section steps">
+      <nav className="case-study-stepper" aria-label="Section steps">
         <StepLink href={previousHref} label="Previous" />
-        <span className={styles.stepperCount} aria-live="polite">
+        <span className="case-study-stepper-count" aria-live="polite">
           {currentLabel} / {total}
         </span>
         <StepLink href={nextHref} label="Next" />
@@ -114,13 +113,13 @@ export function CaseStudyWayfinding({ items, topId }: CaseStudyWayfindingProps) 
 function StepLink({ href, label }: { href: string | null; label: string }) {
   if (href === null) {
     return (
-      <span className={styles.stepperLink} aria-disabled="true">
+      <span className="case-study-stepper-link" aria-disabled="true">
         {label}
       </span>
     );
   }
   return (
-    <a href={href} className={styles.stepperLink}>
+    <a href={href} className="case-study-stepper-link">
       {label}
     </a>
   );

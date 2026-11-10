@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import styles from "./case-study.module.css";
 
 type CaseStudyFrameProps = {
   /** Planned visual name. The placeholder shows it in a mono label. */
@@ -17,11 +16,9 @@ type CaseStudyFrameProps = {
 };
 
 /**
- * One visual frame: 8px corners, a 1px stroke, a mono caption under it.
- *
- * Like a Figma component with two variants. "Placeholder" holds the
- * slot at the right size and names what will go there. "Filled" is
- * whatever the section passes in as children.
+ * One visual frame, the same plate as a Selected Work cover:
+ * 16/10, 8px corners, matte fill, no stroke. A mono label names the
+ * visual until the real one is passed in as children.
  */
 export function CaseStudyFrame({
   name,
@@ -33,24 +30,21 @@ export function CaseStudyFrame({
   const isPlaceholder = children === undefined || children === null;
 
   return (
-    <figure className={styles.figure}>
-      {controls ? <div className={styles.frameControls}>{controls}</div> : null}
+    <figure className="case-study-figure">
+      {controls ? <div className="case-study-frame-controls">{controls}</div> : null}
       <div
-        className={styles.frame}
+        className="case-study-frame"
         style={{ aspectRatio }}
         data-state={isPlaceholder ? "placeholder" : "filled"}
       >
         {isPlaceholder ? (
-          <div className={styles.placeholder}>
-            <span className={styles.placeholderTag}>Placeholder</span>
-            <span className={styles.placeholderName}>{name}</span>
-          </div>
+          <p className="case-study-placeholder">{name}</p>
         ) : (
           children
         )}
       </div>
       {caption ? (
-        <figcaption className={styles.caption}>{caption}</figcaption>
+        <figcaption className="case-study-caption">{caption}</figcaption>
       ) : null}
     </figure>
   );

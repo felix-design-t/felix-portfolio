@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { CaseStudyFrame } from "./case-study-frame";
 import type { CaseStudy } from "./types";
-import styles from "./case-study.module.css";
 
 type CaseStudyCoverProps = {
   cover: CaseStudy["cover"];
@@ -16,13 +15,13 @@ type CaseStudyCoverProps = {
  */
 export function CaseStudyCover({ cover, meta, children }: CaseStudyCoverProps) {
   return (
-    <div className={styles.cover}>
+    <div className="case-study-cover">
       <CaseStudyFrame name={cover.label} aspectRatio={cover.aspectRatio}>
         {children}
       </CaseStudyFrame>
-      <dl className={styles.meta}>
+      <dl className="case-study-meta">
         {meta.map((item) => (
-          <div key={item.label} className={styles.metaRow}>
+          <div key={item.label} className="case-study-meta-row">
             <dt>{item.label}</dt>
             <dd>{item.value}</dd>
           </div>

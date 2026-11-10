@@ -1,24 +1,34 @@
 /*
-  Case study template. Uses only the tokens in src/app/globals.css.
-  The page sits in the root layout's reading column (.shell-inner), so
-  every width here is that column; only the rail lives outside it.
+  Case study layout.
+
+  These are plain class names, not a CSS module. The project's
+  turbopack rule runs the Tailwind loader on every CSS file, and that
+  loader does not hand back a class-name map. A `.module.css` import
+  therefore arrives as an empty object, and className={styles.page}
+  renders nothing. Writing the names here, and using those same
+  strings in the components, is what actually attaches the layout.
+
+  Tokens only, from src/app/globals.css. The page sits in the site's
+  reading column (.shell-inner). The rail steps out of that column
+  into the left margin and is hidden until the margin can hold it.
 */
 
-.page {
+.case-study-page {
   position: relative;
   /* Same top as the home greeting: clear the closed pill, then 112px. */
   padding-top: calc(
     var(--space-3) + var(--nav-inset) * 2 + 2px + var(--nav-tab-size) + 112px
   );
-  /* Room for the fixed stepper so it never covers the last lines. */
-  padding-bottom: calc(var(--space-16) + var(--space-6));
+  /* Room so the fixed step control never covers the last lines. */
+  padding-bottom: calc(var(--space-8) + var(--space-4));
 }
 
-.header {
-  margin-bottom: var(--space-3);
+.case-study-header {
+  margin-bottom: var(--space-4);
 }
 
-.title {
+.case-study-title {
+  margin: 0;
   font-family: var(--font-serif);
   font-size: var(--text-hero);
   font-weight: 400;
@@ -29,13 +39,13 @@
 
 /* ---------- Cover ---------- */
 
-.cover {
+.case-study-cover {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
 }
 
-.meta {
+.case-study-meta {
   display: grid;
   gap: var(--space-1);
   margin: 0;
@@ -44,54 +54,65 @@
   line-height: var(--leading-caption);
 }
 
-.metaRow {
+.case-study-meta-row {
   display: grid;
-  grid-template-columns: 1fr;
   gap: 2px;
 }
 
-.metaRow dt {
+.case-study-meta-row dt {
+  margin: 0;
   color: var(--text-secondary);
 }
 
-.metaRow dd {
+.case-study-meta-row dd {
   margin: 0;
   color: var(--text);
 }
 
 @media (min-width: 640px) {
-  .metaRow {
-    grid-template-columns: 8rem minmax(0, 1fr);
+  .case-study-meta-row {
+    grid-template-columns: 8.5rem minmax(0, 1fr);
     gap: var(--space-2);
+    align-items: baseline;
   }
 }
 
 /* ---------- Sections ---------- */
 
-.sections {
+.case-study-sections {
   display: flex;
   flex-direction: column;
   gap: var(--space-16);
   margin-top: var(--space-16);
 }
 
-.section {
+.case-study-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
   /* Anchor jumps land below the floating pill. */
   scroll-margin-top: calc(var(--space-16) - var(--space-3));
 }
 
-/* "02  Feature": the path label that names the section. */
-.sectionPath {
+/* "01  Problem". The index keeps its own margin so the two words
+   stay apart even if a parent forgets the flex gap. */
+.case-study-kicker {
   display: flex;
+  align-items: baseline;
   gap: var(--space-1);
+  margin: 0;
   font-family: var(--font-mono);
   font-size: var(--text-caption);
   line-height: var(--leading-caption);
   color: var(--text-secondary);
 }
 
-.sectionTitle {
-  margin-top: var(--space-1);
+.case-study-kicker-index {
+  font-variant-numeric: tabular-nums;
+}
+
+.case-study-section-title {
+  margin: 0;
   font-family: var(--font-serif);
   font-size: var(--text-section);
   font-weight: 400;
@@ -99,35 +120,34 @@
   color: var(--text);
 }
 
-.sectionBody {
-  margin-top: var(--space-2);
+.case-study-body {
+  margin: 0;
+  max-width: 40rem;
   font-size: var(--text-body);
   line-height: var(--leading-body);
   color: var(--text-secondary);
   text-wrap: pretty;
 }
 
-/* Copy that is still waiting on Felix reads as a system note, not prose. */
-.sectionBody[data-placeholder="true"] {
+/* Copy that is still waiting on Felix reads as a system note. */
+.case-study-body[data-placeholder="true"] {
   font-family: var(--font-mono);
   font-size: var(--text-caption);
   line-height: var(--leading-caption);
 }
 
-.section .figure {
-  margin-top: var(--space-3);
-}
+/* ---------- Visual frame ----------
+   Same plate as a Selected Work cover (.work-slot-cover):
+   16/10, 8px radius, matte fill, no stroke. */
 
-/* ---------- Visual frame ---------- */
-
-.figure {
+.case-study-figure {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  margin: 0;
+  margin: var(--space-2) 0 0;
 }
 
-.frameControls {
+.case-study-frame-controls {
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -136,82 +156,70 @@
   line-height: var(--leading-caption);
 }
 
-.frame {
+.case-study-frame {
   position: relative;
+  display: grid;
+  place-items: center;
   width: 100%;
   overflow: hidden;
-  border: 1px solid var(--text);
   border-radius: var(--radius-sm);
-  background: var(--bg);
+  background: var(--mat);
 }
 
-.placeholder {
-  display: grid;
-  height: 100%;
-  place-items: center;
+.case-study-placeholder {
   padding: var(--space-2);
   font-family: var(--font-mono);
   font-size: var(--text-caption);
   line-height: var(--leading-caption);
+  color: var(--text-secondary);
   text-align: center;
 }
 
-.placeholderTag {
-  position: absolute;
-  top: var(--space-2);
-  left: var(--space-2);
-  color: var(--text-secondary);
-}
-
-.placeholderName {
-  color: var(--text);
-}
-
-.caption {
+.case-study-caption {
+  margin: 0;
   font-family: var(--font-mono);
   font-size: var(--text-caption);
   line-height: var(--leading-caption);
   color: var(--text-secondary);
 }
 
-/* ---------- Wayfinding: rail (wide) ---------- */
+/* ---------- Wayfinding: rail (wide) ----------
+   Hidden until the left margin can hold 160px plus a 24px gap.
+   Below that it is display:none, so it can never sit on the text. */
 
-.rail {
+.case-study-rail {
   display: none;
 }
 
-/* From 1040px the left margin holds the 160px rail plus air. */
-@media (min-width: 1040px) {
-  .rail {
+@media (min-width: 1100px) {
+  .case-study-rail {
     display: block;
     position: absolute;
-    top: 0;
+    top: calc(
+      var(--space-3) + var(--nav-inset) * 2 + 2px + var(--nav-tab-size) + 112px
+    );
     bottom: 0;
-    /* Right edge sits on the column edge, left of the text gutter. */
-    right: calc(100% + var(--gutter-sm));
     width: 160px;
+    /* Right edge of the rail, then 24px of air, then the text. */
+    right: calc(100% + var(--space-3));
   }
 }
 
-.railList {
+.case-study-rail-list {
   position: sticky;
-  top: calc(var(--space-16) - var(--space-3));
+  top: calc(var(--space-8) + var(--space-3));
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
   margin: 0;
-  /* Line the first entry up with the page title. */
-  margin-top: calc(
-    var(--space-3) + var(--nav-inset) * 2 + 2px + var(--nav-tab-size) + 112px
-  );
   padding: 0;
   list-style: none;
 }
 
-.railLink {
+.case-study-rail-link {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-1);
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  column-gap: var(--space-1);
   padding-block: 2px;
   font-family: var(--font-mono);
   font-size: var(--text-caption);
@@ -221,22 +229,23 @@
   transition: color 150ms var(--ease-out);
 }
 
-.railLink:hover,
-.railLink[aria-current="location"] {
+.case-study-rail-link:hover,
+.case-study-rail-link[aria-current="location"] {
   color: var(--text);
 }
 
-.railIndex {
+.case-study-rail-index {
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- Wayfinding: stepper (small) ---------- */
+/* ---------- Wayfinding: stepper (small) ----------
+   Fixed to the bottom of the window, so it is never in the column. */
 
-.stepper {
+.case-study-stepper {
   position: fixed;
   bottom: var(--space-3);
   left: 50%;
-  z-index: 45;
+  z-index: 40;
   display: flex;
   align-items: center;
   gap: var(--space-1);
@@ -251,21 +260,21 @@
   line-height: 1;
 }
 
-@media (min-width: 1040px) {
-  .stepper {
+@media (min-width: 1100px) {
+  .case-study-stepper {
     display: none;
   }
 }
 
-.stepperCount {
+.case-study-stepper-count {
   min-width: 4.5rem;
   color: var(--text);
   font-variant-numeric: tabular-nums;
   text-align: center;
 }
 
-/* Hit target taller than the 16px icon size, the same height as a nav tab. */
-.stepperLink {
+/* Taller than the 16px icon, the same height as a nav tab. */
+.case-study-stepper-link {
   display: inline-flex;
   align-items: center;
   height: var(--nav-tab-size);
@@ -279,26 +288,26 @@
     scale 150ms var(--ease-out);
 }
 
-a.stepperLink:hover {
+a.case-study-stepper-link:hover {
   background: var(--fg-soft);
   color: var(--text);
 }
 
-a.stepperLink:active {
+a.case-study-stepper-link:active {
   scale: 0.96;
 }
 
-.stepperLink[aria-disabled="true"] {
+.case-study-stepper-link[aria-disabled="true"] {
   opacity: 0.4;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .railLink,
-  .stepperLink {
+  .case-study-rail-link,
+  .case-study-stepper-link {
     transition: none;
   }
 
-  a.stepperLink:active {
+  a.case-study-stepper-link:active {
     scale: 1;
   }
 }

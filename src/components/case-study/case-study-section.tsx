@@ -4,7 +4,6 @@ import {
   formatSectionIndex,
   type CaseStudySectionData,
 } from "./types";
-import styles from "./case-study.module.css";
 
 type CaseStudySectionProps = {
   section: CaseStudySectionData;
@@ -30,18 +29,18 @@ export function CaseStudySection({
   return (
     <section
       id={section.id}
-      className={styles.section}
+      className="case-study-section"
       aria-labelledby={headingId}
     >
-      <p className={styles.sectionPath}>
-        <span>{formatSectionIndex(position)}</span>
+      <p className="case-study-kicker">
+        <span className="case-study-kicker-index">{formatSectionIndex(position)}</span>
         <span>{section.kind}</span>
       </p>
-      <h2 id={headingId} className={styles.sectionTitle}>
+      <h2 id={headingId} className="case-study-section-title">
         {section.title}
       </h2>
       <p
-        className={styles.sectionBody}
+        className="case-study-body"
         data-placeholder={section.isPlaceholderText ? "true" : undefined}
       >
         {section.body}
