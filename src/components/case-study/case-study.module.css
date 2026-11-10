@@ -1,0 +1,304 @@
+/*
+  Case study template. Uses only the tokens in src/app/globals.css.
+  The page sits in the root layout's reading column (.shell-inner), so
+  every width here is that column; only the rail lives outside it.
+*/
+
+.page {
+  position: relative;
+  /* Same top as the home greeting: clear the closed pill, then 112px. */
+  padding-top: calc(
+    var(--space-3) + var(--nav-inset) * 2 + 2px + var(--nav-tab-size) + 112px
+  );
+  /* Room for the fixed stepper so it never covers the last lines. */
+  padding-bottom: calc(var(--space-16) + var(--space-6));
+}
+
+.header {
+  margin-bottom: var(--space-3);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--text-hero);
+  font-weight: 400;
+  letter-spacing: var(--tracking-hero);
+  line-height: var(--leading-hero);
+  color: var(--text);
+}
+
+/* ---------- Cover ---------- */
+
+.cover {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.meta {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.metaRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+
+.metaRow dt {
+  color: var(--text-secondary);
+}
+
+.metaRow dd {
+  margin: 0;
+  color: var(--text);
+}
+
+@media (min-width: 640px) {
+  .metaRow {
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+}
+
+/* ---------- Sections ---------- */
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  margin-top: var(--space-16);
+}
+
+.section {
+  /* Anchor jumps land below the floating pill. */
+  scroll-margin-top: calc(var(--space-16) - var(--space-3));
+}
+
+/* "02  Feature": the path label that names the section. */
+.sectionPath {
+  display: flex;
+  gap: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+}
+
+.sectionTitle {
+  margin-top: var(--space-1);
+  font-family: var(--font-serif);
+  font-size: var(--text-section);
+  font-weight: 400;
+  line-height: var(--leading-section);
+  color: var(--text);
+}
+
+.sectionBody {
+  margin-top: var(--space-2);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+/* Copy that is still waiting on Felix reads as a system note, not prose. */
+.sectionBody[data-placeholder="true"] {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.section .figure {
+  margin-top: var(--space-3);
+}
+
+/* ---------- Visual frame ---------- */
+
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.frameControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--text);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.placeholder {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  padding: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  text-align: center;
+}
+
+.placeholderTag {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  color: var(--text-secondary);
+}
+
+.placeholderName {
+  color: var(--text);
+}
+
+.caption {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+}
+
+/* ---------- Wayfinding: rail (wide) ---------- */
+
+.rail {
+  display: none;
+}
+
+/* From 1040px the left margin holds the 160px rail plus air. */
+@media (min-width: 1040px) {
+  .rail {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    /* Right edge sits on the column edge, left of the text gutter. */
+    right: calc(100% + var(--gutter-sm));
+    width: 160px;
+  }
+}
+
+.railList {
+  position: sticky;
+  top: calc(var(--space-16) - var(--space-3));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  /* Line the first entry up with the page title. */
+  margin-top: calc(
+    var(--space-3) + var(--nav-inset) * 2 + 2px + var(--nav-tab-size) + 112px
+  );
+  padding: 0;
+  list-style: none;
+}
+
+.railLink {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-1);
+  padding-block: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 150ms var(--ease-out);
+}
+
+.railLink:hover,
+.railLink[aria-current="location"] {
+  color: var(--text);
+}
+
+.railIndex {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Wayfinding: stepper (small) ---------- */
+
+.stepper {
+  position: fixed;
+  bottom: var(--space-3);
+  left: 50%;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--nav-inset);
+  translate: -50% 0;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-nav);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: 1;
+}
+
+@media (min-width: 1040px) {
+  .stepper {
+    display: none;
+  }
+}
+
+.stepperCount {
+  min-width: 4.5rem;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+/* Hit target taller than the 16px icon size, the same height as a nav tab. */
+.stepperLink {
+  display: inline-flex;
+  align-items: center;
+  height: var(--nav-tab-size);
+  padding-inline: var(--space-1);
+  border-radius: var(--nav-highlight-radius);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition:
+    background-color 150ms var(--ease-out),
+    color 150ms var(--ease-out),
+    scale 150ms var(--ease-out);
+}
+
+a.stepperLink:hover {
+  background: var(--fg-soft);
+  color: var(--text);
+}
+
+a.stepperLink:active {
+  scale: 0.96;
+}
+
+.stepperLink[aria-disabled="true"] {
+  opacity: 0.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .railLink,
+  .stepperLink {
+    transition: none;
+  }
+
+  a.stepperLink:active {
+    scale: 1;
+  }
+}
