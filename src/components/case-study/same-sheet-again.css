@@ -228,3 +228,35 @@
     transition: none;
   }
 }
+
+/*
+  Riffle, flat. Cards in front of the hovered card step down and left,
+  the opposite of the pile, so more of the hovered card shows.
+  The hovered card does not move. Nothing changes color.
+  One step is the same offset the pile already uses.
+*/
+.same-sheet-card {
+  transition: transform 200ms var(--ease-out);
+}
+
+.same-sheet-stage:has([data-sheet="jury"]:hover) [data-sheet="sick"],
+.same-sheet-stage:has([data-sheet="jury"]:hover) [data-sheet="pto"],
+.same-sheet-stage:has([data-sheet="parental"]:hover) [data-sheet="sick"],
+.same-sheet-stage:has([data-sheet="parental"]:hover) [data-sheet="pto"],
+.same-sheet-stage:has([data-sheet="sick"]:hover) [data-sheet="pto"] {
+  transform: translate(calc(var(--sheet-step-x) * -1), var(--sheet-step-y));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .same-sheet-card {
+    transition: none;
+  }
+
+  .same-sheet-stage:has([data-sheet="jury"]:hover) [data-sheet="sick"],
+  .same-sheet-stage:has([data-sheet="jury"]:hover) [data-sheet="pto"],
+  .same-sheet-stage:has([data-sheet="parental"]:hover) [data-sheet="sick"],
+  .same-sheet-stage:has([data-sheet="parental"]:hover) [data-sheet="pto"],
+  .same-sheet-stage:has([data-sheet="sick"]:hover) [data-sheet="pto"] {
+    transform: none;
+  }
+}
