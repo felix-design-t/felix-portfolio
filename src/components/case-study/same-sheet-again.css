@@ -44,10 +44,10 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  --sheet-left: 28px;
+  --sheet-left: 40px;
   --sheet-step-x: 12px;
   --sheet-step-y: 36px;
-  --sheet-top: 20px;
+  --sheet-top: 8px;
 }
 
 /* One setup sheet. A site card: page ground, hairline, 8px corner. */
@@ -194,10 +194,10 @@
   }
 
   .same-sheet-stage {
-    --sheet-left: 12px;
+    --sheet-left: 24px;
     --sheet-step-x: 10px;
     --sheet-step-y: 26px;
-    --sheet-top: 10px;
+    --sheet-top: 4px;
   }
 
   .same-sheet-type {
@@ -232,8 +232,8 @@
 /*
   Riffle, flat. Cards in front of the hovered card step down and left,
   the opposite of the pile, so more of the hovered card shows.
+  Two horizontal steps and three vertical steps.
   The hovered card does not move. Nothing changes color.
-  One step is the same offset the pile already uses.
 */
 .same-sheet-card {
   transition: transform 200ms var(--ease-out);
@@ -244,7 +244,7 @@
 .same-sheet-stage:has([data-sheet="parental"]:hover) [data-sheet="sick"],
 .same-sheet-stage:has([data-sheet="parental"]:hover) [data-sheet="pto"],
 .same-sheet-stage:has([data-sheet="sick"]:hover) [data-sheet="pto"] {
-  transform: translate(calc(var(--sheet-step-x) * -1), var(--sheet-step-y));
+  transform: translate(calc(var(--sheet-step-x) * -2), calc(var(--sheet-step-y) * 3));
 }
 
 @media (prefers-reduced-motion: reduce) {
