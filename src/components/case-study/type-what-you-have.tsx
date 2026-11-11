@@ -33,12 +33,8 @@ const LINE_SHIFT_MS = 520;
 /** A short rest after the lines settle, before the preview arrives. */
 const AFTER_SHIFT_MS = 240;
 
-const FIELDS = [
-  { label: "Department", value: "Sales" },
-  { label: "Type", value: "PTO" },
-  { label: "Yearly limit", value: "14 days" },
-  { label: "Accrual", value: "Missing", missing: true },
-] as const;
+/** How many gray bars stand in for the rest of the draft. */
+const LOADING_LINES = 3;
 
 const THINKING = [
   "Understanding admin's scope...",
@@ -211,18 +207,10 @@ export function TypeWhatYouHaveVisual() {
               Sales department, yearly limit 14 days. Accrual was not included.
             </p>
           </div>
-          <div className="toc-doc-section">
-            <p className="toc-doc-section-title">Captured</p>
-            <ul className="toc-doc-fields">
-              {FIELDS.map((field) => (
-                <li key={field.label} className="toc-doc-field">
-                  <span className="toc-label">{field.label}</span>
-                  <span className={"missing" in field ? "toc-label" : "toc-value"}>
-                    {field.value}
-                  </span>
-                </li>
-              ))}
-            </ul>
+          <div className="toc-doc-lines" aria-hidden="true">
+            {Array.from({ length: LOADING_LINES }, (_, index) => (
+              <span key={index} className="toc-doc-line" />
+            ))}
           </div>
           <div className="toc-file">
             <span className="toc-page-mark" aria-hidden="true">
