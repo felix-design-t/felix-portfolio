@@ -9,8 +9,10 @@ import "./type-what-you-have.css";
  *
  * The frame stays one size. Three arrangements play inside it:
  * 1. The person's card sits on the right. It types, Send is pressed, then it moves up.
- * 2. That card stays on the right, and the agent's shorter reply appears on the left.
- * 3. Those cards move up, and a document preview is what you look at.
+ * 2. That card stays on the right. On the left, a loader sits beside each of the
+ *    first two lines, then leaves as the third line arrives. The lines slide
+ *    left into the space it left.
+ * 3. After that slide, those cards move up, and a document preview is what you look at.
  *
  * Replay runs it again. Reduced motion stays on the preview.
  */
@@ -22,8 +24,14 @@ const REQUEST =
 const CHAR_MS = 28;
 /** How long Send stays pressed before the card moves up. */
 const SEND_HOLD_MS = 220;
-/** How long the small thinking card stays before the document arrives. */
-const THINK_MS = 1800;
+/** How long each thinking line waits before the next one starts. */
+const LINE_MS = 420;
+/** How long the loader takes to fade once the third line is there. */
+const LOADER_FADE_MS = 240;
+/** How long the three lines take to slide into the loader's space. */
+const LINE_SHIFT_MS = 520;
+/** A short rest after the lines settle, before the preview arrives. */
+const AFTER_SHIFT_MS = 240;
 
 const FIELDS = [
   { label: "Department", value: "Sales" },
@@ -40,6 +48,13 @@ const THINKING = [
 
 type Phase = "typing" | "sending" | "thinking" | "document";
 
+/**
+ * Where the loader is during the thinking reply.
+ * one and two sit beside those lines. three hides the loader.
+ * settled is after the lines have slid left.
+ */
+type ThinkBeat = "idle" | "one" | "two" | "three" | "settled";
+
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
@@ -49,6 +64,7 @@ export function TypeWhatYouHaveVisual() {
   const [seen, setSeen] = useState(false);
   const [run, setRun] = useState(0);
   const [phase, setPhase] = useState<Phase>("typing");
+  const [beat, setBeat] = useState<ThinkBeat>("idle");
   const [typed, setTyped] = useState("");
 
   useEffect(() => {
@@ -79,18 +95,36 @@ export function TypeWhatYouHaveVisual() {
     }
 
     setPhase("typing");
+    setBeat("idle");
     setTyped("");
     let index = 0;
     const timers: number[] = [];
+    const thinkingStartsAt = 160 + SEND_HOLD_MS;
     const typer = window.setInterval(() => {
       index += 1;
       setTyped(REQUEST.slice(0, index));
       if (index < REQUEST.length) return;
       window.clearInterval(typer);
       timers.push(window.setTimeout(() => setPhase("sending"), 160));
-      timers.push(window.setTimeout(() => setPhase("thinking"), 160 + SEND_HOLD_MS));
       timers.push(
-        window.setTimeout(() => setPhase("document"), 160 + SEND_HOLD_MS + THINK_MS),
+        window.setTimeout(() => {
+          setPhase("thinking");
+          setBeat("one");
+        }, thinkingStartsAt),
+      );
+      timers.push(window.setTimeout(() => setBeat("two"), thinkingStartsAt + LINE_MS));
+      timers.push(window.setTimeout(() => setBeat("three"), thinkingStartsAt + LINE_MS * 2));
+      timers.push(
+        window.setTimeout(
+          () => setBeat("settled"),
+          thinkingStartsAt + LINE_MS * 2 + LOADER_FADE_MS,
+        ),
+      );
+      timers.push(
+        window.setTimeout(
+          () => setPhase("document"),
+          thinkingStartsAt + LINE_MS * 2 + LOADER_FADE_MS + LINE_SHIFT_MS + AFTER_SHIFT_MS,
+        ),
       );
     }, CHAR_MS);
 
@@ -153,7 +187,7 @@ export function TypeWhatYouHaveVisual() {
           </article>
 
           <div className="toc-think-slot">
-            <article className="toc-think">
+            <article className="toc-think" data-beat={beat}>
               <span className="toc-think-mark" aria-hidden="true">
                 <Eclipse size={16} />
               </span>
