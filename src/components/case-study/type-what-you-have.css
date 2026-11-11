@@ -364,9 +364,8 @@ html[data-theme="dark"] .toc-product {
 
 .toc-doc-note {
   padding: 8px 10px;
-  border-left: 1px solid var(--toc-mark);
   border-radius: 4px;
-  background: var(--toc-ground);
+  background: color-mix(in srgb, var(--toc-mark) 14%, transparent);
 }
 
 .toc-doc-fields {
