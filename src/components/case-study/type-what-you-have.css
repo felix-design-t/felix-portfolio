@@ -69,6 +69,11 @@ html[data-theme="dark"] .toc-product {
   font-weight: 500;
 }
 
+.toc-doc-lead {
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
 .toc-value,
 .toc-typed,
 .toc-doc-title,
