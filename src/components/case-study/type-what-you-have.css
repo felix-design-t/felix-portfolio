@@ -121,7 +121,6 @@ html[data-theme="dark"] .toc-product {
 }
 
 .toc-chat,
-.toc-think,
 .toc-doc {
   box-sizing: border-box;
   border: 1px solid var(--toc-line);
@@ -263,19 +262,18 @@ html[data-theme="dark"] .toc-product {
   flex-direction: row;
   align-items: center;
   gap: 8px;
-  padding: 0 12px;
-  border-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
   opacity: 0;
   transition:
     opacity 320ms var(--ease-out),
-    padding 480ms var(--ease-out),
-    border-width 480ms var(--ease-out);
+    padding 480ms var(--ease-out);
 }
 
 .toc-product[data-phase="thinking"] .toc-think,
 .toc-product[data-phase="document"] .toc-think {
-  padding: 10px 12px;
-  border-width: 1px;
+  padding: 4px 0;
   opacity: 1;
 }
 
