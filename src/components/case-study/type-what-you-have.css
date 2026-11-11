@@ -245,8 +245,9 @@ html[data-theme="dark"] .toc-product {
   min-height: 0;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
   padding: 0 12px;
   border-width: 0;
   opacity: 0;
@@ -261,6 +262,19 @@ html[data-theme="dark"] .toc-product {
   padding: 10px 12px;
   border-width: 1px;
   opacity: 1;
+}
+
+.toc-think-mark {
+  display: grid;
+  flex: none;
+  color: var(--toc-text-secondary);
+}
+
+.toc-think-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
 .toc-think-line {

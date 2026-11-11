@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Eclipse } from "loading-dev";
 import "./type-what-you-have.css";
 
 /**
@@ -156,11 +157,16 @@ export function TypeWhatYouHaveVisual() {
 
           <div className="toc-think-slot">
             <article className="toc-think">
-              {THINKING.map((line) => (
-                <p key={line} className="toc-think-line">
-                  {line}
-                </p>
-              ))}
+              <span className="toc-think-mark" aria-hidden="true">
+                <Eclipse size={24} />
+              </span>
+              <div className="toc-think-lines">
+                {THINKING.map((line) => (
+                  <p key={line} className="toc-think-line">
+                    {line}
+                  </p>
+                ))}
+              </div>
             </article>
           </div>
         </div>
