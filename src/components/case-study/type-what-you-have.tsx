@@ -169,7 +169,6 @@ export function TypeWhatYouHaveVisual() {
         </div>
 
         <article className="toc-doc" aria-hidden={phase !== "document"}>
-          <span className="toc-label">Sample</span>
           <p className="toc-doc-title">Sales PTO rule (draft)</p>
           <p className="toc-doc-lead">A PTO rule for the sales department.</p>
           <div className="toc-doc-note">
