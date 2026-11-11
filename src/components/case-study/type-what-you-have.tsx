@@ -10,9 +10,9 @@ import "./type-what-you-have.css";
  * The frame stays one size. Three arrangements play inside it:
  * 1. The person's card sits on the right. It types, Send is pressed, then it moves up.
  * 2. That card stays on the right, and the agent's shorter reply appears on the left.
- * 3. A document fills the frame. The earlier cards step back.
+ * 3. Those cards move up, and a document preview is what you look at.
  *
- * Replay runs it again. Reduced motion stays on the document.
+ * Replay runs it again. Reduced motion stays on the preview.
  */
 
 const REQUEST =
@@ -25,10 +25,11 @@ const SEND_HOLD_MS = 220;
 /** How long the small thinking card stays before the document arrives. */
 const THINK_MS = 1500;
 
-const ROWS = [
-  { source: "department", label: "Department", value: "Sales department" },
-  { source: "type", label: "Type", value: "PTO" },
-  { source: "limit", label: "Yearly limit", value: "14 days" },
+const FIELDS = [
+  { label: "Department", value: "Sales" },
+  { label: "Type", value: "PTO" },
+  { label: "Yearly limit", value: "14 days" },
+  { label: "Accrual", value: "Missing", missing: true },
 ] as const;
 
 const THINKING = [
@@ -37,7 +38,6 @@ const THINKING = [
 ] as const;
 
 type Phase = "typing" | "sending" | "thinking" | "document";
-type SourceId = (typeof ROWS)[number]["source"];
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -49,7 +49,6 @@ export function TypeWhatYouHaveVisual() {
   const [run, setRun] = useState(0);
   const [phase, setPhase] = useState<Phase>("typing");
   const [typed, setTyped] = useState("");
-  const [source, setSource] = useState<SourceId | null>(null);
 
   useEffect(() => {
     if (!prefersReducedMotion()) return;
@@ -75,11 +74,9 @@ export function TypeWhatYouHaveVisual() {
     if (prefersReducedMotion()) {
       setPhase("document");
       setTyped(REQUEST);
-      setSource(null);
       return;
     }
 
-    setSource(null);
     setPhase("typing");
     setTyped("");
     let index = 0;
@@ -119,7 +116,6 @@ export function TypeWhatYouHaveVisual() {
       className="toc-product"
       data-visual="type-what-you-have"
       data-phase={phase}
-      data-source={source ?? undefined}
     >
       <div className="toc-top">
         <button type="button" className="toc-replay" onClick={() => setRun((value) => value + 1)}>
@@ -173,39 +169,35 @@ export function TypeWhatYouHaveVisual() {
 
         <article className="toc-doc" aria-hidden={phase !== "document"}>
           <span className="toc-label">Sample</span>
-          <div className="toc-rows">
-            {ROWS.map((row) => (
-              <button
-                key={row.source}
-                type="button"
-                className="toc-row"
-                data-source={row.source}
-                aria-pressed={source === row.source}
-                onPointerEnter={(event) => {
-                  if (event.pointerType === "mouse") setSource(row.source);
-                }}
-                onPointerLeave={(event) => {
-                  if (event.pointerType !== "mouse") return;
-                  if (event.currentTarget.matches(":focus-visible")) return;
-                  setSource(null);
-                }}
-                onFocus={(event) => {
-                  if (event.currentTarget.matches(":focus-visible")) setSource(row.source);
-                }}
-                onBlur={() => setSource(null)}
-                onClick={(event) => {
-                  if (event.pointerType === "mouse") return;
-                  setSource(source === row.source ? null : row.source);
-                }}
-              >
-                <span className="toc-label">{row.label}</span>
-                <span className="toc-value">{row.value}</span>
-              </button>
-            ))}
-            <div className="toc-row toc-row-static">
-              <span className="toc-label">Accrual</span>
-              <span className="toc-label">Missing</span>
-            </div>
+          <p className="toc-doc-title">Sales PTO rule (draft)</p>
+          <p className="toc-doc-lead">A PTO rule for the sales department.</p>
+          <div className="toc-doc-note">
+            <p className="toc-doc-note-title">From the request</p>
+            <p className="toc-doc-note-body">
+              Sales department, yearly limit 14 days. Accrual was not included.
+            </p>
+          </div>
+          <div className="toc-doc-section">
+            <p className="toc-doc-section-title">Captured</p>
+            <ul className="toc-doc-fields">
+              {FIELDS.map((field) => (
+                <li key={field.label} className="toc-doc-field">
+                  <span className="toc-label">{field.label}</span>
+                  <span className={"missing" in field ? "toc-label" : "toc-value"}>
+                    {field.value}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="toc-file">
+            <span className="toc-page-mark" aria-hidden="true">
+              <PageIcon />
+            </span>
+            <span className="toc-file-name">
+              <span className="toc-value">Sales PTO rule draft</span>
+              <span className="toc-label">Page</span>
+            </span>
           </div>
         </article>
       </div>
@@ -214,6 +206,15 @@ export function TypeWhatYouHaveVisual() {
         {status}
       </p>
     </div>
+  );
+}
+
+function PageIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className="toc-send-icon">
+      <path d="M4.5 2.5h5.2L12.5 5.3V13.5h-8Z" />
+      <path d="M9.5 2.7V5.4H12.2" />
+    </svg>
   );
 }
 
