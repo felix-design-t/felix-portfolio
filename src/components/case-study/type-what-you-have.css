@@ -1,7 +1,7 @@
 /*
   Introducing the agent, inside the case-study frame.
-  The box stays 16/10. The chat starts centered, rises when a smaller
-  card appears under it, then both give way to the rule document.
+  The box stays 16/10. The person's card sits on the right. The
+  agent's shorter card answers from the left. Then the rule fills the frame.
   Tokens follow the site theme control, not the system preference.
 */
 
@@ -76,31 +76,31 @@ html[data-theme="dark"] .toc-product {
 }
 
 /*
-  The pair is centered as one group. While the chat is alone, the
-  group is just that card. When the smaller card opens under it, the
-  group grows downward and the chat rises with it.
+  Like a chat window. The person's card hugs the right. When the
+  agent answers, that card rises and stays there, and the shorter
+  reply sits on the left underneath.
 */
 .toc-stack {
   position: absolute;
   top: 50%;
-  left: 50%;
+  right: 4px;
+  left: 4px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: min(88%, 420px);
-  transform: translate(-50%, -50%);
+  align-items: stretch;
+  transform: translateY(-50%);
   transition:
     transform 480ms var(--ease-out),
     opacity 320ms var(--ease-out);
 }
 
 .toc-product[data-phase="thinking"] .toc-stack {
-  transform: translate(-50%, -58%);
+  transform: translateY(-62%);
 }
 
 .toc-product[data-phase="document"] .toc-stack {
   opacity: 0;
-  transform: translate(-50%, -72%);
+  transform: translateY(-78%);
   pointer-events: none;
 }
 
@@ -116,8 +116,9 @@ html[data-theme="dark"] .toc-product {
 .toc-chat {
   display: flex;
   flex-direction: column;
+  align-self: flex-end;
   gap: 12px;
-  width: 100%;
+  width: min(68%, 300px);
   padding: 14px 14px 10px;
 }
 
@@ -201,11 +202,12 @@ html[data-theme="dark"] .toc-product {
   outline-offset: 2px;
 }
 
-/* Closed, this slot has no height, so the chat stays centered alone. */
+/* Closed, this slot has no height, so only the message on the right shows. */
 .toc-think-slot {
   display: grid;
   grid-template-rows: 0fr;
-  width: 92%;
+  align-self: flex-start;
+  width: min(62%, 280px);
   transition: grid-template-rows 480ms var(--ease-out);
 }
 

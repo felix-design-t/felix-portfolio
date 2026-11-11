@@ -7,8 +7,8 @@ import "./type-what-you-have.css";
  * Introducing the agent.
  *
  * The frame stays one size. Three arrangements play inside it:
- * 1. One chat card, centered. It types, Send is pressed, then it moves up.
- * 2. That chat card stays, and a smaller card appears under it.
+ * 1. The person's card sits on the right. It types, Send is pressed, then it moves up.
+ * 2. That card stays on the right, and the agent's shorter reply appears on the left.
  * 3. A document fills the frame. The earlier cards step back.
  *
  * Replay runs it again. Reduced motion stays on the document.
