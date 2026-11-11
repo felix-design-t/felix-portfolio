@@ -1,7 +1,8 @@
 /*
-  Time-Off Copilot product, inside the case-study frame.
-  Tokens follow the site theme control (html[data-theme]), not the
-  system preference, and not a second switch in the tool.
+  Introducing the agent, inside the case-study frame.
+  The product box is one fixed size. Three screens share it, like a
+  stack of cards: the front one slides up and the next one comes in.
+  Tokens follow the site theme control, not the system preference.
 */
 
 .toc-product {
@@ -13,16 +14,21 @@
   --toc-text: #1a1c1a;
   --toc-text-secondary: #5e635e;
   --toc-control: #e4e5e2;
+  /* Room above the front screen so earlier screens can peek. */
+  --toc-peek: 36px;
 
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   width: 100%;
+  aspect-ratio: 16 / 10;
   padding: 12px;
+  overflow: hidden;
   border-radius: 8px;
   background: var(--toc-ground);
   color: var(--toc-text);
+  container-type: size;
 }
 
 html[data-theme="dark"] .toc-product {
@@ -38,9 +44,7 @@ html[data-theme="dark"] .toc-product {
 
 .toc-top {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: flex-end;
   min-height: 28px;
 }
 
@@ -55,9 +59,9 @@ html[data-theme="dark"] .toc-product {
 .toc-value,
 .toc-typed,
 .toc-note,
-.toc-thinking,
+.toc-step,
 .toc-replay,
-.toc-confirm {
+.toc-send {
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 400;
@@ -70,45 +74,67 @@ html[data-theme="dark"] .toc-product {
   color: var(--toc-text);
 }
 
-.toc-stage,
-.toc-rule,
-.toc-motion,
-.toc-still {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  min-width: 0;
+.toc-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
 }
 
-.toc-still {
-  display: none;
-}
-
-.toc-composer,
-.toc-note {
+/*
+  Every screen is the same card. Waiting screens sit below the frame.
+  The front screen sits down by --toc-peek, so the screens that already
+  played can show a strip of their top edge above it.
+*/
+.toc-card {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  height: calc(100% - var(--toc-peek));
   box-sizing: border-box;
-  margin: 0;
-  padding: 8px 10px;
-  border: 1px solid var(--toc-line);
-  border-radius: 4px;
-  background: var(--toc-surface);
-}
-
-.toc-composer {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  overflow: hidden;
+  border: 1px solid var(--toc-line);
+  border-radius: 8px;
+  background: var(--toc-surface);
+  transform: translateY(120%);
+  transition: transform 480ms var(--ease-out);
+}
+
+.toc-product[data-phase="typing"] .toc-card-chat,
+.toc-product[data-phase="sending"] .toc-card-chat,
+.toc-product[data-phase="thinking"] .toc-card-think,
+.toc-product[data-phase="document"] .toc-card-doc {
+  z-index: 3;
+  transform: translateY(var(--toc-peek));
+}
+
+.toc-product[data-phase="thinking"] .toc-card-chat,
+.toc-product[data-phase="document"] .toc-card-think {
+  z-index: 2;
+  transform: translateY(16px);
+}
+
+.toc-product[data-phase="document"] .toc-card-chat {
+  z-index: 1;
+  transform: translateY(4px);
+}
+
+.toc-chat {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
   gap: 8px;
-  min-height: 72px;
+  min-height: 0;
 }
 
-.toc-typed {
+.toc-typed,
+.toc-note {
   margin: 0;
-  min-height: 20px;
-}
-
-.toc-thinking {
-  margin: 0;
-  color: var(--toc-text-secondary);
 }
 
 .toc-caret {
@@ -121,7 +147,7 @@ html[data-theme="dark"] .toc-product {
   animation: toc-caret 1s steps(1, end) infinite;
 }
 
-.toc-composer:hover .toc-caret {
+.toc-chat:hover .toc-caret {
   animation-play-state: paused;
 }
 
@@ -134,6 +160,78 @@ html[data-theme="dark"] .toc-product {
   100% {
     opacity: 0;
   }
+}
+
+.toc-send,
+.toc-replay {
+  box-sizing: border-box;
+  height: 28px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out);
+}
+
+.toc-send {
+  align-self: flex-end;
+  background: var(--toc-control);
+  color: var(--toc-text-secondary);
+}
+
+.toc-product[data-phase="sending"] .toc-send {
+  transform: scale(0.98);
+}
+
+.toc-replay {
+  background: transparent;
+  color: var(--toc-text-secondary);
+}
+
+.toc-send:active,
+.toc-replay:active {
+  transform: scale(0.98);
+}
+
+.toc-send:focus-visible,
+.toc-replay:focus-visible,
+.toc-row:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.toc-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 4px 0 0;
+  list-style: none;
+}
+
+.toc-step {
+  color: var(--toc-text-secondary);
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.toc-product[data-phase="thinking"] .toc-step,
+.toc-product[data-phase="document"] .toc-step {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 160ms var(--ease-out),
+    transform 160ms var(--ease-out);
+}
+
+.toc-product[data-phase="thinking"] .toc-step:nth-child(2),
+.toc-product[data-phase="document"] .toc-step:nth-child(2) {
+  transition-delay: 180ms;
+}
+
+.toc-product[data-phase="thinking"] .toc-step:nth-child(3),
+.toc-product[data-phase="document"] .toc-step:nth-child(3) {
+  transition-delay: 360ms;
 }
 
 .toc-rows {
@@ -212,50 +310,6 @@ button.toc-row {
   transform: scaleX(1);
 }
 
-.toc-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.toc-confirm,
-.toc-replay {
-  box-sizing: border-box;
-  height: 28px;
-  padding: 4px 8px;
-  border: 0;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: transform 160ms var(--ease-out);
-}
-
-.toc-confirm {
-  background: var(--toc-mark);
-  color: var(--toc-on-mark);
-}
-
-.toc-replay {
-  background: transparent;
-  color: var(--toc-text-secondary);
-}
-
-.toc-confirm:active,
-.toc-replay:active {
-  transform: scale(0.98);
-}
-
-.toc-rule-appear {
-  animation: toc-rule-in 160ms var(--ease-out);
-}
-
-@keyframes toc-rule-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .toc-sr {
   position: absolute;
   width: 1px;
@@ -268,30 +322,67 @@ button.toc-row {
   border: 0;
 }
 
+@container (max-height: 280px) {
+  .toc-product {
+    --toc-peek: 20px;
+    gap: 4px;
+    padding: 8px;
+  }
+
+  .toc-note {
+    display: none;
+  }
+
+  .toc-row {
+    min-height: 26px;
+  }
+
+  .toc-card {
+    gap: 8px;
+    padding: 8px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .toc-motion {
+  .toc-card {
+    transition: none;
+    transform: none;
+  }
+
+  .toc-card-chat,
+  .toc-card-think {
     display: none;
   }
 
-  .toc-still {
-    display: flex;
+  .toc-card-doc {
+    position: relative;
+    top: auto;
+    height: auto;
+    transform: none;
   }
 
-  .toc-caret {
-    display: none;
-  }
-
-  .toc-word::after,
-  .toc-row::before,
-  .toc-confirm,
-  .toc-replay,
-  .toc-rule-appear {
+  .toc-caret,
+  .toc-step {
     animation: none;
     transition: none;
   }
 
-  .toc-confirm:active,
-  .toc-replay:active {
+  .toc-step {
+    opacity: 1;
+    transform: none;
+  }
+
+  .toc-word::after,
+  .toc-row::before,
+  .toc-send,
+  .toc-replay {
+    animation: none;
+    transition: none;
+  }
+
+  .toc-send:active,
+  .toc-replay:active,
+  .toc-product[data-phase="sending"] .toc-send {
     transform: none;
   }
 }
