@@ -48,7 +48,6 @@ export const timeOffCopilot: CaseStudy = {
       body: "An admin starts by typing their thoughts. The agent handles the rest, which lowers the stress of not knowing where to start.",
       visual: {
         name: "Note and checklist",
-        caption: "Sample note, captured and missing",
         aspectRatio: "16 / 10",
       },
     },
