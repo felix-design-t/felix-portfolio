@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CaseStudyPage } from "@/components/case-study/case-study-page";
+import { SameSheetAgain } from "@/components/case-study/same-sheet-again";
 import { TypeWhatYouHaveVisual } from "@/components/case-study/type-what-you-have";
 import { timeOffCopilot } from "@/content/case-studies/time-off-copilot";
 
@@ -15,7 +16,12 @@ export default function TimeOffCopilotPage() {
   return (
     <CaseStudyPage
       study={timeOffCopilot}
-      visuals={{ "type-what-you-have": <TypeWhatYouHaveVisual /> }}
+      visuals={{
+        // Problem section: the three setup sheets, with the hover riffle.
+        "blank-form": <SameSheetAgain />,
+        // Introducing Agent, from 9902a6f. Kept beside the sheet stack.
+        "type-what-you-have": <TypeWhatYouHaveVisual />,
+      }}
     />
   );
 }

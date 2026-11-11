@@ -9,16 +9,22 @@
 .same-sheet {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  padding: var(--space-3);
   container-type: size;
   color: var(--text);
-}
-
-.same-sheet:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: -6px;
+  /* Room on the right for the notes, outside the cards. */
+  --note-col: 148px;
+  --callout-stem: 22px;
+  /* One step of room on the left for the shorter riffle. */
+  --sheet-left: 22px;
+  --sheet-step-x: 14px;
+  /* The peek is the title only: padding above the words, plus the line.
+     The next card covers the rule and every row. */
+  --sheet-title-pad: 10px;
+  --sheet-step-y: calc(var(--sheet-title-pad) + var(--leading-caption));
+  /* Centers the taller stack while it is still. One step down still fits. */
+  --sheet-top: 16px;
+  /* Keeps the back card's right edge inside the stack. */
+  --sheet-inset-right: 16px;
 }
 
 /* Read by assistive tech. The cards behind are hidden from it. */
@@ -40,20 +46,18 @@
   clips a copy that steps past a corner.
 */
 .same-sheet-stage {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  --sheet-left: 40px;
-  --sheet-step-x: 12px;
-  --sheet-step-y: 36px;
-  --sheet-top: 8px;
+  position: absolute;
+  inset: var(--space-3) var(--note-col) var(--space-3) var(--space-3);
+  /* Visible so a note can leave its card and still be clipped by the frame. */
+  overflow: visible;
 }
 
 /* One setup sheet. A site card: page ground, hairline, 8px corner. */
 .same-sheet-card {
   position: absolute;
-  width: calc(100% - var(--sheet-left) - var(--sheet-step-x) * 2);
+  width: calc(
+    100% - var(--sheet-left) - var(--sheet-step-x) * 2 - var(--sheet-inset-right)
+  );
   border: 1px solid var(--hairline);
   border-radius: var(--radius-sm);
   background: var(--bg);
@@ -71,21 +75,15 @@
   top: calc(var(--sheet-top) + var(--sheet-step-y));
 }
 
-.same-sheet-card[data-sheet="parental"] {
+.same-sheet-card[data-sheet="jury"] {
   z-index: 2;
   left: calc(var(--sheet-left) + var(--sheet-step-x) * 2);
   top: var(--sheet-top);
 }
 
-.same-sheet-card[data-sheet="more"] {
-  z-index: 1;
-  left: calc(var(--sheet-left) + var(--sheet-step-x) * 3);
-  top: calc(var(--sheet-top) - var(--sheet-step-y));
-}
-
 .same-sheet-type {
   margin: 0 14px;
-  padding: 12px 0 8px;
+  padding: var(--sheet-title-pad) 0 4px;
   border-bottom: 1px solid var(--hairline);
   font-family: var(--font-body);
   font-size: var(--text-caption);
@@ -93,47 +91,79 @@
   color: var(--text);
 }
 
-.same-sheet-rows {
+/*
+  The note is part of the card, so it rides the same move as the riffle.
+  Every stem is one length and begins at that card's right border.
+*/
+.same-sheet-callout {
+  position: absolute;
+  left: calc(100% + 1px);
+  top: var(--sheet-title-pad);
+  display: flex;
+  align-items: center;
+  margin: 0;
+  color: var(--accent-rose);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  white-space: nowrap;
+  opacity: 0.35;
+  transition: opacity 160ms var(--ease-out);
+}
+
+.same-sheet-callout[data-callout="pto"] {
+  opacity: 1;
+}
+
+.same-sheet:has([data-sheet="pto"]:hover) .same-sheet-callout,
+.same-sheet:has([data-sheet="sick"]:hover) .same-sheet-callout,
+.same-sheet:has([data-sheet="jury"]:hover) .same-sheet-callout {
+  opacity: 0.35;
+}
+
+.same-sheet:has([data-sheet="pto"]:hover) .same-sheet-callout[data-callout="pto"],
+.same-sheet:has([data-sheet="sick"]:hover) .same-sheet-callout[data-callout="sick"],
+.same-sheet:has([data-sheet="jury"]:hover) .same-sheet-callout[data-callout="jury"] {
+  opacity: 1;
+}
+
+.same-sheet-callout-stem {
+  width: 36px;
+  height: 1px;
+  margin-right: 8px;
+  background: currentColor;
   position: relative;
-  display: grid;
-  /* Label, a gutter for the link, then the value. */
-  grid-template-columns: minmax(0, 1fr) 16px max-content;
+}
+
+.same-sheet-callout-stem::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+  transform: translateY(-50%);
+}
+
+.same-sheet-rows {
   margin: 0;
   padding: 0 14px 6px;
   list-style: none;
 }
 
-/*
-  The row's children join the list grid (display: contents),
-  so the link can sit in the gutter without taking a row of its own.
-*/
 .same-sheet-row {
-  display: contents;
-}
-
-.same-sheet-label,
-.same-sheet-rule,
-.same-sheet-value {
-  min-height: 28px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 32px;
   padding: 6px 0;
   border-bottom: 1px solid var(--hairline);
 }
 
-.same-sheet-label {
-  grid-column: 1;
-}
-
-.same-sheet-rule {
-  grid-column: 2;
-}
-
-.same-sheet-value {
-  grid-column: 3;
-}
-
-.same-sheet-row:last-of-type .same-sheet-label,
-.same-sheet-row:last-of-type .same-sheet-rule,
-.same-sheet-row:last-of-type .same-sheet-value {
+.same-sheet-row:last-child {
   border-bottom: 0;
 }
 
@@ -150,9 +180,10 @@
 
 .same-sheet-value {
   color: var(--text);
+  white-space: nowrap;
 }
 
-/* The one accent: a 1px line under the word, not a new text color. */
+/* The accent: a 1px line under the word, not a new text color. */
 .same-sheet-mark {
   text-decoration-line: underline;
   text-decoration-thickness: 1px;
@@ -161,79 +192,50 @@
 }
 
 /*
-  One hairline from Accrual back up to Total.
-  Rows are equal, so the line covers row 3 through row 5
-  (Total, Limit, Accrual) and grows upward.
-*/
-.same-sheet-link {
-  grid-column: 2;
-  grid-row: 3 / 6;
-  justify-self: center;
-  align-self: stretch;
-  width: 1px;
-  background: var(--text);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 90ms var(--ease-out);
-}
-
-.same-sheet:hover .same-sheet-link,
-.same-sheet:focus-visible .same-sheet-link {
-  transform: scaleY(1);
-  transition-duration: 180ms;
-}
-
-/*
   A short frame cannot spare the desktop offsets.
-  Type stays on the caption size. Only the pile tightens,
-  and the link is already drawn.
+  Type stays on the caption size. Only the pile tightens.
 */
 @container (max-height: 320px) {
   .same-sheet {
-    padding: var(--space-2);
+    --sheet-left: 20px;
+    --sheet-step-x: 8px;
+    --sheet-title-pad: 6px;
+    --sheet-step-y: calc(var(--sheet-title-pad) + var(--leading-caption));
+    --sheet-top: 8px;
+    --sheet-inset-right: 8px;
+    --note-col: 118px;
+    --callout-stem: 14px;
   }
 
   .same-sheet-stage {
-    --sheet-left: 24px;
-    --sheet-step-x: 10px;
-    --sheet-step-y: 26px;
-    --sheet-top: 4px;
+    inset: var(--space-1) var(--note-col) var(--space-1) var(--space-1);
+  }
+
+  .same-sheet-callout[data-callout="jury"],
+  .same-sheet-callout[data-callout="sick"],
+  .same-sheet-callout[data-callout="pto"] {
+    top: var(--sheet-title-pad);
   }
 
   .same-sheet-type {
     margin-inline: 10px;
-    padding: 8px 0 6px;
+    padding-bottom: 4px;
   }
 
   .same-sheet-rows {
     padding-inline: 10px;
   }
 
-  .same-sheet-label,
-  .same-sheet-rule,
-  .same-sheet-value {
-    min-height: 22px;
-    padding-block: 3px;
-  }
-
-  .same-sheet-link {
-    transform: none;
-    transition: none;
-  }
-}
-
-@media (max-width: 639px), (hover: none), (prefers-reduced-motion: reduce) {
-  .same-sheet-link {
-    transform: none;
-    transition: none;
+  .same-sheet-row {
+    min-height: 0;
+    padding-block: 0;
   }
 }
 
 /*
-  Riffle, flat. Cards in front of the hovered card step down and left,
-  the opposite of the pile, so more of the hovered card shows.
-  Two horizontal steps and three vertical steps.
-  The hovered card does not move. Nothing changes color.
+  Riffle, flat. Cards in front of the hovered card take one step
+  down and left, so a little more of the hovered card shows.
+  The hovered card does not move. The stack stays centered at rest.
 */
 .same-sheet-card {
   transition: transform 200ms var(--ease-out);
@@ -241,21 +243,18 @@
 
 .same-sheet-stage:has([data-sheet="jury"]:hover) [data-sheet="sick"],
 .same-sheet-stage:has([data-sheet="jury"]:hover) [data-sheet="pto"],
-.same-sheet-stage:has([data-sheet="parental"]:hover) [data-sheet="sick"],
-.same-sheet-stage:has([data-sheet="parental"]:hover) [data-sheet="pto"],
 .same-sheet-stage:has([data-sheet="sick"]:hover) [data-sheet="pto"] {
-  transform: translate(calc(var(--sheet-step-x) * -2), calc(var(--sheet-step-y) * 3));
+  transform: translate(calc(var(--sheet-step-x) * -1), var(--sheet-step-y));
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .same-sheet-card {
+  .same-sheet-card,
+  .same-sheet-callout {
     transition: none;
   }
 
   .same-sheet-stage:has([data-sheet="jury"]:hover) [data-sheet="sick"],
   .same-sheet-stage:has([data-sheet="jury"]:hover) [data-sheet="pto"],
-  .same-sheet-stage:has([data-sheet="parental"]:hover) [data-sheet="sick"],
-  .same-sheet-stage:has([data-sheet="parental"]:hover) [data-sheet="pto"],
   .same-sheet-stage:has([data-sheet="sick"]:hover) [data-sheet="pto"] {
     transform: none;
   }
