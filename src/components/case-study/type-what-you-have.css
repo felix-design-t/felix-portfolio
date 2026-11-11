@@ -166,7 +166,7 @@ html[data-theme="dark"] .toc-product {
   padding: 0;
   border: 0;
   border-radius: 4px;
-  background: transparent;
+  background: var(--toc-control);
   color: var(--toc-text-secondary);
   cursor: pointer;
   transition: transform 160ms var(--ease-out);
