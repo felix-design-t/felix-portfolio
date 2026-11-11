@@ -7,8 +7,11 @@
 */
 
 .same-sheet {
-  position: absolute;
-  inset: 0;
+  /* The filled frame sizes itself from this box. Absolute cards
+     do not give it a height, so this keeps the 16/10 placeholder slot. */
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
   container-type: size;
   color: var(--text);
   /* Room on the right for the notes, outside the cards. */
