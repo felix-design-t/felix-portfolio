@@ -23,7 +23,7 @@ const CHAR_MS = 28;
 /** How long Send stays pressed before the card moves up. */
 const SEND_HOLD_MS = 220;
 /** How long the small thinking card stays before the document arrives. */
-const THINK_MS = 1500;
+const THINK_MS = 1800;
 
 const FIELDS = [
   { label: "Department", value: "Sales" },
@@ -33,8 +33,9 @@ const FIELDS = [
 ] as const;
 
 const THINKING = [
-  "Pulling the department and the yearly limit",
-  "Sales department, 14 days",
+  "Understanding admin's scope...",
+  "Pulling the department documents...",
+  "Worked 10s",
 ] as const;
 
 type Phase = "typing" | "sending" | "thinking" | "document";
@@ -101,7 +102,7 @@ export function TypeWhatYouHaveVisual() {
 
   const status =
     phase === "thinking"
-      ? "Pulling the department and the yearly limit. Sales department, 14 days."
+      ? "Understanding admin's scope. Pulling the department documents. Worked 10s."
       : phase === "document"
         ? "Rule created. Sales department, PTO, yearly limit 14 days. Accrual missing."
         : phase === "sending"

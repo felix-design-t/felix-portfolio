@@ -245,7 +245,8 @@ html[data-theme="dark"] .toc-product {
   display: grid;
   grid-template-rows: 0fr;
   align-self: flex-start;
-  width: min(62%, 280px);
+  width: max-content;
+  max-width: 100%;
   transition: grid-template-rows 480ms var(--ease-out);
 }
 
@@ -297,6 +298,7 @@ html[data-theme="dark"] .toc-product {
 .toc-think-line {
   margin: 0;
   color: var(--toc-text-secondary);
+  white-space: nowrap;
   opacity: 0;
   transform: translateY(4px);
 }
@@ -312,7 +314,12 @@ html[data-theme="dark"] .toc-product {
 
 .toc-product[data-phase="thinking"] .toc-think-line:nth-child(2),
 .toc-product[data-phase="document"] .toc-think-line:nth-child(2) {
-  transition-delay: 160ms;
+  transition-delay: 420ms;
+}
+
+.toc-product[data-phase="thinking"] .toc-think-line:nth-child(3),
+.toc-product[data-phase="document"] .toc-think-line:nth-child(3) {
+  transition-delay: 840ms;
 }
 
 .toc-doc {
