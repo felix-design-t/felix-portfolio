@@ -261,7 +261,7 @@ html[data-theme="dark"] .toc-product {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -280,7 +280,11 @@ html[data-theme="dark"] .toc-product {
 .toc-think-mark {
   display: grid;
   flex: none;
-  color: var(--toc-text-secondary);
+  color: var(--toc-mark);
+}
+
+.toc-think-mark .ld-eclipse-dot:nth-child(2) {
+  background: color-mix(in srgb, var(--toc-mark) 40%, transparent);
 }
 
 .toc-think-lines {

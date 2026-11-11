@@ -154,7 +154,7 @@ export function TypeWhatYouHaveVisual() {
           <div className="toc-think-slot">
             <article className="toc-think">
               <span className="toc-think-mark" aria-hidden="true">
-                <Eclipse size={24} />
+                <Eclipse size={16} />
               </span>
               <div className="toc-think-lines">
                 {THINKING.map((line) => (
