@@ -182,6 +182,12 @@
   background: var(--mat);
 }
 
+/* A built visual defines its own height. The ratio is the empty slot. */
+.case-study-frame[data-state="filled"] {
+  display: block;
+  height: auto;
+}
+
 .case-study-placeholder {
   display: flex;
   flex-direction: column;

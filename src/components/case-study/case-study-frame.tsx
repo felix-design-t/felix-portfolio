@@ -41,7 +41,7 @@ export function CaseStudyFrame({
       {controls ? <div className="case-study-frame-controls">{controls}</div> : null}
       <div
         className="case-study-frame"
-        style={{ aspectRatio }}
+        style={isPlaceholder ? { aspectRatio } : undefined}
         data-state={isPlaceholder ? "placeholder" : "filled"}
       >
         {isPlaceholder ? (

@@ -1,0 +1,297 @@
+/*
+  Time-Off Copilot product, inside the case-study frame.
+  Tokens follow the site theme control (html[data-theme]), not the
+  system preference, and not a second switch in the tool.
+*/
+
+.toc-product {
+  --toc-mark: #0e6b52;
+  --toc-on-mark: #f2f3f0;
+  --toc-ground: #f3f4f2;
+  --toc-surface: #ffffff;
+  --toc-line: rgba(26, 28, 26, 0.12);
+  --toc-text: #1a1c1a;
+  --toc-text-secondary: #5e635e;
+  --toc-control: #e4e5e2;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--toc-ground);
+  color: var(--toc-text);
+}
+
+html[data-theme="dark"] .toc-product {
+  --toc-mark: #6fdec0;
+  --toc-on-mark: #1a1c1a;
+  --toc-ground: #141615;
+  --toc-surface: #1c1f1d;
+  --toc-line: rgba(242, 243, 240, 0.14);
+  --toc-text: #f2f3f0;
+  --toc-text-secondary: #a3a8a3;
+  --toc-control: #2a2d2b;
+}
+
+.toc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 28px;
+}
+
+.toc-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--toc-text-secondary);
+}
+
+.toc-value,
+.toc-typed,
+.toc-note,
+.toc-thinking,
+.toc-replay,
+.toc-confirm {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.toc-value,
+.toc-typed,
+.toc-note {
+  color: var(--toc-text);
+}
+
+.toc-stage,
+.toc-rule,
+.toc-motion,
+.toc-still {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.toc-still {
+  display: none;
+}
+
+.toc-composer,
+.toc-note {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--toc-line);
+  border-radius: 4px;
+  background: var(--toc-surface);
+}
+
+.toc-composer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 72px;
+}
+
+.toc-typed {
+  margin: 0;
+  min-height: 20px;
+}
+
+.toc-thinking {
+  margin: 0;
+  color: var(--toc-text-secondary);
+}
+
+.toc-caret {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  margin-left: 1px;
+  background: var(--toc-text);
+  vertical-align: text-bottom;
+  animation: toc-caret 1s steps(1, end) infinite;
+}
+
+.toc-composer:hover .toc-caret {
+  animation-play-state: paused;
+}
+
+@keyframes toc-caret {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.toc-rows {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--toc-line);
+  border-radius: 4px;
+  background: var(--toc-surface);
+}
+
+.toc-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 6.75rem minmax(0, 1fr);
+  align-items: center;
+  column-gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 36px;
+  margin: 0;
+  padding: 0 10px 0 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+button.toc-row {
+  cursor: pointer;
+  font: inherit;
+}
+
+.toc-row + .toc-row {
+  border-top: 1px solid var(--toc-line);
+}
+
+.toc-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background: var(--toc-mark);
+  transform: scaleY(0);
+  transform-origin: top center;
+  transition: transform 160ms var(--ease-out);
+}
+
+.toc-product[data-source="department"] .toc-row[data-source="department"]::before,
+.toc-product[data-source="type"] .toc-row[data-source="type"]::before,
+.toc-product[data-source="limit"] .toc-row[data-source="limit"]::before {
+  transform: scaleY(1);
+}
+
+.toc-word {
+  position: relative;
+}
+
+.toc-word::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--toc-mark);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 160ms var(--ease-out);
+}
+
+.toc-product[data-source="department"] .toc-word[data-source="department"]::after,
+.toc-product[data-source="type"] .toc-word[data-source="type"]::after,
+.toc-product[data-source="limit"] .toc-word[data-source="limit"]::after {
+  transform: scaleX(1);
+}
+
+.toc-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.toc-confirm,
+.toc-replay {
+  box-sizing: border-box;
+  height: 28px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out);
+}
+
+.toc-confirm {
+  background: var(--toc-mark);
+  color: var(--toc-on-mark);
+}
+
+.toc-replay {
+  background: transparent;
+  color: var(--toc-text-secondary);
+}
+
+.toc-confirm:active,
+.toc-replay:active {
+  transform: scale(0.98);
+}
+
+.toc-rule-appear {
+  animation: toc-rule-in 160ms var(--ease-out);
+}
+
+@keyframes toc-rule-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.toc-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toc-motion {
+    display: none;
+  }
+
+  .toc-still {
+    display: flex;
+  }
+
+  .toc-caret {
+    display: none;
+  }
+
+  .toc-word::after,
+  .toc-row::before,
+  .toc-confirm,
+  .toc-replay,
+  .toc-rule-appear {
+    animation: none;
+    transition: none;
+  }
+
+  .toc-confirm:active,
+  .toc-replay:active {
+    transform: none;
+  }
+}
