@@ -152,8 +152,27 @@ html[data-theme="dark"] .toc-product {
   }
 }
 
+.toc-chat-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toc-attach {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--toc-text-secondary);
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out);
+}
+
 .toc-send {
-  align-self: flex-end;
   display: grid;
   width: 28px;
   height: 28px;
@@ -195,6 +214,11 @@ html[data-theme="dark"] .toc-product {
   transition: transform 160ms var(--ease-out);
 }
 
+.toc-attach:active {
+  transform: scale(0.98);
+}
+
+.toc-attach:focus-visible,
 .toc-send:focus-visible,
 .toc-replay:focus-visible,
 .toc-row:focus-visible {
@@ -373,6 +397,7 @@ button.toc-row {
     display: none;
   }
 
+  .toc-attach:active,
   .toc-send:active,
   .toc-replay:active,
   .toc-product[data-phase="sending"] .toc-send {

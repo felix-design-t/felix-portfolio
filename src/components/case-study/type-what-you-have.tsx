@@ -133,15 +133,25 @@ export function TypeWhatYouHaveVisual() {
               {typed}
               {phase === "typing" ? <span className="toc-caret" aria-hidden="true" /> : null}
             </p>
-            <button
-              type="button"
-              className="toc-send"
-              aria-label="Send"
-              aria-pressed={phase === "sending"}
-              tabIndex={chatIsQuiet ? -1 : 0}
-            >
-              <SendIcon />
-            </button>
+            <div className="toc-chat-bar">
+              <button
+                type="button"
+                className="toc-attach"
+                aria-label="Attach a document"
+                tabIndex={chatIsQuiet ? -1 : 0}
+              >
+                <AttachIcon />
+              </button>
+              <button
+                type="button"
+                className="toc-send"
+                aria-label="Send"
+                aria-pressed={phase === "sending"}
+                tabIndex={chatIsQuiet ? -1 : 0}
+              >
+                <SendIcon />
+              </button>
+            </div>
           </article>
 
           <div className="toc-think-slot">
@@ -198,6 +208,14 @@ export function TypeWhatYouHaveVisual() {
         {status}
       </p>
     </div>
+  );
+}
+
+function AttachIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className="toc-send-icon">
+      <path d="M8 3.5v9M3.5 8h9" />
+    </svg>
   );
 }
 
