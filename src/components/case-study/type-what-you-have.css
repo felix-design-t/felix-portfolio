@@ -65,6 +65,10 @@ html[data-theme="dark"] .toc-product {
   line-height: 20px;
 }
 
+.toc-doc-title {
+  font-weight: 500;
+}
+
 .toc-value,
 .toc-typed,
 .toc-doc-title,
