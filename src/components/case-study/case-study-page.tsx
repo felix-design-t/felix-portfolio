@@ -22,32 +22,38 @@ export function CaseStudyPage({ study, visuals = {}, cover }: CaseStudyPageProps
   const wayfindingItems = study.sections.map((section, position) => ({
     id: section.id,
     index: formatSectionIndex(position + 1),
-    title: section.title,
+    title: section.navTitle ?? section.kind,
+    continuesPrevious: section.continuesPrevious,
   }));
 
   return (
     <article className="case-study-page" aria-labelledby={topId}>
-      <CaseStudyWayfinding items={wayfindingItems} topId={topId} />
-
       <header className="case-study-header">
         <h1 id={topId} className="case-study-title">
           {study.title}
         </h1>
       </header>
 
-      <CaseStudyCover cover={study.cover} meta={study.meta}>
-        {cover}
-      </CaseStudyCover>
+      {/*
+        The rail lives in this block, not on the title. On a wide
+        window it is fixed to the left edge of the screen.
+      */}
+      <div className="case-study-main">
+        <CaseStudyWayfinding items={wayfindingItems} topId={topId} />
 
-      <div className="case-study-sections">
-        {study.sections.map((section, position) => (
-          <CaseStudySection
-            key={section.id}
-            section={section}
-            position={position + 1}
-            visual={visuals[section.id]}
-          />
-        ))}
+        <CaseStudyCover cover={study.cover} meta={study.meta}>
+          {cover}
+        </CaseStudyCover>
+
+        <div className="case-study-sections">
+          {study.sections.map((section) => (
+            <CaseStudySection
+              key={section.id}
+              section={section}
+              visual={visuals[section.id]}
+            />
+          ))}
+        </div>
       </div>
     </article>
   );

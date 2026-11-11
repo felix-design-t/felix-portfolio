@@ -1,26 +1,20 @@
 import type { ReactNode } from "react";
 import { CaseStudyFrame } from "./case-study-frame";
-import {
-  formatSectionIndex,
-  type CaseStudySectionData,
-} from "./types";
+import type { CaseStudySectionData } from "./types";
 
 type CaseStudySectionProps = {
   section: CaseStudySectionData;
-  /** 1-based position on the page. Becomes the "01" index. */
-  position: number;
   /** A built visual. Without it the section's frame stays a placeholder. */
   visual?: ReactNode;
   visualControls?: ReactNode;
 };
 
 /**
- * One section: mono index and kind on one line, the title under it,
+ * One section: the kind on one line, the title under it,
  * one short paragraph, then the frame if the section has one.
  */
 export function CaseStudySection({
   section,
-  position,
   visual,
   visualControls,
 }: CaseStudySectionProps) {
@@ -31,11 +25,9 @@ export function CaseStudySection({
       id={section.id}
       className="case-study-section"
       aria-labelledby={headingId}
+      data-continues={section.continuesPrevious ? "true" : undefined}
     >
-      <p className="case-study-kicker">
-        <span className="case-study-kicker-index">{formatSectionIndex(position)}</span>
-        <span>{section.kind}</span>
-      </p>
+      <p className="case-study-kicker">{section.kind}</p>
       <h2 id={headingId} className="case-study-section-title">
         {section.title}
       </h2>
@@ -55,6 +47,51 @@ export function CaseStudySection({
           {visual}
         </CaseStudyFrame>
       ) : null}
+      {section.visual && section.tradeoffs ? (
+        <TradeoffFrame note={section.tradeoffNote} />
+      ) : null}
+      {section.closingTitle ? (
+        <h3 className="case-study-section-title">{section.closingTitle}</h3>
+      ) : null}
+      {section.closing ? (
+        <p className="case-study-body">{section.closing}</p>
+      ) : null}
+      {section.closingVisual ? (
+        <CaseStudyFrame
+          name={section.closingVisual.name}
+          caption={section.closingVisual.caption}
+          aspectRatio={section.closingVisual.aspectRatio}
+        />
+      ) : null}
+      {section.closingVisual && section.tradeoffs ? <TradeoffFrame /> : null}
+      {section.followUp ? (
+        <>
+          <h3 className="case-study-section-title">{section.followUp.title}</h3>
+          <p
+            className="case-study-body"
+            data-placeholder={
+              section.followUp.isPlaceholderText ? "true" : undefined
+            }
+          >
+            {section.followUp.body}
+          </p>
+          {section.followUp.visual ? (
+            <CaseStudyFrame
+              name={section.followUp.visual.name}
+              caption={section.followUp.visual.caption}
+              aspectRatio={section.followUp.visual.aspectRatio}
+            />
+          ) : null}
+          {section.followUp.visual && section.tradeoffs ? (
+            <TradeoffFrame note={section.followUp.tradeoffNote} />
+          ) : null}
+        </>
+      ) : null}
     </section>
   );
+}
+
+/** A second frame under a placeholder. It names the tradeoff of that step. */
+function TradeoffFrame({ note }: { note?: string }) {
+  return <CaseStudyFrame name="Tradeoffs" note={note} aspectRatio="16 / 10" />;
 }

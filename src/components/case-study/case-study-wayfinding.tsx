@@ -1,8 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
-export type WayfindingItem = { id: string; index: string; title: string };
+export type WayfindingItem = {
+  id: string;
+  index: string;
+  title: string;
+  /** This section stays on the previous rail row. */
+  continuesPrevious?: boolean;
+};
 
 type CaseStudyWayfindingProps = {
   items: WayfindingItem[];
@@ -18,10 +24,20 @@ type CaseStudyWayfindingProps = {
  * Both read the same "active section" state, like two variants of one
  * component bound to the same variable. The rail is the progress, so
  * there is no bar.
+ *
+ * The rail marks the current section with one dot, the way Craft's
+ * sidebar does. It is a single element that slides to the new row
+ * (a shared indicator), and the current title steps aside so the
+ * dot has a clear seat. Eight dots swapping on and off would blink.
+ * Index is the first row, and the dot starts there. A section that
+ * continues the one above it does not get its own row.
  */
 export function CaseStudyWayfinding({ items, topId }: CaseStudyWayfindingProps) {
-  // -1 means the reader is still on the cover, before section 01.
+  // -1 means the reader is on the cover, the Index row.
   const [activeIndex, setActiveIndex] = useState(-1);
+  const railListRef = useRef<HTMLDivElement>(null);
+  // Distance from the top of the list to the dot. Null until measured.
+  const [dotOffset, setDotOffset] = useState<number | null>(null);
 
   useEffect(() => {
     // A section counts as current once its top passes this share of the window.
@@ -67,6 +83,41 @@ export function CaseStudyWayfinding({ items, topId }: CaseStudyWayfindingProps) 
     };
   }, [items]);
 
+  // Place the dot on the vertical center of the current row.
+  // ResizeObserver catches wraps when the margin gets narrower.
+  useLayoutEffect(() => {
+    const list = railListRef.current;
+    if (!list) return;
+
+    const dotSize = 4;
+
+    function placeDot() {
+      const current = list?.querySelector<HTMLElement>(
+        '[aria-current="location"]',
+      );
+      const row = current?.closest("li");
+      if (!row || !list) return;
+      setDotOffset(row.offsetTop + (row.offsetHeight - dotSize) / 2);
+    }
+
+    placeDot();
+    const observer = new ResizeObserver(placeDot);
+    observer.observe(list);
+    return () => observer.disconnect();
+  }, [activeIndex, items]);
+
+  const railRows = items.reduce<
+    { id: string; title: string; positions: number[] }[]
+  >((rows, item, position) => {
+    const previous = rows[rows.length - 1];
+    if (item.continuesPrevious && previous) {
+      previous.positions.push(position);
+      return rows;
+    }
+    rows.push({ id: item.id, title: item.title, positions: [position] });
+    return rows;
+  }, []);
+
   const total = String(items.length).padStart(2, "0");
   const currentLabel =
     activeIndex >= 0 ? items[activeIndex].index : "00";
@@ -82,20 +133,41 @@ export function CaseStudyWayfinding({ items, topId }: CaseStudyWayfindingProps) 
   return (
     <>
       <nav className="case-study-rail" aria-label="Sections">
-        <ol className="case-study-rail-list">
-          {items.map((item, position) => (
-            <li key={item.id}>
+        <div className="case-study-rail-list" ref={railListRef}>
+          <span
+            className="case-study-rail-dot"
+            aria-hidden="true"
+            style={
+              dotOffset === null
+                ? undefined
+                : { transform: `translateY(${dotOffset}px)` }
+            }
+          />
+          <ol>
+            <li>
               <a
-                href={`#${item.id}`}
+                href={`#${topId}`}
                 className="case-study-rail-link"
-                aria-current={position === activeIndex ? "location" : undefined}
+                aria-current={activeIndex < 0 ? "location" : undefined}
               >
-                <span className="case-study-rail-index">{item.index}</span>
-                <span>{item.title}</span>
+                <span className="case-study-rail-label">Index</span>
               </a>
             </li>
-          ))}
-        </ol>
+            {railRows.map((row) => (
+              <li key={row.id}>
+                <a
+                  href={`#${row.id}`}
+                  className="case-study-rail-link"
+                  aria-current={
+                    row.positions.includes(activeIndex) ? "location" : undefined
+                  }
+                >
+                  <span className="case-study-rail-label">{row.title}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
       </nav>
 
       <nav className="case-study-stepper" aria-label="Section steps">
