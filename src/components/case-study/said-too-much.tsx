@@ -16,8 +16,8 @@ import { TOC_HOLD_MS, TOC_STEP_MS } from "./toc-motion";
  * that line moves up.
  * The policy card writes after that. It grows past the frame, so the
  * older lines fade at the top. Each row has a small dot on its right.
- * A gray dot is a row from the request. An orange dot is a row the
- * agent added. The two notes under the card use those same dots and
+ * A gray dot is a row from the request. A red dot is a row the
+ * agent added, so it reads as an error. The two notes under the card use those same dots and
  * stay quiet: the words are the normal text color, and the dot is
  * the only color.
  *

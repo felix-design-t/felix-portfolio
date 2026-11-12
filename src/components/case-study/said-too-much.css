@@ -4,14 +4,14 @@
   These rules only apply to this visual.
 
   The policy card stays product UI. A gray dot marks a row from
-  the request. An orange dot marks a row the agent added. The notes
-  under the card are quiet: hairline, surface, normal text. The dot
-  carries the color.
+  the request. A red dot marks a row the agent added, so it reads as
+  an error. The notes under the card are quiet: hairline, surface,
+  normal text. The dot carries the color.
 */
 
 .toc-product[data-visual="said-too-much"] {
-  /* Orange flag. 4.2:1 on the white card and on the dark card. */
-  --anno-flag: #c46008;
+  /* Error red. 4.3:1 on the white card, 4.1:1 on the dark card. */
+  --anno-flag: #e23b3b;
 }
 
 .toc-product[data-visual="said-too-much"][data-phase="thinking"] .toc-stage,
@@ -137,7 +137,7 @@
   color: var(--toc-text-secondary);
 }
 
-/* A small dot on the right of the title. Gray is the request. Orange is added. */
+/* A small dot on the right of the title. Gray is the request. Red is added. */
 .toc-dot {
   flex: none;
   width: 8px;
