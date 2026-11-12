@@ -22,7 +22,7 @@ import { TOC_HOLD_MS } from "./toc-motion";
  */
 
 const REQUEST =
-  "I need to create a PTO policy for sales department, the yearly limit is 14 days.";
+  "I need to create a PTO policy for sales teams, the yearly limit is 14 days.";
 
 /** How long the chat card takes to rise from the bottom of the frame. */
 const ENTER_MS = 800;
@@ -50,7 +50,7 @@ const LOADING_LINES = 3;
 
 const THINKING = [
   "Understanding admin's scope...",
-  "Pulling the department documents...",
+  "Pulling the teams documents...",
   "Worked 10s",
 ] as const;
 
@@ -204,9 +204,9 @@ export function TypeWhatYouHaveVisual() {
 
   const status =
     phase === "thinking"
-      ? "Understanding admin's scope. Pulling the department documents. Worked 10s."
+      ? "Understanding admin's scope. Pulling the teams documents. Worked 10s."
       : phase === "document"
-        ? "Policy created. Sales department, PTO, yearly limit 14 days. Accrual missing."
+        ? "Policy created. Sales teams, PTO, yearly limit 14 days. Accrual missing."
         : phase === "sending"
           ? "Sending the request"
           : "";
@@ -267,11 +267,11 @@ export function TypeWhatYouHaveVisual() {
 
         <article ref={docRef} className="toc-doc" aria-hidden={phase !== "document"}>
           <p className="toc-doc-title">Sales PTO policy</p>
-          <p className="toc-doc-lead">A PTO policy for the sales department.</p>
+          <p className="toc-doc-lead">A PTO policy for the sales teams.</p>
           <div className="toc-doc-note">
             <p className="toc-doc-note-title">From the request</p>
             <p className="toc-doc-note-body">
-              Sales department, yearly limit 14 days. Accrual was not included.
+              Sales teams, yearly limit 14 days. Accrual was not included.
             </p>
           </div>
           <div className="toc-doc-lines" aria-hidden="true">
