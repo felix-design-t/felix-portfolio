@@ -64,6 +64,24 @@ const TRACES = FIELDS.flatMap((field, fieldIndex) =>
 
 type Line = { fieldIndex: number; phrase: PhraseKey; d: string };
 
+/**
+ * One elbow with a small rounded corner. A hard 90° join on a stroke
+ * piles up pixels and reads as a thick blob. The radius is capped so a
+ * short run stays a straight hairline.
+ */
+function elbow(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number): string {
+  const rise = y2 - y1;
+  const run = x3 - x1;
+  const drop = y3 - y2;
+  if (Math.abs(run) < 2) return `M ${x1} ${y1} V ${y3}`;
+  const dirX = Math.sign(run);
+  const dirDrop = Math.sign(drop) || 1;
+  const radius = Math.min(3, Math.abs(rise) / 2, Math.abs(run) / 2, Math.abs(drop) / 2);
+  if (radius < 1) return `M ${x1} ${y1} V ${y2} H ${x3} V ${y3}`;
+  const dirRise = Math.sign(rise) || 1;
+  return `M ${x1} ${y1} V ${y2 - dirRise * radius} Q ${x1} ${y2} ${x1 + dirX * radius} ${y2} H ${x3 - dirX * radius} Q ${x3} ${y2} ${x3} ${y2 + dirDrop * radius} V ${y3}`;
+}
+
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
@@ -132,9 +150,9 @@ export function OnlyWhatYouSaidVisual() {
     // lanes are ordered left to right so the horizontals never cross.
     const bandTop = bubbleBox.bottom - origin.top + 6;
     const bandBottom = messageBox.top - origin.top - 4;
-    const laneCount = Math.max(1, TRACES.length);
+    const laneCount = Math.max(1, FIELDS.length);
     const usable = Math.max(0, bandBottom - bandTop);
-    const laneGap = laneCount > 1 ? Math.min(6, usable / (laneCount - 1)) : 0;
+    const laneGap = laneCount > 1 ? Math.min(4, usable / (laneCount - 1)) : 0;
     const laneOrigin = bandTop + Math.max(0, usable - laneGap * (laneCount - 1)) / 2;
     const cardLeft = messageBox.left - origin.left;
     const cardRight = messageBox.right - origin.left;
@@ -192,18 +210,18 @@ export function OnlyWhatYouSaidVisual() {
 
     measured.sort((a, b) => a.startX - b.startX || a.endX - b.endX);
 
-    // Two words can feed one chip. Split their landings so the drops don't sit on top of each other.
-    const seenForField = new Map<number, number>();
+    // Words that feed one chip share a lane and a single stem, so "yearly"
+    // and "14 days" read as one hairline instead of two brackets side by side.
+    const laneOfField = new Map<number, number>();
     measured.forEach((trace) => {
-      const count = measured.filter((item) => item.fieldIndex === trace.fieldIndex).length;
-      const seenCount = seenForField.get(trace.fieldIndex) ?? 0;
-      seenForField.set(trace.fieldIndex, seenCount + 1);
-      trace.slot = seenCount;
-      if (count > 1) trace.endX += (seenCount - (count - 1) / 2) * 10;
+      if (!laneOfField.has(trace.fieldIndex)) laneOfField.set(trace.fieldIndex, laneOfField.size);
     });
 
-    const next: Line[] = measured.map((trace, index) => {
-      const laneY = Math.max(trace.startY + 4, laneOrigin + index * laneGap);
+    const next: Line[] = measured.map((trace) => {
+      const siblings = measured.filter((item) => item.fieldIndex === trace.fieldIndex);
+      const laneIndex = laneOfField.get(trace.fieldIndex) ?? 0;
+      const lowestStart = Math.max(...siblings.map((item) => item.startY));
+      const laneY = Math.max(lowestStart + 4, laneOrigin + laneIndex * laneGap);
       // Row: drop onto the chip when that x is beside the lead, otherwise
       // stop on the card's top edge so the line never cuts the sentence.
       // Stacked: the chips share one x, so run down the card's right padding
@@ -212,10 +230,10 @@ export function OnlyWhatYouSaidVisual() {
       if (asRow) {
         const clearsLead = trace.endX < leadLeft - 4 || trace.endX > leadRight + 4;
         const endY = clearsLead ? trace.chipTop : cardTop;
-        d = `M ${trace.startX} ${trace.startY} V ${laneY} H ${trace.endX} V ${endY}`;
+        d = elbow(trace.startX, trace.startY, trace.startX, laneY, trace.endX, endY);
       } else {
-        const railX = cardRight - 5 - (trace.fieldIndex * 3 + trace.slot * 2);
-        d = `M ${trace.startX} ${trace.startY} V ${laneY} H ${railX} V ${trace.chipMid} H ${trace.chipRight}`;
+        const railX = cardRight - 6 - trace.fieldIndex * 3;
+        d = `${elbow(trace.startX, trace.startY, trace.startX, laneY, railX, trace.chipMid)} H ${trace.chipRight}`;
       }
       return { fieldIndex: trace.fieldIndex, phrase: trace.phrase, d };
     });

@@ -294,7 +294,8 @@
 .ofs-line {
   fill: none;
   stroke: var(--toc-mark);
-  stroke-width: 1.5;
+  stroke-width: 1;
+  stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
