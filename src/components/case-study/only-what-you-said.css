@@ -215,14 +215,14 @@
   align-self: start;
 }
 
-/* No open chip here. The three choices stay on one row, at the right. */
+/* No open chip here. The three choices stay on one row, under the question. */
 .ofs-resolve-ask {
   grid-template-columns: minmax(0, 1fr);
 }
 
 .ofs-resolve-ask .ofs-options {
   flex-wrap: nowrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .ofs-product[data-fit="column"] .ofs-resolve-ask .ofs-options {
