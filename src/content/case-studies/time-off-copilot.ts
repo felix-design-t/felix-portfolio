@@ -70,6 +70,8 @@ export const timeOffCopilot: CaseStudy = {
         name: "Field chips and questions",
         aspectRatio: "16 / 10",
       },
+      closing:
+        "The admin needs a place to review and edit, and they hold the final say on what moves forward.",
       closingVisual: {
         name: "See every change, keep what you want",
         caption: "Edit a value, one line changes, Undo",
