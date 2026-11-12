@@ -1,9 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import "./type-what-you-have.css";
 import "./only-what-you-said.css";
 import {
+  TOC_HOLD_MS,
   TOC_MOVE_MS,
   TOC_PAUSE_MS,
   TOC_PHASE_GAP_MS,
@@ -22,10 +24,10 @@ import {
  *   3. The admin answers, the agent says "Got it", the chip fills in,
  *      and the thread settles.
  *
- * "step" is the number of messages on screen (0 to 4). Think of it like
- * the active state in a stepper: earlier steps dim, the newest is full.
- * The thread plays once, the first time it scrolls into view, then holds.
- * Reduced motion shows the finished thread. Tweak the times below.
+ * "step" is the number of messages on screen (0 to 4). Messages that
+ * are already on screen stay fully visible. Nothing dims while the
+ * thread is playing. It loops after a short hold, unless the person
+ * has tapped a choice. Reduced motion shows the finished thread.
  */
 
 /** Pause before the agent's first message. */
@@ -42,6 +44,8 @@ const PICK_STEP_MS = TOC_STEP_MS;
 const BEFORE_GENERATE_MS = TOC_STEP_MS;
 /** Rest after "Got it" before the Accrual chip fills in. */
 const BEFORE_FILL_MS = TOC_REST_MS;
+/** How long the finished thread is held before the loop starts again. */
+const LOOP_HOLD_MS = TOC_HOLD_MS;
 /** Stage width where the three chips sit in one row. */
 const ROW_MIN_WIDTH = 440;
 
@@ -76,8 +80,11 @@ export function OnlyWhatYouSaidVisual() {
   const stageRef = useRef<HTMLDivElement>(null);
   /** A tap that arrived before the run finished. Applied as soon as it can show. */
   const pendingChoiceRef = useRef<Choice | null>(null);
+  /** A tap stops the loop so the person's choice is not wiped. */
+  const autoplayRef = useRef(true);
 
   const [seen, setSeen] = useState(false);
+  const [run, setRun] = useState(0);
   const [step, setStep] = useState(0);
   const [chipsShown, setChipsShown] = useState(0);
   const [autoTrace, setAutoTrace] = useState<number | null>(null);
@@ -144,14 +151,21 @@ export function OnlyWhatYouSaidVisual() {
   }, [measure, step, chipsShown]);
 
   useEffect(() => {
-    if (!seen || prefersReducedMotion()) return;
+    if (!seen || prefersReducedMotion() || !autoplayRef.current) return;
 
-    setStep(0);
-    setChipsShown(0);
-    setAutoTrace(null);
-    setChoice(pendingChoiceRef.current);
-    setFilled(false);
-    setFinished(false);
+    const root = rootRef.current;
+    if (root) root.dataset.snap = "true";
+    flushSync(() => {
+      setStep(0);
+      setChipsShown(0);
+      setAutoTrace(null);
+      setChoice(pendingChoiceRef.current);
+      setFilled(false);
+      setFinished(false);
+    });
+    const release = window.requestAnimationFrame(() => {
+      if (root) delete root.dataset.snap;
+    });
 
     const timers: number[] = [];
     const at = (ms: number, work: () => void) => {
@@ -181,15 +195,23 @@ export function OnlyWhatYouSaidVisual() {
     at(time, () => setFilled(true));
     time += BEFORE_GENERATE_MS;
     at(time, () => setFinished(true));
+    time += LOOP_HOLD_MS;
+    at(time, () => {
+      if (autoplayRef.current) setRun((value) => value + 1);
+    });
 
-    return () => timers.forEach((id) => window.clearTimeout(id));
-  }, [seen]);
+    return () => {
+      window.cancelAnimationFrame(release);
+      timers.forEach((id) => window.clearTimeout(id));
+    };
+  }, [seen, run]);
 
   /**
    * A tap never rewinds the thread. Before the run finishes it is remembered
    * and used for the reply; after that it just updates the filled chip.
    */
   const choose = (next: Choice) => {
+    autoplayRef.current = false;
     pendingChoiceRef.current = next;
     setChoice(next);
     if (finished || prefersReducedMotion()) {
@@ -204,9 +226,8 @@ export function OnlyWhatYouSaidVisual() {
   const chosen = CHOICES.find((option) => option.key === choice);
   const accrualValue = filled ? (chosen?.filled ?? "") : "";
 
-  /** A message is hidden before its step, dimmed after it, full at the end. */
-  const stateOf = (messageStep: number) =>
-    step < messageStep ? "hidden" : finished || step === messageStep ? "current" : "past";
+  /** A message is hidden until its step, then stays fully visible. */
+  const stateOf = (messageStep: number) => (step < messageStep ? "hidden" : "current");
 
   const status = finished
     ? `Ready. Type PTO, department sales, yearly limit 14 days, accrual ${accrualValue.toLowerCase()}.`
@@ -231,7 +252,7 @@ export function OnlyWhatYouSaidVisual() {
         <article
           className="ofs-bubble ofs-message"
           data-message="request"
-          data-state={step >= 2 && !finished ? "past" : "current"}
+          data-state="current"
           aria-label="Your request"
         >
           <p className="ofs-request">

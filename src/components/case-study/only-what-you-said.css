@@ -29,8 +29,15 @@
 }
 
 .ofs-message[data-state="past"] {
-  opacity: 0.7;
+  opacity: 1;
   transform: none;
+}
+
+/* A loop restart hides messages in one frame, with no fade. */
+.ofs-product[data-snap="true"] .ofs-message,
+.ofs-product[data-snap="true"] .ofs-chip,
+.ofs-product[data-snap="true"] .ofs-phrase {
+  transition: none;
 }
 
 .ofs-message[data-state="hidden"] {
