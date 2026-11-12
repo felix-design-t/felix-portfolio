@@ -44,7 +44,7 @@ html[data-theme="dark"] .toc-product {
 
 .toc-label {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   line-height: 16px;
   color: var(--toc-text-secondary);
@@ -59,25 +59,37 @@ html[data-theme="dark"] .toc-product {
 .toc-doc-note-body,
 .toc-replay {
   font-family: var(--font-body);
-  font-size: 13px;
   font-weight: 400;
+}
+
+.toc-typed {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.toc-think-line,
+.toc-value,
+.toc-replay {
+  font-size: 14px;
   line-height: 20px;
 }
 
 .toc-doc-title {
+  font-size: 14px;
   font-weight: 500;
+  line-height: 20px;
 }
 
 .toc-doc-lead,
-.toc-doc-note-body {
-  font-size: var(--text-caption);
-  line-height: var(--leading-caption);
+.toc-doc-note-body,
+.toc-doc-note-title {
+  font-size: 12px;
+  line-height: 16px;
 }
 
-.toc-doc-note-title {
-  font-size: var(--text-caption);
+.toc-doc-note-title,
+.toc-replay {
   font-weight: 500;
-  line-height: var(--leading-caption);
 }
 
 .toc-value,
@@ -119,12 +131,11 @@ html[data-theme="dark"] .toc-product {
 }
 
 .toc-product[data-phase="document"] .toc-stack {
-  /* The stack's top starts where the preview begins, then the whole
-     stack shifts up by its own height. The thinking card, at the bottom,
-     lands just above the preview. The chat card can leave through the top. */
-  top: 28%;
+  /* Sit the thinking lines just above the preview. The chat card, higher
+     in the stack, can leave through the top fade. */
+  top: calc(100% - var(--toc-doc-height, 0px) - 8px);
   opacity: 1;
-  transform: translateY(calc(-100% - 12px));
+  transform: translateY(-100%);
   pointer-events: none;
 }
 
@@ -138,7 +149,6 @@ html[data-theme="dark"] .toc-product {
 .toc-doc {
   box-sizing: border-box;
   border: 1px solid var(--toc-line);
-  border-radius: 8px;
   background: var(--toc-surface);
 }
 
@@ -146,14 +156,15 @@ html[data-theme="dark"] .toc-product {
   display: flex;
   flex-direction: column;
   align-self: flex-end;
-  gap: 12px;
+  gap: 8px;
   width: min(68%, 300px);
-  padding: 14px 14px 10px;
+  padding: 16px;
+  border-radius: 16px;
 }
 
 .toc-typed {
   margin: 0;
-  min-height: 40px;
+  min-height: 48px;
 }
 
 .toc-caret {
@@ -194,7 +205,7 @@ html[data-theme="dark"] .toc-product {
   place-items: center;
   padding: 0;
   border: 0;
-  border-radius: 4px;
+  border-radius: 9999px;
   background: var(--toc-ground);
   color: var(--toc-text-secondary);
   cursor: pointer;
@@ -208,7 +219,7 @@ html[data-theme="dark"] .toc-product {
   place-items: center;
   padding: 0;
   border: 0;
-  border-radius: 4px;
+  border-radius: 9999px;
   background: var(--toc-mark);
   color: var(--toc-on-mark);
   cursor: pointer;
@@ -234,9 +245,9 @@ html[data-theme="dark"] .toc-product {
 .toc-replay {
   box-sizing: border-box;
   height: 28px;
-  padding: 4px 8px;
+  padding: 0 12px;
   border: 0;
-  border-radius: 4px;
+  border-radius: 9999px;
   background: transparent;
   color: var(--toc-text-secondary);
   cursor: pointer;
@@ -267,7 +278,7 @@ html[data-theme="dark"] .toc-product {
 .toc-product[data-phase="thinking"] .toc-think-slot,
 .toc-product[data-phase="document"] .toc-think-slot {
   grid-template-rows: 1fr;
-  margin-top: 12px;
+  margin-top: 8px;
 }
 
 .toc-think {
@@ -319,7 +330,7 @@ html[data-theme="dark"] .toc-product {
 .toc-think[data-beat="two"] .toc-think-mark,
 .toc-think[data-beat="three"] .toc-think-mark,
 .toc-think[data-beat="settled"] .toc-think-mark {
-  top: 28px;
+  top: 32px;
 }
 
 .toc-think[data-beat="three"] .toc-think-mark,
@@ -335,9 +346,9 @@ html[data-theme="dark"] .toc-product {
 .toc-think-lines {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   min-width: 0;
-  padding-left: 28px;
+  padding-left: 24px;
   transition: padding-left 520ms var(--ease-out);
 }
 
@@ -376,9 +387,9 @@ html[data-theme="dark"] .toc-product {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-height: 72%;
   padding: 12px;
-  overflow: auto;
+  overflow: visible;
+  border-radius: 16px;
   opacity: 0;
   transform: translateY(12px);
   pointer-events: none;
@@ -407,7 +418,7 @@ html[data-theme="dark"] .toc-product {
 
 .toc-doc-note {
   padding: 8px 10px;
-  border-radius: 4px;
+  border-radius: 12px;
   background: color-mix(in srgb, var(--toc-mark) 14%, transparent);
 }
 
@@ -421,7 +432,7 @@ html[data-theme="dark"] .toc-product {
 .toc-doc-line {
   display: block;
   height: 8px;
-  border-radius: 4px;
+  border-radius: 9999px;
   background: linear-gradient(
     100deg,
     var(--toc-control) 30%,
@@ -464,7 +475,7 @@ html[data-theme="dark"] .toc-product {
   width: 28px;
   height: 28px;
   place-items: center;
-  border-radius: 4px;
+  border-radius: 8px;
   background: var(--toc-control);
   color: var(--toc-text);
 }

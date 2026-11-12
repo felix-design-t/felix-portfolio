@@ -57,6 +57,8 @@ function prefersReducedMotion(): boolean {
 
 export function TypeWhatYouHaveVisual() {
   const rootRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const docRef = useRef<HTMLElement>(null);
   const [seen, setSeen] = useState(false);
   const [run, setRun] = useState(0);
   const [phase, setPhase] = useState<Phase>("typing");
@@ -67,6 +69,21 @@ export function TypeWhatYouHaveVisual() {
     if (!prefersReducedMotion()) return;
     setPhase("document");
     setTyped(REQUEST);
+  }, []);
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    const doc = docRef.current;
+    if (!stage || !doc) return;
+    // The thinking lines sit just above the card. The card's height
+    // decides how far up they go, so a taller card does not cover them.
+    const measure = () => {
+      stage.style.setProperty("--toc-doc-height", `${doc.offsetHeight}px`);
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(doc);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -154,7 +171,7 @@ export function TypeWhatYouHaveVisual() {
         </button>
       </div>
 
-      <div className="toc-stage">
+      <div className="toc-stage" ref={stageRef}>
         <div className="toc-stack" aria-hidden={chatIsQuiet}>
           <article className="toc-chat">
             <p className="toc-typed">
@@ -198,8 +215,8 @@ export function TypeWhatYouHaveVisual() {
           </div>
         </div>
 
-        <article className="toc-doc" aria-hidden={phase !== "document"}>
-          <p className="toc-doc-title">Sales PTO rule (draft)</p>
+        <article ref={docRef} className="toc-doc" aria-hidden={phase !== "document"}>
+          <p className="toc-doc-title">Sales PTO rule</p>
           <p className="toc-doc-lead">A PTO rule for the sales department.</p>
           <div className="toc-doc-note">
             <p className="toc-doc-note-title">From the request</p>
@@ -217,7 +234,7 @@ export function TypeWhatYouHaveVisual() {
               <PageIcon />
             </span>
             <span className="toc-file-name">
-              <span className="toc-value">Sales PTO rule draft</span>
+              <span className="toc-value">Sales PTO rule</span>
               <span className="toc-label">Page</span>
             </span>
           </div>
