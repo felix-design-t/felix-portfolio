@@ -219,7 +219,8 @@ export function EditOneLineVisual() {
         <article className="eol-card" aria-label="Sales PTO policy">
           <header className="eol-head">
             <h3 className="eol-title">Sales PTO policy</h3>
-            <div className="eol-actions" data-shown={showCount ? "true" : "false"} aria-hidden={showCount ? undefined : true}>
+            {/* Always mounted, so the row stays put and keeps one height. */}
+            <div className="eol-status" data-shown={showCount ? "true" : "false"} aria-hidden={showCount ? undefined : true}>
               <p className="eol-count">{countLabel}</p>
               <button
                 type="button"
@@ -230,16 +231,6 @@ export function EditOneLineVisual() {
               >
                 Undo
               </button>
-              {pending ? (
-                <button
-                  type="button"
-                  className="eol-quiet"
-                  data-pressed={keepPressed ? "true" : "false"}
-                  onClick={onKeep}
-                >
-                  Keep change
-                </button>
-              ) : null}
             </div>
           </header>
 
@@ -274,6 +265,17 @@ export function EditOneLineVisual() {
           </div>
 
           <div className="eol-foot">
+            <button
+              type="button"
+              className="eol-quiet"
+              data-shown={pending ? "true" : "false"}
+              data-pressed={keepPressed ? "true" : "false"}
+              aria-hidden={pending ? undefined : true}
+              tabIndex={pending ? 0 : -1}
+              onClick={onKeep}
+            >
+              Keep change
+            </button>
             <button
               type="button"
               className="eol-preview"

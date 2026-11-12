@@ -33,9 +33,8 @@
 
 .eol-head {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: stretch;
   gap: 8px;
 }
 
@@ -53,29 +52,31 @@
   color: var(--toc-text);
 }
 
-/* Reserves the row so the sentences do not jump when the count appears. */
-.eol-actions {
+/* One fixed row under the title. Hidden states keep this exact height. */
+.eol-status {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 8px;
-  min-height: 36px;
+  height: 32px;
   opacity: 0;
   transition: opacity var(--toc-dur-fade) var(--toc-ease);
 }
 
-.eol-actions[data-shown="false"] {
+.eol-status[data-shown="false"] {
   pointer-events: none;
 }
 
-.eol-actions[data-shown="true"] {
+.eol-status[data-shown="true"] {
   opacity: 1;
 }
 
 .eol-count {
+  flex: none;
   font-size: var(--toc-meta-size);
   line-height: var(--toc-meta-line);
   color: var(--toc-text-secondary);
+  white-space: nowrap;
 }
 
 .eol-quiet,
@@ -104,6 +105,11 @@
 .eol-quiet:disabled {
   opacity: 0.45;
   cursor: default;
+}
+
+.eol-quiet[data-shown="false"] {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .eol-quiet[data-pressed="true"],
@@ -230,7 +236,9 @@
 
 .eol-foot {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
 }
 
 .eol-preview {
@@ -260,7 +268,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .eol-actions,
+  .eol-status,
   .eol-line,
   .eol-quiet,
   .eol-preview,
