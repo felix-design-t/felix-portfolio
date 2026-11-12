@@ -1,0 +1,550 @@
+/*
+  Exploration ideas, one frame each.
+
+  Two systems share the frame. Product screens sit in .toc-product and
+  use only --toc-* tokens. Diagrams, the Gains and Costs notes, and the
+  two-by-two sit on the frame's mat and use only the site tokens.
+  Rose (--accent-rose) marks a changed or failed outcome, nothing else.
+  No shadow, gradient, or blur. Static: there is no motion to reduce.
+*/
+
+.xp-idea {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* ---------- Product screen ---------- */
+
+.xp-product {
+  aspect-ratio: auto;
+  height: auto;
+  justify-content: center;
+}
+
+.xp-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--toc-gap);
+  width: 100%;
+  padding: var(--toc-pad);
+  border: 1px solid var(--toc-line);
+  border-radius: 16px;
+  background: var(--toc-surface);
+  font-family: var(--font-body);
+}
+
+.xp-card-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.xp-card-title,
+.xp-card-meta,
+.xp-result-line,
+.xp-field-value,
+.xp-ask-question,
+.xp-check,
+.xp-group-example {
+  margin: 0;
+}
+
+.xp-card-title {
+  font-size: var(--toc-title-size);
+  font-weight: 500;
+  line-height: var(--toc-title-line);
+  color: var(--toc-text);
+}
+
+.xp-card-meta {
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
+  color: var(--toc-text-secondary);
+}
+
+/* The words that decided it. Text keeps its color; the line is the mark. */
+.xp-mark {
+  color: var(--toc-text);
+  text-decoration: underline;
+  text-decoration-color: var(--toc-mark);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+/* Idea 1: presets, fields, result. */
+
+.xp-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.xp-preset {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--toc-control);
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
+  color: var(--toc-text-secondary);
+}
+
+.xp-preset[data-active="true"] {
+  border-color: var(--toc-line);
+  background: var(--toc-surface);
+  color: var(--toc-text);
+  font-weight: 500;
+}
+
+.xp-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.xp-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 56px;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid var(--toc-line);
+  border-radius: 12px;
+  background: var(--toc-raised);
+}
+
+.xp-field dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.xp-field-value {
+  font-size: var(--toc-body-size);
+  font-weight: 500;
+  line-height: var(--toc-body-line);
+  color: var(--toc-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.xp-result {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-top: var(--toc-gap);
+  border-top: 1px solid var(--toc-line);
+}
+
+.xp-result-line {
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
+  color: var(--toc-text);
+}
+
+/* Idea 2: groups that open to one example. */
+
+.xp-groups {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xp-group {
+  border-top: 1px solid var(--toc-line);
+}
+
+.xp-group-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--toc-row);
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
+  color: var(--toc-text);
+}
+
+/* The count carries the rose dot, the same dot as the year above. */
+.xp-group-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 2ch;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.xp-group-count::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--accent-rose);
+}
+
+.xp-group-label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.xp-chevron {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--toc-text-secondary);
+}
+
+.xp-chevron[data-open="true"] {
+  transform: rotate(90deg);
+}
+
+.xp-group-example {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 0 12px 22px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--toc-raised);
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
+  color: var(--toc-text);
+}
+
+/* Idea 3: the inbox card. */
+
+.xp-ask-question {
+  padding-left: 12px;
+  border-left: 1px solid var(--toc-mark);
+  font-size: var(--toc-title-size);
+  font-weight: 500;
+  line-height: var(--toc-title-line);
+  color: var(--toc-text);
+  text-wrap: pretty;
+}
+
+.xp-choices {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xp-choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  border-top: 1px solid var(--toc-line);
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
+  color: var(--toc-text-secondary);
+}
+
+.xp-choice:last-child {
+  border-bottom: 1px solid var(--toc-line);
+}
+
+.xp-choice[data-chosen="true"] {
+  color: var(--toc-text);
+  font-weight: 500;
+}
+
+.xp-radio {
+  flex: none;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--toc-text-secondary);
+  border-radius: 9999px;
+}
+
+.xp-choice[data-chosen="true"] .xp-radio {
+  border: 5px solid var(--toc-text);
+}
+
+.xp-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
+  color: var(--toc-text);
+}
+
+.xp-checkbox {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: var(--toc-text);
+  color: var(--toc-surface);
+}
+
+.xp-checkbox svg {
+  width: 14px;
+  height: 14px;
+}
+
+.xp-card-foot {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* The one solid button in the frame. */
+.xp-solid {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 9999px;
+  background: var(--toc-mark);
+  color: var(--toc-on-mark);
+  font-size: var(--toc-body-size);
+  font-weight: 500;
+  line-height: var(--toc-body-line);
+}
+
+/* ---------- Page diagrams ---------- */
+
+/* Idea 2: a year of requests. */
+
+.xp-year {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-2) var(--space-2) var(--space-1);
+}
+
+.xp-year-dots {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.xp-year-dots circle {
+  fill: color-mix(in srgb, var(--text) 26%, transparent);
+}
+
+.xp-year-dots circle[data-changed="true"] {
+  fill: var(--accent-rose);
+}
+
+.xp-year-axis {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+}
+
+.xp-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text);
+}
+
+.xp-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.xp-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--text) 26%, transparent);
+}
+
+.xp-dot[data-changed="true"] {
+  background: var(--accent-rose);
+}
+
+/* Idea 3: the card beside its timeline. Stacks when the frame is narrow. */
+
+.xp-ask-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1);
+}
+
+@container (min-width: 600px) {
+  .xp-ask-layout {
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    align-items: center;
+  }
+}
+
+.xp-gap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.xp-gap-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.xp-gap-title,
+.xp-gap-ends,
+.xp-gap-span {
+  margin: 0;
+}
+
+.xp-gap-title {
+  color: var(--text);
+}
+
+.xp-gap-track {
+  display: flex;
+  align-items: center;
+  height: 8px;
+}
+
+.xp-gap-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-pill);
+  background: var(--text);
+}
+
+.xp-gap-line {
+  height: 1.5px;
+  background: var(--text);
+}
+
+.xp-gap-track[data-kind="late"] .xp-gap-line {
+  flex: 1 1 auto;
+  background: var(--accent-rose);
+}
+
+.xp-gap-track[data-kind="same"] .xp-gap-line {
+  flex: none;
+  width: 2px;
+}
+
+.xp-gap-ends {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-secondary);
+}
+
+.xp-gap-span {
+  color: var(--text);
+}
+
+.xp-gap-span-late {
+  color: var(--accent-rose);
+}
+
+/* ---------- Gains, Costs, and where the idea sits ---------- */
+
+.xp-notes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2) var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+@container (min-width: 600px) {
+  .xp-notes {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: var(--space-3);
+  }
+}
+
+.xp-note {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.xp-note-title {
+  margin: 0;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.xp-note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+/* Two-by-two: rows are who starts it, columns are when. */
+.xp-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 4px;
+  row-gap: 4px;
+  align-items: center;
+  justify-content: start;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+@container (min-width: 600px) {
+  .xp-grid {
+    grid-column: auto;
+    align-self: start;
+  }
+}
+
+.xp-grid-head {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.xp-grid-side {
+  padding-right: 4px;
+  text-align: right;
+}
+
+.xp-grid-cell {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  height: 24px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xs);
+}
+
+.xp-grid-cell[data-active="true"]::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--text);
+}

@@ -9,6 +9,8 @@ type CaseStudySectionProps = {
   visualControls?: ReactNode;
   /** A built visual for the closing frame. */
   closingVisual?: ReactNode;
+  /** Built visuals for `section.ideas`, matched by position. */
+  ideaVisuals?: ReactNode[];
 };
 
 /**
@@ -20,6 +22,7 @@ export function CaseStudySection({
   visual,
   visualControls,
   closingVisual,
+  ideaVisuals = [],
 }: CaseStudySectionProps) {
   const headingId = `${section.id}-title`;
 
@@ -40,6 +43,16 @@ export function CaseStudySection({
       >
         {section.body}
       </p>
+      {section.ideas?.map((idea, position) => (
+        <CaseStudyFrame
+          key={idea.name}
+          name={idea.name}
+          caption={idea.caption}
+          aspectRatio={idea.aspectRatio}
+        >
+          {ideaVisuals[position]}
+        </CaseStudyFrame>
+      ))}
       {section.visual ? (
         <CaseStudyFrame
           name={section.visual.name}

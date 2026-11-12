@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { CaseStudyPage } from "@/components/case-study/case-study-page";
+import { AskInsteadVisual } from "@/components/case-study/ask-instead";
+import { ReplayLastYearVisual } from "@/components/case-study/replay-last-year";
+import { TryAScenarioVisual } from "@/components/case-study/try-a-scenario";
 import { SameSheetAgain } from "@/components/case-study/same-sheet-again";
 import { EditOneLineVisual } from "@/components/case-study/edit-one-line";
 import { OnlyWhatYouSaidVisual } from "@/components/case-study/only-what-you-said";
@@ -31,6 +34,14 @@ export default function TimeOffCopilotPage() {
         "mistakes-in-use": <BlindGap />,
       }}
       closingVisuals={{ "fields-first": <EditOneLineVisual /> }}
+      ideaVisuals={{
+        // Exploration: three answers to the blind gap, in reading order.
+        "where-it-could-go-wrong": [
+          <TryAScenarioVisual key="try" />,
+          <ReplayLastYearVisual key="replay" />,
+          <AskInsteadVisual key="ask" />,
+        ],
+      }}
     />
   );
 }

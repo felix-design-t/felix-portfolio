@@ -91,26 +91,16 @@ export const timeOffCopilot: CaseStudy = {
     {
       id: "where-it-could-go-wrong",
       kind: "Exploration",
-      tradeoffs: true,
-      tradeoffNote:
-        "Pros: a comprehensive overview. Cons: not every warning is an error, so it can overwhelm admins.",
       title: "The agent provides proactive warnings",
       body: "Before anything is published, the agent troubleshoots. It compares the new rule with the current rules, shows where they conflict, and points at what could go wrong.",
-      visual: {
-        name: "Draft and current rules",
-        caption: "Compare, one Conflict marked",
-        aspectRatio: "16 / 10",
-      },
+      ideas: [
+        { name: "Try a scenario", caption: "1. Try a scenario", aspectRatio: "16 / 10" },
+        { name: "Replay last year", caption: "2. Replay last year", aspectRatio: "16 / 10" },
+        { name: "Ask instead of deciding", caption: "3. Ask instead of deciding", aspectRatio: "16 / 10" },
+      ],
       followUp: {
         title: "Test your own scenarios",
         body: "Then the admin gets a space to name scenarios and test them. They decide which cases matter. They confirm and apply only when the results look right. The agent never publishes.",
-        visual: {
-          name: "Scenario tests",
-          caption: "Test, Confirm, then Apply",
-          aspectRatio: "16 / 10",
-        },
-        tradeoffNote:
-          "Pros: the admin knows the worst scenario from experience, and the test is straightforward. Cons: a missed error can become a problem later.",
       },
     },
     {

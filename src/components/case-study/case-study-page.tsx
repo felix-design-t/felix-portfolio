@@ -11,6 +11,8 @@ type CaseStudyPageProps = {
   visuals?: Partial<Record<string, ReactNode>>;
   /** Built visuals for a section's closing frame, by section id. */
   closingVisuals?: Partial<Record<string, ReactNode>>;
+  /** Built visuals for a section's idea frames, by section id, in idea order. */
+  ideaVisuals?: Partial<Record<string, ReactNode[]>>;
   cover?: ReactNode;
 };
 
@@ -19,7 +21,13 @@ type CaseStudyPageProps = {
  * with wayfinding in the margin. It sits inside the site's reading
  * column from the root layout, so the text never widens.
  */
-export function CaseStudyPage({ study, visuals = {}, closingVisuals = {}, cover }: CaseStudyPageProps) {
+export function CaseStudyPage({
+  study,
+  visuals = {},
+  closingVisuals = {},
+  ideaVisuals = {},
+  cover,
+}: CaseStudyPageProps) {
   const topId = "case-study-top";
   const wayfindingItems = study.sections.map((section, position) => ({
     id: section.id,
@@ -54,6 +62,7 @@ export function CaseStudyPage({ study, visuals = {}, closingVisuals = {}, cover 
               section={section}
               visual={visuals[section.id]}
               closingVisual={closingVisuals[section.id]}
+              ideaVisuals={ideaVisuals[section.id]}
             />
           ))}
         </div>

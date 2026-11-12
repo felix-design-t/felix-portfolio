@@ -52,6 +52,11 @@ export type CaseStudySectionData = {
   /** A heading above the closing paragraph. */
   closingTitle?: string;
   visual?: CaseStudyVisual;
+  /**
+   * Ideas explored side by side, one frame each, in reading order.
+   * They sit under the body, before `visual`.
+   */
+  ideas?: CaseStudyVisual[];
   /** A second frame, under the closing paragraph. */
   closingVisual?: CaseStudyVisual;
   /**
