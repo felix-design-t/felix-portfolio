@@ -13,11 +13,6 @@
   min-width: 0;
 }
 
-/* Room above the first agent message for the trace lines. */
-.ofs-message[data-message="fields"] {
-  margin-top: 24px;
-}
-
 .ofs-message {
   position: relative;
   z-index: 1;
@@ -112,8 +107,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
-  /* A little extra room above the chips for the trace lanes. */
-  margin: 8px 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -306,39 +300,9 @@
   cursor: pointer;
 }
 
-.ofs-lines {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-}
-
-.ofs-line {
-  fill: none;
-  stroke: var(--toc-mark);
-  stroke-width: 1;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  opacity: 0;
-  transition:
-    stroke-dashoffset var(--toc-dur-travel) var(--toc-ease),
-    opacity var(--toc-dur-fade) var(--toc-ease);
-}
-
-.ofs-line[data-active="true"] {
-  stroke-dashoffset: 0;
-  opacity: 1;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ofs-chip,
   .ofs-message,
-  .ofs-line,
   .ofs-option,
   .ofs-generate,
   .ofs-phrase {

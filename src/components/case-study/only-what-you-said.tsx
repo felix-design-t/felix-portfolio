@@ -15,8 +15,9 @@ import {
  * Only what you said.
  *
  * A short chat thread, read top to bottom, in three steps:
- *   1. The agent shows what it understood, as chips pinned to the
- *      admin's own words with thin lines.
+ *   1. The agent shows what it understood. Each chip and the words it
+ *      came from take the same tint together, then the words settle
+ *      back to an underline.
  *   2. It asks about the one field it did not see, instead of guessing.
  *   3. The admin answers, the agent says "Got it", the chip fills in,
  *      and Generate becomes available.
@@ -66,31 +67,6 @@ const CHOICES: { key: Choice; label: string; filled: string; reply: string }[] =
   { key: "skip", label: "Skip", filled: "Skipped", reply: "Skip" },
 ];
 
-/** One trace per phrase: the line from a chip back to its words. */
-const TRACES = FIELDS.flatMap((field, fieldIndex) =>
-  field.from.map((phrase) => ({ fieldIndex, phrase })),
-);
-
-type Line = { fieldIndex: number; phrase: PhraseKey; d: string };
-
-/**
- * One elbow with a small rounded corner. A hard 90° join on a stroke
- * piles up pixels and reads as a thick blob. The radius is capped so a
- * short run stays a straight hairline.
- */
-function elbow(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number): string {
-  const rise = y2 - y1;
-  const run = x3 - x1;
-  const drop = y3 - y2;
-  if (Math.abs(run) < 2) return `M ${x1} ${y1} V ${y3}`;
-  const dirX = Math.sign(run);
-  const dirDrop = Math.sign(drop) || 1;
-  const radius = Math.min(3, Math.abs(rise) / 2, Math.abs(run) / 2, Math.abs(drop) / 2);
-  if (radius < 1) return `M ${x1} ${y1} V ${y2} H ${x3} V ${y3}`;
-  const dirRise = Math.sign(rise) || 1;
-  return `M ${x1} ${y1} V ${y2 - dirRise * radius} Q ${x1} ${y2} ${x1 + dirX * radius} ${y2} H ${x3 - dirX * radius} Q ${x3} ${y2} ${x3} ${y2 + dirDrop * radius} V ${y3}`;
-}
-
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
@@ -109,7 +85,6 @@ export function OnlyWhatYouSaidVisual() {
   const [choice, setChoice] = useState<Choice | null>(null);
   const [filled, setFilled] = useState(false);
   const [finished, setFinished] = useState(false);
-  const [lines, setLines] = useState<Line[]>([]);
 
   const showEnd = useCallback((pick: Choice) => {
     setStep(4);
@@ -138,126 +113,12 @@ export function OnlyWhatYouSaidVisual() {
     return () => observer.disconnect();
   }, []);
 
-  /** Measure where each chip and each phrase sits, then build the lines. */
+  /** Wide frames keep the three chips in a row. Narrow frames stack them. */
   const measure = useCallback(() => {
     const stage = stageRef.current;
     const root = rootRef.current;
     if (!stage || !root) return;
-    const origin = stage.getBoundingClientRect();
-    const asRow = origin.width >= ROW_MIN_WIDTH;
-    root.dataset.fit = asRow ? "row" : "column";
-
-    const message = stage.querySelector<HTMLElement>('[data-message="fields"]');
-    const bubble = stage.querySelector<HTMLElement>('[data-message="request"]');
-    if (!message || !bubble) return;
-    const messageBox = message.getBoundingClientRect();
-    const bubbleBox = bubble.getBoundingClientRect();
-
-    // Each trace is one elbow in the gap between the request and the card:
-    // straight down from the word, across on its own lane, then down to the
-    // top of the card above its chip. Nothing runs around the card, and
-    // lanes are ordered left to right so the horizontals never cross.
-    const bandTop = bubbleBox.bottom - origin.top + 6;
-    const bandBottom = messageBox.top - origin.top - 4;
-    const laneCount = Math.max(1, FIELDS.length);
-    const usable = Math.max(0, bandBottom - bandTop);
-    const laneGap = laneCount > 1 ? Math.min(4, usable / (laneCount - 1)) : 0;
-    const laneOrigin = bandTop + Math.max(0, usable - laneGap * (laneCount - 1)) / 2;
-    const cardLeft = messageBox.left - origin.left;
-    const cardRight = messageBox.right - origin.left;
-    const cardTop = messageBox.top - origin.top;
-
-    const lead = message.querySelector(".ofs-lead")?.getBoundingClientRect();
-    const leadLeft = lead ? lead.left - origin.left : cardLeft;
-    const leadRight = lead ? lead.right - origin.left : cardLeft;
-
-    const measured: {
-      fieldIndex: number;
-      phrase: PhraseKey;
-      startX: number;
-      startY: number;
-      endX: number;
-      chipTop: number;
-      chipMid: number;
-      chipRight: number;
-      slot: number;
-    }[] = [];
-
-    TRACES.forEach((trace) => {
-      const chip = stage.querySelector<HTMLElement>(`[data-field="${trace.fieldIndex}"]`);
-      const phrase = stage.querySelector<HTMLElement>(`[data-phrase="${trace.phrase}"]`);
-      if (!chip || !phrase) return;
-      const chipBox = chip.getBoundingClientRect();
-      const rects = phrase.getClientRects();
-      const phraseBox = rects[rects.length - 1] ?? phrase.getBoundingClientRect();
-      const phraseX = phraseBox.left + phraseBox.width / 2 - origin.left;
-      // Touch the underline when the word is on the last line. A word on an
-      // earlier line starts the line at the bubble edge, so it never cuts
-      // through the line of text below it.
-      const onLastLine = phraseBox.bottom > bubbleBox.bottom - 20;
-      const startY = onLastLine
-        ? phraseBox.bottom + 2 - origin.top
-        : bubbleBox.bottom - origin.top;
-      // In a row, land above that chip. Stacked chips share one x, so land
-      // across the card top in field order instead of piling up.
-      let endX = asRow
-        ? chipBox.left + chipBox.width / 2 - origin.left
-        : cardLeft + ((trace.fieldIndex + 0.5) / FIELDS.length) * (cardRight - cardLeft);
-      endX = Math.min(cardRight - 16, Math.max(cardLeft + 16, endX));
-      measured.push({
-        fieldIndex: trace.fieldIndex,
-        phrase: trace.phrase,
-        startX: phraseX,
-        startY,
-        endX,
-        chipTop: chipBox.top - origin.top,
-        chipMid: chipBox.top + chipBox.height / 2 - origin.top,
-        chipRight: chipBox.right - origin.left,
-        slot: 0,
-      });
-    });
-
-    measured.sort((a, b) => a.startX - b.startX || a.endX - b.endX);
-
-    // Words that feed one chip share a lane and a single stem, so "yearly"
-    // and "14 days" read as one hairline instead of two brackets side by side.
-    const laneOfField = new Map<number, number>();
-    measured.forEach((trace) => {
-      if (!laneOfField.has(trace.fieldIndex)) laneOfField.set(trace.fieldIndex, laneOfField.size);
-    });
-
-    const next: Line[] = measured.map((trace) => {
-      const siblings = measured.filter((item) => item.fieldIndex === trace.fieldIndex);
-      const laneIndex = laneOfField.get(trace.fieldIndex) ?? 0;
-      const lowestStart = Math.max(...siblings.map((item) => item.startY));
-      const laneY = Math.max(lowestStart + 4, laneOrigin + laneIndex * laneGap);
-      // Every line ends on its chip. A straight drop is used when that
-      // column is clear of the sentence. Otherwise the line comes down the
-      // card's empty side padding, crosses under the sentence, and steps
-      // onto the top center of the chip.
-      let d: string;
-      if (asRow) {
-        const chipX = trace.endX;
-        const chipY = trace.chipTop;
-        const clearsLead = chipX < leadLeft - 4 || chipX > leadRight + 4;
-        if (clearsLead) {
-          d = elbow(trace.startX, trace.startY, trace.startX, laneY, chipX, chipY);
-        } else {
-          const gutterX = chipX >= (cardLeft + cardRight) / 2 ? cardRight - 8 : cardLeft + 8;
-          const leadBottom = lead ? lead.bottom - origin.top : cardTop;
-          const channelY = Math.min(chipY, leadBottom + 4);
-          d =
-            channelY >= chipY - 1
-              ? `${elbow(trace.startX, trace.startY, trace.startX, laneY, gutterX, chipY)} H ${chipX}`
-              : `${elbow(trace.startX, trace.startY, trace.startX, laneY, gutterX, channelY)} H ${chipX} V ${chipY}`;
-        }
-      } else {
-        const railX = cardRight - 6 - trace.fieldIndex * 3;
-        d = `${elbow(trace.startX, trace.startY, trace.startX, laneY, railX, trace.chipMid)} H ${trace.chipRight}`;
-      }
-      return { fieldIndex: trace.fieldIndex, phrase: trace.phrase, d };
-    });
-    setLines(next);
+    root.dataset.fit = stage.getBoundingClientRect().width >= ROW_MIN_WIDTH ? "row" : "column";
   }, []);
 
   useLayoutEffect(() => {
@@ -486,18 +347,6 @@ export function OnlyWhatYouSaidVisual() {
             </div>
           </div>
         </article>
-
-        <svg className="ofs-lines" aria-hidden="true">
-          {lines.map((line) => (
-            <path
-              key={`${line.fieldIndex}-${line.phrase}`}
-              d={line.d}
-              pathLength={1}
-              className="ofs-line"
-              data-active={activeTrace === line.fieldIndex ? "true" : "false"}
-            />
-          ))}
-        </svg>
       </div>
 
       <p className="toc-sr" aria-live="polite">
