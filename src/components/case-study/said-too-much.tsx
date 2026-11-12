@@ -17,8 +17,7 @@ import "./said-too-much.css";
  * older lines fade at the top. A counter counts what was asked and
  * what the agent added.
  *
- * The checklist beside the policy never gains a row. Reduced motion
- * shows the finished policy, the tags, and the counter.
+ * Reduced motion shows the finished policy, the tags, and the counter.
  */
 
 /** How long "Generating full policy" stays before it changes. */
@@ -95,13 +94,6 @@ const SECTIONS = [
   },
 ] as const;
 
-/** The checklist is the same three lines for the whole sequence. */
-const CHECKLIST = [
-  { name: "Yearly limit", state: "14 days" },
-  { name: "Department", state: "Sales" },
-  { name: "Accrual", state: "Missing" },
-] as const;
-
 type Phase = "thinking" | "document";
 type ThinkBeat = "idle" | "one" | "settled";
 
@@ -135,21 +127,12 @@ export function SaidTooMuchVisual() {
     if (!stage || !dock || !root) return;
 
     // The policy is meant to overflow. The frame only grows when the
-    // counter, the checklist, and a slice of the policy would collide.
+    // counter and a slice of the policy would collide.
     const measure = () => {
-      const beside = stage.clientWidth >= 460;
-      root.dataset.fit = beside ? "beside" : "stack";
       const counter = dock.querySelector<HTMLElement>(".toc-count");
-      const checklist = dock.querySelector<HTMLElement>(".toc-check");
       const counterHeight = Math.ceil(counter?.getBoundingClientRect().height ?? 0);
-      const checklistHeight = Math.ceil(checklist?.getBoundingClientRect().height ?? 0);
       stage.style.setProperty("--toc-counter", `${counterHeight}px`);
-      stage.style.setProperty("--toc-check", `${checklistHeight}px`);
-      // Beside: the checklist sits in the right margin, so the policy
-      // only has to clear the counter. Stacked: it clears both.
-      const dockHeight = beside
-        ? counterHeight + 12
-        : counterHeight + checklistHeight + 20;
+      const dockHeight = counterHeight + 12;
       stage.style.setProperty("--toc-dock", `${dockHeight}px`);
       const padY =
         parseFloat(getComputedStyle(root).paddingTop) +
@@ -170,9 +153,7 @@ export function SaidTooMuchVisual() {
     observer.observe(dock);
     observer.observe(root);
     const counter = dock.querySelector(".toc-count");
-    const checklist = dock.querySelector(".toc-check");
     if (counter) observer.observe(counter);
-    if (checklist) observer.observe(checklist);
     let cancelled = false;
     document.fonts?.ready.then(() => {
       if (!cancelled) measure();
@@ -238,7 +219,7 @@ export function SaidTooMuchVisual() {
   const added = visible.filter((section) => section.kind === "added").length;
   const status =
     phase === "document"
-      ? `The agent wrote a long sales PTO policy. ${asked} asked, ${added} added. Only the yearly limit of 14 days came from the request. The checklist did not change.`
+      ? `The agent wrote a long sales PTO policy. ${asked} asked, ${added} added. Only the yearly limit of 14 days came from the request.`
       : beat === "settled"
         ? "Worked for 20s."
         : "Generating full policy.";
@@ -299,17 +280,6 @@ export function SaidTooMuchVisual() {
         </article>
 
         <div className="toc-dock" ref={dockRef}>
-          <aside className="toc-check" aria-label="Checklist">
-            <p className="toc-label">Checklist</p>
-            <ul className="toc-check-list">
-              {CHECKLIST.map((item) => (
-                <li key={item.name} className="toc-check-row">
-                  <span className="toc-value">{item.name}</span>
-                  <span className="toc-label">{item.state}</span>
-                </li>
-              ))}
-            </ul>
-          </aside>
           <p className="toc-count" aria-hidden={phase !== "document"}>
             <span className="toc-count-num">{asked}</span> asked,{" "}
             <span className="toc-count-num">{added}</span> added
