@@ -242,7 +242,6 @@ export function EditOneLineVisual() {
                 <p
                   key={isLimit ? `limit-${flashKey}` : line.id}
                   className="eol-line"
-                  data-changed={isLimit && changedLines > 0 ? "true" : "false"}
                   data-pending={isPendingLine ? "true" : "false"}
                   data-dim={pending && !isLimit ? "true" : "false"}
                   data-flash={isLimit && flashKey > 0 ? "true" : "false"}

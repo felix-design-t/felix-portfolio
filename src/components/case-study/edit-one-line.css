@@ -126,19 +126,13 @@
 
 .eol-line {
   padding: 4px 8px;
-  border-left: 2px solid transparent;
   border-radius: 8px;
   font-size: var(--toc-body-size);
   line-height: var(--toc-body-line);
   color: var(--toc-text);
   transition:
     opacity var(--toc-dur-fade) var(--toc-ease),
-    background-color var(--toc-dur-fade) var(--toc-ease),
-    border-color var(--toc-dur-fade) var(--toc-ease);
-}
-
-.eol-line[data-changed="true"] {
-  border-left-color: var(--toc-mark);
+    background-color var(--toc-dur-fade) var(--toc-ease);
 }
 
 .eol-line[data-pending="true"] {
