@@ -239,6 +239,9 @@ export function TypeWhatYouHaveVisual() {
               <span className="toc-value">Sales PTO policy</span>
               <span className="toc-label">Page</span>
             </span>
+            <span className="toc-download" aria-hidden="true">
+              <DownloadIcon />
+            </span>
           </div>
         </article>
       </div>
@@ -247,6 +250,16 @@ export function TypeWhatYouHaveVisual() {
         {status}
       </p>
     </div>
+  );
+}
+
+function DownloadIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className="toc-send-icon">
+      <path d="M8 2.5v7" />
+      <path d="M5.2 7.2 8 10l2.8-2.8" />
+      <path d="M3.5 12.5h9" />
+    </svg>
   );
 }
 

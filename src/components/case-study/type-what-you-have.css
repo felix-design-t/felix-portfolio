@@ -492,6 +492,14 @@ html[data-theme="dark"] .toc-product {
   flex-direction: column;
 }
 
+.toc-download {
+  display: grid;
+  flex: none;
+  margin-left: auto;
+  place-items: center;
+  color: var(--toc-text-secondary);
+}
+
 .toc-sr {
   position: absolute;
   width: 1px;
