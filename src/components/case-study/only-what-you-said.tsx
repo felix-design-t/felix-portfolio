@@ -16,6 +16,7 @@ import "./only-what-you-said.css";
  *
  * "step" is the number of messages on screen (0 to 4). Think of it like
  * the active state in a stepper: earlier steps dim, the newest is full.
+ * The thread plays once, the first time it scrolls into view, then holds.
  * Reduced motion shows the finished thread. Tweak the times below.
  */
 
@@ -31,8 +32,6 @@ const BEFORE_PICK_MS = 1400;
 const PICK_STEP_MS = 900;
 /** Time between the Accrual chip filling and Generate lighting up. */
 const BEFORE_GENERATE_MS = 800;
-/** How long the finished state is held. */
-const LOOP_HOLD_MS = 2000;
 /** Stage width where the three chips sit in one row. */
 const ROW_MIN_WIDTH = 440;
 
@@ -72,10 +71,10 @@ function prefersReducedMotion(): boolean {
 export function OnlyWhatYouSaidVisual() {
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const autoplayRef = useRef(true);
+  /** A tap that arrived before the run finished. Applied as soon as it can show. */
+  const pendingChoiceRef = useRef<Choice | null>(null);
 
   const [seen, setSeen] = useState(false);
-  const [run, setRun] = useState(0);
   const [step, setStep] = useState(0);
   const [chipsShown, setChipsShown] = useState(0);
   const [autoTrace, setAutoTrace] = useState<number | null>(null);
@@ -96,8 +95,7 @@ export function OnlyWhatYouSaidVisual() {
 
   useEffect(() => {
     if (!prefersReducedMotion()) return;
-    autoplayRef.current = false;
-    showEnd("monthly");
+    showEnd(pendingChoiceRef.current ?? "monthly");
   }, [showEnd]);
 
   useEffect(() => {
@@ -126,10 +124,39 @@ export function OnlyWhatYouSaidVisual() {
     const bubble = stage.querySelector<HTMLElement>('[data-message="request"]');
     if (!message || !bubble) return;
     const messageBox = message.getBoundingClientRect();
-    const gap = messageBox.top - bubble.getBoundingClientRect().bottom;
+    const bubbleBox = bubble.getBoundingClientRect();
 
-    const next: Line[] = [];
-    TRACES.forEach((trace, traceIndex) => {
+    // Each trace is one elbow in the gap between the request and the card:
+    // straight down from the word, across on its own lane, then down to the
+    // top of the card above its chip. Nothing runs around the card, and
+    // lanes are ordered left to right so the horizontals never cross.
+    const bandTop = bubbleBox.bottom - origin.top + 6;
+    const bandBottom = messageBox.top - origin.top - 4;
+    const laneCount = Math.max(1, TRACES.length);
+    const usable = Math.max(0, bandBottom - bandTop);
+    const laneGap = laneCount > 1 ? Math.min(6, usable / (laneCount - 1)) : 0;
+    const laneOrigin = bandTop + Math.max(0, usable - laneGap * (laneCount - 1)) / 2;
+    const cardLeft = messageBox.left - origin.left;
+    const cardRight = messageBox.right - origin.left;
+    const cardTop = messageBox.top - origin.top;
+
+    const lead = message.querySelector(".ofs-lead")?.getBoundingClientRect();
+    const leadLeft = lead ? lead.left - origin.left : cardLeft;
+    const leadRight = lead ? lead.right - origin.left : cardLeft;
+
+    const measured: {
+      fieldIndex: number;
+      phrase: PhraseKey;
+      startX: number;
+      startY: number;
+      endX: number;
+      chipTop: number;
+      chipMid: number;
+      chipRight: number;
+      slot: number;
+    }[] = [];
+
+    TRACES.forEach((trace) => {
       const chip = stage.querySelector<HTMLElement>(`[data-field="${trace.fieldIndex}"]`);
       const phrase = stage.querySelector<HTMLElement>(`[data-phrase="${trace.phrase}"]`);
       if (!chip || !phrase) return;
@@ -137,23 +164,60 @@ export function OnlyWhatYouSaidVisual() {
       const rects = phrase.getClientRects();
       const phraseBox = rects[rects.length - 1] ?? phrase.getBoundingClientRect();
       const phraseX = phraseBox.left + phraseBox.width / 2 - origin.left;
-      const phraseY = phraseBox.bottom + 3 - origin.top;
-      // Every trace runs down the message's left padding and has its own
-      // lane in the gap above, so no line crosses text or another line.
-      const gutterX = messageBox.left - origin.left + 5 + traceIndex * 2.5;
-      const laneAbove = messageBox.top - origin.top - Math.max(8, gap * 0.28) - traceIndex * 5;
+      // Touch the underline when the word is on the last line. A word on an
+      // earlier line starts the line at the bubble edge, so it never cuts
+      // through the line of text below it.
+      const onLastLine = phraseBox.bottom > bubbleBox.bottom - 20;
+      const startY = onLastLine
+        ? phraseBox.bottom + 2 - origin.top
+        : bubbleBox.bottom - origin.top;
+      // In a row, land above that chip. Stacked chips share one x, so land
+      // across the card top in field order instead of piling up.
+      let endX = asRow
+        ? chipBox.left + chipBox.width / 2 - origin.left
+        : cardLeft + ((trace.fieldIndex + 0.5) / FIELDS.length) * (cardRight - cardLeft);
+      endX = Math.min(cardRight - 16, Math.max(cardLeft + 16, endX));
+      measured.push({
+        fieldIndex: trace.fieldIndex,
+        phrase: trace.phrase,
+        startX: phraseX,
+        startY,
+        endX,
+        chipTop: chipBox.top - origin.top,
+        chipMid: chipBox.top + chipBox.height / 2 - origin.top,
+        chipRight: chipBox.right - origin.left,
+        slot: 0,
+      });
+    });
+
+    measured.sort((a, b) => a.startX - b.startX || a.endX - b.endX);
+
+    // Two words can feed one chip. Split their landings so the drops don't sit on top of each other.
+    const seenForField = new Map<number, number>();
+    measured.forEach((trace) => {
+      const count = measured.filter((item) => item.fieldIndex === trace.fieldIndex).length;
+      const seenCount = seenForField.get(trace.fieldIndex) ?? 0;
+      seenForField.set(trace.fieldIndex, seenCount + 1);
+      trace.slot = seenCount;
+      if (count > 1) trace.endX += (seenCount - (count - 1) / 2) * 10;
+    });
+
+    const next: Line[] = measured.map((trace, index) => {
+      const laneY = Math.max(trace.startY + 4, laneOrigin + index * laneGap);
+      // Row: drop onto the chip when that x is beside the lead, otherwise
+      // stop on the card's top edge so the line never cuts the sentence.
+      // Stacked: the chips share one x, so run down the card's right padding
+      // (empty) and meet each chip on its right edge.
       let d: string;
       if (asRow) {
-        const startX = chipBox.left + chipBox.width / 2 - origin.left;
-        const startY = chipBox.top - origin.top;
-        const laneBelow = startY - 3 - traceIndex * 2.5;
-        d = `M ${startX} ${startY} V ${laneBelow} H ${gutterX} V ${laneAbove} H ${phraseX} V ${phraseY}`;
+        const clearsLead = trace.endX < leadLeft - 4 || trace.endX > leadRight + 4;
+        const endY = clearsLead ? trace.chipTop : cardTop;
+        d = `M ${trace.startX} ${trace.startY} V ${laneY} H ${trace.endX} V ${endY}`;
       } else {
-        const startX = chipBox.left - origin.left;
-        const startY = chipBox.top + chipBox.height / 2 - origin.top;
-        d = `M ${startX} ${startY} H ${gutterX} V ${laneAbove} H ${phraseX} V ${phraseY}`;
+        const railX = cardRight - 5 - (trace.fieldIndex * 3 + trace.slot * 2);
+        d = `M ${trace.startX} ${trace.startY} V ${laneY} H ${railX} V ${trace.chipMid} H ${trace.chipRight}`;
       }
-      next.push({ fieldIndex: trace.fieldIndex, phrase: trace.phrase, d });
+      return { fieldIndex: trace.fieldIndex, phrase: trace.phrase, d };
     });
     setLines(next);
   }, []);
@@ -173,15 +237,15 @@ export function OnlyWhatYouSaidVisual() {
       cancelled = true;
       observer.disconnect();
     };
-  }, [measure]);
+  }, [measure, step, chipsShown]);
 
   useEffect(() => {
-    if (!seen || !autoplayRef.current || prefersReducedMotion()) return;
+    if (!seen || prefersReducedMotion()) return;
 
     setStep(0);
     setChipsShown(0);
     setAutoTrace(null);
-    setChoice(null);
+    setChoice(pendingChoiceRef.current);
     setFilled(false);
     setFinished(false);
 
@@ -203,7 +267,8 @@ export function OnlyWhatYouSaidVisual() {
     time += BEFORE_QUESTION_MS + 400;
     at(time, () => setStep(2));
     time += BEFORE_PICK_MS;
-    at(time, () => setChoice("monthly"));
+    // A tap before this beat wins. Otherwise the run picks Monthly.
+    at(time, () => setChoice((current) => pendingChoiceRef.current ?? current ?? "monthly"));
     time += PICK_STEP_MS;
     at(time, () => setStep(3));
     time += PICK_STEP_MS;
@@ -212,16 +277,23 @@ export function OnlyWhatYouSaidVisual() {
     at(time, () => setFilled(true));
     time += BEFORE_GENERATE_MS;
     at(time, () => setFinished(true));
-    time += LOOP_HOLD_MS;
-    at(time, () => setRun((value) => value + 1));
 
     return () => timers.forEach((id) => window.clearTimeout(id));
-  }, [seen, run]);
+  }, [seen]);
 
-  /** The person took over, so the loop stops and their choice stays. */
+  /**
+   * A tap never rewinds the thread. Before the run finishes it is remembered
+   * and used for the reply; after that it just updates the filled chip.
+   */
   const choose = (next: Choice) => {
-    autoplayRef.current = false;
-    showEnd(next);
+    pendingChoiceRef.current = next;
+    setChoice(next);
+    if (finished || prefersReducedMotion()) {
+      setFilled(true);
+      setFinished(true);
+      setStep(4);
+      setChipsShown(FIELDS.length);
+    }
   };
 
   const activeTrace = pointerTrace ?? autoTrace;
