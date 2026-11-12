@@ -38,12 +38,12 @@ const MIN_LIMIT = 8;
 const MAX_LIMIT = 20;
 const LINE_COUNT = 4;
 
-type LineId = "type" | "department" | "limit" | "accrual";
+type LineId = "type" | "teams" | "limit" | "accrual";
 
 /** The sentence is split so the chip can sit in the middle of it. */
 const LINES: { id: LineId; before: string; value: string; after: string }[] = [
   { id: "type", before: "This policy covers", value: "PTO", after: "." },
-  { id: "department", before: "It applies to the", value: "Sales", after: "department." },
+  { id: "teams", before: "It applies to the", value: "Sales", after: "teams." },
   { id: "limit", before: "Each employee gets", value: "", after: "of PTO per year." },
   { id: "accrual", before: "Days are earned", value: "Monthly", after: "." },
 ];
@@ -212,7 +212,7 @@ export function EditOneLineVisual() {
     ? `Sales PTO policy kept. Yearly limit ${limit} days. ${countLabel}. Preview is available.`
     : pending
       ? `Yearly limit changed from ${confirmed} to ${limit} days. ${countLabel}. Keep the change or undo it. Preview is waiting.`
-      : "Sales PTO policy draft. PTO, Sales department, 14 days a year, earned monthly.";
+      : "Sales PTO policy draft. PTO, Sales teams, 14 days a year, earned monthly.";
 
   return (
     <div ref={rootRef} className="toc-product eol-product" data-visual="edit-one-line">
