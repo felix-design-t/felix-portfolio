@@ -1,0 +1,301 @@
+/*
+  Only what you said.
+  Reuses the introducing-agent tokens (.toc-product) and the 16/10 frame,
+  which grows on its own when the content is taller than that ratio.
+*/
+
+.ofs-stage {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 32px;
+  min-width: 0;
+}
+
+.ofs-product[data-fit="column"] .ofs-stage {
+  gap: 48px;
+}
+
+.ofs-bubble,
+.ofs-card {
+  box-sizing: border-box;
+  border: 1px solid var(--toc-line);
+  background: var(--toc-surface);
+}
+
+.ofs-bubble {
+  align-self: flex-end;
+  width: min(80%, 372px);
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.ofs-request,
+.ofs-title,
+.ofs-caption,
+.ofs-nudge-text {
+  margin: 0;
+  font-family: var(--font-body);
+}
+
+.ofs-request {
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--toc-text);
+}
+
+.ofs-phrase {
+  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-color: var(--toc-mark);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  border-radius: 4px;
+  transition: background-color 400ms var(--toc-ease);
+}
+
+.ofs-phrase[data-active="true"] {
+  background: color-mix(in srgb, var(--toc-mark) 16%, transparent);
+}
+
+.ofs-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: flex-start;
+  width: 100%;
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.ofs-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ofs-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--toc-text);
+}
+
+.ofs-caption {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--toc-text-secondary);
+}
+
+.ofs-chips {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ofs-product[data-fit="column"] .ofs-chips {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.ofs-chip {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--toc-control);
+  color: var(--toc-text);
+  font: inherit;
+  text-align: left;
+  cursor: default;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 560ms var(--toc-ease),
+    transform 560ms var(--toc-ease),
+    background-color 400ms var(--toc-ease),
+    border-color 400ms var(--toc-ease);
+}
+
+.ofs-chip[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.ofs-chip[data-traced="true"] {
+  background: color-mix(in srgb, var(--toc-mark) 16%, var(--toc-control));
+}
+
+.ofs-chip[data-open="true"] {
+  background: transparent;
+  border: 1px dashed var(--toc-line);
+}
+
+.ofs-chip:focus-visible,
+.ofs-option:focus-visible,
+.ofs-generate:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.ofs-chip-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--toc-text-secondary);
+}
+
+.ofs-chip-value {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.ofs-chip[data-open="true"] .ofs-chip-value {
+  color: var(--toc-text-secondary);
+  font-weight: 400;
+}
+
+.ofs-nudge {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--toc-mark) 8%, transparent);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 560ms var(--toc-ease),
+    transform 560ms var(--toc-ease);
+}
+
+.ofs-nudge[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.ofs-nudge-text {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--toc-text);
+}
+
+.ofs-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ofs-option {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--toc-line);
+  border-radius: 9999px;
+  background: var(--toc-surface);
+  color: var(--toc-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  cursor: pointer;
+  transition:
+    background-color 400ms var(--toc-ease),
+    border-color 400ms var(--toc-ease),
+    transform 280ms var(--toc-ease);
+}
+
+.ofs-option[data-kind="skip"] {
+  border-color: transparent;
+  background: transparent;
+  color: var(--toc-text-secondary);
+}
+
+.ofs-option[data-selected="true"] {
+  border-color: var(--toc-mark);
+  background: color-mix(in srgb, var(--toc-mark) 16%, transparent);
+  color: var(--toc-text);
+}
+
+.ofs-option:active {
+  transform: scale(0.98);
+}
+
+.ofs-foot {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ofs-generate {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--toc-control);
+  color: var(--toc-text-secondary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  cursor: default;
+  transition:
+    background-color 560ms var(--toc-ease),
+    color 560ms var(--toc-ease);
+}
+
+.ofs-generate[data-ready="true"] {
+  background: var(--toc-mark);
+  color: var(--toc-on-mark);
+  cursor: pointer;
+}
+
+.ofs-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.ofs-line {
+  fill: none;
+  stroke: var(--toc-mark);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+  transition:
+    stroke-dashoffset 700ms var(--toc-ease),
+    opacity 500ms var(--toc-ease);
+}
+
+.ofs-line[data-active="true"] {
+  stroke-dashoffset: 0;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ofs-chip,
+  .ofs-nudge,
+  .ofs-line,
+  .ofs-option,
+  .ofs-generate,
+  .ofs-phrase {
+    transition: none;
+  }
+}
