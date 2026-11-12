@@ -24,8 +24,8 @@
   opacity: 0;
   transform: translateY(8px);
   transition:
-    opacity 700ms var(--toc-ease),
-    transform 700ms var(--toc-ease);
+    opacity var(--toc-dur-fade) var(--toc-ease),
+    transform var(--toc-dur-move) var(--toc-ease);
 }
 
 .ofs-message[data-state="current"] {
@@ -82,7 +82,7 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
   border-radius: 4px;
-  transition: background-color 400ms var(--toc-ease);
+  transition: background-color var(--toc-dur-fade) var(--toc-ease);
 }
 
 .ofs-phrase[data-active="true"] {
@@ -140,10 +140,10 @@
   opacity: 0;
   transform: translateY(6px);
   transition:
-    opacity 560ms var(--toc-ease),
-    transform 560ms var(--toc-ease),
-    background-color 400ms var(--toc-ease),
-    border-color 400ms var(--toc-ease);
+    opacity var(--toc-dur-reveal) var(--toc-ease),
+    transform var(--toc-dur-reveal) var(--toc-ease),
+    background-color var(--toc-dur-fade) var(--toc-ease),
+    border-color var(--toc-dur-fade) var(--toc-ease);
 }
 
 .ofs-chip[data-shown="true"] {
@@ -205,9 +205,9 @@
   line-height: var(--toc-body-line);
   cursor: pointer;
   transition:
-    background-color 400ms var(--toc-ease),
-    border-color 400ms var(--toc-ease),
-    transform 280ms var(--toc-ease);
+    background-color var(--toc-dur-fade) var(--toc-ease),
+    border-color var(--toc-dur-fade) var(--toc-ease),
+    transform var(--toc-dur-press) var(--toc-ease);
 }
 
 .ofs-option[data-kind="skip"] {
@@ -243,7 +243,7 @@
 }
 
 .ofs-chip-static[data-filled="true"] {
-  animation: ofs-flash 1100ms var(--toc-ease);
+  animation: ofs-flash var(--toc-dur-flash) var(--toc-ease);
 }
 
 @keyframes ofs-flash {
@@ -271,8 +271,8 @@
   line-height: var(--toc-body-line);
   cursor: default;
   transition:
-    background-color 560ms var(--toc-ease),
-    color 560ms var(--toc-ease);
+    background-color var(--toc-dur-fade) var(--toc-ease),
+    color var(--toc-dur-fade) var(--toc-ease);
 }
 
 .ofs-generate[data-ready="true"] {
@@ -301,8 +301,8 @@
   stroke-dashoffset: 1;
   opacity: 0;
   transition:
-    stroke-dashoffset 700ms var(--toc-ease),
-    opacity 500ms var(--toc-ease);
+    stroke-dashoffset var(--toc-dur-travel) var(--toc-ease),
+    opacity var(--toc-dur-fade) var(--toc-ease);
 }
 
 .ofs-line[data-active="true"] {

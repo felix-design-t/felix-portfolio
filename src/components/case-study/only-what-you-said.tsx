@@ -3,6 +3,13 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./type-what-you-have.css";
 import "./only-what-you-said.css";
+import {
+  TOC_MOVE_MS,
+  TOC_PAUSE_MS,
+  TOC_PHASE_GAP_MS,
+  TOC_REST_MS,
+  TOC_STEP_MS,
+} from "./toc-motion";
 
 /**
  * Only what you said.
@@ -21,17 +28,19 @@ import "./only-what-you-said.css";
  */
 
 /** Pause before the agent's first message. */
-const INTRO_MS = 800;
+const INTRO_MS = TOC_MOVE_MS;
 /** Time between one chip filling in and the next. */
-const CHIP_STEP_MS = 800;
+const CHIP_STEP_MS = TOC_STEP_MS;
 /** Pause after the last chip before the question arrives. */
-const BEFORE_QUESTION_MS = 1000;
+const BEFORE_QUESTION_MS = TOC_PHASE_GAP_MS;
 /** Time the question waits before an option highlights. */
-const BEFORE_PICK_MS = 1400;
+const BEFORE_PICK_MS = TOC_PAUSE_MS;
 /** Time between the pick, the reply, "Got it", and the filled chip. */
-const PICK_STEP_MS = 900;
+const PICK_STEP_MS = TOC_STEP_MS;
 /** Time between the Accrual chip filling and Generate lighting up. */
-const BEFORE_GENERATE_MS = 800;
+const BEFORE_GENERATE_MS = TOC_STEP_MS;
+/** Rest after "Got it" before the Accrual chip fills in. */
+const BEFORE_FILL_MS = TOC_REST_MS;
 /** Stage width where the three chips sit in one row. */
 const ROW_MIN_WIDTH = 440;
 
@@ -282,7 +291,7 @@ export function OnlyWhatYouSaidVisual() {
       });
     });
     at(time + CHIP_STEP_MS - 200, () => setAutoTrace(null));
-    time += BEFORE_QUESTION_MS + 400;
+    time += BEFORE_QUESTION_MS;
     at(time, () => setStep(2));
     time += BEFORE_PICK_MS;
     // A tap before this beat wins. Otherwise the run picks Monthly.
@@ -291,7 +300,7 @@ export function OnlyWhatYouSaidVisual() {
     at(time, () => setStep(3));
     time += PICK_STEP_MS;
     at(time, () => setStep(4));
-    time += PICK_STEP_MS * 0.6;
+    time += BEFORE_FILL_MS;
     at(time, () => setFilled(true));
     time += BEFORE_GENERATE_MS;
     at(time, () => setFinished(true));

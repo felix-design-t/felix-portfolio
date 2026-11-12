@@ -36,8 +36,25 @@
   --toc-pad: 16px;
   --toc-gap: 12px;
   --toc-row: 44px;
-  /* Smooth ease for this sequence. Slower than the site's ease-out. */
+  /* Motion. Section 02 sets the pace; every product visual reuses these.
+     JS beats (typing, step, hold) live in toc-motion.ts. */
   --toc-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  /* A card entering, or a block changing position. */
+  --toc-dur-move: 800ms;
+  /* Lines sliding into space a loader left. */
+  --toc-dur-settle: 880ms;
+  /* Opacity and color: fades, tints, and filled states. */
+  --toc-dur-fade: 560ms;
+  /* The loader stepping down a line, or a hairline drawing. */
+  --toc-dur-travel: 640ms;
+  /* The loader fading out. */
+  --toc-dur-soft: 420ms;
+  /* One small item arriving in a stream: a line, chip, row, or note. */
+  --toc-dur-reveal: 320ms;
+  /* A button press scaling to 0.98 and back. */
+  --toc-dur-press: 280ms;
+  /* A tint flash that comes in and goes out over two fades. */
+  --toc-dur-flash: 1120ms;
 
   position: relative;
   box-sizing: border-box;
@@ -145,9 +162,9 @@ html[data-theme="dark"] .toc-product {
   align-items: stretch;
   transform: translateY(-50%);
   transition:
-    top 800ms var(--toc-ease),
-    transform 800ms var(--toc-ease),
-    opacity 560ms var(--toc-ease);
+    top var(--toc-dur-move) var(--toc-ease),
+    transform var(--toc-dur-move) var(--toc-ease),
+    opacity var(--toc-dur-fade) var(--toc-ease);
 }
 
 .toc-product[data-phase="thinking"] .toc-stack {
@@ -248,7 +265,7 @@ html[data-theme="dark"] .toc-product {
   color: var(--toc-user-muted);
   cursor: pointer;
   align-self: center;
-  transition: transform 280ms var(--toc-ease);
+  transition: transform var(--toc-dur-press) var(--toc-ease);
 }
 
 .toc-send {
@@ -263,7 +280,7 @@ html[data-theme="dark"] .toc-product {
   color: var(--toc-user-on-mark);
   cursor: pointer;
   align-self: center;
-  transition: transform 280ms var(--toc-ease);
+  transition: transform var(--toc-dur-press) var(--toc-ease);
 }
 
 .toc-send-icon {
@@ -299,7 +316,7 @@ html[data-theme="dark"] .toc-product {
   align-self: flex-start;
   width: max-content;
   max-width: 100%;
-  transition: grid-template-rows 800ms var(--toc-ease);
+  transition: grid-template-rows var(--toc-dur-move) var(--toc-ease);
 }
 
 .toc-product[data-phase="thinking"] .toc-think-slot,
@@ -320,8 +337,8 @@ html[data-theme="dark"] .toc-product {
   background: transparent;
   opacity: 0;
   transition:
-    opacity 560ms var(--toc-ease),
-    padding 800ms var(--toc-ease);
+    opacity var(--toc-dur-fade) var(--toc-ease),
+    padding var(--toc-dur-move) var(--toc-ease);
 }
 
 .toc-product[data-phase="thinking"] .toc-think,
@@ -345,13 +362,13 @@ html[data-theme="dark"] .toc-product {
   place-items: center;
   color: var(--toc-mark);
   opacity: 1;
-  transition: opacity 420ms var(--toc-ease);
+  transition: opacity var(--toc-dur-soft) var(--toc-ease);
 }
 
 .toc-product[data-phase="thinking"] .toc-think-mark {
   transition:
-    top 640ms var(--toc-ease),
-    opacity 420ms var(--toc-ease);
+    top var(--toc-dur-travel) var(--toc-ease),
+    opacity var(--toc-dur-soft) var(--toc-ease);
 }
 
 .toc-think[data-beat="two"] .toc-think-mark,
@@ -376,7 +393,7 @@ html[data-theme="dark"] .toc-product {
   gap: 8px;
   min-width: 0;
   padding-left: 24px;
-  transition: padding-left 880ms var(--toc-ease);
+  transition: padding-left var(--toc-dur-settle) var(--toc-ease);
 }
 
 .toc-think[data-beat="settled"] .toc-think-lines,
@@ -391,8 +408,8 @@ html[data-theme="dark"] .toc-product {
   opacity: 0;
   transform: translateY(4px);
   transition:
-    opacity 320ms var(--toc-ease),
-    transform 320ms var(--toc-ease);
+    opacity var(--toc-dur-reveal) var(--toc-ease),
+    transform var(--toc-dur-reveal) var(--toc-ease);
 }
 
 .toc-think[data-beat="one"] .toc-think-line:nth-child(1),
@@ -421,8 +438,8 @@ html[data-theme="dark"] .toc-product {
   transform: translateY(12px);
   pointer-events: none;
   transition:
-    opacity 560ms var(--toc-ease),
-    transform 800ms var(--toc-ease);
+    opacity var(--toc-dur-fade) var(--toc-ease),
+    transform var(--toc-dur-move) var(--toc-ease);
 }
 
 .toc-product[data-phase="document"] .toc-doc {

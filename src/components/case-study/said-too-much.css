@@ -110,7 +110,7 @@ html[data-theme="dark"] .toc-product[data-visual="said-too-much"] {
 
 .toc-policy-row[data-shown="true"] {
   display: flex;
-  animation: toc-row-in 640ms var(--toc-ease);
+  animation: toc-row-in var(--toc-dur-reveal) var(--toc-ease);
 }
 
 @keyframes toc-row-in {
@@ -230,8 +230,8 @@ html[data-theme="dark"] .toc-product[data-visual="said-too-much"] {
   opacity: 0;
   transform: translateY(6px);
   transition:
-    opacity 560ms var(--toc-ease),
-    transform 640ms var(--toc-ease);
+    opacity var(--toc-dur-reveal) var(--toc-ease),
+    transform var(--toc-dur-reveal) var(--toc-ease);
 }
 
 .toc-legend li[data-shown="true"] {
@@ -263,7 +263,7 @@ html[data-theme="dark"] .toc-product[data-visual="said-too-much"] {
   line-height: var(--leading-caption);
   font-variant-numeric: tabular-nums;
   opacity: 0;
-  transition: opacity 560ms var(--toc-ease);
+  transition: opacity var(--toc-dur-fade) var(--toc-ease);
 }
 
 .toc-count-num {

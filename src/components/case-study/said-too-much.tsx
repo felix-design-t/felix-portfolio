@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Eclipse } from "loading-dev";
 import "./type-what-you-have.css";
 import "./said-too-much.css";
+import { TOC_HOLD_MS, TOC_STEP_MS } from "./toc-motion";
 
 /**
  * The agent said too much.
@@ -29,9 +30,9 @@ const LINE_MS = 720;
 const LINE_SHIFT_MS = 880;
 /** A short rest after that slide, before the policy arrives. */
 const AFTER_SHIFT_MS = 480;
-/** How long one policy section takes to arrive before the next. */
-const ROW_MS = 680;
-const LOOP_HOLD_MS = 2000;
+/** How long one policy section takes to arrive before the next. Same step as section 02's thinking lines. */
+const ROW_MS = TOC_STEP_MS;
+const LOOP_HOLD_MS = TOC_HOLD_MS;
 
 const GENERATING = "Generating full policy";
 const WORKED = "Worked for 20s";
