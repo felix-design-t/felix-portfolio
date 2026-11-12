@@ -18,7 +18,7 @@ import "./type-what-you-have.css";
  */
 
 const REQUEST =
-  "I need to create a PTO rule for sales department, the yearly limit is 14 days.";
+  "I need to create a PTO policy for sales department, the yearly limit is 14 days.";
 
 /** How fast each letter appears. Raise it to type more slowly. */
 const CHAR_MS = 48;
@@ -153,7 +153,7 @@ export function TypeWhatYouHaveVisual() {
     phase === "thinking"
       ? "Understanding admin's scope. Pulling the department documents. Worked 10s."
       : phase === "document"
-        ? "Rule created. Sales department, PTO, yearly limit 14 days. Accrual missing."
+        ? "Policy created. Sales department, PTO, yearly limit 14 days. Accrual missing."
         : phase === "sending"
           ? "Sending the request"
           : "";
@@ -218,8 +218,8 @@ export function TypeWhatYouHaveVisual() {
         </div>
 
         <article ref={docRef} className="toc-doc" aria-hidden={phase !== "document"}>
-          <p className="toc-doc-title">Sales PTO rule</p>
-          <p className="toc-doc-lead">A PTO rule for the sales department.</p>
+          <p className="toc-doc-title">Sales PTO policy</p>
+          <p className="toc-doc-lead">A PTO policy for the sales department.</p>
           <div className="toc-doc-note">
             <p className="toc-doc-note-title">From the request</p>
             <p className="toc-doc-note-body">
@@ -236,7 +236,7 @@ export function TypeWhatYouHaveVisual() {
               <PageIcon />
             </span>
             <span className="toc-file-name">
-              <span className="toc-value">Sales PTO rule</span>
+              <span className="toc-value">Sales PTO policy</span>
               <span className="toc-label">Page</span>
             </span>
           </div>
