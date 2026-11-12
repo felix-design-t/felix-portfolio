@@ -20,8 +20,11 @@ export const TOC_BEAT_MS = 320;
 export const TOC_PRESS_HOLD_MS = 420;
 /** A short rest after something settles, before the next phase arrives. */
 export const TOC_REST_MS = 480;
-/** How long a finished state is held before a loop starts over. */
-export const TOC_HOLD_MS = 2000;
+/**
+ * How long a finished state is held before a loop starts over. Every looping
+ * visual uses this one value, so a new loop should import it, not set its own.
+ */
+export const TOC_HOLD_MS = 3000;
 /** A card entering or travelling. Matches --toc-dur-move. */
 export const TOC_MOVE_MS = 800;
 /** A tint flash on a chip or line: it comes in and goes out over two fades. */

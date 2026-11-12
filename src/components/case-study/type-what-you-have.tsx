@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { Eclipse } from "loading-dev";
 import "./type-what-you-have.css";
+import { TOC_HOLD_MS } from "./toc-motion";
 
 /**
  * Introducing the agent.
@@ -42,7 +43,7 @@ const AFTER_SHIFT_MS = 480;
 /** How long the preview takes to finish sliding in. Matches the CSS. */
 const PREVIEW_ARRIVE_MS = 800;
 /** How long the finished preview stays before the sequence starts over. */
-const LOOP_HOLD_MS = 2000;
+const LOOP_HOLD_MS = TOC_HOLD_MS;
 
 /** How many gray bars stand in for the rest of the draft. */
 const LOADING_LINES = 3;
