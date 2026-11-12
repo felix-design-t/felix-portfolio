@@ -101,12 +101,12 @@
   max-width: 100%;
 }
 
-/* A sentence in the card, not a headline. Body step: 13/20, weight 400. */
+/* Same type as the words in the admin bubble: 15/22, weight 400. */
 .ofs-lead {
   margin: 0;
   font-family: var(--font-body);
-  font-size: var(--toc-body-size);
-  line-height: var(--toc-body-line);
+  font-size: var(--toc-title-size);
+  line-height: var(--toc-title-line);
   font-weight: 400;
   color: var(--toc-text);
 }
