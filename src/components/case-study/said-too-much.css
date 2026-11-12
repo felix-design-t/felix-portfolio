@@ -3,29 +3,20 @@
   Reuses the introducing-agent tokens, thinking line, and file row.
   These rules only apply to this visual.
 
-  The policy card stays product UI. The gutter notes, the narrow
-  legend, and the counter are case-study annotations: site caption
-  type, not product chips. Green matches the mark. Amber is the
-  problem. One amber for the marker and the bracket, a separate
-  amber for the 12px words so they clear 4.5:1.
+  The policy card stays product UI. The labels and the two totals
+  are case-study notes: filled tints, dark text, no border. Green is
+  the request. Amber is only what the agent added.
 */
 
 .toc-product[data-visual="said-too-much"] {
-  /* Same green as the product mark, owned here so the note is not a product token. */
-  --anno-request: #0e6b52;
-  /* Brighter amber for the marker, the bracket, and the counter hairline. */
-  --anno-amber: #dd7400;
-  /* Darker amber for 12px text on the light site ground and the frame. */
-  --anno-amber-text: #a85700;
-  /* Room beside the card for "From your request". Narrow frames ignore this. */
-  --toc-gutter: 168px;
-}
-
-html[data-theme="dark"] .toc-product[data-visual="said-too-much"] {
-  --anno-request: #6fdec0;
-  --anno-amber: #dd7400;
-  /* Darker than the marker, still light enough for 4.5:1 on the dark ground. */
-  --anno-amber-text: #c26400;
+  /* Mid green tint. Dark text clears 4.5:1 on it. The tint clears 3:1 on the frame and the card. */
+  --anno-request-fill: #40967f;
+  --anno-request-ink: #091512;
+  /* Softer amber than a bright orange. Same contrast job as the green. */
+  --anno-added-fill: #ad7f43;
+  --anno-added-ink: #151009;
+  /* Room beside the card for the "From your request" tag. Narrow frames ignore this. */
+  --toc-gutter: 176px;
 }
 
 .toc-product[data-visual="said-too-much"][data-phase="thinking"] .toc-stage,
@@ -154,51 +145,40 @@ html[data-theme="dark"] .toc-product[data-visual="said-too-much"] {
 }
 
 /*
-  A note lives with its row. On a wide frame a 1px line runs from the
-  card edge to the words. On a narrow frame that line turns into a
-  rail beside the title, and the words move to the legend.
+  The label is the thing you read. It is a filled tag outside the card,
+  lined up with the row title. No line, no rail, no border.
 */
 .toc-note,
-.toc-legend {
+.toc-count {
   margin: 0;
+  border: 0;
+  border-radius: 999px;
   font-family: var(--font-body);
   font-size: var(--text-caption);
-  font-weight: 400;
+  font-weight: 500;
   line-height: var(--leading-caption);
+  white-space: nowrap;
 }
 
 .toc-note {
   position: absolute;
-  top: 14px;
-  left: calc(100% + var(--toc-pad) + 1px);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: max-content;
+  top: 12px;
+  left: calc(100% + var(--toc-pad) + 9px);
+  padding: 2px 8px;
+  background: var(--anno-fill);
   color: var(--anno-ink);
-  white-space: nowrap;
 }
 
 .toc-note[data-kind="request"],
-.toc-legend li[data-kind="request"] {
-  --anno-line: var(--anno-request);
-  --anno-ink: var(--anno-request);
-  color: var(--anno-ink);
+.toc-count[data-kind="request"] {
+  --anno-fill: var(--anno-request-fill);
+  --anno-ink: var(--anno-request-ink);
 }
 
 .toc-note[data-kind="added"],
-.toc-legend li[data-kind="added"] {
-  --anno-line: var(--anno-amber);
-  --anno-ink: var(--anno-amber-text);
-  color: var(--anno-ink);
-}
-
-/* One straight hairline. No corner, so it cannot look like a broken box. */
-.toc-note-mark {
-  flex: none;
-  width: 16px;
-  height: 1px;
-  background: var(--anno-line);
+.toc-count[data-kind="added"] {
+  --anno-fill: var(--anno-added-fill);
+  --anno-ink: var(--anno-added-ink);
 }
 
 .toc-dock {
@@ -208,93 +188,40 @@ html[data-theme="dark"] .toc-product[data-visual="said-too-much"] {
   bottom: 0;
   left: 0;
   display: flex;
-  flex-direction: column;
+  flex-flow: row wrap;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 12px;
   pointer-events: none;
 }
 
-.toc-legend {
-  display: none;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 12px;
-  padding: 0;
-  list-style: none;
-}
-
-.toc-legend li {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  opacity: 0;
-  transform: translateY(6px);
-  transition:
-    opacity var(--toc-dur-reveal) var(--toc-ease),
-    transform var(--toc-dur-reveal) var(--toc-ease);
-}
-
-.toc-legend li[data-shown="true"] {
-  opacity: 1;
-  transform: none;
-}
-
-.toc-legend .toc-note-mark {
-  width: 1px;
-  height: 10px;
-}
-
-.toc-product[data-visual="said-too-much"][data-phase="document"] .toc-count {
-  opacity: 1;
-}
-
 .toc-count {
-  width: max-content;
-  max-width: calc(100% - 16px);
-  margin: 0;
-  padding: 4px 12px;
-  border: 1px solid var(--anno-amber);
-  border-radius: 9999px;
-  background: transparent;
-  color: var(--anno-amber-text);
-  font-family: var(--font-body);
-  font-size: var(--text-caption);
-  font-weight: 400;
-  line-height: var(--leading-caption);
+  padding: 4px 10px;
+  background: var(--anno-fill);
+  color: var(--anno-ink);
   font-variant-numeric: tabular-nums;
   opacity: 0;
   transition: opacity var(--toc-dur-fade) var(--toc-ease);
+}
+
+.toc-count[data-shown="true"] {
+  opacity: 1;
 }
 
 .toc-count-num {
   font-variant-numeric: tabular-nums;
 }
 
-/* Narrow frames keep the card full width. The words move under it. */
+/* Narrow frames keep the card full width. The repeated row tags
+   would sit on the policy, so the two totals under the card name
+   each group instead. */
 @media (max-width: 720px) {
   .toc-product[data-visual="said-too-much"] .toc-doc {
     width: 100%;
   }
 
   .toc-note {
-    top: 12px;
-    left: auto;
-    /* In the card's right padding, lined up with the title, clear of the words. */
-    right: calc(-1 * var(--toc-pad) + 8px);
-    gap: 0;
-  }
-
-  .toc-note .toc-note-mark {
-    width: 1px;
-    height: 20px;
-  }
-
-  .toc-note-label {
     display: none;
-  }
-
-  .toc-legend {
-    display: flex;
   }
 }
 
@@ -316,19 +243,14 @@ html[data-theme="dark"] .toc-product[data-visual="said-too-much"] {
     animation: none;
   }
 
-  .toc-product[data-visual="said-too-much"] .toc-legend li {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
   .toc-product[data-visual="said-too-much"] .toc-dock {
     position: relative;
     inset: auto;
     margin-top: 8px;
   }
 
-  .toc-product[data-visual="said-too-much"] .toc-count {
+  .toc-product[data-visual="said-too-much"] .toc-count[data-shown="true"] {
     opacity: 1;
+    transition: none;
   }
 }
