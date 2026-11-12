@@ -15,14 +15,13 @@ import { TOC_HOLD_MS, TOC_STEP_MS } from "./toc-motion";
  * "Worked for 20s" as the loader leaves. When the policy appears,
  * that line moves up.
  * The policy card writes after that. It grows past the frame, so the
- * older lines fade at the top. The card itself has no tags. Each row
- * carries a filled label outside the card, and that label arrives with
- * the row. On a narrow frame the repeated labels would crowd the policy,
- * so the eight added rows share one label under the card.
- * The totals are two separate notes. "1 from your request" stays green.
- * "8 added by AI" is the only amber. They never share a pill.
+ * older lines fade at the top. Each row has a small dot on its right.
+ * A gray dot is a row from the request. An orange dot is a row the
+ * agent added. The two notes under the card use those same dots and
+ * stay quiet: the words are the normal text color, and the dot is
+ * the only color.
  *
- * Reduced motion shows the finished policy, the labels, and both totals.
+ * Reduced motion shows the finished policy, the dots, and both notes.
  */
 
 /** How long "Generating full policy" stays before it changes. */
@@ -260,11 +259,9 @@ export function SaidTooMuchVisual() {
               >
                 <div className="toc-policy-head">
                   <p className="toc-policy-title">{section.title}</p>
+                  <span className="toc-dot" data-kind={section.kind} aria-hidden="true" />
                 </div>
                 <p className="toc-policy-body">{section.body}</p>
-                <p className="toc-note" data-kind={section.kind}>
-                  {section.tag}
-                </p>
               </div>
             ))}
           </div>
@@ -288,6 +285,7 @@ export function SaidTooMuchVisual() {
             data-kind="request"
             data-shown={asked > 0 ? "true" : "false"}
           >
+            <span className="toc-dot" data-kind="request" aria-hidden="true" />
             <span className="toc-count-num">{asked}</span> from your request
           </p>
           <p
@@ -295,6 +293,7 @@ export function SaidTooMuchVisual() {
             data-kind="added"
             data-shown={added > 0 ? "true" : "false"}
           >
+            <span className="toc-dot" data-kind="added" aria-hidden="true" />
             <span className="toc-count-num">{added}</span> added by AI
           </p>
         </div>

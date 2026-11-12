@@ -3,20 +3,15 @@
   Reuses the introducing-agent tokens, thinking line, and file row.
   These rules only apply to this visual.
 
-  The policy card stays product UI. The labels and the two totals
-  are case-study notes: filled tints, dark text, no border. Green is
-  the request. Amber is only what the agent added.
+  The policy card stays product UI. A gray dot marks a row from
+  the request. An orange dot marks a row the agent added. The notes
+  under the card are quiet: hairline, surface, normal text. The dot
+  carries the color.
 */
 
 .toc-product[data-visual="said-too-much"] {
-  /* Mid green tint. Dark text clears 4.5:1 on it. The tint clears 3:1 on the frame and the card. */
-  --anno-request-fill: #40967f;
-  --anno-request-ink: #091512;
-  /* Softer amber than a bright orange. Same contrast job as the green. */
-  --anno-added-fill: #ad7f43;
-  --anno-added-ink: #151009;
-  /* Room beside the card for the "From your request" tag. Narrow frames ignore this. */
-  --toc-gutter: 176px;
+  /* Orange flag. 4.2:1 on the white card and on the dark card. */
+  --anno-flag: #c46008;
 }
 
 .toc-product[data-visual="said-too-much"][data-phase="thinking"] .toc-stage,
@@ -77,8 +72,7 @@
 
 .toc-product[data-visual="said-too-much"] .toc-doc {
   bottom: calc(var(--toc-counter, 28px) + 12px);
-  /* Leave a gutter on the right for the notes. Narrow frames set this back to full width. */
-  width: calc(100% - var(--toc-gutter));
+  width: 100%;
   max-height: none;
   overflow: visible;
   z-index: 2;
@@ -121,7 +115,6 @@
   justify-content: space-between;
   gap: 8px;
   min-height: var(--toc-body-line);
-  flex-wrap: wrap;
 }
 
 .toc-policy-title,
@@ -144,41 +137,17 @@
   color: var(--toc-text-secondary);
 }
 
-/*
-  The label is the thing you read. It is a filled tag outside the card,
-  lined up with the row title. No line, no rail, no border.
-*/
-.toc-note,
-.toc-count {
-  margin: 0;
-  border: 0;
+/* A small dot on the right of the title. Gray is the request. Orange is added. */
+.toc-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
   border-radius: 999px;
-  font-family: var(--font-body);
-  font-size: var(--text-caption);
-  font-weight: 500;
-  line-height: var(--leading-caption);
-  white-space: nowrap;
+  background: var(--toc-text-secondary);
 }
 
-.toc-note {
-  position: absolute;
-  top: 12px;
-  left: calc(100% + var(--toc-pad) + 9px);
-  padding: 2px 8px;
-  background: var(--anno-fill);
-  color: var(--anno-ink);
-}
-
-.toc-note[data-kind="request"],
-.toc-count[data-kind="request"] {
-  --anno-fill: var(--anno-request-fill);
-  --anno-ink: var(--anno-request-ink);
-}
-
-.toc-note[data-kind="added"],
-.toc-count[data-kind="added"] {
-  --anno-fill: var(--anno-added-fill);
-  --anno-ink: var(--anno-added-ink);
+.toc-dot[data-kind="added"] {
+  background: var(--anno-flag);
 }
 
 .toc-dock {
@@ -196,10 +165,21 @@
 }
 
 .toc-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
   padding: 4px 10px;
-  background: var(--anno-fill);
-  color: var(--anno-ink);
+  border: 1px solid var(--toc-line);
+  border-radius: 999px;
+  background: var(--toc-surface);
+  color: var(--toc-text);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
   opacity: 0;
   transition: opacity var(--toc-dur-fade) var(--toc-ease);
 }
@@ -210,19 +190,6 @@
 
 .toc-count-num {
   font-variant-numeric: tabular-nums;
-}
-
-/* Narrow frames keep the card full width. The repeated row tags
-   would sit on the policy, so the two totals under the card name
-   each group instead. */
-@media (max-width: 720px) {
-  .toc-product[data-visual="said-too-much"] .toc-doc {
-    width: 100%;
-  }
-
-  .toc-note {
-    display: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
