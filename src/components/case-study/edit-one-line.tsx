@@ -116,9 +116,9 @@ export function EditOneLineVisual() {
   return (
     <div className="toc-product eol-product" data-visual="edit-one-line">
       <div className="eol-stage">
-        <article className="eol-card" aria-label="Sales PTO policy">
+        <article className="eol-card" aria-label="Sales PTO Policy">
           <header className="eol-head">
-            <h3 className="eol-title">Sales PTO policy</h3>
+            <h3 className="eol-title">Sales PTO Policy</h3>
             <p className="eol-count" data-shown={showCount ? "true" : "false"} aria-hidden={showCount ? undefined : true}>
               {showCount ? countLabel : "1 line changed, 3 unchanged"}
             </p>
