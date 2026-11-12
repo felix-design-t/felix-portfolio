@@ -181,14 +181,13 @@
 }
 
 /* Question and "Got it" share this row, so the chip stays put and only
-   the right side changes. The min-height fits two lines of options, so
-   the cards stay about the same height. */
+   the right side changes. The row is only as tall as its content, so
+   the chip sits under the title with the same gap as the other cards. */
 .ofs-resolve {
   display: grid;
   grid-template-columns: minmax(0, 42%) minmax(0, 1fr);
-  align-items: end;
+  align-items: start;
   gap: 12px;
-  min-height: 80px;
 }
 
 .ofs-resolve-side {
@@ -197,18 +196,17 @@
   align-items: flex-end;
   justify-content: flex-end;
   align-content: flex-end;
+  align-self: end;
   gap: 8px;
-  min-height: 80px;
 }
 
 .ofs-product[data-fit="column"] .ofs-resolve {
   grid-template-columns: minmax(0, 1fr);
-  min-height: 0;
 }
 
 .ofs-product[data-fit="column"] .ofs-resolve-side {
   justify-content: flex-start;
-  min-height: 0;
+  align-self: start;
 }
 
 .ofs-options {
