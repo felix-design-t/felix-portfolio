@@ -231,15 +231,26 @@ export function OnlyWhatYouSaidVisual() {
       const laneIndex = laneOfField.get(trace.fieldIndex) ?? 0;
       const lowestStart = Math.max(...siblings.map((item) => item.startY));
       const laneY = Math.max(lowestStart + 4, laneOrigin + laneIndex * laneGap);
-      // Row: drop onto the chip when that x is beside the lead, otherwise
-      // stop on the card's top edge so the line never cuts the sentence.
-      // Stacked: the chips share one x, so run down the card's right padding
-      // (empty) and meet each chip on its right edge.
+      // Every line ends on its chip. A straight drop is used when that
+      // column is clear of the sentence. Otherwise the line comes down the
+      // card's empty side padding, crosses under the sentence, and steps
+      // onto the top center of the chip.
       let d: string;
       if (asRow) {
-        const clearsLead = trace.endX < leadLeft - 4 || trace.endX > leadRight + 4;
-        const endY = clearsLead ? trace.chipTop : cardTop;
-        d = elbow(trace.startX, trace.startY, trace.startX, laneY, trace.endX, endY);
+        const chipX = trace.endX;
+        const chipY = trace.chipTop;
+        const clearsLead = chipX < leadLeft - 4 || chipX > leadRight + 4;
+        if (clearsLead) {
+          d = elbow(trace.startX, trace.startY, trace.startX, laneY, chipX, chipY);
+        } else {
+          const gutterX = chipX >= (cardLeft + cardRight) / 2 ? cardRight - 8 : cardLeft + 8;
+          const leadBottom = lead ? lead.bottom - origin.top : cardTop;
+          const channelY = Math.min(chipY, leadBottom + 4);
+          d =
+            channelY >= chipY - 1
+              ? `${elbow(trace.startX, trace.startY, trace.startX, laneY, gutterX, chipY)} H ${chipX}`
+              : `${elbow(trace.startX, trace.startY, trace.startX, laneY, gutterX, channelY)} H ${chipX} V ${chipY}`;
+        }
       } else {
         const railX = cardRight - 6 - trace.fieldIndex * 3;
         d = `${elbow(trace.startX, trace.startY, trace.startX, laneY, railX, trace.chipMid)} H ${trace.chipRight}`;
