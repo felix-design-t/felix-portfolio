@@ -1,0 +1,347 @@
+/*
+  Edit one line.
+  Reuses the .toc-product tokens and the 16/10 frame, which grows on its
+  own when the content is taller than that ratio. Two panels side by
+  side from 560px, stacked (fields above the policy) below that.
+*/
+
+.eol-product {
+  container-type: inline-size;
+}
+
+.eol-stage {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  align-items: stretch;
+}
+
+@container (min-width: 560px) {
+  .eol-stage {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .eol-panel {
+    flex: 1 1 0;
+  }
+}
+
+.eol-panel {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--toc-line);
+  border-radius: 16px;
+  background: var(--toc-surface);
+}
+
+.eol-caption,
+.eol-title,
+.eol-log-text,
+.eol-sentence {
+  margin: 0;
+  font-family: var(--font-body);
+}
+
+.eol-caption {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--toc-text-secondary);
+}
+
+/* Fields */
+
+.eol-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.eol-chip {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 52px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: var(--toc-control);
+  transition: background-color 400ms var(--toc-ease);
+}
+
+.eol-chip[data-lit="true"] {
+  background: color-mix(in srgb, var(--toc-mark) 16%, var(--toc-control));
+}
+
+.eol-chip-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.eol-chip-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--toc-text-secondary);
+}
+
+.eol-chip-value {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--toc-text);
+}
+
+.eol-stepper {
+  display: flex;
+  flex: none;
+  gap: 4px;
+}
+
+.eol-step {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--toc-surface);
+  color: var(--toc-text);
+  cursor: pointer;
+  transition:
+    background-color 400ms var(--toc-ease),
+    transform 280ms var(--toc-ease);
+}
+
+.eol-step:disabled {
+  color: var(--toc-text-secondary);
+  opacity: 0.5;
+  cursor: default;
+}
+
+.eol-step:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.eol-step-icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.eol-foot {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Generate: solid until pressed, then a quiet gray. Nothing is solid after. */
+
+.eol-generate {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--toc-control);
+  color: var(--toc-text-secondary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  cursor: default;
+  transition:
+    background-color 560ms var(--toc-ease),
+    color 560ms var(--toc-ease),
+    transform 280ms var(--toc-ease);
+}
+
+.eol-generate[data-ready="true"] {
+  background: var(--toc-mark);
+  color: var(--toc-on-mark);
+  cursor: pointer;
+}
+
+.eol-generate[data-pressed="true"] {
+  transform: scale(0.98);
+}
+
+.eol-generate .toc-send-icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Policy card */
+
+.eol-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.eol-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--toc-text);
+}
+
+/* Reserves its height so the lines never jump when the log appears. */
+.eol-log {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 40px;
+  opacity: 0;
+  transition: opacity 560ms var(--toc-ease);
+}
+
+.eol-log[data-shown="true"] {
+  opacity: 1;
+}
+
+.eol-log-text {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--toc-text-secondary);
+}
+
+.eol-undo {
+  flex: none;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--toc-control);
+  color: var(--toc-text-secondary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  cursor: pointer;
+  transition: transform 280ms var(--toc-ease);
+}
+
+.eol-undo[data-pressed="true"],
+.eol-undo:active {
+  transform: scale(0.98);
+}
+
+.eol-generate:focus-visible,
+.eol-undo:focus-visible,
+.eol-step:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.eol-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.eol-line {
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 560ms var(--toc-ease),
+    transform 560ms var(--toc-ease);
+}
+
+.eol-line[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.eol-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 8px 8px 10px;
+  border-left: 2px solid transparent;
+  border-radius: 8px;
+  transition: border-color 400ms var(--toc-ease);
+}
+
+.eol-row[data-changed="true"] {
+  border-left-color: var(--toc-mark);
+}
+
+.eol-row[data-flash="true"] {
+  animation: eol-flash 1600ms var(--toc-ease) both;
+}
+
+@keyframes eol-flash {
+  0%,
+  35% {
+    background: color-mix(in srgb, var(--toc-mark) 16%, transparent);
+  }
+
+  100% {
+    background: transparent;
+  }
+}
+
+.eol-sentence {
+  min-width: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--toc-text);
+}
+
+.eol-pill {
+  flex: none;
+  padding: 0 8px;
+  border-radius: 9999px;
+  background: var(--toc-control);
+  color: var(--toc-text-secondary);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eol-chip,
+  .eol-step,
+  .eol-generate,
+  .eol-undo,
+  .eol-log,
+  .eol-line,
+  .eol-row {
+    transition: none;
+  }
+
+  .eol-row[data-flash="true"] {
+    animation: none;
+  }
+}

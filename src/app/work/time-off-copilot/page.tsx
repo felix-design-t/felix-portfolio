@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CaseStudyPage } from "@/components/case-study/case-study-page";
 import { SameSheetAgain } from "@/components/case-study/same-sheet-again";
+import { EditOneLineVisual } from "@/components/case-study/edit-one-line";
 import { OnlyWhatYouSaidVisual } from "@/components/case-study/only-what-you-said";
 import { SaidTooMuchVisual } from "@/components/case-study/said-too-much";
 import { TypeWhatYouHaveVisual } from "@/components/case-study/type-what-you-have";
@@ -26,6 +27,7 @@ export default function TimeOffCopilotPage() {
         "said-too-much": <SaidTooMuchVisual />,
         "fields-first": <OnlyWhatYouSaidVisual />,
       }}
+      closingVisuals={{ "fields-first": <EditOneLineVisual /> }}
     />
   );
 }

@@ -76,7 +76,7 @@ export const timeOffCopilot: CaseStudy = {
       },
       closingVisual: {
         name: "Edit and approve",
-        caption: "Change a field, then approve",
+        caption: "Edit a field, one line changes, Undo",
         aspectRatio: "16 / 10",
       },
     },

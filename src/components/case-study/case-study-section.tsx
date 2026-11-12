@@ -7,6 +7,8 @@ type CaseStudySectionProps = {
   /** A built visual. Without it the section's frame stays a placeholder. */
   visual?: ReactNode;
   visualControls?: ReactNode;
+  /** A built visual for the closing frame. */
+  closingVisual?: ReactNode;
 };
 
 /**
@@ -17,6 +19,7 @@ export function CaseStudySection({
   section,
   visual,
   visualControls,
+  closingVisual,
 }: CaseStudySectionProps) {
   const headingId = `${section.id}-title`;
 
@@ -61,7 +64,9 @@ export function CaseStudySection({
           name={section.closingVisual.name}
           caption={section.closingVisual.caption}
           aspectRatio={section.closingVisual.aspectRatio}
-        />
+        >
+          {closingVisual}
+        </CaseStudyFrame>
       ) : null}
       {section.closingVisual && section.tradeoffs ? <TradeoffFrame /> : null}
       {section.followUp ? (
