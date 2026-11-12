@@ -11,17 +11,25 @@
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 36px);
 }
 
-/* The chat card is gone, so the thinking line sits at the top left. */
-.toc-product[data-visual="said-too-much"][data-phase="thinking"] .toc-stack,
-.toc-product[data-visual="said-too-much"][data-phase="document"] .toc-stack {
-  top: 0;
+/*
+  The loader and its line start in the middle of the frame. When the
+  policy appears, that same line eases up to the top.
+*/
+.toc-product[data-visual="said-too-much"][data-phase="thinking"] .toc-stack {
+  top: calc((100% - var(--toc-dock, 40px)) / 2);
   right: auto;
   left: 0;
-  transform: none;
+  transform: translateY(-50%);
+  opacity: 1;
 }
 
 .toc-product[data-visual="said-too-much"][data-phase="document"] .toc-stack {
-  opacity: 0;
+  /* Leave through the top fade so the line does not sit on the policy. */
+  top: 0;
+  right: auto;
+  left: 0;
+  transform: translateY(-100%);
+  opacity: 1;
   pointer-events: none;
 }
 

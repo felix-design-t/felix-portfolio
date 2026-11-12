@@ -9,8 +9,10 @@ import "./said-too-much.css";
  * The agent said too much.
  *
  * Section 02 already shows the request, so this loop starts at the
- * thinking line. One line reads "Generating full policy" with the
- * loader beside it, then becomes "Worked for 20s" as the loader leaves.
+ * thinking line, in the middle of the frame. One line reads
+ * "Generating full policy" with the loader beside it, then becomes
+ * "Worked for 20s" as the loader leaves. When the policy appears,
+ * that line moves up.
  * The policy card writes after that. It grows past the frame, so the
  * older lines fade at the top. A counter counts what was asked and
  * what the agent added.
