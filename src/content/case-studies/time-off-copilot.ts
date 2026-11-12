@@ -58,7 +58,6 @@ export const timeOffCopilot: CaseStudy = {
       body: "The agent filled the gaps on its own. It overstepped. It wrote a full draft with carryover, payout, and blackout dates no one asked for. It was overwhelming, and none of it became a field the admin could check.",
       visual: {
         name: "Unasked draft",
-        caption: "Extra parts marked, checklist unchanged",
         aspectRatio: "16 / 10",
       },
     },
