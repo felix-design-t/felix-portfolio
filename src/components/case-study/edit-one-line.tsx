@@ -1,9 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import "./type-what-you-have.css";
 import "./edit-one-line.css";
-import { TOC_PAUSE_MS, TOC_PHASE_GAP_MS, TOC_PRESS_HOLD_MS } from "./toc-motion";
 
 /**
  * Review and control.
@@ -16,20 +15,11 @@ import { TOC_PAUSE_MS, TOC_PHASE_GAP_MS, TOC_PRESS_HOLD_MS } from "./toc-motion"
  * Changing the yearly limit is like editing one instance. Only that
  * sentence shows the diff. Undo steps back. Keep change confirms it,
  * and only then does Preview policy become the solid button.
- * Nothing here publishes. The sequence plays once.
- *
- * The numbers below are the feel knobs.
+ * Nothing here publishes. The field starts at 14 days and stays there
+ * until the admin changes it.
  */
 
-/** Pause on the fresh draft before the edit. */
-const BEFORE_EDIT_MS = TOC_PHASE_GAP_MS;
-/** How long the diff sits before Keep change is pressed. */
-const BEFORE_KEEP_MS = TOC_PAUSE_MS;
-/** How long the Keep change press lasts. */
-const PRESS_MS = TOC_PRESS_HOLD_MS;
-
 const BASE_LIMIT = 14;
-const EDITED_LIMIT = 13;
 const MIN_LIMIT = 8;
 const MAX_LIMIT = 20;
 const LINE_COUNT = 4;
@@ -64,25 +54,14 @@ const FRESH: Policy = {
   history: [],
 };
 
-function prefersReducedMotion(): boolean {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
 function limitLabel(days: number): string {
   return `${days} days`;
 }
 
 export function EditOneLineVisual() {
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  const [seen, setSeen] = useState(false);
-  const [autoplay, setAutoplay] = useState(true);
   const [policy, setPolicy] = useState<Policy>(FRESH);
   /** Bumps so the tint flash on the edited line restarts. */
   const [flashKey, setFlashKey] = useState(0);
-  const [keepPressed, setKeepPressed] = useState(false);
-  /** The scripted pass runs once. After Keep change it stays on this frame. */
-  const playedRef = useRef(false);
 
   const { limit, confirmed, kept, history } = policy;
   const pending = limit !== confirmed;
@@ -131,82 +110,15 @@ export function EditOneLineVisual() {
     }));
   }, []);
 
-  const showEnd = useCallback(() => {
-    setPolicy({
-      limit: EDITED_LIMIT,
-      confirmed: EDITED_LIMIT,
-      kept: true,
-      history: [{ limit: BASE_LIMIT, kept: false }],
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!prefersReducedMotion()) return;
-    const id = window.setTimeout(() => {
-      setAutoplay(false);
-      showEnd();
-    }, 0);
-    return () => window.clearTimeout(id);
-  }, [showEnd]);
-
-  useEffect(() => {
-    const node = rootRef.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) setSeen(true);
-      },
-      { threshold: 0.45 },
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!seen || !autoplay || playedRef.current || prefersReducedMotion()) return;
-
-    const timers: number[] = [];
-    const at = (ms: number, work: () => void) => {
-      timers.push(window.setTimeout(work, ms));
-    };
-    let finished = false;
-
-    let time = BEFORE_EDIT_MS;
-    at(time, () => edit(EDITED_LIMIT));
-    time += BEFORE_KEEP_MS;
-    at(time, () => setKeepPressed(true));
-    time += PRESS_MS;
-    at(time, () => {
-      finished = true;
-      playedRef.current = true;
-      setKeepPressed(false);
-      keep();
-      setAutoplay(false);
-    });
-
-    return () => {
-      timers.forEach((id) => window.clearTimeout(id));
-      if (!finished) playedRef.current = false;
-    };
-  }, [seen, autoplay, edit, keep]);
-
-  /** A tap means the person is driving, so the scripted presses stop. */
-  const takeOver = () => setAutoplay(false);
-
   const nudge = (step: number) => {
-    takeOver();
     edit(limit + step);
   };
 
   const onUndo = () => {
-    takeOver();
-    setKeepPressed(false);
     undo();
   };
 
   const onKeep = () => {
-    takeOver();
-    setKeepPressed(false);
     keep();
   };
 
@@ -222,7 +134,7 @@ export function EditOneLineVisual() {
       : "Sales PTO policy draft. PTO, Sales department, 14 days a year, earned monthly.";
 
   return (
-    <div ref={rootRef} className="toc-product eol-product" data-visual="edit-one-line">
+    <div className="toc-product eol-product" data-visual="edit-one-line">
       <div className="eol-stage">
         <article className="eol-card" aria-label="Sales PTO policy">
           <header className="eol-head">
@@ -276,7 +188,6 @@ export function EditOneLineVisual() {
               <button
                 type="button"
                 className="eol-quiet"
-                data-pressed={keepPressed ? "true" : "false"}
                 tabIndex={showActions && pending ? 0 : -1}
                 onClick={onKeep}
               >
