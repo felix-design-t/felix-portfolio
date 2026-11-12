@@ -38,7 +38,7 @@ const AFTER_SHIFT_MS = 480;
 /** How long the preview takes to finish sliding in. Matches the CSS. */
 const PREVIEW_ARRIVE_MS = 800;
 /** How long the finished preview stays before the sequence starts over. */
-const LOOP_HOLD_MS = 1500;
+const LOOP_HOLD_MS = 2000;
 
 /** How many gray bars stand in for the rest of the draft. */
 const LOADING_LINES = 3;
