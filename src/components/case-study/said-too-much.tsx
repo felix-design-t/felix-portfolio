@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { flushSync } from "react-dom";
 import { Eclipse } from "loading-dev";
 import "./type-what-you-have.css";
 import "./said-too-much.css";
@@ -9,39 +8,29 @@ import "./said-too-much.css";
 /**
  * The agent said too much.
  *
- * Same Copilot surface as the introducing-agent screen. The sequence:
- * 1. The chat card rises from the bottom and types the short request.
- * 2. Send presses. The card leaves through the top fade.
- * 3. Thinking lines step through on the left, then shift left.
- * 4. A policy card writes section after section. It grows past the
- *    frame, so the older lines fade at the top.
- * 5. A counter at the bottom counts what was asked and what the agent added.
+ * Section 02 already shows the request, so this loop starts at the
+ * thinking line. One line reads "Generating full policy" with the
+ * loader beside it, then becomes "Worked for 20s" as the loader leaves.
+ * The policy card writes after that. It grows past the frame, so the
+ * older lines fade at the top. A counter counts what was asked and
+ * what the agent added.
  *
  * The checklist beside the policy never gains a row. Reduced motion
  * shows the finished policy, the tags, and the counter.
  */
 
-const REQUEST =
-  "I need to create a PTO policy for sales department, the yearly limit is 14 days.";
-
-/** How long the chat card takes to rise from the bottom of the frame. */
-const ENTER_MS = 800;
-const CHAR_MS = 48;
-const BEFORE_SEND_MS = 320;
-const SEND_HOLD_MS = 420;
+/** How long "Generating full policy" stays before it changes. */
 const LINE_MS = 720;
-const LOADER_FADE_MS = 420;
+/** How long the line takes to slide into the space the loader left. */
 const LINE_SHIFT_MS = 880;
+/** A short rest after that slide, before the policy arrives. */
 const AFTER_SHIFT_MS = 480;
 /** How long one policy section takes to arrive before the next. */
 const ROW_MS = 680;
 const LOOP_HOLD_MS = 2000;
 
-const THINKING = [
-  "Reading the request...",
-  "Drafting the full policy...",
-  "Worked 8s",
-] as const;
+const GENERATING = "Generating full policy";
+const WORKED = "Worked for 20s";
 
 /**
  * One row is the yearly limit from the note. The other eight are
@@ -111,8 +100,8 @@ const CHECKLIST = [
   { name: "Accrual", state: "Missing" },
 ] as const;
 
-type Phase = "typing" | "sending" | "thinking" | "document";
-type ThinkBeat = "idle" | "one" | "two" | "three" | "settled";
+type Phase = "thinking" | "document";
+type ThinkBeat = "idle" | "one" | "settled";
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -124,17 +113,16 @@ export function SaidTooMuchVisual() {
   const dockRef = useRef<HTMLDivElement>(null);
   const [seen, setSeen] = useState(false);
   const [run, setRun] = useState(0);
-  const [phase, setPhase] = useState<Phase>("typing");
+  const [phase, setPhase] = useState<Phase>("thinking");
   const [beat, setBeat] = useState<ThinkBeat>("idle");
-  const [typed, setTyped] = useState("");
-  const [arriving, setArriving] = useState(true);
+  const [line, setLine] = useState(GENERATING);
   const [shown, setShown] = useState(0);
 
   useEffect(() => {
     if (!prefersReducedMotion()) return;
     setPhase("document");
-    setTyped(REQUEST);
-    setArriving(false);
+    setBeat("settled");
+    setLine(WORKED);
     setShown(SECTIONS.length);
   }, []);
 
@@ -210,77 +198,35 @@ export function SaidTooMuchVisual() {
     if (!seen) return;
     if (prefersReducedMotion()) {
       setPhase("document");
-      setTyped(REQUEST);
-      setArriving(false);
+      setBeat("settled");
+      setLine(WORKED);
       setShown(SECTIONS.length);
       return;
     }
 
-    setBeat("idle");
-    setTyped("");
+    setPhase("thinking");
+    setBeat("one");
+    setLine(GENERATING);
     setShown(0);
-    flushSync(() => {
-      setPhase("typing");
-      setArriving(true);
-    });
 
-    let typer = 0;
-    let riseFrame = 0;
     const timers: number[] = [];
-    const thinkingStartsAt = BEFORE_SEND_MS + SEND_HOLD_MS;
-    const beginTyping = () => {
-      let index = 0;
-      typer = window.setInterval(() => {
-        index += 1;
-        setTyped(REQUEST.slice(0, index));
-        if (index < REQUEST.length) return;
-        window.clearInterval(typer);
-        timers.push(window.setTimeout(() => setPhase("sending"), BEFORE_SEND_MS));
-        timers.push(
-          window.setTimeout(() => {
-            setPhase("thinking");
-            setBeat("one");
-          }, thinkingStartsAt),
-        );
-        timers.push(window.setTimeout(() => setBeat("two"), thinkingStartsAt + LINE_MS));
-        timers.push(
-          window.setTimeout(() => setBeat("three"), thinkingStartsAt + LINE_MS * 2),
-        );
-        timers.push(
-          window.setTimeout(
-            () => setBeat("settled"),
-            thinkingStartsAt + LINE_MS * 2 + LOADER_FADE_MS,
-          ),
-        );
-        const writingStartsAt =
-          thinkingStartsAt + LINE_MS * 2 + LOADER_FADE_MS + LINE_SHIFT_MS + AFTER_SHIFT_MS;
-        timers.push(window.setTimeout(() => setPhase("document"), writingStartsAt));
-        SECTIONS.forEach((_, sectionIndex) => {
-          timers.push(
-            window.setTimeout(
-              () => setShown(sectionIndex + 1),
-              writingStartsAt + sectionIndex * ROW_MS,
-            ),
-          );
-        });
-        const finishedAt = writingStartsAt + (SECTIONS.length - 1) * ROW_MS + ROW_MS;
-        timers.push(
-          window.setTimeout(() => setRun((value) => value + 1), finishedAt + LOOP_HOLD_MS),
-        );
-      }, CHAR_MS);
-    };
-
-    const parkFrame = window.requestAnimationFrame(() => {
-      const stack = rootRef.current?.querySelector(".toc-stack");
-      if (stack) void stack.getBoundingClientRect();
-      riseFrame = window.requestAnimationFrame(() => setArriving(false));
+    timers.push(
+      window.setTimeout(() => {
+        setLine(WORKED);
+        setBeat("settled");
+      }, LINE_MS),
+    );
+    const writingStartsAt = LINE_MS + LINE_SHIFT_MS + AFTER_SHIFT_MS;
+    timers.push(window.setTimeout(() => setPhase("document"), writingStartsAt));
+    SECTIONS.forEach((_, sectionIndex) => {
+      timers.push(
+        window.setTimeout(() => setShown(sectionIndex + 1), writingStartsAt + sectionIndex * ROW_MS),
+      );
     });
-    timers.push(window.setTimeout(beginTyping, ENTER_MS));
+    const finishedAt = writingStartsAt + (SECTIONS.length - 1) * ROW_MS + ROW_MS;
+    timers.push(window.setTimeout(() => setRun((value) => value + 1), finishedAt + LOOP_HOLD_MS));
 
     return () => {
-      window.cancelAnimationFrame(parkFrame);
-      window.cancelAnimationFrame(riseFrame);
-      window.clearInterval(typer);
       timers.forEach((timerId) => window.clearTimeout(timerId));
     };
   }, [seen, run]);
@@ -288,16 +234,12 @@ export function SaidTooMuchVisual() {
   const visible = SECTIONS.slice(0, shown);
   const asked = visible.filter((section) => section.kind === "request").length;
   const added = visible.filter((section) => section.kind === "added").length;
-  const chatIsQuiet = phase === "thinking" || phase === "document";
-
   const status =
     phase === "document"
       ? `The agent wrote a long sales PTO policy. ${asked} asked, ${added} added. Only the yearly limit of 14 days came from the request. The checklist did not change.`
-      : phase === "thinking"
-        ? "Reading the request. Drafting the full policy. Worked 8s."
-        : phase === "sending"
-          ? "Sending the request"
-          : "";
+      : beat === "settled"
+        ? "Worked for 20s."
+        : "Generating full policy.";
 
   return (
     <div
@@ -305,47 +247,16 @@ export function SaidTooMuchVisual() {
       className="toc-product"
       data-visual="said-too-much"
       data-phase={phase}
-      data-arrive={arriving ? "bottom" : undefined}
     >
       <div className="toc-stage" ref={stageRef}>
-        <div className="toc-stack" aria-hidden={chatIsQuiet}>
-          <article className="toc-chat">
-            <p className="toc-typed">
-              {typed}
-              {phase === "typing" ? <span className="toc-caret" aria-hidden="true" /> : null}
-            </p>
-            <div className="toc-chat-bar">
-              <button
-                type="button"
-                className="toc-attach"
-                aria-label="Attach a document"
-                tabIndex={chatIsQuiet ? -1 : 0}
-              >
-                <AttachIcon />
-              </button>
-              <button
-                type="button"
-                className="toc-send"
-                aria-label="Send"
-                aria-pressed={phase === "sending"}
-                tabIndex={chatIsQuiet ? -1 : 0}
-              >
-                <SendIcon />
-              </button>
-            </div>
-          </article>
-
+        <div className="toc-stack" aria-hidden={phase === "document"}>
           <div className="toc-think-slot">
             <article className="toc-think" data-beat={beat}>
               <span className="toc-think-mark" aria-hidden="true">
                 <Eclipse size={16} />
               </span>
               <div className="toc-think-lines">
-                {THINKING.map((line) => (
-                  <p key={line} className="toc-think-line">
-                    {line}
-                  </p>
-                ))}
+                <p className="toc-think-line">{line}</p>
               </div>
             </article>
           </div>
@@ -430,18 +341,3 @@ function PageIcon() {
   );
 }
 
-function AttachIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className="toc-send-icon">
-      <path d="M8 3.5v9M3.5 8h9" />
-    </svg>
-  );
-}
-
-function SendIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className="toc-send-icon">
-      <path d="M8 12.5V3.8M8 3.8 4.6 7.2M8 3.8l3.4 3.4" />
-    </svg>
-  );
-}

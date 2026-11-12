@@ -6,21 +6,18 @@
 
 .toc-product[data-visual="said-too-much"][data-phase="thinking"] .toc-stage,
 .toc-product[data-visual="said-too-much"][data-phase="document"] .toc-stage {
-  /* The chat, and later the policy, fade as they cross the top edge. */
+  /* The policy fades as it crosses the top edge. */
   mask-image: linear-gradient(to bottom, transparent, #000 36px);
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 36px);
 }
 
-/*
-  Park the lines at the top and let the chat card, which sits above
-  them in the stack, leave through the fade.
-*/
+/* The chat card is gone, so the thinking line sits at the top left. */
 .toc-product[data-visual="said-too-much"][data-phase="thinking"] .toc-stack,
 .toc-product[data-visual="said-too-much"][data-phase="document"] .toc-stack {
-  top: 4px;
-  right: 4px;
-  left: 4px;
-  transform: translateY(calc(-100% + 96px));
+  top: 0;
+  right: auto;
+  left: 0;
+  transform: none;
 }
 
 .toc-product[data-visual="said-too-much"][data-phase="document"] .toc-stack {
@@ -28,8 +25,31 @@
   pointer-events: none;
 }
 
-.toc-product[data-visual="said-too-much"] .toc-chat {
-  width: min(100%, 352px);
+.toc-product[data-visual="said-too-much"][data-phase="thinking"] .toc-think-slot,
+.toc-product[data-visual="said-too-much"][data-phase="document"] .toc-think-slot {
+  margin-top: 0;
+  transition: none;
+}
+
+.toc-product[data-visual="said-too-much"]:has(.toc-think[data-beat="idle"]) .toc-think-slot {
+  grid-template-rows: 0fr;
+}
+
+/* One line, so the loader stays beside it instead of stepping down.
+   At the start of a loop it snaps back beside the words, then eases away. */
+.toc-product[data-visual="said-too-much"] .toc-think[data-beat="one"] .toc-think-mark,
+.toc-product[data-visual="said-too-much"] .toc-think[data-beat="settled"] .toc-think-mark {
+  top: 4px;
+}
+
+.toc-product[data-visual="said-too-much"] .toc-think[data-beat="one"] .toc-think-mark {
+  opacity: 1;
+  transition: none;
+}
+
+.toc-product[data-visual="said-too-much"] .toc-think[data-beat="one"] .toc-think-lines {
+  padding-left: 24px;
+  transition: none;
 }
 
 .toc-product[data-visual="said-too-much"] .toc-doc {
