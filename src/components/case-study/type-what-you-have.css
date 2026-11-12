@@ -6,15 +6,36 @@
 */
 
 .toc-product {
+  /* Accent. The only hue. A 1px line, a rail, or the one solid button. */
   --toc-mark: #0e6b52;
-  --toc-on-mark: #f2f3f0;
-  --toc-ground: #f3f4f2;
+  --toc-on-mark: #f4f8f6;
+  /* Tonal layers, tinted slightly toward the mark: ground < surface, raised sits inside a surface. */
+  --toc-ground: #eef2ef;
   --toc-surface: #ffffff;
-  --toc-line: rgba(26, 28, 26, 0.12);
-  --toc-text: #1a1c1a;
-  --toc-text-secondary: #5e635e;
-  --toc-user: #ecedea;
-  --toc-control: #e4e5e2;
+  --toc-raised: #f1f5f2;
+  --toc-control: var(--toc-raised);
+  --toc-line: rgba(18, 38, 28, 0.1);
+  --toc-text: #101914;
+  --toc-text-secondary: #55645b;
+  /* The admin's message is the one inverted layer, so it holds against the ground. */
+  --toc-user: #17211c;
+  --toc-user-text: #f3f7f5;
+  --toc-user-muted: #9fb0a7;
+  --toc-user-mark: #6fdec0;
+  --toc-user-on-mark: #0e1612;
+  /* Type scale: title, body, meta, label. Nothing else. */
+  --toc-title-size: 15px;
+  --toc-title-line: 22px;
+  --toc-body-size: 13px;
+  --toc-body-line: 20px;
+  --toc-meta-size: 12px;
+  --toc-meta-line: 16px;
+  --toc-label-size: 11px;
+  --toc-label-line: 16px;
+  /* Space: 16px card inset, 12px between groups, 44px list row. */
+  --toc-pad: 16px;
+  --toc-gap: 12px;
+  --toc-row: 44px;
   /* Smooth ease for this sequence. Slower than the site's ease-out. */
   --toc-ease: cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -25,27 +46,34 @@
   width: 100%;
   aspect-ratio: 16 / 10;
   /* Pulls the chat, thinking, and preview in from the frame edge. */
-  padding: 16px;
+  padding: 20px;
+  border-radius: var(--radius-sm);
+  background: var(--toc-ground);
   color: var(--toc-text);
 }
 
 html[data-theme="dark"] .toc-product {
   --toc-mark: #6fdec0;
-  --toc-on-mark: #1a1c1a;
-  --toc-ground: #141615;
-  --toc-surface: #1c1f1d;
-  --toc-line: rgba(242, 243, 240, 0.14);
-  --toc-text: #f2f3f0;
-  --toc-text-secondary: #a3a8a3;
-  --toc-user: #232624;
-  --toc-control: #2a2d2b;
+  --toc-on-mark: #0c1511;
+  --toc-ground: #0e1311;
+  --toc-surface: #151b18;
+  --toc-raised: #1d2521;
+  --toc-line: rgba(220, 240, 230, 0.12);
+  --toc-text: #ebf2ee;
+  --toc-text-secondary: #94a39b;
+  --toc-user: #3a4d43;
+  --toc-user-text: #f3f7f5;
+  --toc-user-muted: #b4c3bb;
+  --toc-user-mark: #6fdec0;
+  --toc-user-on-mark: #0c1511;
 }
 
 .toc-label {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--toc-label-size);
   font-weight: 400;
-  line-height: 16px;
+  line-height: var(--toc-label-line);
+  letter-spacing: 0.02em;
   color: var(--toc-text-secondary);
 }
 
@@ -61,27 +89,27 @@ html[data-theme="dark"] .toc-product {
 }
 
 .toc-typed {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: var(--toc-title-size);
+  line-height: var(--toc-title-line);
 }
 
 .toc-think-line,
 .toc-value {
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
 }
 
 .toc-doc-title {
-  font-size: 14px;
+  font-size: var(--toc-title-size);
   font-weight: 500;
-  line-height: 20px;
+  line-height: var(--toc-title-line);
 }
 
 .toc-doc-lead,
 .toc-doc-note-body,
 .toc-doc-note-title {
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
 }
 
 .toc-doc-note-title {
@@ -160,19 +188,21 @@ html[data-theme="dark"] .toc-product {
   display: flex;
   flex-direction: column;
   align-self: flex-end;
-  gap: 8px;
+  gap: var(--toc-gap);
   /* Wide enough for the request to sit on two lines. */
-  width: min(76%, 352px);
-  padding: 16px;
+  width: min(76%, 360px);
+  padding: var(--toc-pad);
   border-radius: 16px;
-  /* The admin's message: gray fill, no visible border, so it reads as theirs. */
+  /* The admin's message: the inverted layer, no border, so it reads as theirs. */
   border-color: transparent;
   background: var(--toc-user);
+  color: var(--toc-user-text);
 }
 
-.toc-typed {
+.toc-chat .toc-typed {
   margin: 0;
-  min-height: 48px;
+  min-height: 44px;
+  color: var(--toc-user-text);
 }
 
 .toc-caret {
@@ -180,7 +210,7 @@ html[data-theme="dark"] .toc-product {
   width: 1px;
   height: 1em;
   margin-left: 1px;
-  background: var(--toc-text);
+  background: var(--toc-user-text);
   vertical-align: text-bottom;
   animation: toc-caret 1s steps(1, end) infinite;
 }
@@ -215,7 +245,7 @@ html[data-theme="dark"] .toc-product {
   border: 0;
   border-radius: 9999px;
   background: transparent;
-  color: var(--toc-text-secondary);
+  color: var(--toc-user-muted);
   cursor: pointer;
   align-self: center;
   transition: transform 280ms var(--toc-ease);
@@ -229,8 +259,8 @@ html[data-theme="dark"] .toc-product {
   padding: 0;
   border: 0;
   border-radius: 9999px;
-  background: var(--toc-mark);
-  color: var(--toc-on-mark);
+  background: var(--toc-user-mark);
+  color: var(--toc-user-on-mark);
   cursor: pointer;
   align-self: center;
   transition: transform 280ms var(--toc-ease);
@@ -383,8 +413,8 @@ html[data-theme="dark"] .toc-product {
   z-index: 3;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 12px;
+  gap: var(--toc-gap);
+  padding: var(--toc-pad);
   overflow: visible;
   border-radius: 16px;
   opacity: 0;
@@ -408,21 +438,25 @@ html[data-theme="dark"] .toc-product {
   margin: 0;
 }
 
+.toc-doc-title + .toc-doc-lead {
+  margin-top: -8px;
+}
+
 .toc-doc-lead,
 .toc-doc-note-body {
   color: var(--toc-text-secondary);
 }
 
 .toc-doc-note {
-  padding: 8px 10px;
+  padding: 10px 12px;
   border-radius: 12px;
-  background: color-mix(in srgb, var(--toc-mark) 14%, transparent);
+  background: color-mix(in srgb, var(--toc-mark) 9%, var(--toc-surface));
 }
 
 .toc-doc-lines {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   margin-top: 4px;
 }
 
@@ -460,9 +494,9 @@ html[data-theme="dark"] .toc-product {
 .toc-file {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   margin-top: 4px;
-  padding-top: 8px;
+  padding-top: 12px;
   border-top: 1px solid var(--toc-line);
 }
 

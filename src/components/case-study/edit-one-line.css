@@ -13,7 +13,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--toc-gap);
   min-width: 0;
   align-items: stretch;
 }
@@ -33,9 +33,9 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--toc-gap);
   min-width: 0;
-  padding: 16px;
+  padding: var(--toc-pad);
   border: 1px solid var(--toc-line);
   border-radius: 16px;
   background: var(--toc-surface);
@@ -50,8 +50,8 @@
 }
 
 .eol-caption {
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
   color: var(--toc-text-secondary);
 }
 
@@ -72,10 +72,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  min-height: 52px;
-  padding: 6px 12px;
+  min-height: 56px;
+  padding: 8px 12px;
   border-radius: 12px;
-  background: var(--toc-control);
+  background: var(--toc-raised);
   transition: background-color 400ms var(--toc-ease);
 }
 
@@ -91,16 +91,16 @@
 
 .eol-chip-label {
   font-family: var(--font-body);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
   color: var(--toc-text-secondary);
 }
 
 .eol-chip-value {
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--toc-body-size);
   font-weight: 500;
-  line-height: 20px;
+  line-height: var(--toc-body-line);
   color: var(--toc-text);
 }
 
@@ -113,10 +113,10 @@
 .eol-step {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   padding: 0;
-  border: 0;
+  border: 1px solid var(--toc-line);
   border-radius: 9999px;
   background: var(--toc-surface);
   color: var(--toc-text);
@@ -157,16 +157,16 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 40px;
+  min-height: 36px;
   padding: 0 16px;
   border: 0;
   border-radius: 9999px;
-  background: var(--toc-control);
+  background: var(--toc-raised);
   color: var(--toc-text-secondary);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--toc-body-size);
   font-weight: 500;
-  line-height: 20px;
+  line-height: var(--toc-body-line);
   cursor: default;
   transition:
     background-color 560ms var(--toc-ease),
@@ -203,9 +203,9 @@
 }
 
 .eol-title {
-  font-size: 14px;
+  font-size: var(--toc-title-size);
   font-weight: 500;
-  line-height: 20px;
+  line-height: var(--toc-title-line);
   color: var(--toc-text);
 }
 
@@ -215,7 +215,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  min-height: 40px;
+  min-height: 36px;
   opacity: 0;
   transition: opacity 560ms var(--toc-ease);
 }
@@ -225,23 +225,23 @@
 }
 
 .eol-log-text {
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
   color: var(--toc-text-secondary);
 }
 
 .eol-undo {
   flex: none;
-  min-height: 40px;
+  min-height: 32px;
   padding: 0 12px;
   border: 0;
   border-radius: 9999px;
-  background: var(--toc-control);
+  background: var(--toc-raised);
   color: var(--toc-text-secondary);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--toc-body-size);
   font-weight: 500;
-  line-height: 20px;
+  line-height: var(--toc-body-line);
   cursor: pointer;
   transition: transform 280ms var(--toc-ease);
 }
@@ -261,7 +261,7 @@
 .eol-lines {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -282,12 +282,15 @@
 
 .eol-row {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  gap: 8px;
-  padding: 8px 8px 8px 10px;
+  gap: 12px;
+  min-height: var(--toc-row);
+  box-sizing: border-box;
+  align-items: center;
+  padding: 10px 8px 10px 12px;
   border-left: 2px solid transparent;
-  border-radius: 8px;
+  border-top: 1px solid var(--toc-line);
+  border-radius: 0;
   transition: border-color 400ms var(--toc-ease);
 }
 
@@ -312,21 +315,21 @@
 
 .eol-sentence {
   min-width: 0;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
   color: var(--toc-text);
 }
 
 .eol-pill {
   flex: none;
-  padding: 0 8px;
+  padding: 2px 8px;
   border-radius: 9999px;
-  background: var(--toc-control);
+  background: var(--toc-raised);
   color: var(--toc-text-secondary);
   font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 20px;
+  font-size: var(--toc-meta-size);
+  font-weight: 400;
+  line-height: var(--toc-meta-line);
   white-space: nowrap;
 }
 
