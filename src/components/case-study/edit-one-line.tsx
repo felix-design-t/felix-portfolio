@@ -60,8 +60,6 @@ function limitLabel(days: number): string {
 
 export function EditOneLineVisual() {
   const [policy, setPolicy] = useState<Policy>(FRESH);
-  /** Bumps so the tint flash on the edited line restarts. */
-  const [flashKey, setFlashKey] = useState(0);
 
   const { limit, confirmed, kept, history } = policy;
   const pending = limit !== confirmed;
@@ -71,8 +69,6 @@ export function EditOneLineVisual() {
   const showCount = changedLines > 0;
   /** Undo and Keep change appear together once the draft is no longer the default. */
   const showActions = pending || changedLines > 0;
-
-  const flash = () => setFlashKey((key) => key + 1);
 
   const edit = useCallback((next: number) => {
     const clamped = Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, next));
@@ -85,7 +81,6 @@ export function EditOneLineVisual() {
         history: [...current.history, { limit: current.limit, kept: current.kept }],
       };
     });
-    flash();
   }, []);
 
   const undo = useCallback(() => {
@@ -99,7 +94,6 @@ export function EditOneLineVisual() {
         history: current.history.slice(0, -1),
       };
     });
-    flash();
   }, []);
 
   const keep = useCallback(() => {
@@ -150,11 +144,10 @@ export function EditOneLineVisual() {
               const isPendingLine = isLimit && pending;
               return (
                 <p
-                  key={isLimit ? `limit-${flashKey}` : line.id}
+                  key={line.id}
                   className="eol-line"
                   data-pending={isPendingLine ? "true" : "false"}
                   data-dim={pending && !isLimit ? "true" : "false"}
-                  data-flash={isLimit && flashKey > 0 ? "true" : "false"}
                 >
                   {`${line.before} `}
                   {isLimit ? (

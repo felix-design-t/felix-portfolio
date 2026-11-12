@@ -137,21 +137,6 @@
   opacity: 0.62;
 }
 
-.eol-line[data-flash="true"] {
-  animation: eol-flash var(--toc-dur-flash) var(--toc-ease);
-}
-
-@keyframes eol-flash {
-  0%,
-  50% {
-    background: color-mix(in srgb, var(--toc-mark) 28%, transparent);
-  }
-
-  100% {
-    background: color-mix(in srgb, var(--toc-mark) 12%, transparent);
-  }
-}
-
 /* A field, not a pill: square corners and a hairline, so it does not match Undo. */
 .eol-token {
   margin-left: 6px;
@@ -174,10 +159,8 @@
 .eol-token-limit {
   gap: 2px;
   padding: 2px;
-}
-
-.eol-token-limit[data-pending="true"] {
-  background: color-mix(in srgb, var(--toc-mark) 16%, var(--toc-raised));
+  border: 0;
+  background: transparent;
 }
 
 .eol-token-values {
@@ -265,9 +248,5 @@
   .eol-preview,
   .eol-step {
     transition: none;
-  }
-
-  .eol-line[data-flash="true"] {
-    animation: none;
   }
 }
