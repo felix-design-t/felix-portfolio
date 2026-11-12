@@ -22,15 +22,25 @@
 }
 
 /*
-  The loader and its line start in the middle of the frame. When the
-  policy appears, that same line eases up to the top.
+  Each loop, the loader rises from below the frame into the middle.
+  When the policy appears, that same line eases up to the top.
 */
 .toc-product[data-visual="said-too-much"][data-phase="thinking"] .toc-stack {
   top: calc((100% - var(--toc-dock, 40px)) / 2);
   right: auto;
   left: 0;
+  z-index: 3;
   transform: translateY(-50%);
   opacity: 1;
+}
+
+/* Each loop parks the loader under the frame, then the rise above
+   eases it into the middle. No transition while it is parked, so a
+   finished policy does not drag the line down first. */
+.toc-product[data-visual="said-too-much"][data-arrive="bottom"] .toc-stack {
+  top: 100%;
+  transform: translateY(12px);
+  transition: none;
 }
 
 .toc-product[data-visual="said-too-much"][data-phase="document"] .toc-stack {

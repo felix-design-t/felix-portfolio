@@ -1,16 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { Eclipse } from "loading-dev";
 import "./type-what-you-have.css";
 import "./said-too-much.css";
-import { TOC_HOLD_MS, TOC_STEP_MS } from "./toc-motion";
+import { TOC_MOVE_MS, TOC_STEP_MS } from "./toc-motion";
 
 /**
  * The agent said too much.
  *
- * Section 02 already shows the request, so this loop starts at the
- * thinking line, in the middle of the frame. One line reads
+ * Section 02 already shows the request, so this plays once. It starts
+ * at the thinking line below the frame, and that line rises into the
+ * middle. It holds on the finished policy. One line reads
  * "Generating full policy" with the loader beside it, then becomes
  * "Worked for 20s" as the loader leaves. When the policy appears,
  * that line moves up.
@@ -32,7 +34,6 @@ const LINE_SHIFT_MS = 880;
 const AFTER_SHIFT_MS = 480;
 /** How long one policy section takes to arrive before the next. Same step as section 02's thinking lines. */
 const ROW_MS = TOC_STEP_MS;
-const LOOP_HOLD_MS = TOC_HOLD_MS;
 
 const GENERATING = "Generating full policy";
 const WORKED = "Worked for 20s";
@@ -110,11 +111,11 @@ export function SaidTooMuchVisual() {
   const stageRef = useRef<HTMLDivElement>(null);
   const dockRef = useRef<HTMLDivElement>(null);
   const [seen, setSeen] = useState(false);
-  const [run, setRun] = useState(0);
   const [phase, setPhase] = useState<Phase>("thinking");
   const [beat, setBeat] = useState<ThinkBeat>("idle");
   const [line, setLine] = useState(GENERATING);
   const [shown, setShown] = useState(0);
+  const [arriving, setArriving] = useState(false);
 
   useEffect(() => {
     if (!prefersReducedMotion()) return;
@@ -189,32 +190,43 @@ export function SaidTooMuchVisual() {
       return;
     }
 
-    setPhase("thinking");
-    setBeat("one");
-    setLine(GENERATING);
-    setShown(0);
+    // Paint the loader below the frame with no transition, then release
+    // it on the next frame so it rises into the middle.
+    flushSync(() => {
+      setPhase("thinking");
+      setBeat("one");
+      setLine(GENERATING);
+      setShown(0);
+      setArriving(true);
+    });
+
+    let riseFrame = 0;
+    const parkFrame = window.requestAnimationFrame(() => {
+      const stack = rootRef.current?.querySelector(".toc-stack");
+      if (stack) void stack.getBoundingClientRect();
+      riseFrame = window.requestAnimationFrame(() => setArriving(false));
+    });
 
     const timers: number[] = [];
     timers.push(
       window.setTimeout(() => {
         setLine(WORKED);
         setBeat("settled");
-      }, LINE_MS),
+      }, TOC_MOVE_MS + LINE_MS),
     );
-    const writingStartsAt = LINE_MS + LINE_SHIFT_MS + AFTER_SHIFT_MS;
+    const writingStartsAt = TOC_MOVE_MS + LINE_MS + LINE_SHIFT_MS + AFTER_SHIFT_MS;
     timers.push(window.setTimeout(() => setPhase("document"), writingStartsAt));
     SECTIONS.forEach((_, sectionIndex) => {
       timers.push(
         window.setTimeout(() => setShown(sectionIndex + 1), writingStartsAt + sectionIndex * ROW_MS),
       );
     });
-    const finishedAt = writingStartsAt + (SECTIONS.length - 1) * ROW_MS + ROW_MS;
-    timers.push(window.setTimeout(() => setRun((value) => value + 1), finishedAt + LOOP_HOLD_MS));
-
     return () => {
+      window.cancelAnimationFrame(parkFrame);
+      window.cancelAnimationFrame(riseFrame);
       timers.forEach((timerId) => window.clearTimeout(timerId));
     };
-  }, [seen, run]);
+  }, [seen]);
 
   const visible = SECTIONS.slice(0, shown);
   const asked = visible.filter((section) => section.kind === "request").length;
@@ -232,6 +244,7 @@ export function SaidTooMuchVisual() {
       className="toc-product"
       data-visual="said-too-much"
       data-phase={phase}
+      data-arrive={arriving ? "bottom" : undefined}
     >
       <div className="toc-stage" ref={stageRef}>
         <div className="toc-stack" aria-hidden={phase === "document"}>
