@@ -90,7 +90,6 @@ export function OnlyWhatYouSaidVisual() {
   const [autoTrace, setAutoTrace] = useState<number | null>(null);
   const [pointerTrace, setPointerTrace] = useState<number | null>(null);
   const [choice, setChoice] = useState<Choice | null>(null);
-  const [filled, setFilled] = useState(false);
   const [finished, setFinished] = useState(false);
 
   const showEnd = useCallback((pick: Choice) => {
@@ -98,7 +97,6 @@ export function OnlyWhatYouSaidVisual() {
     setChipsShown(FIELDS.length);
     setAutoTrace(null);
     setChoice(pick);
-    setFilled(true);
     setFinished(true);
   }, []);
 
@@ -160,7 +158,6 @@ export function OnlyWhatYouSaidVisual() {
       setChipsShown(0);
       setAutoTrace(null);
       setChoice(pendingChoiceRef.current);
-      setFilled(false);
       setFinished(false);
     });
     const release = window.requestAnimationFrame(() => {
@@ -192,7 +189,6 @@ export function OnlyWhatYouSaidVisual() {
     time += PICK_STEP_MS;
     at(time, () => setStep(4));
     time += BEFORE_FILL_MS;
-    at(time, () => setFilled(true));
     time += BEFORE_GENERATE_MS;
     at(time, () => setFinished(true));
     time += LOOP_HOLD_MS;
@@ -215,7 +211,6 @@ export function OnlyWhatYouSaidVisual() {
     pendingChoiceRef.current = next;
     setChoice(next);
     if (finished || prefersReducedMotion()) {
-      setFilled(true);
       setFinished(true);
       setStep(4);
       setChipsShown(FIELDS.length);
@@ -224,13 +219,14 @@ export function OnlyWhatYouSaidVisual() {
 
   const activeTrace = pointerTrace ?? autoTrace;
   const chosen = CHOICES.find((option) => option.key === choice);
-  const accrualValue = filled ? (chosen?.filled ?? "") : "";
+  /** Monthly is the resting value, so the chip never appears blank and then fills. */
+  const accrualLabel = chosen?.filled ?? "Monthly";
 
   /** A message is hidden until its step, then stays fully visible. */
   const stateOf = (messageStep: number) => (step < messageStep ? "hidden" : "current");
 
   const status = finished
-    ? `Ready. Type PTO, department sales, yearly limit 14 days, accrual ${accrualValue.toLowerCase()}.`
+    ? `Ready. Type PTO, department sales, yearly limit 14 days, accrual ${accrualLabel.toLowerCase()}.`
     : step >= 2
       ? "Type, department, and yearly limit came from your request. Accrual wasn't mentioned. Monthly, all at once, or skip?"
       : "Reading your request into fields.";
@@ -349,9 +345,9 @@ export function OnlyWhatYouSaidVisual() {
           aria-label="Agent: ready"
         >
           <p className="ofs-lead">Got it.</p>
-          <div className="ofs-chip ofs-chip-static" data-open={filled ? "false" : "true"} data-filled={filled ? "true" : "false"}>
+          <div className="ofs-chip ofs-chip-static">
             <span className="ofs-chip-label">Accrual</span>
-            <span className="ofs-chip-value">{accrualValue || "Open"}</span>
+            <span className="ofs-chip-value">{accrualLabel}</span>
           </div>
         </article>
       </div>
