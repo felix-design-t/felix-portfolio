@@ -13,8 +13,9 @@ import "./edit-one-line.css";
  * idea as a component instance dropped into a line of type.
  *
  * Changing the yearly limit is like editing one instance. Only that
- * sentence shows the diff. Undo steps back. Keep change confirms it,
- * and only then does Preview policy become the solid button.
+ * sentence shows the diff. Undo returns the limit to 14 days.
+ * Keep change confirms it,
+ * and only then does Preview become the solid button.
  * Nothing here publishes. The field starts at 14 days and stays there
  * until the admin changes it.
  */
@@ -34,8 +35,6 @@ const LINES: { id: LineId; before: string; value: string; after: string }[] = [
   { id: "accrual", before: "Days are earned", value: "Monthly", after: "." },
 ];
 
-type Mark = { limit: number; kept: boolean };
-
 type Policy = {
   /** What the sentence shows now. */
   limit: number;
@@ -43,15 +42,12 @@ type Policy = {
   confirmed: number;
   /** True after Keep change, until a newer edit moves off that value. */
   kept: boolean;
-  /** Earlier limits, newest last, so Undo can step back. */
-  history: Mark[];
 };
 
 const FRESH: Policy = {
   limit: BASE_LIMIT,
   confirmed: BASE_LIMIT,
   kept: false,
-  history: [],
 };
 
 function limitLabel(days: number): string {
@@ -61,7 +57,7 @@ function limitLabel(days: number): string {
 export function EditOneLineVisual() {
   const [policy, setPolicy] = useState<Policy>(FRESH);
 
-  const { limit, confirmed, kept, history } = policy;
+  const { limit, confirmed, kept } = policy;
   const pending = limit !== confirmed;
   const changedLines = limit === BASE_LIMIT ? 0 : 1;
   const previewSolid = kept && !pending;
@@ -78,22 +74,12 @@ export function EditOneLineVisual() {
         limit: clamped,
         confirmed: current.confirmed,
         kept: clamped === current.confirmed ? current.kept : false,
-        history: [...current.history, { limit: current.limit, kept: current.kept }],
       };
     });
   }, []);
 
   const undo = useCallback(() => {
-    setPolicy((current) => {
-      if (current.history.length === 0) return current;
-      const previous = current.history[current.history.length - 1];
-      return {
-        limit: previous.limit,
-        confirmed: current.confirmed,
-        kept: previous.kept,
-        history: current.history.slice(0, -1),
-      };
-    });
+    setPolicy(FRESH);
   }, []);
 
   const keep = useCallback(() => {
@@ -122,9 +108,9 @@ export function EditOneLineVisual() {
   const countLabel = `${changedWord}, ${unchangedWord}`;
 
   const status = previewSolid
-    ? `Sales PTO policy kept. Yearly limit ${limit} days. ${countLabel}. Preview policy is available.`
+    ? `Sales PTO policy kept. Yearly limit ${limit} days. ${countLabel}. Preview is available.`
     : pending
-      ? `Yearly limit changed from ${confirmed} to ${limit} days. ${countLabel}. Keep the change or undo it. Preview policy is waiting.`
+      ? `Yearly limit changed from ${confirmed} to ${limit} days. ${countLabel}. Keep the change or undo it. Preview is waiting.`
       : "Sales PTO policy draft. PTO, Sales department, 14 days a year, earned monthly.";
 
   return (
@@ -171,8 +157,8 @@ export function EditOneLineVisual() {
               <button
                 type="button"
                 className="eol-quiet"
-                aria-label="Undo the last change"
-                disabled={history.length === 0}
+                aria-label="Return the yearly limit to 14 days"
+                disabled={!showActions}
                 tabIndex={showActions ? 0 : -1}
                 onClick={onUndo}
               >
@@ -194,7 +180,7 @@ export function EditOneLineVisual() {
               aria-disabled={!previewSolid}
               tabIndex={previewSolid ? 0 : -1}
             >
-              Preview policy
+              Preview
             </button>
           </div>
         </article>
