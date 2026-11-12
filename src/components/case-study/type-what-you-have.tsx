@@ -14,7 +14,8 @@ import "./type-what-you-have.css";
  *    left into the space it left.
  * 3. After that slide, those cards move up, and a document preview is what you look at.
  *
- * Replay runs it again. Reduced motion stays on the preview.
+ * After the preview has finished appearing, it holds, then plays from
+ * the start. Reduced motion stays on the preview.
  */
 
 const REQUEST =
@@ -34,6 +35,10 @@ const LOADER_FADE_MS = 420;
 const LINE_SHIFT_MS = 880;
 /** A short rest after the lines settle, before the preview arrives. */
 const AFTER_SHIFT_MS = 480;
+/** How long the preview takes to finish sliding in. Matches the CSS. */
+const PREVIEW_ARRIVE_MS = 800;
+/** How long the finished preview stays before the sequence starts over. */
+const LOOP_HOLD_MS = 1500;
 
 /** How many gray bars stand in for the rest of the draft. */
 const LOADING_LINES = 3;
@@ -135,10 +140,13 @@ export function TypeWhatYouHaveVisual() {
           thinkingStartsAt + LINE_MS * 2 + LOADER_FADE_MS,
         ),
       );
+      const previewStartsAt =
+        thinkingStartsAt + LINE_MS * 2 + LOADER_FADE_MS + LINE_SHIFT_MS + AFTER_SHIFT_MS;
+      timers.push(window.setTimeout(() => setPhase("document"), previewStartsAt));
       timers.push(
         window.setTimeout(
-          () => setPhase("document"),
-          thinkingStartsAt + LINE_MS * 2 + LOADER_FADE_MS + LINE_SHIFT_MS + AFTER_SHIFT_MS,
+          () => setRun((value) => value + 1),
+          previewStartsAt + PREVIEW_ARRIVE_MS + LOOP_HOLD_MS,
         ),
       );
     }, CHAR_MS);
@@ -167,12 +175,6 @@ export function TypeWhatYouHaveVisual() {
       data-visual="type-what-you-have"
       data-phase={phase}
     >
-      <div className="toc-top">
-        <button type="button" className="toc-replay" onClick={() => setRun((value) => value + 1)}>
-          Replay
-        </button>
-      </div>
-
       <div className="toc-stage" ref={stageRef}>
         <div className="toc-stack" aria-hidden={chatIsQuiet}>
           <article className="toc-chat">
