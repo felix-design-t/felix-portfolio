@@ -5,6 +5,7 @@ import { EditOneLineVisual } from "@/components/case-study/edit-one-line";
 import { OnlyWhatYouSaidVisual } from "@/components/case-study/only-what-you-said";
 import { SaidTooMuchVisual } from "@/components/case-study/said-too-much";
 import { TypeWhatYouHaveVisual } from "@/components/case-study/type-what-you-have";
+import { BlindGap } from "@/components/case-study/blind-gap";
 import { timeOffCopilot } from "@/content/case-studies/time-off-copilot";
 
 export const metadata: Metadata = {
@@ -26,6 +27,8 @@ export default function TimeOffCopilotPage() {
         "type-what-you-have": <TypeWhatYouHaveVisual />,
         "said-too-much": <SaidTooMuchVisual />,
         "fields-first": <OnlyWhatYouSaidVisual />,
+        // Admin's worry: the 90-day wait, then a request that is 4 days short.
+        "mistakes-in-use": <BlindGap />,
       }}
       closingVisuals={{ "fields-first": <EditOneLineVisual /> }}
     />

@@ -1,0 +1,393 @@
+/*
+  Blind gap. A timeline on the case-study frame.
+
+  The frame's matte fill is the ground. Type uses the page: serif at
+  section size for the policy, body caption for the marks. The only
+  hue is the rose shortfall. No shadow, gradient, or blur.
+
+  The horizontal measure is 150 days. Day 0 is the left edge.
+  Vertical room above the line is the balance, from 0 up to 5 days.
+*/
+
+.blind-gap {
+  position: relative;
+  container-type: inline-size;
+  width: 100%;
+  --blind-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --blind-move: 800ms;
+  --blind-fade: 560ms;
+  /* Shared with the balance line in blind-gap.tsx. */
+  --axis-days: 150;
+  --plot-top: 48px;
+  --plot-bottom: 42px;
+}
+
+.blind-gap-inner {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: 62.5cqi;
+  padding: var(--space-2);
+  color: var(--text);
+}
+
+.blind-gap-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.blind-gap-policy {
+  margin: 0;
+  max-width: 36rem;
+  font-family: var(--font-serif);
+  font-size: var(--text-section);
+  font-weight: 400;
+  line-height: var(--leading-section);
+  color: var(--text);
+  text-wrap: pretty;
+  opacity: 0;
+  transition: opacity var(--blind-fade) var(--blind-ease);
+}
+
+.blind-gap-policy[data-shown="true"] {
+  opacity: 1;
+}
+
+/* The chart. Labels at the top, the line in the middle, days along the bottom. */
+.blind-gap-plot {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 188px;
+}
+
+.blind-gap-confirmed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text);
+  opacity: 0;
+  transition: opacity var(--blind-fade) var(--blind-ease);
+}
+
+.blind-gap-confirmed[data-shown="true"] {
+  opacity: 1;
+}
+
+/* Days 0–90. A flat tint, the same height the whole way. */
+.blind-gap-band {
+  position: absolute;
+  top: var(--plot-top);
+  bottom: var(--plot-bottom);
+  left: 0;
+  width: calc(90 / var(--axis-days) * 100%);
+}
+
+.blind-gap-band-fill {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--text) 10%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--blind-move) var(--blind-ease);
+}
+
+.blind-gap-band[data-shown="true"] .blind-gap-band-fill {
+  transform: scaleX(1);
+}
+
+.blind-gap-band-label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+  opacity: 0;
+  transition: opacity var(--blind-fade) var(--blind-ease);
+}
+
+.blind-gap-band[data-shown="true"] .blind-gap-band-label {
+  opacity: 1;
+}
+
+/*
+  Balance line. 0 days is the floor of the chart. 5 days is the top.
+  One day is a fifth of that height. The step happens at day 91.
+*/
+.blind-gap-flat,
+.blind-gap-rise,
+.blind-gap-level {
+  position: absolute;
+  background: var(--text);
+  transition: transform var(--blind-move) var(--blind-ease);
+}
+
+.blind-gap-flat {
+  bottom: var(--plot-bottom);
+  left: 0;
+  width: calc(91 / var(--axis-days) * 100%);
+  height: 1.5px;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.blind-gap-flat[data-shown="true"] {
+  transform: scaleX(1);
+}
+
+.blind-gap-rise {
+  bottom: var(--plot-bottom);
+  left: calc(91 / var(--axis-days) * 100%);
+  width: 1.5px;
+  height: calc((100% - var(--plot-top) - var(--plot-bottom)) * 0.2);
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: bottom center;
+}
+
+.blind-gap-rise[data-shown="true"] {
+  transform: translateX(-50%) scaleY(1);
+}
+
+.blind-gap-level {
+  right: 0;
+  bottom: calc(var(--plot-bottom) + (100% - var(--plot-top) - var(--plot-bottom)) * 0.2);
+  left: calc(91 / var(--axis-days) * 100%);
+  height: 1.5px;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.blind-gap-level[data-shown="true"] {
+  transform: scaleX(1);
+}
+
+/*
+  The shortfall. Top is the 5-day request. Bottom meets the 1-day balance.
+*/
+.blind-gap-rose {
+  position: absolute;
+  top: var(--plot-top);
+  left: calc(91 / var(--axis-days) * 100%);
+  width: 12px;
+  height: calc((100% - var(--plot-top) - var(--plot-bottom)) * 0.8);
+  transform: translateX(-50%);
+}
+
+.blind-gap-rose-fill {
+  width: 100%;
+  height: 100%;
+  background: var(--accent-rose);
+  transform: scaleY(0);
+  transform-origin: bottom center;
+  transition: transform var(--blind-move) var(--blind-ease);
+}
+
+.blind-gap-rose[data-shown="true"] .blind-gap-rose-fill {
+  transform: scaleY(1);
+}
+
+.blind-gap-short {
+  position: absolute;
+  top: calc(var(--plot-top) + (100% - var(--plot-top) - var(--plot-bottom)) * 0.4);
+  right: calc((var(--axis-days) - 91) / var(--axis-days) * 100% + 12px);
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--accent-rose);
+  text-align: right;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity var(--blind-fade) var(--blind-ease);
+}
+
+.blind-gap-short[data-shown="true"] {
+  opacity: 1;
+}
+
+/* The quiet stretch between the request and the payroll flag. */
+.blind-gap-weeks {
+  position: absolute;
+  bottom: 18px;
+  left: calc(91 / var(--axis-days) * 100%);
+  width: calc(42 / var(--axis-days) * 100%);
+  height: 16px;
+}
+
+.blind-gap-weeks-line {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--text-secondary);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--blind-move) var(--blind-ease);
+}
+
+.blind-gap-weeks[data-shown="true"] .blind-gap-weeks-line {
+  transform: scaleX(1);
+}
+
+.blind-gap-weeks-label {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity var(--blind-fade) var(--blind-ease);
+}
+
+.blind-gap-weeks[data-shown="true"] .blind-gap-weeks-label {
+  opacity: 1;
+}
+
+.blind-gap-admin {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(133 / var(--axis-days) * 100%);
+  width: 1px;
+}
+
+.blind-gap-admin-copy {
+  position: absolute;
+  top: 0;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: max-content;
+  max-width: 9.5rem;
+  margin: 0;
+  text-align: right;
+  opacity: 0;
+  transition: opacity var(--blind-fade) var(--blind-ease);
+}
+
+.blind-gap-admin[data-shown="true"] .blind-gap-admin-copy {
+  opacity: 1;
+}
+
+.blind-gap-admin-label,
+.blind-gap-flag {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.blind-gap-admin-label {
+  color: var(--text);
+}
+
+.blind-gap-flag {
+  color: var(--text-secondary);
+}
+
+.blind-gap-admin-dot {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--text);
+  transform: translate(-2px, 0);
+  opacity: 0;
+  transition: opacity var(--blind-fade) var(--blind-ease);
+}
+
+.blind-gap-admin-stem {
+  position: absolute;
+  top: 46px;
+  bottom: var(--plot-bottom);
+  left: 0;
+  width: 1px;
+  background: var(--text);
+  transform: scaleY(0);
+  transform-origin: top center;
+  transition: transform var(--blind-move) var(--blind-ease);
+}
+
+.blind-gap-admin[data-shown="true"] .blind-gap-admin-dot {
+  opacity: 1;
+}
+
+.blind-gap-admin[data-shown="true"] .blind-gap-admin-stem {
+  transform: scaleY(1);
+}
+
+.blind-gap-axis {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 16px;
+}
+
+.blind-gap-tick {
+  position: absolute;
+  top: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+  transform: translateX(-50%);
+}
+
+.blind-gap-outcomes {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.blind-gap-outcome {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text);
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity var(--blind-fade) var(--blind-ease),
+    transform var(--blind-move) var(--blind-ease);
+}
+
+.blind-gap-outcomes[data-shown="true"] .blind-gap-outcome {
+  opacity: 1;
+  transform: none;
+}
+
+/* A restart snaps back. Reduced motion is the finished chart, still. */
+.blind-gap[data-snap="true"] *,
+.blind-gap[data-snap="true"] {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blind-gap *,
+  .blind-gap {
+    transition: none;
+  }
+}
