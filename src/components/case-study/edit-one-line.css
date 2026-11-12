@@ -158,15 +158,18 @@
   }
 }
 
+/* A field, not a pill: square corners and a hairline, so it does not match Undo. */
 .eol-token {
   margin-left: 6px;
   vertical-align: middle;
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  min-height: 28px;
-  padding: 2px 10px;
-  border-radius: 12px;
-  background: var(--toc-raised);
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--toc-line);
+  border-radius: 8px;
+  background: var(--toc-surface);
   color: var(--toc-text);
   font-size: var(--toc-body-size);
   font-weight: 500;
@@ -208,7 +211,7 @@
   padding: 0;
   border: 0;
   border-radius: 9999px;
-  background: var(--toc-surface);
+  background: var(--toc-raised);
   color: var(--toc-text);
 }
 
