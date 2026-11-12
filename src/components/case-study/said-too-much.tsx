@@ -14,10 +14,13 @@ import "./said-too-much.css";
  * "Worked for 20s" as the loader leaves. When the policy appears,
  * that line moves up.
  * The policy card writes after that. It grows past the frame, so the
- * older lines fade at the top. A counter counts what was asked and
- * what the agent added.
+ * older lines fade at the top. The card itself has no tags. "From your
+ * request" and "Added by AI" sit outside it, in the frame gutter, and
+ * each one arrives with its row. On a narrow frame those words collapse
+ * into a legend under the card, and a small marker stays on the row.
+ * The counter is the same kind of note: outside the card, in amber.
  *
- * Reduced motion shows the finished policy, the tags, and the counter.
+ * Reduced motion shows the finished policy, the notes, and the counter.
  */
 
 /** How long "Generating full policy" stays before it changes. */
@@ -127,12 +130,10 @@ export function SaidTooMuchVisual() {
     if (!stage || !dock || !root) return;
 
     // The policy is meant to overflow. The frame only grows when the
-    // counter and a slice of the policy would collide.
+    // notes under the card and a slice of the policy would collide.
     const measure = () => {
-      const counter = dock.querySelector<HTMLElement>(".toc-count");
-      const counterHeight = Math.ceil(counter?.getBoundingClientRect().height ?? 0);
-      stage.style.setProperty("--toc-counter", `${counterHeight}px`);
-      const dockHeight = counterHeight + 12;
+      const dockHeight = Math.ceil(dock.getBoundingClientRect().height);
+      stage.style.setProperty("--toc-counter", `${dockHeight}px`);
       stage.style.setProperty("--toc-dock", `${dockHeight}px`);
       const padY =
         parseFloat(getComputedStyle(root).paddingTop) +
@@ -257,11 +258,12 @@ export function SaidTooMuchVisual() {
               >
                 <div className="toc-policy-head">
                   <p className="toc-policy-title">{section.title}</p>
-                  <span className="toc-tag" data-kind={section.kind}>
-                    {section.tag}
-                  </span>
                 </div>
                 <p className="toc-policy-body">{section.body}</p>
+                <p className="toc-note" data-kind={section.kind}>
+                  <span className="toc-note-mark" aria-hidden="true" />
+                  <span className="toc-note-label">{section.tag}</span>
+                </p>
               </div>
             ))}
           </div>
@@ -280,6 +282,16 @@ export function SaidTooMuchVisual() {
         </article>
 
         <div className="toc-dock" ref={dockRef}>
+          <ul className="toc-legend">
+            <li data-kind="request" data-shown={asked > 0 ? "true" : "false"}>
+              <span className="toc-note-mark" aria-hidden="true" />
+              <span>From your request</span>
+            </li>
+            <li data-kind="added" data-shown={added > 0 ? "true" : "false"}>
+              <span className="toc-note-mark" aria-hidden="true" />
+              <span>Added by AI</span>
+            </li>
+          </ul>
           <p className="toc-count" aria-hidden={phase !== "document"}>
             <span className="toc-count-num">{asked}</span> asked,{" "}
             <span className="toc-count-num">{added}</span> added

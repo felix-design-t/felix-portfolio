@@ -1,8 +1,32 @@
 /*
   The agent said too much.
-  Reuses the introducing-agent tokens, chat card, thinking lines, and
-  file row. These rules only apply to this visual.
+  Reuses the introducing-agent tokens, thinking line, and file row.
+  These rules only apply to this visual.
+
+  The policy card stays product UI. The gutter notes, the narrow
+  legend, and the counter are case-study annotations: site caption
+  type, not product chips. Green matches the mark. Amber is the
+  problem. One amber for the marker and the bracket, a separate
+  amber for the 12px words so they clear 4.5:1.
 */
+
+.toc-product[data-visual="said-too-much"] {
+  /* Same green as the product mark, owned here so the note is not a product token. */
+  --anno-request: #0e6b52;
+  /* Brighter amber for the marker, the bracket, and the counter hairline. */
+  --anno-amber: #dd7400;
+  /* Darker amber for 12px text on the light site ground and the frame. */
+  --anno-amber-text: #a85700;
+  /* Room beside the card for "From your request". Narrow frames ignore this. */
+  --toc-gutter: 168px;
+}
+
+html[data-theme="dark"] .toc-product[data-visual="said-too-much"] {
+  --anno-request: #6fdec0;
+  --anno-amber: #dd7400;
+  /* Darker than the marker, still light enough for 4.5:1 on the dark ground. */
+  --anno-amber-text: #c26400;
+}
 
 .toc-product[data-visual="said-too-much"][data-phase="thinking"] .toc-stage,
 .toc-product[data-visual="said-too-much"][data-phase="document"] .toc-stage {
@@ -62,7 +86,8 @@
 
 .toc-product[data-visual="said-too-much"] .toc-doc {
   bottom: calc(var(--toc-counter, 28px) + 12px);
-  width: 100%;
+  /* Leave a gutter on the right for the notes. Narrow frames set this back to full width. */
+  width: calc(100% - var(--toc-gutter));
   max-height: none;
   overflow: visible;
   z-index: 2;
@@ -75,6 +100,7 @@
 }
 
 .toc-policy-row {
+  position: relative;
   display: none;
   flex-direction: column;
   gap: 2px;
@@ -108,8 +134,7 @@
 }
 
 .toc-policy-title,
-.toc-policy-body,
-.toc-count {
+.toc-policy-body {
   margin: 0;
   font-family: var(--font-body);
 }
@@ -128,31 +153,117 @@
   color: var(--toc-text-secondary);
 }
 
-.toc-tag {
-  flex: none;
-  padding: 2px 8px;
-  border-radius: 9999px;
+/*
+  A note lives with its row, then steps outside the card. The mark is a
+  1px tick at the card edge and a 1px arm to the words.
+*/
+.toc-note,
+.toc-legend {
+  margin: 0;
   font-family: var(--font-body);
-  font-size: var(--toc-meta-size);
+  font-size: var(--text-caption);
   font-weight: 400;
-  line-height: var(--toc-meta-line);
+  line-height: var(--leading-caption);
 }
 
-.toc-tag[data-kind="request"] {
-  background: color-mix(in srgb, var(--toc-mark) 14%, var(--toc-surface));
-  color: var(--toc-text);
+.toc-note {
+  position: absolute;
+  top: 14px;
+  left: calc(100% + var(--toc-pad) + 1px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  color: var(--anno-ink);
+  white-space: nowrap;
 }
 
-.toc-tag[data-kind="added"] {
-  background: var(--toc-control);
-  color: var(--toc-text-secondary);
+.toc-note[data-kind="request"],
+.toc-legend li[data-kind="request"] {
+  --anno-line: var(--anno-request);
+  --anno-ink: var(--anno-request);
+  color: var(--anno-ink);
+}
+
+.toc-note[data-kind="added"],
+.toc-legend li[data-kind="added"] {
+  --anno-line: var(--anno-amber);
+  --anno-ink: var(--anno-amber-text);
+  color: var(--anno-ink);
+}
+
+.toc-note-mark {
+  position: relative;
+  flex: none;
+  width: 13px;
+  height: 10px;
+}
+
+.toc-note-mark::before,
+.toc-note-mark::after {
+  content: "";
+  position: absolute;
+  background: var(--anno-line);
+}
+
+.toc-note-mark::before {
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 10px;
+}
+
+.toc-note-mark::after {
+  left: 0;
+  top: 4px;
+  width: 12px;
+  height: 1px;
 }
 
 .toc-dock {
   position: absolute;
   z-index: 4;
-  inset: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   pointer-events: none;
+}
+
+.toc-legend {
+  display: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.toc-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 560ms var(--toc-ease),
+    transform 640ms var(--toc-ease);
+}
+
+.toc-legend li[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.toc-legend .toc-note-mark {
+  width: 1px;
+}
+
+.toc-legend .toc-note-mark::after {
+  display: none;
 }
 
 .toc-product[data-visual="said-too-much"][data-phase="document"] .toc-count {
@@ -160,27 +271,57 @@
 }
 
 .toc-count {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
   width: max-content;
   max-width: calc(100% - 16px);
+  margin: 0;
   padding: 4px 12px;
+  border: 1px solid var(--anno-amber);
   border-radius: 9999px;
-  border: 1px solid var(--toc-line);
-  background: var(--toc-surface);
-  color: var(--toc-text-secondary);
-  font-size: var(--toc-meta-size);
+  background: transparent;
+  color: var(--anno-amber-text);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
   font-weight: 400;
-  line-height: var(--toc-meta-line);
+  line-height: var(--leading-caption);
   font-variant-numeric: tabular-nums;
   opacity: 0;
-  transform: translateX(-50%);
   transition: opacity 560ms var(--toc-ease);
 }
 
 .toc-count-num {
   font-variant-numeric: tabular-nums;
+}
+
+/* Narrow frames keep the card full width. The words move under it. */
+@media (max-width: 720px) {
+  .toc-product[data-visual="said-too-much"] .toc-doc {
+    width: 100%;
+  }
+
+  .toc-note {
+    left: auto;
+    /* Sit in the card's right padding, on the edge, clear of the words. */
+    right: calc(-1 * var(--toc-pad) + 2px);
+    gap: 0;
+  }
+
+  .toc-note .toc-note-mark {
+    width: 8px;
+    height: 12px;
+    box-sizing: border-box;
+    border: 1px solid var(--anno-line);
+    border-left: 0;
+  }
+
+  .toc-note .toc-note-mark::before,
+  .toc-note .toc-note-mark::after,
+  .toc-note-label {
+    display: none;
+  }
+
+  .toc-legend {
+    display: flex;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -192,7 +333,6 @@
   .toc-product[data-visual="said-too-much"] .toc-doc {
     position: relative;
     bottom: auto;
-    width: 100%;
     opacity: 1;
     transform: none;
   }
@@ -202,19 +342,19 @@
     animation: none;
   }
 
+  .toc-product[data-visual="said-too-much"] .toc-legend li {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
   .toc-product[data-visual="said-too-much"] .toc-dock {
     position: relative;
     inset: auto;
-    display: flex;
-    justify-content: center;
     margin-top: 8px;
   }
 
   .toc-product[data-visual="said-too-much"] .toc-count {
-    position: relative;
-    bottom: auto;
-    left: auto;
     opacity: 1;
-    transform: none;
   }
 }
