@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./type-what-you-have.css";
 import "./edit-one-line.css";
+import { TOC_PAUSE_MS, TOC_PHASE_GAP_MS, TOC_PRESS_HOLD_MS, TOC_STEP_MS } from "./toc-motion";
 
 /**
  * Review and control.
@@ -16,9 +17,21 @@ import "./edit-one-line.css";
  * sentence shows the diff. Undo returns the limit to 14 days.
  * Keep change confirms it,
  * and only then does Preview become the solid button.
- * Nothing here publishes. The field starts at 14 days and stays there
- * until the admin changes it.
+ * Nothing here publishes. The field starts at 14 days. Once, on its
+ * own: minus twice to 12, Undo back to 14, plus twice to 16, then
+ * Keep change. It stops there.
  */
+
+/** How long the opening 14 days is shown before the first press. */
+const INTRO_MS = TOC_PHASE_GAP_MS;
+/** How long a scripted press stays down. */
+const PRESS_MS = TOC_PRESS_HOLD_MS;
+/** Pause between two presses of the same stepper. */
+const BETWEEN_PRESSES_MS = TOC_STEP_MS;
+/** Pause on 12, and again on 16, before the next button. */
+const READ_MS = TOC_PAUSE_MS;
+
+type Pressed = "minus" | "plus" | "undo" | "keep";
 
 const BASE_LIMIT = 14;
 const MIN_LIMIT = 8;
@@ -54,8 +67,19 @@ function limitLabel(days: number): string {
   return `${days} days`;
 }
 
+function prefersReducedMotion(): boolean {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export function EditOneLineVisual() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  /** The scripted presses run once. A second visit does not replay them. */
+  const playedRef = useRef(false);
+
   const [policy, setPolicy] = useState<Policy>(FRESH);
+  const [seen, setSeen] = useState(false);
+  const [autoplay, setAutoplay] = useState(true);
+  const [pressed, setPressed] = useState<Pressed | null>(null);
 
   const { limit, confirmed, kept } = policy;
   const pending = limit !== confirmed;
@@ -90,15 +114,92 @@ export function EditOneLineVisual() {
     }));
   }, []);
 
+  const showKept = useCallback(() => {
+    setPolicy({ limit: 16, confirmed: 16, kept: true });
+  }, []);
+
+  useEffect(() => {
+    if (!prefersReducedMotion()) return;
+    const id = window.setTimeout(() => {
+      playedRef.current = true;
+      setAutoplay(false);
+      showKept();
+    }, 0);
+    return () => window.clearTimeout(id);
+  }, [showKept]);
+
+  useEffect(() => {
+    const node = rootRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) setSeen(true);
+      },
+      { threshold: 0.45 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!seen || !autoplay || playedRef.current || prefersReducedMotion()) return;
+
+    const timers: number[] = [];
+    const at = (ms: number, work: () => void) => {
+      timers.push(window.setTimeout(work, ms));
+    };
+    let finished = false;
+
+    const tap = (control: Pressed, work: () => void, start: number) => {
+      at(start, () => setPressed(control));
+      at(start + PRESS_MS, () => {
+        setPressed(null);
+        work();
+      });
+      return start + PRESS_MS;
+    };
+
+    let time = INTRO_MS;
+    time = tap("minus", () => edit(13), time);
+    time += BETWEEN_PRESSES_MS;
+    time = tap("minus", () => edit(12), time);
+    time += READ_MS;
+    time = tap("undo", undo, time);
+    time += BETWEEN_PRESSES_MS;
+    time = tap("plus", () => edit(15), time);
+    time += BETWEEN_PRESSES_MS;
+    time = tap("plus", () => edit(16), time);
+    time += READ_MS;
+    tap("keep", () => {
+      finished = true;
+      playedRef.current = true;
+      keep();
+      setAutoplay(false);
+    }, time);
+
+    return () => {
+      timers.forEach((id) => window.clearTimeout(id));
+      if (!finished) playedRef.current = false;
+    };
+  }, [seen, autoplay, edit, undo, keep]);
+
+  /** A real tap takes over, so the scripted presses stop. */
+  const takeOver = () => setAutoplay(false);
+
   const nudge = (step: number) => {
+    takeOver();
     edit(limit + step);
   };
 
   const onUndo = () => {
+    takeOver();
+    setPressed(null);
     undo();
   };
 
   const onKeep = () => {
+    takeOver();
+    setPressed(null);
     keep();
   };
 
@@ -114,7 +215,7 @@ export function EditOneLineVisual() {
       : "Sales PTO policy draft. PTO, Sales department, 14 days a year, earned monthly.";
 
   return (
-    <div className="toc-product eol-product" data-visual="edit-one-line">
+    <div ref={rootRef} className="toc-product eol-product" data-visual="edit-one-line">
       <div className="eol-stage">
         <article className="eol-card" aria-label="Sales PTO Policy">
           <header className="eol-head">
@@ -141,6 +242,7 @@ export function EditOneLineVisual() {
                       limit={limit}
                       confirmed={confirmed}
                       pending={pending}
+                      pressed={pressed}
                       onNudge={nudge}
                     />
                   ) : (
@@ -158,6 +260,7 @@ export function EditOneLineVisual() {
                 type="button"
                 className="eol-quiet"
                 aria-label="Return the yearly limit to 14 days"
+                data-pressed={pressed === "undo" ? "true" : "false"}
                 disabled={!showActions}
                 tabIndex={showActions ? 0 : -1}
                 onClick={onUndo}
@@ -167,6 +270,7 @@ export function EditOneLineVisual() {
               <button
                 type="button"
                 className="eol-quiet"
+                data-pressed={pressed === "keep" ? "true" : "false"}
                 tabIndex={showActions && pending ? 0 : -1}
                 onClick={onKeep}
               >
@@ -197,11 +301,13 @@ function LimitToken({
   limit,
   confirmed,
   pending,
+  pressed,
   onNudge,
 }: {
   limit: number;
   confirmed: number;
   pending: boolean;
+  pressed: Pressed | null;
   onNudge: (step: number) => void;
 }) {
   return (
@@ -210,6 +316,7 @@ function LimitToken({
         type="button"
         className="eol-step"
         aria-label="Decrease yearly limit by one day"
+        data-pressed={pressed === "minus" ? "true" : "false"}
         disabled={limit <= MIN_LIMIT}
         onClick={() => onNudge(-1)}
       >
@@ -223,6 +330,7 @@ function LimitToken({
         type="button"
         className="eol-step"
         aria-label="Increase yearly limit by one day"
+        data-pressed={pressed === "plus" ? "true" : "false"}
         disabled={limit >= MAX_LIMIT}
         onClick={() => onNudge(1)}
       >

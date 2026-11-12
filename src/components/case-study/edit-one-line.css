@@ -107,6 +107,7 @@
 }
 
 .eol-quiet[data-pressed="true"],
+.eol-step[data-pressed="true"],
 .eol-quiet:active:not(:disabled),
 .eol-step:active:not(:disabled) {
   transform: scale(0.98);
