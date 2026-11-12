@@ -33,9 +33,10 @@
 
 .eol-head {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
+  min-height: 32px;
 }
 
 .eol-title,
@@ -52,23 +53,9 @@
   color: var(--toc-text);
 }
 
-/* One fixed row under the title. Hidden states keep this exact height. */
-.eol-status {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 8px;
-  height: 32px;
-  opacity: 0;
-  transition: opacity var(--toc-dur-fade) var(--toc-ease);
-}
-
-.eol-status[data-shown="false"] {
-  pointer-events: none;
-}
-
-.eol-status[data-shown="true"] {
-  opacity: 1;
+/* Top right. Hidden at the default 14 days, without changing the row height. */
+.eol-count[data-shown="false"] {
+  visibility: hidden;
 }
 
 .eol-count {
@@ -107,7 +94,14 @@
   cursor: default;
 }
 
-.eol-quiet[data-shown="false"] {
+/* Bottom left. The pair stays mounted so the footer height never changes. */
+.eol-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eol-actions[data-shown="false"] {
   visibility: hidden;
   pointer-events: none;
 }
@@ -265,7 +259,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .eol-status,
+  .eol-actions,
   .eol-line,
   .eol-quiet,
   .eol-preview,

@@ -88,7 +88,10 @@ export function EditOneLineVisual() {
   const pending = limit !== confirmed;
   const changedLines = limit === BASE_LIMIT ? 0 : 1;
   const previewSolid = kept && !pending;
-  const showCount = changedLines > 0 || pending;
+  /** The count only names a real edit. The default 14 days stays quiet. */
+  const showCount = changedLines > 0;
+  /** Undo and Keep change appear together once the draft is no longer the default. */
+  const showActions = pending || changedLines > 0;
 
   const flash = () => setFlashKey((key) => key + 1);
 
@@ -219,19 +222,9 @@ export function EditOneLineVisual() {
         <article className="eol-card" aria-label="Sales PTO policy">
           <header className="eol-head">
             <h3 className="eol-title">Sales PTO policy</h3>
-            {/* Always mounted, so the row stays put and keeps one height. */}
-            <div className="eol-status" data-shown={showCount ? "true" : "false"} aria-hidden={showCount ? undefined : true}>
-              <p className="eol-count">{countLabel}</p>
-              <button
-                type="button"
-                className="eol-quiet"
-                aria-label="Undo the last change"
-                disabled={history.length === 0}
-                onClick={onUndo}
-              >
-                Undo
-              </button>
-            </div>
+            <p className="eol-count" data-shown={showCount ? "true" : "false"} aria-hidden={showCount ? undefined : true}>
+              {showCount ? countLabel : "1 line changed, 3 unchanged"}
+            </p>
           </header>
 
           <div className="eol-lines">
@@ -264,17 +257,27 @@ export function EditOneLineVisual() {
           </div>
 
           <div className="eol-foot">
-            <button
-              type="button"
-              className="eol-quiet"
-              data-shown={pending ? "true" : "false"}
-              data-pressed={keepPressed ? "true" : "false"}
-              aria-hidden={pending ? undefined : true}
-              tabIndex={pending ? 0 : -1}
-              onClick={onKeep}
-            >
-              Keep change
-            </button>
+            <div className="eol-actions" data-shown={showActions ? "true" : "false"} aria-hidden={showActions ? undefined : true}>
+              <button
+                type="button"
+                className="eol-quiet"
+                aria-label="Undo the last change"
+                disabled={history.length === 0}
+                tabIndex={showActions ? 0 : -1}
+                onClick={onUndo}
+              >
+                Undo
+              </button>
+              <button
+                type="button"
+                className="eol-quiet"
+                data-pressed={keepPressed ? "true" : "false"}
+                tabIndex={showActions && pending ? 0 : -1}
+                onClick={onKeep}
+              >
+                Keep change
+              </button>
+            </div>
             <button
               type="button"
               className="eol-preview"
