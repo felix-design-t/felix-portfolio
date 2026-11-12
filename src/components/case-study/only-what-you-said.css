@@ -272,8 +272,7 @@
 }
 
 .ofs-chip-static {
-  width: max-content;
-  min-width: 148px;
+  width: var(--ofs-type-width, max-content);
   max-width: 100%;
   opacity: 1;
   transform: none;

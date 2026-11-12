@@ -119,6 +119,11 @@ export function OnlyWhatYouSaidVisual() {
     const root = rootRef.current;
     if (!stage || !root) return;
     root.dataset.fit = stage.getBoundingClientRect().width >= ROW_MIN_WIDTH ? "row" : "column";
+    // The Accrual chip matches the Type chip, including when the row stacks.
+    const typeChip = stage.querySelector<HTMLElement>('[data-field="0"]');
+    if (typeChip && typeChip.offsetWidth > 0) {
+      root.style.setProperty("--ofs-type-width", `${typeChip.offsetWidth}px`);
+    }
   }, []);
 
   useLayoutEffect(() => {
