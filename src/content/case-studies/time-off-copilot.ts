@@ -74,7 +74,6 @@ export const timeOffCopilot: CaseStudy = {
         "The admin needs a place to review and edit, and they hold the final say on what moves forward.",
       closingVisual: {
         name: "See every change, keep what you want",
-        caption: "Edit a value, one line changes, Undo",
         aspectRatio: "16 / 10",
       },
     },
