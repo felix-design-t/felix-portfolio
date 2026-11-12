@@ -3,125 +3,138 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./type-what-you-have.css";
 import "./edit-one-line.css";
+import { TOC_HOLD_MS, TOC_PAUSE_MS, TOC_PHASE_GAP_MS, TOC_PRESS_HOLD_MS } from "./toc-motion";
 
 /**
- * Edit one line.
+ * Review and control.
  *
- * Step two of the trust story, and it picks up where "Only what you
- * said" stops: Generate was just pressed. Think of the left panel as a
- * form and the right panel as a printout of it. Each printed line is
- * "wired" to one field, so changing a field rewrites only its own
- * line. A one-line change log with Undo keeps the admin in control.
- * The story stops before Publish.
+ * This is the second trust visual. It opens where "Only what you said"
+ * ends: Generate policy was just pressed. The draft is one card of four
+ * sentences, and each field sits inside its sentence as a chip, the same
+ * idea as a component instance dropped into a line of type.
  *
- * Every time below is a "feel" knob. Change a number, the loop changes.
+ * Changing the yearly limit is like editing one instance. Only that
+ * sentence shows the diff. Undo steps back. Keep change confirms it,
+ * and only then does Preview policy become the solid button.
+ * Nothing here publishes. The sequence plays once.
+ *
+ * The numbers below are the feel knobs.
  */
 
-/** Pause before Generate is pressed. */
-const BEFORE_PRESS_MS = 1200;
-/** How long the Generate press (scale to 0.98) lasts. */
-const PRESS_MS = 300;
-/** Time between one policy line writing in and the next. */
-const LINE_STEP_MS = 700;
-/** Pause after the last line before the first edit. */
-const BEFORE_EDIT_MS = 1200;
-/** How long the edited state is shown before Undo is pressed. */
-const BEFORE_UNDO_MS = 2200;
-/** How long the Undo press lasts. */
-const UNDO_PRESS_MS = 300;
-/** Pause after Undo before the admin edits again. */
-const BEFORE_REEDIT_MS = 1800;
-/** How long the final, edited policy is held. */
-const LOOP_HOLD_MS = 2000;
-/** How long the changed chip stays highlighted. */
-const CHIP_HIGHLIGHT_MS = 1600;
+/** Pause on the fresh draft before the edit. */
+const BEFORE_EDIT_MS = TOC_PHASE_GAP_MS;
+/** How long the diff sits before Keep change is pressed. */
+const BEFORE_KEEP_MS = TOC_PAUSE_MS;
+/** How long the Keep change press lasts. */
+const PRESS_MS = TOC_PRESS_HOLD_MS;
+/** How long the confirmed policy is held. Nothing restarts after this. */
+const HOLD_MS = TOC_HOLD_MS;
 
 const BASE_LIMIT = 14;
-const EDITED_LIMIT = 12;
+const EDITED_LIMIT = 13;
 const MIN_LIMIT = 8;
 const MAX_LIMIT = 20;
+const LINE_COUNT = 4;
 
-type FieldKey = "type" | "department" | "limit" | "accrual";
+type LineId = "type" | "department" | "limit" | "accrual";
 
-const FIELDS: { key: FieldKey; label: string; value: string }[] = [
-  { key: "type", label: "Type", value: "PTO" },
-  { key: "department", label: "Department", value: "Sales" },
-  { key: "limit", label: "Yearly limit", value: "" },
-  { key: "accrual", label: "Accrual", value: "Monthly" },
+/** The sentence is split so the chip can sit in the middle of it. */
+const LINES: { id: LineId; before: string; value: string; after: string }[] = [
+  { id: "type", before: "This policy covers", value: "PTO", after: "." },
+  { id: "department", before: "It applies to the", value: "Sales", after: "department." },
+  { id: "limit", before: "Each employee gets", value: "", after: "of PTO per year." },
+  { id: "accrual", before: "Days are earned", value: "Monthly", after: "." },
 ];
 
-/** One plain sentence per field. The pill names the chip it came from. */
-function policyLines(limit: number): { field: FieldKey; text: string }[] {
-  return [
-    { field: "type", text: "This policy covers PTO." },
-    { field: "department", text: "It applies to the Sales department." },
-    { field: "limit", text: `Each employee gets ${limit} days of PTO per year.` },
-    { field: "accrual", text: "Days are earned monthly." },
-  ];
-}
+type Mark = { limit: number; kept: boolean };
 
-type Edits = { limit: number; history: number[] };
+type Policy = {
+  /** What the sentence shows now. */
+  limit: number;
+  /** The last value the admin confirmed. The diff strikes this. */
+  confirmed: number;
+  /** True after Keep change, until a newer edit moves off that value. */
+  kept: boolean;
+  /** Earlier limits, newest last, so Undo can step back. */
+  history: Mark[];
+};
+
+const FRESH: Policy = {
+  limit: BASE_LIMIT,
+  confirmed: BASE_LIMIT,
+  kept: false,
+  history: [],
+};
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function limitLabel(days: number): string {
+  return `${days} days`;
 }
 
 export function EditOneLineVisual() {
   const rootRef = useRef<HTMLDivElement>(null);
 
   const [seen, setSeen] = useState(false);
-  const [run, setRun] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
-
-  const [generatePressed, setGeneratePressed] = useState(false);
-  const [generated, setGenerated] = useState(false);
-  const [linesShown, setLinesShown] = useState(0);
-  const [edits, setEdits] = useState<Edits>({ limit: BASE_LIMIT, history: [] });
-  /** Restarts the tint flash on the rewritten line each time it changes. */
+  const [policy, setPolicy] = useState<Policy>(FRESH);
+  /** Bumps so the tint flash on the edited line restarts. */
   const [flashKey, setFlashKey] = useState(0);
-  const [chipLit, setChipLit] = useState(false);
-  const [undoPressed, setUndoPressed] = useState(false);
-  const [hoverField, setHoverField] = useState<FieldKey | null>(null);
+  const [keepPressed, setKeepPressed] = useState(false);
 
-  const chipTimer = useRef<number | null>(null);
+  const { limit, confirmed, kept, history } = policy;
+  const pending = limit !== confirmed;
+  const changedLines = limit === BASE_LIMIT ? 0 : 1;
+  const previewSolid = kept && !pending;
+  const showCount = changedLines > 0 || pending;
 
-  const { limit } = edits;
-  const changed = limit !== BASE_LIMIT;
-  const log = changed ? `Yearly limit ${BASE_LIMIT} to ${limit}, 1 line changed` : "";
+  const flash = () => setFlashKey((key) => key + 1);
 
-  const lightChip = useCallback(() => {
-    setChipLit(true);
-    if (chipTimer.current) window.clearTimeout(chipTimer.current);
-    chipTimer.current = window.setTimeout(() => setChipLit(false), CHIP_HIGHLIGHT_MS);
+  const edit = useCallback((next: number) => {
+    const clamped = Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, next));
+    setPolicy((current) => {
+      if (clamped === current.limit) return current;
+      return {
+        limit: clamped,
+        confirmed: current.confirmed,
+        kept: clamped === current.confirmed ? current.kept : false,
+        history: [...current.history, { limit: current.limit, kept: current.kept }],
+      };
+    });
+    flash();
   }, []);
 
-  const edit = useCallback(
-    (next: number) => {
-      setEdits((current) =>
-        next === current.limit
-          ? current
-          : { limit: next, history: [...current.history, current.limit] },
-      );
-      setFlashKey((key) => key + 1);
-      lightChip();
-    },
-    [lightChip],
-  );
-
   const undo = useCallback(() => {
-    setEdits((current) => {
+    setPolicy((current) => {
       if (current.history.length === 0) return current;
       const previous = current.history[current.history.length - 1];
-      return { limit: previous, history: current.history.slice(0, -1) };
+      return {
+        limit: previous.limit,
+        confirmed: current.confirmed,
+        kept: previous.kept,
+        history: current.history.slice(0, -1),
+      };
     });
-    setFlashKey((key) => key + 1);
-    lightChip();
-  }, [lightChip]);
+    flash();
+  }, []);
+
+  const keep = useCallback(() => {
+    setPolicy((current) => ({
+      ...current,
+      confirmed: current.limit,
+      kept: true,
+    }));
+  }, []);
 
   const showEnd = useCallback(() => {
-    setGenerated(true);
-    setLinesShown(4);
-    setEdits({ limit: EDITED_LIMIT, history: [BASE_LIMIT] });
+    setPolicy({
+      limit: EDITED_LIMIT,
+      confirmed: EDITED_LIMIT,
+      kept: true,
+      history: [{ limit: BASE_LIMIT, kept: false }],
+    });
   }, []);
 
   useEffect(() => {
@@ -146,13 +159,6 @@ export function EditOneLineVisual() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(
-    () => () => {
-      if (chipTimer.current) window.clearTimeout(chipTimer.current);
-    },
-    [],
-  );
-
   useEffect(() => {
     if (!seen || !autoplay || prefersReducedMotion()) return;
 
@@ -161,175 +167,124 @@ export function EditOneLineVisual() {
       timers.push(window.setTimeout(work, ms));
     };
 
-    at(0, () => {
-      setGeneratePressed(false);
-      setGenerated(false);
-      setLinesShown(0);
-      setEdits({ limit: BASE_LIMIT, history: [] });
-      setChipLit(false);
-      setUndoPressed(false);
-    });
-
-    let time = BEFORE_PRESS_MS;
-    at(time, () => setGeneratePressed(true));
+    let time = BEFORE_EDIT_MS;
+    at(time, () => edit(EDITED_LIMIT));
+    time += BEFORE_KEEP_MS;
+    at(time, () => setKeepPressed(true));
     time += PRESS_MS;
     at(time, () => {
-      setGeneratePressed(false);
-      setGenerated(true);
+      setKeepPressed(false);
+      keep();
     });
-    for (let line = 1; line <= 4; line += 1) {
-      time += LINE_STEP_MS;
-      at(time, () => setLinesShown(line));
-    }
-    time += BEFORE_EDIT_MS;
-    at(time, () => edit(EDITED_LIMIT));
-    time += BEFORE_UNDO_MS;
-    at(time, () => setUndoPressed(true));
-    time += UNDO_PRESS_MS;
-    at(time, () => {
-      setUndoPressed(false);
-      undo();
-    });
-    time += BEFORE_REEDIT_MS;
-    at(time, () => edit(EDITED_LIMIT));
-    time += LOOP_HOLD_MS + CHIP_HIGHLIGHT_MS;
-    at(time, () => setRun((value) => value + 1));
+    time += HOLD_MS;
+    at(time, () => setAutoplay(false));
 
     return () => timers.forEach((id) => window.clearTimeout(id));
-  }, [seen, run, autoplay, edit, undo]);
+  }, [seen, autoplay, edit, keep]);
 
-  /** The person took over: stop the loop and settle on a complete policy. */
-  const takeOver = () => {
-    if (!autoplay) return;
-    setAutoplay(false);
-    setGeneratePressed(false);
-    setUndoPressed(false);
-    setGenerated(true);
-    setLinesShown(4);
-  };
+  /** A tap means the person is driving, so the scripted presses stop. */
+  const takeOver = () => setAutoplay(false);
 
   const nudge = (step: number) => {
     takeOver();
-    edit(Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, limit + step)));
+    edit(limit + step);
   };
 
   const onUndo = () => {
     takeOver();
+    setKeepPressed(false);
     undo();
   };
 
-  const status = !generated
-    ? "Fields confirmed. Generate policy is ready."
-    : changed
-      ? `Sales PTO policy, four lines. Yearly limit changed from ${BASE_LIMIT} to ${limit}, one line changed. Undo is available.`
-      : "Sales PTO policy, four lines: PTO, Sales department, 14 days a year, earned monthly.";
+  const onKeep = () => {
+    takeOver();
+    setKeepPressed(false);
+    keep();
+  };
+
+  const changedWord = changedLines === 1 ? "1 line changed" : `${changedLines} lines changed`;
+  const unchanged = LINE_COUNT - changedLines;
+  const unchangedWord = unchanged === 1 ? "1 unchanged" : `${unchanged} unchanged`;
+  const countLabel = `${changedWord}, ${unchangedWord}`;
+
+  const status = previewSolid
+    ? `Sales PTO policy kept. Yearly limit ${limit} days. ${countLabel}. Preview policy is available.`
+    : pending
+      ? `Yearly limit changed from ${confirmed} to ${limit} days. ${countLabel}. Keep the change or undo it. Preview policy is waiting.`
+      : "Sales PTO policy draft. PTO, Sales department, 14 days a year, earned monthly.";
 
   return (
     <div ref={rootRef} className="toc-product eol-product" data-visual="edit-one-line">
       <div className="eol-stage">
-        <section className="eol-panel" aria-label="Fields">
-          <p className="eol-caption">Fields</p>
-          <ul className="eol-chips">
-            {FIELDS.map((field) => {
-              const isLimit = field.key === "limit";
-              const lit = isLimit && chipLit;
-              return (
-                <li
-                  key={field.key}
-                  className="eol-chip"
-                  data-lit={lit || hoverField === field.key ? "true" : "false"}
-                >
-                  <span className="eol-chip-text">
-                    <span className="eol-chip-label">{field.label}</span>
-                    <span className="eol-chip-value">
-                      {isLimit ? `${limit} days` : field.value}
-                    </span>
-                  </span>
-                  {isLimit ? (
-                    <span className="eol-stepper" role="group" aria-label="Yearly limit">
-                      <button
-                        type="button"
-                        className="eol-step"
-                        aria-label="Decrease yearly limit by one day"
-                        disabled={limit <= MIN_LIMIT}
-                        onClick={() => nudge(-1)}
-                      >
-                        <StepIcon plus={false} />
-                      </button>
-                      <button
-                        type="button"
-                        className="eol-step"
-                        aria-label="Increase yearly limit by one day"
-                        disabled={limit >= MAX_LIMIT}
-                        onClick={() => nudge(1)}
-                      >
-                        <StepIcon plus />
-                      </button>
-                    </span>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
-          <div className="eol-foot">
-            <button
-              type="button"
-              className="eol-generate"
-              data-ready={generated ? "false" : "true"}
-              data-pressed={generatePressed ? "true" : "false"}
-              aria-disabled={generated}
-              tabIndex={generated ? -1 : 0}
-            >
-              <span>Generate policy</span>
-              <ArrowIcon />
-            </button>
-          </div>
-        </section>
-
-        <section className="eol-panel eol-policy" aria-label="Sales PTO policy">
-          <div className="eol-head">
-            <p className="eol-title">Sales PTO policy</p>
-            <div className="eol-log" data-shown={changed ? "true" : "false"}>
-              <p className="eol-log-text">{log}</p>
+        <article className="eol-card" aria-label="Sales PTO policy">
+          <header className="eol-head">
+            <h3 className="eol-title">Sales PTO policy</h3>
+            <div className="eol-actions" data-shown={showCount ? "true" : "false"} aria-hidden={showCount ? undefined : true}>
+              <p className="eol-count">{countLabel}</p>
               <button
                 type="button"
-                className="eol-undo"
-                data-pressed={undoPressed ? "true" : "false"}
-                tabIndex={changed ? 0 : -1}
+                className="eol-quiet"
                 aria-label="Undo the last change"
+                disabled={history.length === 0}
                 onClick={onUndo}
               >
                 Undo
               </button>
-            </div>
-          </div>
-
-          <ol className="eol-lines">
-            {policyLines(limit).map((line, index) => {
-              const isChanged = line.field === "limit" && changed;
-              const label = FIELDS.find((field) => field.key === line.field)?.label;
-              return (
-                <li
-                  key={line.field}
-                  className="eol-line"
-                  data-shown={index < linesShown ? "true" : "false"}
-                  onMouseEnter={() => setHoverField(line.field)}
-                  onMouseLeave={() => setHoverField(null)}
+              {pending ? (
+                <button
+                  type="button"
+                  className="eol-quiet"
+                  data-pressed={keepPressed ? "true" : "false"}
+                  onClick={onKeep}
                 >
-                  <div
-                    key={line.field === "limit" ? `limit-${flashKey}` : line.field}
-                    className="eol-row"
-                    data-changed={isChanged ? "true" : "false"}
-                    data-flash={line.field === "limit" && flashKey > 0 ? "true" : "false"}
-                  >
-                    <p className="eol-sentence">{line.text}</p>
-                    <span className="eol-pill">{label}</span>
-                  </div>
-                </li>
+                  Keep change
+                </button>
+              ) : null}
+            </div>
+          </header>
+
+          <div className="eol-lines">
+            {LINES.map((line) => {
+              const isLimit = line.id === "limit";
+              const isPendingLine = isLimit && pending;
+              return (
+                <p
+                  key={isLimit ? `limit-${flashKey}` : line.id}
+                  className="eol-line"
+                  data-changed={isLimit && changedLines > 0 ? "true" : "false"}
+                  data-pending={isPendingLine ? "true" : "false"}
+                  data-dim={pending && !isLimit ? "true" : "false"}
+                  data-flash={isLimit && flashKey > 0 ? "true" : "false"}
+                >
+                  {`${line.before} `}
+                  {isLimit ? (
+                    <LimitToken
+                      limit={limit}
+                      confirmed={confirmed}
+                      pending={pending}
+                      onNudge={nudge}
+                    />
+                  ) : (
+                    <span className="eol-token">{line.value}</span>
+                  )}
+                  {line.after === "." ? "." : ` ${line.after}`}
+                </p>
               );
             })}
-          </ol>
-        </section>
+          </div>
+
+          <div className="eol-foot">
+            <button
+              type="button"
+              className="eol-preview"
+              data-ready={previewSolid ? "true" : "false"}
+              aria-disabled={!previewSolid}
+              tabIndex={previewSolid ? 0 : -1}
+            >
+              Preview policy
+            </button>
+          </div>
+        </article>
       </div>
 
       <p className="toc-sr" aria-live="polite">
@@ -339,12 +294,42 @@ export function EditOneLineVisual() {
   );
 }
 
-function ArrowIcon() {
+function LimitToken({
+  limit,
+  confirmed,
+  pending,
+  onNudge,
+}: {
+  limit: number;
+  confirmed: number;
+  pending: boolean;
+  onNudge: (step: number) => void;
+}) {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className="toc-send-icon">
-      <path d="M8 12.5V3.5" />
-      <path d="M4.5 7 8 3.5 11.5 7" />
-    </svg>
+    <span className="eol-token eol-token-limit" data-pending={pending ? "true" : "false"}>
+      <button
+        type="button"
+        className="eol-step"
+        aria-label="Decrease yearly limit by one day"
+        disabled={limit <= MIN_LIMIT}
+        onClick={() => onNudge(-1)}
+      >
+        <StepIcon plus={false} />
+      </button>
+      <span className="eol-token-values">
+        {pending ? <s className="eol-old">{limitLabel(confirmed)}</s> : null}
+        <span className="eol-new">{limitLabel(limit)}</span>
+      </span>
+      <button
+        type="button"
+        className="eol-step"
+        aria-label="Increase yearly limit by one day"
+        disabled={limit >= MAX_LIMIT}
+        onClick={() => onNudge(1)}
+      >
+        <StepIcon plus />
+      </button>
+    </span>
   );
 }
 

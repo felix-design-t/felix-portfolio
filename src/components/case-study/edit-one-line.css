@@ -1,113 +1,203 @@
 /*
-  Edit one line.
-  Reuses the .toc-product tokens and the 16/10 frame, which grows on its
-  own when the content is taller than that ratio. Two panels side by
-  side from 560px, stacked (fields above the policy) below that.
+  Review and control.
+  One policy card inside the product frame. The frame stays the column
+  width. The card is at least 16:10 and grows taller when a sentence wraps,
+  so nothing clips. Tokens reuse the chip look from visual 1.
 */
 
 .eol-product {
   container-type: inline-size;
+  aspect-ratio: auto;
+  height: auto;
 }
 
+/* 16:10 of the frame, minus the 20px inset on each edge. Content can be taller. */
 .eol-stage {
   display: flex;
-  flex: 1;
   flex-direction: column;
-  gap: var(--toc-gap);
-  min-width: 0;
-  align-items: stretch;
+  justify-content: center;
+  min-height: calc(62.5cqw - 40px);
 }
 
-@container (min-width: 560px) {
-  .eol-stage {
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .eol-panel {
-    flex: 1 1 0;
-  }
-}
-
-.eol-panel {
+.eol-card {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: var(--toc-gap);
-  min-width: 0;
+  width: 100%;
   padding: var(--toc-pad);
   border: 1px solid var(--toc-line);
   border-radius: 16px;
   background: var(--toc-surface);
 }
 
-.eol-caption,
-.eol-title,
-.eol-log-text,
-.eol-sentence {
-  margin: 0;
-  font-family: var(--font-body);
-}
-
-.eol-caption {
-  font-size: var(--toc-meta-size);
-  line-height: var(--toc-meta-line);
-  color: var(--toc-text-secondary);
-}
-
-/* Fields */
-
-.eol-chips {
+.eol-head {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.eol-chip {
-  box-sizing: border-box;
-  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  min-height: 56px;
-  padding: 8px 12px;
-  border-radius: 12px;
-  background: var(--toc-raised);
-  transition: background-color 400ms var(--toc-ease);
 }
 
-.eol-chip[data-lit="true"] {
-  background: color-mix(in srgb, var(--toc-mark) 16%, var(--toc-control));
-}
-
-.eol-chip-text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.eol-chip-label {
+.eol-title,
+.eol-count,
+.eol-line {
+  margin: 0;
   font-family: var(--font-body);
+}
+
+.eol-title {
+  font-size: var(--toc-title-size);
+  font-weight: 500;
+  line-height: var(--toc-title-line);
+  color: var(--toc-text);
+}
+
+/* Reserves the row so the sentences do not jump when the count appears. */
+.eol-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  opacity: 0;
+  transition: opacity var(--toc-dur-fade) var(--toc-ease);
+}
+
+.eol-actions[data-shown="false"] {
+  pointer-events: none;
+}
+
+.eol-actions[data-shown="true"] {
+  opacity: 1;
+}
+
+.eol-count {
   font-size: var(--toc-meta-size);
   line-height: var(--toc-meta-line);
   color: var(--toc-text-secondary);
 }
 
-.eol-chip-value {
+.eol-quiet,
+.eol-preview,
+.eol-step {
   font-family: var(--font-body);
+  cursor: pointer;
+  transition:
+    background-color var(--toc-dur-fade) var(--toc-ease),
+    color var(--toc-dur-fade) var(--toc-ease),
+    transform var(--toc-dur-press) var(--toc-ease);
+}
+
+.eol-quiet {
+  min-height: 32px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--toc-raised);
+  color: var(--toc-text-secondary);
   font-size: var(--toc-body-size);
   font-weight: 500;
   line-height: var(--toc-body-line);
-  color: var(--toc-text);
 }
 
-.eol-stepper {
+.eol-quiet:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.eol-quiet[data-pressed="true"],
+.eol-quiet:active:not(:disabled),
+.eol-step:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.eol-lines {
   display: flex;
-  flex: none;
-  gap: 4px;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.eol-line {
+  padding: 4px 8px;
+  border-left: 2px solid transparent;
+  border-radius: 8px;
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
+  color: var(--toc-text);
+  transition:
+    opacity var(--toc-dur-fade) var(--toc-ease),
+    background-color var(--toc-dur-fade) var(--toc-ease),
+    border-color var(--toc-dur-fade) var(--toc-ease);
+}
+
+.eol-line[data-changed="true"] {
+  border-left-color: var(--toc-mark);
+}
+
+.eol-line[data-pending="true"] {
+  background: color-mix(in srgb, var(--toc-mark) 12%, transparent);
+}
+
+.eol-line[data-dim="true"] {
+  opacity: 0.62;
+}
+
+.eol-line[data-flash="true"] {
+  animation: eol-flash var(--toc-dur-flash) var(--toc-ease);
+}
+
+@keyframes eol-flash {
+  0%,
+  50% {
+    background: color-mix(in srgb, var(--toc-mark) 28%, transparent);
+  }
+
+  100% {
+    background: color-mix(in srgb, var(--toc-mark) 12%, transparent);
+  }
+}
+
+.eol-token {
+  margin-left: 6px;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: var(--toc-raised);
+  color: var(--toc-text);
+  font-size: var(--toc-body-size);
+  font-weight: 500;
+  line-height: var(--toc-body-line);
+  white-space: nowrap;
+}
+
+.eol-token-limit {
+  gap: 2px;
+  padding: 2px;
+}
+
+.eol-token-limit[data-pending="true"] {
+  background: color-mix(in srgb, var(--toc-mark) 16%, var(--toc-raised));
+}
+
+.eol-token-values {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 0 6px;
+}
+
+.eol-old {
+  color: var(--toc-text-secondary);
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+.eol-new {
+  font-weight: 500;
 }
 
 .eol-step {
@@ -116,24 +206,16 @@
   width: 32px;
   height: 32px;
   padding: 0;
-  border: 1px solid var(--toc-line);
+  border: 0;
   border-radius: 9999px;
   background: var(--toc-surface);
   color: var(--toc-text);
-  cursor: pointer;
-  transition:
-    background-color 400ms var(--toc-ease),
-    transform 280ms var(--toc-ease);
 }
 
 .eol-step:disabled {
   color: var(--toc-text-secondary);
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: default;
-}
-
-.eol-step:active:not(:disabled) {
-  transform: scale(0.98);
 }
 
 .eol-step-icon {
@@ -151,200 +233,42 @@
   justify-content: flex-end;
 }
 
-/* Generate: solid until pressed, then a quiet gray. Nothing is solid after. */
-
-.eol-generate {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+.eol-preview {
   min-height: 36px;
   padding: 0 16px;
   border: 0;
   border-radius: 9999px;
   background: var(--toc-raised);
   color: var(--toc-text-secondary);
-  font-family: var(--font-body);
   font-size: var(--toc-body-size);
   font-weight: 500;
   line-height: var(--toc-body-line);
   cursor: default;
-  transition:
-    background-color 560ms var(--toc-ease),
-    color 560ms var(--toc-ease),
-    transform 280ms var(--toc-ease);
 }
 
-.eol-generate[data-ready="true"] {
+.eol-preview[data-ready="true"] {
   background: var(--toc-mark);
   color: var(--toc-on-mark);
   cursor: pointer;
 }
 
-.eol-generate[data-pressed="true"] {
-  transform: scale(0.98);
-}
-
-.eol-generate .toc-send-icon {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* Policy card */
-
-.eol-head {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.eol-title {
-  font-size: var(--toc-title-size);
-  font-weight: 500;
-  line-height: var(--toc-title-line);
-  color: var(--toc-text);
-}
-
-/* Reserves its height so the lines never jump when the log appears. */
-.eol-log {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  min-height: 36px;
-  opacity: 0;
-  transition: opacity 560ms var(--toc-ease);
-}
-
-.eol-log[data-shown="true"] {
-  opacity: 1;
-}
-
-.eol-log-text {
-  font-size: var(--toc-meta-size);
-  line-height: var(--toc-meta-line);
-  color: var(--toc-text-secondary);
-}
-
-.eol-undo {
-  flex: none;
-  min-height: 32px;
-  padding: 0 12px;
-  border: 0;
-  border-radius: 9999px;
-  background: var(--toc-raised);
-  color: var(--toc-text-secondary);
-  font-family: var(--font-body);
-  font-size: var(--toc-body-size);
-  font-weight: 500;
-  line-height: var(--toc-body-line);
-  cursor: pointer;
-  transition: transform 280ms var(--toc-ease);
-}
-
-.eol-undo[data-pressed="true"],
-.eol-undo:active {
-  transform: scale(0.98);
-}
-
-.eol-generate:focus-visible,
-.eol-undo:focus-visible,
+.eol-quiet:focus-visible,
+.eol-preview:focus-visible,
 .eol-step:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
-.eol-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.eol-line {
-  opacity: 0;
-  transform: translateY(6px);
-  transition:
-    opacity 560ms var(--toc-ease),
-    transform 560ms var(--toc-ease);
-}
-
-.eol-line[data-shown="true"] {
-  opacity: 1;
-  transform: none;
-}
-
-.eol-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  min-height: var(--toc-row);
-  box-sizing: border-box;
-  align-items: center;
-  padding: 10px 8px 10px 12px;
-  border-left: 2px solid transparent;
-  border-top: 1px solid var(--toc-line);
-  border-radius: 0;
-  transition: border-color 400ms var(--toc-ease);
-}
-
-.eol-row[data-changed="true"] {
-  border-left-color: var(--toc-mark);
-}
-
-.eol-row[data-flash="true"] {
-  animation: eol-flash 1600ms var(--toc-ease) both;
-}
-
-@keyframes eol-flash {
-  0%,
-  35% {
-    background: color-mix(in srgb, var(--toc-mark) 16%, transparent);
-  }
-
-  100% {
-    background: transparent;
-  }
-}
-
-.eol-sentence {
-  min-width: 0;
-  font-size: var(--toc-body-size);
-  line-height: var(--toc-body-line);
-  color: var(--toc-text);
-}
-
-.eol-pill {
-  flex: none;
-  padding: 2px 8px;
-  border-radius: 9999px;
-  background: var(--toc-raised);
-  color: var(--toc-text-secondary);
-  font-family: var(--font-body);
-  font-size: var(--toc-meta-size);
-  font-weight: 400;
-  line-height: var(--toc-meta-line);
-  white-space: nowrap;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .eol-chip,
-  .eol-step,
-  .eol-generate,
-  .eol-undo,
-  .eol-log,
+  .eol-actions,
   .eol-line,
-  .eol-row {
+  .eol-quiet,
+  .eol-preview,
+  .eol-step {
     transition: none;
   }
 
-  .eol-row[data-flash="true"] {
+  .eol-line[data-flash="true"] {
     animation: none;
   }
 }

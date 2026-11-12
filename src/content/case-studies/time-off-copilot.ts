@@ -64,18 +64,16 @@ export const timeOffCopilot: CaseStudy = {
     {
       id: "fields-first",
       kind: "Trust Building",
-      title: "Structure the rule by asking. The admin decides when it runs.",
-      body: "The agent builds the structure and asks questions before it generates the final policy. It breaks the policy into its variables instead of guessing.",
-      closingTitle: "Provide visibility to keep the human in the loop.",
-      closing: "The agent provides a description of each important decision it made.",
+      title: "Your words become fields, every change stays visible",
+      body: "The agent fills only what the admin said and asks about anything missing. They can edit and undo it, and nothing moves on until they confirm.",
       visual: {
         name: "Field chips and questions",
-        caption: "Fields, Ask, Confirm, Generate",
+        caption: "Fields from your words, then Generate",
         aspectRatio: "16 / 10",
       },
       closingVisual: {
-        name: "Edit and approve",
-        caption: "Edit a field, one line changes, Undo",
+        name: "See every change, keep what you want",
+        caption: "Edit a value, one line changes, Undo",
         aspectRatio: "16 / 10",
       },
     },
