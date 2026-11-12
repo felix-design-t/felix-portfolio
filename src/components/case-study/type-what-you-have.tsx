@@ -84,12 +84,31 @@ export function TypeWhatYouHaveVisual() {
     if (!stage || !doc) return;
     // The thinking lines sit just above the card. The card's height
     // decides how far up they go, so a taller card does not cover them.
+    // On a narrow frame the 16/10 box can be shorter than the preview.
+    // Grow only in that case, so the preview stays whole and the chat
+    // stays above it. A wide frame is already tall enough and stays put.
     const measure = () => {
-      stage.style.setProperty("--toc-doc-height", `${doc.offsetHeight}px`);
+      const root = rootRef.current;
+      if (!root) return;
+      const docHeight = doc.offsetHeight;
+      stage.style.setProperty("--toc-doc-height", `${docHeight}px`);
+      const padY =
+        parseFloat(getComputedStyle(root).paddingTop) +
+        parseFloat(getComputedStyle(root).paddingBottom);
+      const borderY = root.offsetHeight - root.clientHeight;
+      const naturalHeight = root.getBoundingClientRect().width * (10 / 16);
+      const neededHeight = docHeight + padY + borderY;
+      if (neededHeight > naturalHeight + 1) {
+        root.style.minHeight = `${Math.ceil(neededHeight)}px`;
+      } else {
+        root.style.minHeight = "";
+      }
     };
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(doc);
+    const root = rootRef.current;
+    if (root) observer.observe(root);
     return () => observer.disconnect();
   }, []);
 
@@ -242,7 +261,7 @@ export function TypeWhatYouHaveVisual() {
               <span className="toc-label">Page</span>
             </span>
             <span className="toc-download" aria-hidden="true">
-              <DownloadIcon />
+              <OpenIcon />
             </span>
           </div>
         </article>
@@ -255,12 +274,12 @@ export function TypeWhatYouHaveVisual() {
   );
 }
 
-function DownloadIcon() {
+function OpenIcon() {
   return (
     <svg viewBox="0 0 16 16" aria-hidden="true" className="toc-send-icon">
-      <path d="M8 2.5v7" />
-      <path d="M5.2 7.2 8 10l2.8-2.8" />
-      <path d="M3.5 12.5h9" />
+      <path d="M6.5 3.5H3.5v9h9V9.5" />
+      <path d="M8.5 3.5H12.5V7.5" />
+      <path d="M12.2 3.8 7.2 8.8" />
     </svg>
   );
 }
