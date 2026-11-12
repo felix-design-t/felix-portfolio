@@ -13,6 +13,7 @@
   --toc-line: rgba(26, 28, 26, 0.12);
   --toc-text: #1a1c1a;
   --toc-text-secondary: #5e635e;
+  --toc-user: #ecedea;
   --toc-control: #e4e5e2;
   /* Smooth ease for this sequence. Slower than the site's ease-out. */
   --toc-ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -36,6 +37,7 @@ html[data-theme="dark"] .toc-product {
   --toc-line: rgba(242, 243, 240, 0.14);
   --toc-text: #f2f3f0;
   --toc-text-secondary: #a3a8a3;
+  --toc-user: #232624;
   --toc-control: #2a2d2b;
 }
 
@@ -163,6 +165,9 @@ html[data-theme="dark"] .toc-product {
   width: min(76%, 352px);
   padding: 16px;
   border-radius: 16px;
+  /* The admin's message: gray fill, no visible border, so it reads as theirs. */
+  border-color: transparent;
+  background: var(--toc-user);
 }
 
 .toc-typed {

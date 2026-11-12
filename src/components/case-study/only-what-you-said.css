@@ -50,9 +50,15 @@
 .ofs-bubble {
   align-self: flex-end;
   width: fit-content;
-  max-width: min(80%, 372px);
+  max-width: 70%;
   padding: 16px;
   border-radius: 16px;
+}
+
+/* The admin's messages: gray fill, no border. Agent cards keep the white surface. */
+.ofs-bubble {
+  border-color: transparent;
+  background: var(--toc-user);
 }
 
 .ofs-request {
@@ -85,7 +91,7 @@
   flex-direction: column;
   gap: 12px;
   align-self: flex-start;
-  width: 100%;
+  width: 85%;
   padding: 16px;
   border-radius: 16px;
 }
