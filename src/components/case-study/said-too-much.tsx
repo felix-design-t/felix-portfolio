@@ -233,7 +233,7 @@ export function SaidTooMuchVisual() {
   const added = visible.filter((section) => section.kind === "added").length;
   const status =
     phase === "document"
-      ? `The agent wrote a long sales PTO policy. ${asked} from your request. ${added} added by AI. Only the yearly limit of 14 days came from the request.`
+      ? `The agent wrote a long sales PTO policy. ${asked} from request. ${added} added by agent. Only the yearly limit of 14 days came from the request.`
       : beat === "settled"
         ? "Worked for 20s."
         : "Generating full policy.";
@@ -299,7 +299,7 @@ export function SaidTooMuchVisual() {
             data-shown={asked > 0 ? "true" : "false"}
           >
             <span className="toc-dot" data-kind="request" aria-hidden="true" />
-            <span className="toc-count-num">{asked}</span> from your request
+            <span className="toc-count-num">{asked}</span> from request
           </p>
           <p
             className="toc-count"
@@ -307,7 +307,7 @@ export function SaidTooMuchVisual() {
             data-shown={added > 0 ? "true" : "false"}
           >
             <span className="toc-dot" data-kind="added" aria-hidden="true" />
-            <span className="toc-count-num">{added}</span> added by AI
+            <span className="toc-count-num">{added}</span> added by agent
           </p>
         </div>
       </div>
