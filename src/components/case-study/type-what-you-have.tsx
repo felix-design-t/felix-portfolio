@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { Eclipse } from "loading-dev";
 import "./type-what-you-have.css";
 
@@ -15,12 +16,15 @@ import "./type-what-you-have.css";
  * 3. After that slide, those cards move up, and a document preview is what you look at.
  *
  * After the preview has finished appearing, it holds, then plays from
- * the start. Reduced motion stays on the preview.
+ * the start. Each start begins with the chat card rising from the
+ * bottom of the frame. Reduced motion stays on the preview.
  */
 
 const REQUEST =
   "I need to create a PTO policy for sales department, the yearly limit is 14 days.";
 
+/** How long the chat card takes to rise from the bottom of the frame. */
+const ENTER_MS = 800;
 /** How fast each letter appears. Raise it to type more slowly. */
 const CHAR_MS = 48;
 /** Quiet moment after the last letter, before Send presses. */
@@ -71,6 +75,8 @@ export function TypeWhatYouHaveVisual() {
   const [phase, setPhase] = useState<Phase>("typing");
   const [beat, setBeat] = useState<ThinkBeat>("idle");
   const [typed, setTyped] = useState("");
+  // True until the chat card has been released from below the frame.
+  const [arriving, setArriving] = useState(true);
 
   useEffect(() => {
     if (!prefersReducedMotion()) return;
@@ -133,44 +139,63 @@ export function TypeWhatYouHaveVisual() {
       return;
     }
 
-    setPhase("typing");
     setBeat("idle");
     setTyped("");
-    let index = 0;
+    // Paint the card below the frame with no transition, then release
+    // it on the next frame so it rises into the typing spot.
+    flushSync(() => {
+      setPhase("typing");
+      setArriving(true);
+    });
+
+    let typer = 0;
+    let riseFrame = 0;
     const timers: number[] = [];
     const thinkingStartsAt = BEFORE_SEND_MS + SEND_HOLD_MS;
-    const typer = window.setInterval(() => {
-      index += 1;
-      setTyped(REQUEST.slice(0, index));
-      if (index < REQUEST.length) return;
-      window.clearInterval(typer);
-      timers.push(window.setTimeout(() => setPhase("sending"), BEFORE_SEND_MS));
-      timers.push(
-        window.setTimeout(() => {
-          setPhase("thinking");
-          setBeat("one");
-        }, thinkingStartsAt),
-      );
-      timers.push(window.setTimeout(() => setBeat("two"), thinkingStartsAt + LINE_MS));
-      timers.push(window.setTimeout(() => setBeat("three"), thinkingStartsAt + LINE_MS * 2));
-      timers.push(
-        window.setTimeout(
-          () => setBeat("settled"),
-          thinkingStartsAt + LINE_MS * 2 + LOADER_FADE_MS,
-        ),
-      );
-      const previewStartsAt =
-        thinkingStartsAt + LINE_MS * 2 + LOADER_FADE_MS + LINE_SHIFT_MS + AFTER_SHIFT_MS;
-      timers.push(window.setTimeout(() => setPhase("document"), previewStartsAt));
-      timers.push(
-        window.setTimeout(
-          () => setRun((value) => value + 1),
-          previewStartsAt + PREVIEW_ARRIVE_MS + LOOP_HOLD_MS,
-        ),
-      );
-    }, CHAR_MS);
+    const beginTyping = () => {
+      let index = 0;
+      typer = window.setInterval(() => {
+        index += 1;
+        setTyped(REQUEST.slice(0, index));
+        if (index < REQUEST.length) return;
+        window.clearInterval(typer);
+        timers.push(window.setTimeout(() => setPhase("sending"), BEFORE_SEND_MS));
+        timers.push(
+          window.setTimeout(() => {
+            setPhase("thinking");
+            setBeat("one");
+          }, thinkingStartsAt),
+        );
+        timers.push(window.setTimeout(() => setBeat("two"), thinkingStartsAt + LINE_MS));
+        timers.push(window.setTimeout(() => setBeat("three"), thinkingStartsAt + LINE_MS * 2));
+        timers.push(
+          window.setTimeout(
+            () => setBeat("settled"),
+            thinkingStartsAt + LINE_MS * 2 + LOADER_FADE_MS,
+          ),
+        );
+        const previewStartsAt =
+          thinkingStartsAt + LINE_MS * 2 + LOADER_FADE_MS + LINE_SHIFT_MS + AFTER_SHIFT_MS;
+        timers.push(window.setTimeout(() => setPhase("document"), previewStartsAt));
+        timers.push(
+          window.setTimeout(
+            () => setRun((value) => value + 1),
+            previewStartsAt + PREVIEW_ARRIVE_MS + LOOP_HOLD_MS,
+          ),
+        );
+      }, CHAR_MS);
+    };
+
+    const parkFrame = window.requestAnimationFrame(() => {
+      const stack = rootRef.current?.querySelector(".toc-stack");
+      if (stack) void stack.getBoundingClientRect();
+      riseFrame = window.requestAnimationFrame(() => setArriving(false));
+    });
+    timers.push(window.setTimeout(beginTyping, ENTER_MS));
 
     return () => {
+      window.cancelAnimationFrame(parkFrame);
+      window.cancelAnimationFrame(riseFrame);
       window.clearInterval(typer);
       timers.forEach((timerId) => window.clearTimeout(timerId));
     };
@@ -193,6 +218,7 @@ export function TypeWhatYouHaveVisual() {
       className="toc-product"
       data-visual="type-what-you-have"
       data-phase={phase}
+      data-arrive={arriving ? "bottom" : undefined}
     >
       <div className="toc-stage" ref={stageRef}>
         <div className="toc-stack" aria-hidden={chatIsQuiet}>

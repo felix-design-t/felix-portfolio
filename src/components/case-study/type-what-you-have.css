@@ -133,6 +133,14 @@ html[data-theme="dark"] .toc-product {
   pointer-events: none;
 }
 
+/* Each loop starts with the chat card below the frame. No transition
+   here, so a finished preview does not slide down before the rise. */
+.toc-product[data-arrive="bottom"] .toc-stack {
+  top: 100%;
+  transform: translateY(12px);
+  transition: none;
+}
+
 .toc-product[data-phase="document"] .toc-stage {
   /* Soft edge, so a card that leaves the top fades instead of cutting off. */
   mask-image: linear-gradient(to bottom, transparent, #000 36px);
