@@ -94,8 +94,9 @@
   border-radius: 16px;
 }
 
-/* The question is a title plus one row of choices, so the card hugs that. */
-.ofs-card[data-message="question"] {
+/* These cards hug their content instead of stretching across the frame. */
+.ofs-card[data-message="question"],
+.ofs-card[data-message="done"] {
   width: fit-content;
   max-width: 100%;
 }
@@ -161,8 +162,7 @@
 }
 
 .ofs-chip:focus-visible,
-.ofs-option:focus-visible,
-.ofs-generate:focus-visible {
+.ofs-option:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
@@ -271,8 +271,9 @@
 }
 
 .ofs-chip-static {
-  width: 100%;
-  max-width: none;
+  width: max-content;
+  min-width: 148px;
+  max-width: 100%;
   opacity: 1;
   transform: none;
   cursor: default;
@@ -291,39 +292,10 @@
   }
 }
 
-.ofs-generate {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  gap: 8px;
-  height: 36px;
-  min-height: 36px;
-  padding: 0 16px;
-  border: 0;
-  border-radius: 9999px;
-  background: var(--toc-raised);
-  color: var(--toc-text-secondary);
-  font-family: var(--font-body);
-  font-size: var(--toc-body-size);
-  font-weight: 500;
-  line-height: var(--toc-body-line);
-  cursor: default;
-  transition:
-    background-color var(--toc-dur-fade) var(--toc-ease),
-    color var(--toc-dur-fade) var(--toc-ease);
-}
-
-.ofs-generate[data-ready="true"] {
-  background: var(--toc-mark);
-  color: var(--toc-on-mark);
-  cursor: pointer;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ofs-chip,
   .ofs-message,
   .ofs-option,
-  .ofs-generate,
   .ofs-phrase {
     transition: none;
   }

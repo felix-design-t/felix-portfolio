@@ -20,7 +20,7 @@ import {
  *      back to an underline.
  *   2. It asks about the one field it did not see, instead of guessing.
  *   3. The admin answers, the agent says "Got it", the chip fills in,
- *      and Generate becomes available.
+ *      and the thread settles.
  *
  * "step" is the number of messages on screen (0 to 4). Think of it like
  * the active state in a stepper: earlier steps dim, the newest is full.
@@ -38,7 +38,7 @@ const BEFORE_QUESTION_MS = TOC_PHASE_GAP_MS;
 const BEFORE_PICK_MS = TOC_PAUSE_MS;
 /** Time between the pick, the reply, "Got it", and the filled chip. */
 const PICK_STEP_MS = TOC_STEP_MS;
-/** Time between the Accrual chip filling and Generate lighting up. */
+/** Time between the Accrual chip filling and the thread settling. */
 const BEFORE_GENERATE_MS = TOC_STEP_MS;
 /** Rest after "Got it" before the Accrual chip fills in. */
 const BEFORE_FILL_MS = TOC_REST_MS;
@@ -204,7 +204,7 @@ export function OnlyWhatYouSaidVisual() {
     step < messageStep ? "hidden" : finished || step === messageStep ? "current" : "past";
 
   const status = finished
-    ? `Ready. Type PTO, department sales, yearly limit 14 days, accrual ${accrualValue.toLowerCase()}. Preview policy is available.`
+    ? `Ready. Type PTO, department sales, yearly limit 14 days, accrual ${accrualValue.toLowerCase()}.`
     : step >= 2
       ? "Type, department, and yearly limit came from your request. Accrual wasn't mentioned. Monthly, all at once, or skip?"
       : "Reading your request into fields.";
@@ -323,24 +323,9 @@ export function OnlyWhatYouSaidVisual() {
           aria-label="Agent: ready"
         >
           <p className="ofs-lead">Got it.</p>
-          <div className="ofs-resolve">
-            <div className="ofs-chip ofs-chip-static" data-open={filled ? "false" : "true"} data-filled={filled ? "true" : "false"}>
-              <span className="ofs-chip-label">Accrual</span>
-              <span className="ofs-chip-value">{accrualValue || "Open"}</span>
-            </div>
-            <div className="ofs-resolve-side">
-              <button
-                type="button"
-                className="ofs-generate"
-                data-ready={finished ? "true" : "false"}
-                aria-label="Preview policy"
-                aria-disabled={!finished}
-                tabIndex={finished ? 0 : -1}
-              >
-                <span>Preview policy</span>
-                <ArrowIcon />
-              </button>
-            </div>
+          <div className="ofs-chip ofs-chip-static" data-open={filled ? "false" : "true"} data-filled={filled ? "true" : "false"}>
+            <span className="ofs-chip-label">Accrual</span>
+            <span className="ofs-chip-value">{accrualValue || "Open"}</span>
           </div>
         </article>
       </div>
@@ -352,11 +337,3 @@ export function OnlyWhatYouSaidVisual() {
   );
 }
 
-function ArrowIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className="toc-send-icon">
-      <path d="M8 12.5V3.5" />
-      <path d="M4.5 7 8 3.5 11.5 7" />
-    </svg>
-  );
-}
