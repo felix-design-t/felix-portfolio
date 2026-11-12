@@ -287,11 +287,7 @@ export function OnlyWhatYouSaidVisual() {
           aria-label="Agent: accrual question"
         >
           <p className="ofs-lead">I didn&apos;t see accrual. How should it work?</p>
-          <div className="ofs-resolve">
-            <div className="ofs-chip ofs-chip-static" data-open="true">
-              <span className="ofs-chip-label">Accrual</span>
-              <span className="ofs-chip-value">Open</span>
-            </div>
+          <div className="ofs-resolve ofs-resolve-ask">
             <div className="ofs-resolve-side ofs-options" role="group" aria-label="Accrual">
               {CHOICES.map((option) => (
                 <button
