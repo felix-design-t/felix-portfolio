@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./type-what-you-have.css";
 import "./edit-one-line.css";
-import { TOC_HOLD_MS, TOC_PAUSE_MS, TOC_PHASE_GAP_MS, TOC_PRESS_HOLD_MS } from "./toc-motion";
+import { TOC_PAUSE_MS, TOC_PHASE_GAP_MS, TOC_PRESS_HOLD_MS } from "./toc-motion";
 
 /**
  * Review and control.
@@ -27,8 +27,6 @@ const BEFORE_EDIT_MS = TOC_PHASE_GAP_MS;
 const BEFORE_KEEP_MS = TOC_PAUSE_MS;
 /** How long the Keep change press lasts. */
 const PRESS_MS = TOC_PRESS_HOLD_MS;
-/** How long the confirmed policy is held. Nothing restarts after this. */
-const HOLD_MS = TOC_HOLD_MS;
 
 const BASE_LIMIT = 14;
 const EDITED_LIMIT = 13;
@@ -83,6 +81,8 @@ export function EditOneLineVisual() {
   /** Bumps so the tint flash on the edited line restarts. */
   const [flashKey, setFlashKey] = useState(0);
   const [keepPressed, setKeepPressed] = useState(false);
+  /** The scripted pass runs once. After Keep change it stays on this frame. */
+  const playedRef = useRef(false);
 
   const { limit, confirmed, kept, history } = policy;
   const pending = limit !== confirmed;
@@ -163,12 +163,13 @@ export function EditOneLineVisual() {
   }, []);
 
   useEffect(() => {
-    if (!seen || !autoplay || prefersReducedMotion()) return;
+    if (!seen || !autoplay || playedRef.current || prefersReducedMotion()) return;
 
     const timers: number[] = [];
     const at = (ms: number, work: () => void) => {
       timers.push(window.setTimeout(work, ms));
     };
+    let finished = false;
 
     let time = BEFORE_EDIT_MS;
     at(time, () => edit(EDITED_LIMIT));
@@ -176,13 +177,17 @@ export function EditOneLineVisual() {
     at(time, () => setKeepPressed(true));
     time += PRESS_MS;
     at(time, () => {
+      finished = true;
+      playedRef.current = true;
       setKeepPressed(false);
       keep();
+      setAutoplay(false);
     });
-    time += HOLD_MS;
-    at(time, () => setAutoplay(false));
 
-    return () => timers.forEach((id) => window.clearTimeout(id));
+    return () => {
+      timers.forEach((id) => window.clearTimeout(id));
+      if (!finished) playedRef.current = false;
+    };
   }, [seen, autoplay, edit, keep]);
 
   /** A tap means the person is driving, so the scripted presses stop. */
