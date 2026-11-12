@@ -61,7 +61,7 @@ type Field = {
 
 const FIELDS: Field[] = [
   { label: "Type", value: "PTO", from: ["pto"] },
-  { label: "Department", value: "Sales", from: ["sales"] },
+  { label: "Teams", value: "Sales", from: ["sales"] },
   { label: "Yearly limit", value: "14 days", from: ["yearly", "days"] },
 ];
 
@@ -226,9 +226,9 @@ export function OnlyWhatYouSaidVisual() {
   const stateOf = (messageStep: number) => (step < messageStep ? "hidden" : "current");
 
   const status = finished
-    ? `Ready. Type PTO, department sales, yearly limit 14 days, accrual ${accrualLabel.toLowerCase()}.`
+    ? `Ready. Type PTO, sales teams, yearly limit 14 days, accrual ${accrualLabel.toLowerCase()}.`
     : step >= 2
-      ? "Type, department, and yearly limit came from your request. Accrual wasn't mentioned. Monthly, all at once, or skip?"
+      ? "Type, teams, and yearly limit came from your request. Accrual wasn't mentioned. Monthly, all at once, or skip?"
       : "Reading your request into fields.";
 
   const phraseProps = (key: PhraseKey) => ({
@@ -260,7 +260,7 @@ export function OnlyWhatYouSaidVisual() {
             <span className="ofs-phrase" {...phraseProps("sales")}>
               sales
             </span>{" "}
-            department, the{" "}
+            teams, the{" "}
             <span className="ofs-phrase" {...phraseProps("yearly")}>
               yearly
             </span>{" "}
