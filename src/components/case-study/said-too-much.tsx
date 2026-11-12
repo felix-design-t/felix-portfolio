@@ -5,14 +5,15 @@ import { flushSync } from "react-dom";
 import { Eclipse } from "loading-dev";
 import "./type-what-you-have.css";
 import "./said-too-much.css";
-import { TOC_MOVE_MS, TOC_STEP_MS } from "./toc-motion";
+import { TOC_HOLD_MS, TOC_MOVE_MS, TOC_STEP_MS } from "./toc-motion";
 
 /**
  * The agent said too much.
  *
- * Section 02 already shows the request, so this plays once. It starts
- * at the thinking line below the frame, and that line rises into the
- * middle. It holds on the finished policy. One line reads
+ * Section 02 already shows the request, so this starts at the
+ * thinking line. Each loop begins below the frame, and that line
+ * rises into the middle. After the policy holds, it plays again.
+ * One line reads
  * "Generating full policy" with the loader beside it, then becomes
  * "Worked for 20s" as the loader leaves. When the policy appears,
  * that line moves up.
@@ -34,6 +35,7 @@ const LINE_SHIFT_MS = 880;
 const AFTER_SHIFT_MS = 480;
 /** How long one policy section takes to arrive before the next. Same step as section 02's thinking lines. */
 const ROW_MS = TOC_STEP_MS;
+const LOOP_HOLD_MS = TOC_HOLD_MS;
 
 const GENERATING = "Generating full policy";
 const WORKED = "Worked for 20s";
@@ -111,6 +113,7 @@ export function SaidTooMuchVisual() {
   const stageRef = useRef<HTMLDivElement>(null);
   const dockRef = useRef<HTMLDivElement>(null);
   const [seen, setSeen] = useState(false);
+  const [run, setRun] = useState(0);
   const [phase, setPhase] = useState<Phase>("thinking");
   const [beat, setBeat] = useState<ThinkBeat>("idle");
   const [line, setLine] = useState(GENERATING);
@@ -221,12 +224,14 @@ export function SaidTooMuchVisual() {
         window.setTimeout(() => setShown(sectionIndex + 1), writingStartsAt + sectionIndex * ROW_MS),
       );
     });
+    const finishedAt = writingStartsAt + (SECTIONS.length - 1) * ROW_MS + ROW_MS;
+    timers.push(window.setTimeout(() => setRun((value) => value + 1), finishedAt + LOOP_HOLD_MS));
     return () => {
       window.cancelAnimationFrame(parkFrame);
       window.cancelAnimationFrame(riseFrame);
       timers.forEach((timerId) => window.clearTimeout(timerId));
     };
-  }, [seen]);
+  }, [seen, run]);
 
   const visible = SECTIONS.slice(0, shown);
   const asked = visible.filter((section) => section.kind === "request").length;
