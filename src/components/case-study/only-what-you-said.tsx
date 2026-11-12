@@ -343,7 +343,7 @@ export function OnlyWhatYouSaidVisual() {
     step < messageStep ? "hidden" : finished || step === messageStep ? "current" : "past";
 
   const status = finished
-    ? `Ready. Type PTO, department sales, yearly limit 14 days, accrual ${accrualValue.toLowerCase()}. Generate policy is available.`
+    ? `Ready. Type PTO, department sales, yearly limit 14 days, accrual ${accrualValue.toLowerCase()}. Preview policy is available.`
     : step >= 2
       ? "Type, department, and yearly limit came from your request. Accrual wasn't mentioned. Monthly, all at once, or skip?"
       : "Reading your request into fields.";
@@ -426,25 +426,27 @@ export function OnlyWhatYouSaidVisual() {
           aria-label="Agent: accrual question"
         >
           <p className="ofs-lead">I didn&apos;t see accrual. How should it work?</p>
-          <div className="ofs-chip ofs-chip-static" data-open="true">
-            <span className="ofs-chip-label">Accrual</span>
-            <span className="ofs-chip-value">Open</span>
-          </div>
-          <div className="ofs-options" role="group" aria-label="Accrual">
-            {CHOICES.map((option) => (
-              <button
-                key={option.key}
-                type="button"
-                className="ofs-option"
-                data-kind={option.key === "skip" ? "skip" : "pick"}
-                data-selected={choice === option.key ? "true" : "false"}
-                aria-pressed={choice === option.key}
-                tabIndex={step >= 2 ? 0 : -1}
-                onClick={() => choose(option.key)}
-              >
-                {option.label}
-              </button>
-            ))}
+          <div className="ofs-resolve">
+            <div className="ofs-chip ofs-chip-static" data-open="true">
+              <span className="ofs-chip-label">Accrual</span>
+              <span className="ofs-chip-value">Open</span>
+            </div>
+            <div className="ofs-resolve-side ofs-options" role="group" aria-label="Accrual">
+              {CHOICES.map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  className="ofs-option"
+                  data-kind={option.key === "skip" ? "skip" : "pick"}
+                  data-selected={choice === option.key ? "true" : "false"}
+                  aria-pressed={choice === option.key}
+                  tabIndex={step >= 2 ? 0 : -1}
+                  onClick={() => choose(option.key)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
         </article>
 
@@ -464,21 +466,24 @@ export function OnlyWhatYouSaidVisual() {
           aria-label="Agent: ready"
         >
           <p className="ofs-lead">Got it.</p>
-          <div className="ofs-done-row">
+          <div className="ofs-resolve">
             <div className="ofs-chip ofs-chip-static" data-open={filled ? "false" : "true"} data-filled={filled ? "true" : "false"}>
               <span className="ofs-chip-label">Accrual</span>
               <span className="ofs-chip-value">{accrualValue || "Open"}</span>
             </div>
-            <button
-              type="button"
-              className="ofs-generate"
-              data-ready={finished ? "true" : "false"}
-              aria-disabled={!finished}
-              tabIndex={finished ? 0 : -1}
-            >
-              <span>Generate policy</span>
-              <ArrowIcon />
-            </button>
+            <div className="ofs-resolve-side">
+              <button
+                type="button"
+                className="ofs-generate"
+                data-ready={finished ? "true" : "false"}
+                aria-label="Preview policy"
+                aria-disabled={!finished}
+                tabIndex={finished ? 0 : -1}
+              >
+                <span>Preview policy</span>
+                <ArrowIcon />
+              </button>
+            </div>
           </div>
         </article>
 

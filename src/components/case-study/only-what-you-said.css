@@ -186,6 +186,37 @@
   font-weight: 400;
 }
 
+/* Question and "Got it" share this row, so the chip stays put and only
+   the right side changes. The min-height fits two lines of options, so
+   the cards stay about the same height. */
+.ofs-resolve {
+  display: grid;
+  grid-template-columns: minmax(0, 42%) minmax(0, 1fr);
+  align-items: end;
+  gap: 12px;
+  min-height: 80px;
+}
+
+.ofs-resolve-side {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+  align-content: flex-end;
+  gap: 8px;
+  min-height: 80px;
+}
+
+.ofs-product[data-fit="column"] .ofs-resolve {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+}
+
+.ofs-product[data-fit="column"] .ofs-resolve-side {
+  justify-content: flex-start;
+  min-height: 0;
+}
+
 .ofs-options {
   display: flex;
   flex-wrap: wrap;
@@ -226,17 +257,9 @@
   transform: scale(0.98);
 }
 
-.ofs-done-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
 .ofs-chip-static {
-  width: 148px;
-  max-width: 100%;
+  width: 100%;
+  max-width: none;
   opacity: 1;
   transform: none;
   cursor: default;
@@ -257,8 +280,10 @@
 
 .ofs-generate {
   display: inline-flex;
+  flex: none;
   align-items: center;
   gap: 8px;
+  height: 36px;
   min-height: 36px;
   padding: 0 16px;
   border: 0;
