@@ -154,8 +154,9 @@ html[data-theme="dark"] .toc-product[data-visual="said-too-much"] {
 }
 
 /*
-  A note lives with its row, then steps outside the card. The mark is a
-  1px tick at the card edge and a 1px arm to the words.
+  A note lives with its row. On a wide frame a 1px line runs from the
+  card edge to the words. On a narrow frame that line turns into a
+  rail beside the title, and the words move to the legend.
 */
 .toc-note,
 .toc-legend {
@@ -192,32 +193,12 @@ html[data-theme="dark"] .toc-product[data-visual="said-too-much"] {
   color: var(--anno-ink);
 }
 
+/* One straight hairline. No corner, so it cannot look like a broken box. */
 .toc-note-mark {
-  position: relative;
   flex: none;
-  width: 13px;
-  height: 10px;
-}
-
-.toc-note-mark::before,
-.toc-note-mark::after {
-  content: "";
-  position: absolute;
-  background: var(--anno-line);
-}
-
-.toc-note-mark::before {
-  left: 0;
-  top: 0;
-  width: 1px;
-  height: 10px;
-}
-
-.toc-note-mark::after {
-  left: 0;
-  top: 4px;
-  width: 12px;
+  width: 16px;
   height: 1px;
+  background: var(--anno-line);
 }
 
 .toc-dock {
@@ -260,10 +241,7 @@ html[data-theme="dark"] .toc-product[data-visual="said-too-much"] {
 
 .toc-legend .toc-note-mark {
   width: 1px;
-}
-
-.toc-legend .toc-note-mark::after {
-  display: none;
+  height: 10px;
 }
 
 .toc-product[data-visual="said-too-much"][data-phase="document"] .toc-count {
@@ -299,22 +277,18 @@ html[data-theme="dark"] .toc-product[data-visual="said-too-much"] {
   }
 
   .toc-note {
+    top: 12px;
     left: auto;
-    /* Sit in the card's right padding, on the edge, clear of the words. */
-    right: calc(-1 * var(--toc-pad) + 2px);
+    /* In the card's right padding, lined up with the title, clear of the words. */
+    right: calc(-1 * var(--toc-pad) + 8px);
     gap: 0;
   }
 
   .toc-note .toc-note-mark {
-    width: 8px;
-    height: 12px;
-    box-sizing: border-box;
-    border: 1px solid var(--anno-line);
-    border-left: 0;
+    width: 1px;
+    height: 20px;
   }
 
-  .toc-note .toc-note-mark::before,
-  .toc-note .toc-note-mark::after,
   .toc-note-label {
     display: none;
   }
