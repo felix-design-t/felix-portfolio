@@ -160,6 +160,12 @@
   margin: var(--space-2) 0 0;
 }
 
+/* A paragraph between two cards. The card below already carries
+   the figure's top margin, so this matches that gap above. */
+.case-study-figure + .case-study-body {
+  margin-top: var(--space-2);
+}
+
 .case-study-frame-controls {
   display: flex;
   align-items: center;
