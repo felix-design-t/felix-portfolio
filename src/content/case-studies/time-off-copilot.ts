@@ -68,7 +68,6 @@ export const timeOffCopilot: CaseStudy = {
       body: "The agent fills only what the admin said and asks about anything missing. They can edit and undo it, and nothing moves on until they confirm.",
       visual: {
         name: "Field chips and questions",
-        caption: "Fields from your words, then Generate",
         aspectRatio: "16 / 10",
       },
       closingVisual: {
