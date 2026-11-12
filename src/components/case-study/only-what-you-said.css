@@ -9,12 +9,35 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 32px;
+  gap: 12px;
   min-width: 0;
 }
 
-.ofs-product[data-fit="column"] .ofs-stage {
-  gap: 48px;
+/* Room above the first agent message for the trace lines. */
+.ofs-message[data-message="fields"] {
+  margin-top: 24px;
+}
+
+.ofs-message {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 700ms var(--toc-ease),
+    transform 700ms var(--toc-ease);
+}
+
+.ofs-message[data-state="current"] {
+  opacity: 1;
+  transform: none;
+}
+
+.ofs-message[data-state="past"] {
+  opacity: 0.7;
+  transform: none;
+}
+
+.ofs-message[data-state="hidden"] {
+  pointer-events: none;
 }
 
 .ofs-bubble,
@@ -26,15 +49,13 @@
 
 .ofs-bubble {
   align-self: flex-end;
-  width: min(80%, 372px);
+  width: fit-content;
+  max-width: min(80%, 372px);
   padding: 16px;
   border-radius: 16px;
 }
 
-.ofs-request,
-.ofs-title,
-.ofs-caption,
-.ofs-nudge-text {
+.ofs-request {
   margin: 0;
   font-family: var(--font-body);
 }
@@ -69,31 +90,20 @@
   border-radius: 16px;
 }
 
-.ofs-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.ofs-title {
+.ofs-lead {
+  margin: 0;
+  font-family: var(--font-body);
   font-size: 14px;
-  font-weight: 500;
   line-height: 20px;
   color: var(--toc-text);
 }
 
-.ofs-caption {
-  font-size: 12px;
-  line-height: 16px;
-  color: var(--toc-text-secondary);
-}
-
 .ofs-chips {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
-  margin: 0;
+  /* A little extra room above the chips for the trace lanes. */
+  margin: 4px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -166,31 +176,6 @@
   font-weight: 400;
 }
 
-.ofs-nudge {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--toc-mark) 8%, transparent);
-  opacity: 0;
-  transform: translateY(6px);
-  transition:
-    opacity 560ms var(--toc-ease),
-    transform 560ms var(--toc-ease);
-}
-
-.ofs-nudge[data-shown="true"] {
-  opacity: 1;
-  transform: none;
-}
-
-.ofs-nudge-text {
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--toc-text);
-}
-
 .ofs-options {
   display: flex;
   flex-wrap: wrap;
@@ -231,9 +216,33 @@
   transform: scale(0.98);
 }
 
-.ofs-foot {
+.ofs-done-row {
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ofs-chip-static {
+  width: 148px;
+  max-width: 100%;
+  opacity: 1;
+  transform: none;
+  cursor: default;
+}
+
+.ofs-chip-static[data-filled="true"] {
+  animation: ofs-flash 1100ms var(--toc-ease);
+}
+
+@keyframes ofs-flash {
+  from {
+    background: color-mix(in srgb, var(--toc-mark) 32%, var(--toc-control));
+  }
+  to {
+    background: var(--toc-control);
+  }
 }
 
 .ofs-generate {
@@ -291,7 +300,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ofs-chip,
-  .ofs-nudge,
+  .ofs-message,
   .ofs-line,
   .ofs-option,
   .ofs-generate,

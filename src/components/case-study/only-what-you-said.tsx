@@ -7,30 +7,34 @@ import "./only-what-you-said.css";
 /**
  * Only what you said.
  *
- * Think of the action card as a form the agent fills in from the
- * admin's own words. Each field chip is "pinned" to the phrase it came
- * from with a thin line. A field with no phrase stays open, and the
- * agent asks about it once, quietly, instead of guessing.
+ * A short chat thread, read top to bottom, in three steps:
+ *   1. The agent shows what it understood, as chips pinned to the
+ *      admin's own words with thin lines.
+ *   2. It asks about the one field it did not see, instead of guessing.
+ *   3. The admin answers, the agent says "Got it", the chip fills in,
+ *      and Generate becomes available.
  *
- * The loop: chips arrive and trace back to their words, the nudge
- * appears, an option is picked, Accrual fills in, Generate activates.
- * Reduced motion shows that last state. Every tweakable time is below.
+ * "step" is the number of messages on screen (0 to 4). Think of it like
+ * the active state in a stepper: earlier steps dim, the newest is full.
+ * Reduced motion shows the finished thread. Tweak the times below.
  */
 
-/** Pause before the first chip, so the chat reads first. */
-const INTRO_MS = 900;
-/** Time between one chip arriving and the next. */
-const CHIP_STEP_MS = 1100;
-/** Pause after the last chip before the nudge opens. */
-const BEFORE_NUDGE_MS = 700;
-/** Time the nudge waits before an option highlights. */
-const BEFORE_PICK_MS = 1300;
-/** Time between the pick, the filled chip, and Generate lighting up. */
-const PICK_STEP_MS = 650;
+/** Pause before the agent's first message. */
+const INTRO_MS = 800;
+/** Time between one chip filling in and the next. */
+const CHIP_STEP_MS = 800;
+/** Pause after the last chip before the question arrives. */
+const BEFORE_QUESTION_MS = 1000;
+/** Time the question waits before an option highlights. */
+const BEFORE_PICK_MS = 1400;
+/** Time between the pick, the reply, "Got it", and the filled chip. */
+const PICK_STEP_MS = 900;
+/** Time between the Accrual chip filling and Generate lighting up. */
+const BEFORE_GENERATE_MS = 800;
 /** How long the finished state is held. */
 const LOOP_HOLD_MS = 2000;
-/** Width where the four chips sit in one row. */
-const ROW_MIN_WIDTH = 480;
+/** Stage width where the three chips sit in one row. */
+const ROW_MIN_WIDTH = 440;
 
 type PhraseKey = "pto" | "sales" | "yearly" | "days";
 type Choice = "monthly" | "all-at-once" | "skip";
@@ -38,7 +42,7 @@ type Choice = "monthly" | "all-at-once" | "skip";
 type Field = {
   label: string;
   value: string;
-  /** Phrases in the request this field was read from. Empty means open. */
+  /** Phrases in the request this field was read from. */
   from: PhraseKey[];
 };
 
@@ -46,14 +50,12 @@ const FIELDS: Field[] = [
   { label: "Type", value: "PTO", from: ["pto"] },
   { label: "Department", value: "Sales", from: ["sales"] },
   { label: "Yearly limit", value: "14 days", from: ["yearly", "days"] },
-  { label: "Accrual", value: "", from: [] },
 ];
-const ACCRUAL_INDEX = 3;
 
-const CHOICES: { key: Choice; label: string; filled: string }[] = [
-  { key: "monthly", label: "Monthly", filled: "Monthly" },
-  { key: "all-at-once", label: "All at once", filled: "All at once" },
-  { key: "skip", label: "Skip", filled: "Skipped" },
+const CHOICES: { key: Choice; label: string; filled: string; reply: string }[] = [
+  { key: "monthly", label: "Monthly", filled: "Monthly", reply: "Monthly" },
+  { key: "all-at-once", label: "All at once", filled: "All at once", reply: "All at once" },
+  { key: "skip", label: "Skip", filled: "Skipped", reply: "Skip" },
 ];
 
 /** One trace per phrase: the line from a chip back to its words. */
@@ -74,28 +76,28 @@ export function OnlyWhatYouSaidVisual() {
 
   const [seen, setSeen] = useState(false);
   const [run, setRun] = useState(0);
+  const [step, setStep] = useState(0);
   const [chipsShown, setChipsShown] = useState(0);
   const [autoTrace, setAutoTrace] = useState<number | null>(null);
   const [pointerTrace, setPointerTrace] = useState<number | null>(null);
-  const [nudgeShown, setNudgeShown] = useState(false);
   const [choice, setChoice] = useState<Choice | null>(null);
-  const [committed, setCommitted] = useState(false);
-  const [generateReady, setGenerateReady] = useState(false);
+  const [filled, setFilled] = useState(false);
+  const [finished, setFinished] = useState(false);
   const [lines, setLines] = useState<Line[]>([]);
 
-  const showEnd = useCallback(() => {
+  const showEnd = useCallback((pick: Choice) => {
+    setStep(4);
     setChipsShown(FIELDS.length);
     setAutoTrace(null);
-    setNudgeShown(true);
-    setChoice("monthly");
-    setCommitted(true);
-    setGenerateReady(true);
+    setChoice(pick);
+    setFilled(true);
+    setFinished(true);
   }, []);
 
   useEffect(() => {
     if (!prefersReducedMotion()) return;
     autoplayRef.current = false;
-    showEnd();
+    showEnd("monthly");
   }, [showEnd]);
 
   useEffect(() => {
@@ -105,7 +107,7 @@ export function OnlyWhatYouSaidVisual() {
       ([entry]) => {
         if (entry?.isIntersecting) setSeen(true);
       },
-      { threshold: 0.45 },
+      { threshold: 0.35 },
     );
     observer.observe(node);
     return () => observer.disconnect();
@@ -120,12 +122,11 @@ export function OnlyWhatYouSaidVisual() {
     const asRow = origin.width >= ROW_MIN_WIDTH;
     root.dataset.fit = asRow ? "row" : "column";
 
-    const card = stage.querySelector<HTMLElement>(".ofs-card");
-    const bubble = stage.querySelector<HTMLElement>(".ofs-bubble");
-    if (!card || !bubble) return;
-    const cardBox = card.getBoundingClientRect();
-    const bubbleBox = bubble.getBoundingClientRect();
-    const gap = cardBox.top - bubbleBox.bottom;
+    const message = stage.querySelector<HTMLElement>('[data-message="fields"]');
+    const bubble = stage.querySelector<HTMLElement>('[data-message="request"]');
+    if (!message || !bubble) return;
+    const messageBox = message.getBoundingClientRect();
+    const gap = messageBox.top - bubble.getBoundingClientRect().bottom;
 
     const next: Line[] = [];
     TRACES.forEach((trace, traceIndex) => {
@@ -137,19 +138,20 @@ export function OnlyWhatYouSaidVisual() {
       const phraseBox = rects[rects.length - 1] ?? phrase.getBoundingClientRect();
       const phraseX = phraseBox.left + phraseBox.width / 2 - origin.left;
       const phraseY = phraseBox.bottom + 3 - origin.top;
-      // Each trace gets its own horizontal lane in the gap, so they never overlap.
-      const lane = cardBox.top - origin.top - Math.max(8, gap * 0.28) - traceIndex * 5;
+      // Every trace runs down the message's left padding and has its own
+      // lane in the gap above, so no line crosses text or another line.
+      const gutterX = messageBox.left - origin.left + 5 + traceIndex * 2.5;
+      const laneAbove = messageBox.top - origin.top - Math.max(8, gap * 0.28) - traceIndex * 5;
       let d: string;
       if (asRow) {
         const startX = chipBox.left + chipBox.width / 2 - origin.left;
         const startY = chipBox.top - origin.top;
-        d = `M ${startX} ${startY} V ${lane} H ${phraseX} V ${phraseY}`;
+        const laneBelow = startY - 3 - traceIndex * 2.5;
+        d = `M ${startX} ${startY} V ${laneBelow} H ${gutterX} V ${laneAbove} H ${phraseX} V ${phraseY}`;
       } else {
-        // Stacked chips: run down the card's left padding so no line crosses a chip.
-        const gutterX = cardBox.left - origin.left + 5 + traceIndex * 2.5;
         const startX = chipBox.left - origin.left;
         const startY = chipBox.top + chipBox.height / 2 - origin.top;
-        d = `M ${startX} ${startY} H ${gutterX} V ${lane} H ${phraseX} V ${phraseY}`;
+        d = `M ${startX} ${startY} H ${gutterX} V ${laneAbove} H ${phraseX} V ${phraseY}`;
       }
       next.push({ fieldIndex: trace.fieldIndex, phrase: trace.phrase, d });
     });
@@ -162,7 +164,7 @@ export function OnlyWhatYouSaidVisual() {
     if (!stage) return;
     const observer = new ResizeObserver(measure);
     observer.observe(stage);
-    stage.querySelectorAll(".ofs-card, .ofs-bubble").forEach((el) => observer.observe(el));
+    stage.querySelectorAll("[data-message]").forEach((el) => observer.observe(el));
     let cancelled = false;
     document.fonts?.ready.then(() => {
       if (!cancelled) measure();
@@ -176,12 +178,12 @@ export function OnlyWhatYouSaidVisual() {
   useEffect(() => {
     if (!seen || !autoplayRef.current || prefersReducedMotion()) return;
 
+    setStep(0);
     setChipsShown(0);
     setAutoTrace(null);
-    setNudgeShown(false);
     setChoice(null);
-    setCommitted(false);
-    setGenerateReady(false);
+    setFilled(false);
+    setFinished(false);
 
     const timers: number[] = [];
     const at = (ms: number, work: () => void) => {
@@ -189,23 +191,27 @@ export function OnlyWhatYouSaidVisual() {
     };
 
     let time = INTRO_MS;
+    at(time, () => setStep(1));
     FIELDS.forEach((field, index) => {
-      const start = time;
-      at(start, () => {
-        setChipsShown(index + 1);
-        setAutoTrace(field.from.length ? index : null);
-      });
       time += CHIP_STEP_MS;
+      at(time, () => {
+        setChipsShown(index + 1);
+        setAutoTrace(index);
+      });
     });
-    at(time - 300, () => setAutoTrace(null));
-    time += BEFORE_NUDGE_MS;
-    at(time, () => setNudgeShown(true));
+    at(time + CHIP_STEP_MS - 200, () => setAutoTrace(null));
+    time += BEFORE_QUESTION_MS + 400;
+    at(time, () => setStep(2));
     time += BEFORE_PICK_MS;
     at(time, () => setChoice("monthly"));
     time += PICK_STEP_MS;
-    at(time, () => setCommitted(true));
+    at(time, () => setStep(3));
     time += PICK_STEP_MS;
-    at(time, () => setGenerateReady(true));
+    at(time, () => setStep(4));
+    time += PICK_STEP_MS * 0.6;
+    at(time, () => setFilled(true));
+    time += BEFORE_GENERATE_MS;
+    at(time, () => setFinished(true));
     time += LOOP_HOLD_MS;
     at(time, () => setRun((value) => value + 1));
 
@@ -215,22 +221,20 @@ export function OnlyWhatYouSaidVisual() {
   /** The person took over, so the loop stops and their choice stays. */
   const choose = (next: Choice) => {
     autoplayRef.current = false;
-    setChipsShown(FIELDS.length);
-    setAutoTrace(null);
-    setNudgeShown(true);
-    setChoice(next);
-    setCommitted(true);
-    setGenerateReady(true);
+    showEnd(next);
   };
 
   const activeTrace = pointerTrace ?? autoTrace;
   const chosen = CHOICES.find((option) => option.key === choice);
-  const accrualValue = committed ? (chosen?.filled ?? "") : "";
-  const canGenerate = generateReady;
+  const accrualValue = filled ? (chosen?.filled ?? "") : "";
 
-  const status = canGenerate
+  /** A message is hidden before its step, dimmed after it, full at the end. */
+  const stateOf = (messageStep: number) =>
+    step < messageStep ? "hidden" : finished || step === messageStep ? "current" : "past";
+
+  const status = finished
     ? `Ready. Type PTO, department sales, yearly limit 14 days, accrual ${accrualValue.toLowerCase()}. Generate policy is available.`
-    : nudgeShown
+    : step >= 2
       ? "Type, department, and yearly limit came from your request. Accrual wasn't mentioned. Monthly, all at once, or skip?"
       : "Reading your request into fields.";
 
@@ -248,7 +252,12 @@ export function OnlyWhatYouSaidVisual() {
       data-fit="row"
     >
       <div className="ofs-stage" ref={stageRef}>
-        <article className="ofs-bubble" aria-label="Your request">
+        <article
+          className="ofs-bubble ofs-message"
+          data-message="request"
+          data-state={step >= 2 && !finished ? "past" : "current"}
+          aria-label="Your request"
+        >
           <p className="ofs-request">
             I need to create a{" "}
             <span className="ofs-phrase" {...phraseProps("pto")}>
@@ -270,72 +279,92 @@ export function OnlyWhatYouSaidVisual() {
           </p>
         </article>
 
-        <article className="ofs-card" aria-label="Agent reply">
-          <div className="ofs-head">
-            <p className="ofs-title">Sales PTO policy</p>
-            <p className="ofs-caption">From your words</p>
-          </div>
-
+        <article
+          className="ofs-card ofs-message"
+          data-message="fields"
+          data-state={stateOf(1)}
+          aria-label="Agent: what I got"
+        >
+          <p className="ofs-lead">Here&apos;s what I got from your request</p>
           <ul className="ofs-chips">
-            {FIELDS.map((field, index) => {
-              const isAccrual = index === ACCRUAL_INDEX;
-              const isOpen = isAccrual && !committed;
-              const value = isAccrual ? accrualValue || "Open" : field.value;
-              const hasSource = field.from.length > 0;
-              return (
-                <li key={field.label} className="ofs-chip-slot">
-                  <button
-                    type="button"
-                    className="ofs-chip"
-                    data-field={index}
-                    data-shown={index < chipsShown ? "true" : "false"}
-                    data-open={isOpen ? "true" : "false"}
-                    data-traced={activeTrace === index ? "true" : "false"}
-                    aria-label={
-                      hasSource
-                        ? `${field.label}, ${field.value}, taken from your request`
-                        : `${field.label}, ${value}`
-                    }
-                    onMouseEnter={() => hasSource && setPointerTrace(index)}
-                    onMouseLeave={() => setPointerTrace(null)}
-                    onFocus={() => hasSource && setPointerTrace(index)}
-                    onBlur={() => setPointerTrace(null)}
-                  >
-                    <span className="ofs-chip-label">{field.label}</span>
-                    <span className="ofs-chip-value">{value}</span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-
-          <div className="ofs-nudge" data-shown={nudgeShown ? "true" : "false"}>
-            <p className="ofs-nudge-text">Accrual wasn&apos;t mentioned. Monthly or all at once?</p>
-            <div className="ofs-options" role="group" aria-label="Accrual">
-              {CHOICES.map((option) => (
+            {FIELDS.map((field, index) => (
+              <li key={field.label} className="ofs-chip-slot">
                 <button
-                  key={option.key}
                   type="button"
-                  className="ofs-option"
-                  data-kind={option.key === "skip" ? "skip" : "pick"}
-                  data-selected={choice === option.key ? "true" : "false"}
-                  aria-pressed={choice === option.key}
-                  tabIndex={nudgeShown ? 0 : -1}
-                  onClick={() => choose(option.key)}
+                  className="ofs-chip"
+                  data-field={index}
+                  data-shown={index < chipsShown ? "true" : "false"}
+                  data-traced={activeTrace === index ? "true" : "false"}
+                  aria-label={`${field.label}, ${field.value}, taken from your request`}
+                  onMouseEnter={() => setPointerTrace(index)}
+                  onMouseLeave={() => setPointerTrace(null)}
+                  onFocus={() => setPointerTrace(index)}
+                  onBlur={() => setPointerTrace(null)}
                 >
-                  {option.label}
+                  <span className="ofs-chip-label">{field.label}</span>
+                  <span className="ofs-chip-value">{field.value}</span>
                 </button>
-              ))}
-            </div>
-          </div>
+              </li>
+            ))}
+          </ul>
+        </article>
 
-          <div className="ofs-foot">
+        <article
+          className="ofs-card ofs-message"
+          data-message="question"
+          data-state={stateOf(2)}
+          aria-label="Agent: accrual question"
+        >
+          <p className="ofs-lead">I didn&apos;t see accrual. How should it work?</p>
+          <div className="ofs-chip ofs-chip-static" data-open="true">
+            <span className="ofs-chip-label">Accrual</span>
+            <span className="ofs-chip-value">Open</span>
+          </div>
+          <div className="ofs-options" role="group" aria-label="Accrual">
+            {CHOICES.map((option) => (
+              <button
+                key={option.key}
+                type="button"
+                className="ofs-option"
+                data-kind={option.key === "skip" ? "skip" : "pick"}
+                data-selected={choice === option.key ? "true" : "false"}
+                aria-pressed={choice === option.key}
+                tabIndex={step >= 2 ? 0 : -1}
+                onClick={() => choose(option.key)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </article>
+
+        <article
+          className="ofs-bubble ofs-message"
+          data-message="reply"
+          data-state={stateOf(3)}
+          aria-label="Your answer"
+        >
+          <p className="ofs-request">{chosen?.reply ?? "Monthly"}</p>
+        </article>
+
+        <article
+          className="ofs-card ofs-message"
+          data-message="done"
+          data-state={stateOf(4)}
+          aria-label="Agent: ready"
+        >
+          <p className="ofs-lead">Got it.</p>
+          <div className="ofs-done-row">
+            <div className="ofs-chip ofs-chip-static" data-open={filled ? "false" : "true"} data-filled={filled ? "true" : "false"}>
+              <span className="ofs-chip-label">Accrual</span>
+              <span className="ofs-chip-value">{accrualValue || "Open"}</span>
+            </div>
             <button
               type="button"
               className="ofs-generate"
-              data-ready={canGenerate ? "true" : "false"}
-              aria-disabled={!canGenerate}
-              tabIndex={canGenerate ? 0 : -1}
+              data-ready={finished ? "true" : "false"}
+              aria-disabled={!finished}
+              tabIndex={finished ? 0 : -1}
             >
               <span>Generate policy</span>
               <ArrowIcon />
