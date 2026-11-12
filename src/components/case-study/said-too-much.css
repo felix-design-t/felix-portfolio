@@ -1,0 +1,255 @@
+/*
+  The agent said too much.
+  Reuses the introducing-agent tokens, chat card, thinking lines, and
+  file row. These rules only apply to this visual.
+*/
+
+.toc-product[data-visual="said-too-much"][data-phase="thinking"] .toc-stage,
+.toc-product[data-visual="said-too-much"][data-phase="document"] .toc-stage {
+  /* The chat, and later the policy, fade as they cross the top edge. */
+  mask-image: linear-gradient(to bottom, transparent, #000 36px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 36px);
+}
+
+/*
+  Park the lines at the top and let the chat card, which sits above
+  them in the stack, leave through the fade.
+*/
+.toc-product[data-visual="said-too-much"][data-phase="thinking"] .toc-stack,
+.toc-product[data-visual="said-too-much"][data-phase="document"] .toc-stack {
+  top: 4px;
+  right: 4px;
+  left: 4px;
+  transform: translateY(calc(-100% + 96px));
+}
+
+.toc-product[data-visual="said-too-much"][data-phase="document"] .toc-stack {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.toc-product[data-visual="said-too-much"] .toc-chat {
+  width: min(100%, 352px);
+}
+
+.toc-product[data-visual="said-too-much"] .toc-doc {
+  bottom: calc(var(--toc-counter, 28px) + 12px);
+  width: 72%;
+  max-height: none;
+  overflow: visible;
+  z-index: 2;
+}
+
+.toc-product[data-visual="said-too-much"][data-fit="stack"] .toc-doc {
+  width: 100%;
+  bottom: calc(var(--toc-counter, 28px) + var(--toc-check, 120px) + 20px);
+}
+
+.toc-policy-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toc-policy-row {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.toc-policy-row[data-shown="true"] {
+  display: flex;
+  animation: toc-row-in 640ms var(--toc-ease);
+}
+
+@keyframes toc-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.toc-policy-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 20px;
+  flex-wrap: wrap;
+}
+
+.toc-policy-title,
+.toc-policy-body,
+.toc-count {
+  margin: 0;
+  font-family: var(--font-body);
+}
+
+.toc-policy-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--toc-text);
+}
+
+.toc-policy-body {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--toc-text-secondary);
+}
+
+.toc-tag {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.toc-tag[data-kind="request"] {
+  background: color-mix(in srgb, var(--toc-mark) 16%, transparent);
+  color: var(--toc-text);
+}
+
+.toc-tag[data-kind="added"] {
+  background: var(--toc-control);
+  color: var(--toc-text-secondary);
+}
+
+.toc-dock {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  pointer-events: none;
+}
+
+.toc-check {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--toc-counter, 28px) + 12px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: calc(28% - 8px);
+  padding: 12px;
+  border: 1px solid var(--toc-line);
+  border-radius: 16px;
+  background: var(--toc-surface);
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 560ms var(--toc-ease),
+    transform 800ms var(--toc-ease);
+}
+
+.toc-product[data-visual="said-too-much"][data-fit="stack"] .toc-check {
+  right: 0;
+  left: 0;
+  width: 100%;
+}
+
+.toc-product[data-visual="said-too-much"][data-phase="document"] .toc-check,
+.toc-product[data-visual="said-too-much"][data-phase="document"] .toc-count {
+  opacity: 1;
+  transform: none;
+}
+
+.toc-check-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toc-check-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0;
+  min-height: 36px;
+  padding: 4px 0;
+  border-top: 1px solid var(--toc-line);
+}
+
+.toc-check-row:first-child {
+  border-top: 0;
+}
+
+.toc-count {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100% - 16px);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--toc-mark) 16%, var(--toc-surface));
+  color: var(--toc-text);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity 560ms var(--toc-ease);
+}
+
+.toc-count-num {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toc-product[data-visual="said-too-much"] .toc-stage {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .toc-product[data-visual="said-too-much"] .toc-doc {
+    position: relative;
+    bottom: auto;
+    width: 100%;
+    opacity: 1;
+    transform: none;
+  }
+
+  .toc-product[data-visual="said-too-much"] .toc-policy-row {
+    display: flex;
+    animation: none;
+  }
+
+  .toc-product[data-visual="said-too-much"] .toc-dock {
+    position: relative;
+    inset: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .toc-product[data-visual="said-too-much"] .toc-check,
+  .toc-product[data-visual="said-too-much"] .toc-count {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    width: 100%;
+    opacity: 1;
+    transform: none;
+  }
+
+  .toc-product[data-visual="said-too-much"] .toc-count {
+    width: max-content;
+    align-self: center;
+  }
+}

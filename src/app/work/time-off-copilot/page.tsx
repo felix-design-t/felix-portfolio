@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CaseStudyPage } from "@/components/case-study/case-study-page";
 import { SameSheetAgain } from "@/components/case-study/same-sheet-again";
+import { SaidTooMuchVisual } from "@/components/case-study/said-too-much";
 import { TypeWhatYouHaveVisual } from "@/components/case-study/type-what-you-have";
 import { timeOffCopilot } from "@/content/case-studies/time-off-copilot";
 
@@ -21,6 +22,7 @@ export default function TimeOffCopilotPage() {
         "blank-form": <SameSheetAgain />,
         // Introducing Agent, from 9902a6f. Kept beside the sheet stack.
         "type-what-you-have": <TypeWhatYouHaveVisual />,
+        "said-too-much": <SaidTooMuchVisual />,
       }}
     />
   );
