@@ -151,7 +151,8 @@ html[data-theme="dark"] .toc-product {
   flex-direction: column;
   align-self: flex-end;
   gap: 8px;
-  width: min(68%, 300px);
+  /* Wide enough for the request to sit on two lines. */
+  width: min(76%, 352px);
   padding: 16px;
   border-radius: 16px;
 }
