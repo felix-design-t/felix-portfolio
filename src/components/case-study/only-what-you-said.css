@@ -286,19 +286,6 @@
   cursor: default;
 }
 
-.ofs-chip-static[data-filled="true"] {
-  animation: ofs-flash var(--toc-dur-flash) var(--toc-ease);
-}
-
-@keyframes ofs-flash {
-  from {
-    background: color-mix(in srgb, var(--toc-mark) 32%, var(--toc-control));
-  }
-  to {
-    background: var(--toc-control);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ofs-chip,
   .ofs-message,
