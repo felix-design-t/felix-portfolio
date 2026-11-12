@@ -21,17 +21,19 @@ const REQUEST =
   "I need to create a PTO rule for sales department, the yearly limit is 14 days.";
 
 /** How fast each letter appears. Raise it to type more slowly. */
-const CHAR_MS = 28;
+const CHAR_MS = 48;
+/** Quiet moment after the last letter, before Send presses. */
+const BEFORE_SEND_MS = 320;
 /** How long Send stays pressed before the card moves up. */
-const SEND_HOLD_MS = 220;
+const SEND_HOLD_MS = 420;
 /** How long each thinking line waits before the next one starts. */
-const LINE_MS = 420;
+const LINE_MS = 720;
 /** How long the loader takes to fade once the third line is there. */
-const LOADER_FADE_MS = 240;
+const LOADER_FADE_MS = 420;
 /** How long the three lines take to slide into the loader's space. */
-const LINE_SHIFT_MS = 520;
+const LINE_SHIFT_MS = 880;
 /** A short rest after the lines settle, before the preview arrives. */
-const AFTER_SHIFT_MS = 240;
+const AFTER_SHIFT_MS = 480;
 
 /** How many gray bars stand in for the rest of the draft. */
 const LOADING_LINES = 3;
@@ -112,13 +114,13 @@ export function TypeWhatYouHaveVisual() {
     setTyped("");
     let index = 0;
     const timers: number[] = [];
-    const thinkingStartsAt = 160 + SEND_HOLD_MS;
+    const thinkingStartsAt = BEFORE_SEND_MS + SEND_HOLD_MS;
     const typer = window.setInterval(() => {
       index += 1;
       setTyped(REQUEST.slice(0, index));
       if (index < REQUEST.length) return;
       window.clearInterval(typer);
-      timers.push(window.setTimeout(() => setPhase("sending"), 160));
+      timers.push(window.setTimeout(() => setPhase("sending"), BEFORE_SEND_MS));
       timers.push(
         window.setTimeout(() => {
           setPhase("thinking");

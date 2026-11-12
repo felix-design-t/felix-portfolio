@@ -14,6 +14,8 @@
   --toc-text: #1a1c1a;
   --toc-text-secondary: #5e635e;
   --toc-control: #e4e5e2;
+  /* Smooth ease for this sequence. Slower than the site's ease-out. */
+  --toc-ease: cubic-bezier(0.4, 0, 0.2, 1);
 
   position: relative;
   box-sizing: border-box;
@@ -121,9 +123,9 @@ html[data-theme="dark"] .toc-product {
   align-items: stretch;
   transform: translateY(-50%);
   transition:
-    top 480ms var(--ease-out),
-    transform 480ms var(--ease-out),
-    opacity 320ms var(--ease-out);
+    top 800ms var(--toc-ease),
+    transform 800ms var(--toc-ease),
+    opacity 560ms var(--toc-ease);
 }
 
 .toc-product[data-phase="thinking"] .toc-stack {
@@ -206,10 +208,11 @@ html[data-theme="dark"] .toc-product {
   padding: 0;
   border: 0;
   border-radius: 9999px;
-  background: var(--toc-ground);
+  background: transparent;
   color: var(--toc-text-secondary);
   cursor: pointer;
-  transition: transform 160ms var(--ease-out);
+  align-self: center;
+  transition: transform 280ms var(--toc-ease);
 }
 
 .toc-send {
@@ -223,10 +226,12 @@ html[data-theme="dark"] .toc-product {
   background: var(--toc-mark);
   color: var(--toc-on-mark);
   cursor: pointer;
-  transition: transform 160ms var(--ease-out);
+  align-self: center;
+  transition: transform 280ms var(--toc-ease);
 }
 
 .toc-send-icon {
+  display: block;
   width: 16px;
   height: 16px;
   fill: none;
@@ -251,7 +256,7 @@ html[data-theme="dark"] .toc-product {
   background: transparent;
   color: var(--toc-text-secondary);
   cursor: pointer;
-  transition: transform 160ms var(--ease-out);
+  transition: transform 280ms var(--toc-ease);
 }
 
 .toc-attach:active {
@@ -272,7 +277,7 @@ html[data-theme="dark"] .toc-product {
   align-self: flex-start;
   width: max-content;
   max-width: 100%;
-  transition: grid-template-rows 480ms var(--ease-out);
+  transition: grid-template-rows 800ms var(--toc-ease);
 }
 
 .toc-product[data-phase="thinking"] .toc-think-slot,
@@ -293,8 +298,8 @@ html[data-theme="dark"] .toc-product {
   background: transparent;
   opacity: 0;
   transition:
-    opacity 320ms var(--ease-out),
-    padding 480ms var(--ease-out);
+    opacity 560ms var(--toc-ease),
+    padding 800ms var(--toc-ease);
 }
 
 .toc-product[data-phase="thinking"] .toc-think,
@@ -318,13 +323,13 @@ html[data-theme="dark"] .toc-product {
   place-items: center;
   color: var(--toc-mark);
   opacity: 1;
-  transition: opacity 220ms var(--ease-out);
+  transition: opacity 420ms var(--toc-ease);
 }
 
 .toc-product[data-phase="thinking"] .toc-think-mark {
   transition:
-    top 380ms var(--ease-out),
-    opacity 220ms var(--ease-out);
+    top 640ms var(--toc-ease),
+    opacity 420ms var(--toc-ease);
 }
 
 .toc-think[data-beat="two"] .toc-think-mark,
@@ -349,7 +354,7 @@ html[data-theme="dark"] .toc-product {
   gap: 8px;
   min-width: 0;
   padding-left: 24px;
-  transition: padding-left 520ms var(--ease-out);
+  transition: padding-left 880ms var(--toc-ease);
 }
 
 .toc-think[data-beat="settled"] .toc-think-lines,
@@ -364,8 +369,8 @@ html[data-theme="dark"] .toc-product {
   opacity: 0;
   transform: translateY(4px);
   transition:
-    opacity 160ms var(--ease-out),
-    transform 160ms var(--ease-out);
+    opacity 320ms var(--toc-ease),
+    transform 320ms var(--toc-ease);
 }
 
 .toc-think[data-beat="one"] .toc-think-line:nth-child(1),
@@ -394,8 +399,8 @@ html[data-theme="dark"] .toc-product {
   transform: translateY(12px);
   pointer-events: none;
   transition:
-    opacity 320ms var(--ease-out),
-    transform 480ms var(--ease-out);
+    opacity 560ms var(--toc-ease),
+    transform 800ms var(--toc-ease);
 }
 
 .toc-product[data-phase="document"] .toc-doc {
@@ -440,7 +445,7 @@ html[data-theme="dark"] .toc-product {
     var(--toc-control) 70%
   );
   background-size: 220% 100%;
-  animation: toc-line-shimmer 1.6s var(--ease-out) infinite;
+  animation: toc-line-shimmer 1.6s var(--toc-ease) infinite;
 }
 
 .toc-doc-line:nth-child(2) {
