@@ -23,6 +23,8 @@
   flex-direction: column;
   width: 100%;
   aspect-ratio: 16 / 10;
+  /* Pulls the chat, thinking, and preview in from the frame edge. */
+  padding: 16px;
   color: var(--toc-text);
 }
 
