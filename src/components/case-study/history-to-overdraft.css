@@ -193,7 +193,7 @@
 }
 
 .hto-chat .dec-options .xp-card-foot {
-  flex-wrap: nowrap;
+  justify-content: flex-end;
 }
 
 .hto-product .dec-composer {

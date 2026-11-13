@@ -369,15 +369,6 @@ function Choices() {
         })}
       </ul>
       <div className="xp-card-foot">
-        <p className="xp-check">
-          <span className="xp-checkbox" aria-hidden="true">
-            <svg viewBox="0 0 16 16">
-              <path d="M4 8.5l2.5 2.5L12 5.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            </svg>
-          </span>
-          <span>Apply to future cases</span>
-          <span className="toc-sr">, checked</span>
-        </p>
         <span className="xp-solid">Confirm</span>
       </div>
     </div>
