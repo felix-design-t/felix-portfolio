@@ -96,7 +96,7 @@ export const timeOffCopilot: CaseStudy = {
       ideas: [
         {
           name: "Try a scenario",
-          caption: "Policy in use; Admin initiates",
+          caption: "Policy in use; Agent initiates",
           aspectRatio: "16 / 10",
         },
         {
