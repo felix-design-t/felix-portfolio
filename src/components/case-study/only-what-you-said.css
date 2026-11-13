@@ -55,7 +55,8 @@
   align-self: flex-end;
   width: fit-content;
   max-width: 70%;
-  padding: 8px 10px;
+  /* Same inset as the white cards under it. */
+  padding: var(--toc-pad);
   border-radius: 16px;
 }
 
