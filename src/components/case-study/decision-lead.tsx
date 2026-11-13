@@ -52,12 +52,10 @@ function HistoricalCheck() {
           </span>
         </div>
 
-        <div className="dec-agent-block">
-          <p className="toc-label">Agent</p>
-          <p className="dec-agent dec-ask">
-            Setup is finished. Check this policy against last year&rsquo;s requests?
-          </p>
-        </div>
+        <p className="dec-agent">
+          <span className="toc-sr">Agent. </span>
+          Setup is finished. Check this policy against last year&rsquo;s requests?
+        </p>
 
         <p className="dec-admin">Yes</p>
 
