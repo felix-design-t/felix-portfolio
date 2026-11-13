@@ -52,28 +52,43 @@
   border-right: 1px solid var(--toc-line);
 }
 
-/* The chat box stays at the bottom of the conversation,
-   even when the policy beside it is taller. Same box as the
-   historical check. */
+/*
+  The prompt is its own section at the bottom of the conversation.
+  Like Notion and Cursor: the words sit on the first line, small
+  against the window, and plus and send sit on the line under them.
+  It stays down even when the policy beside it is taller.
+*/
 .ntp-composer {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 10px;
   margin-top: auto;
-  min-height: 36px;
-  padding: 4px 4px 4px 10px;
+  padding: 10px 10px 8px;
   border: 1px solid var(--toc-line);
-  border-radius: 12px;
-  background: var(--toc-raised);
+  border-radius: 16px;
+  background: var(--toc-surface);
 }
 
 .ntp-composer-hint {
-  flex: 1 1 auto;
-  min-width: 0;
   margin: 0;
+  padding: 0 2px;
   font-family: var(--font-body);
   font-size: var(--toc-body-size);
   line-height: var(--toc-body-line);
+  color: var(--toc-text-secondary);
+}
+
+.ntp-composer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ntp-composer-plus {
+  display: grid;
+  width: var(--toc-icon-button);
+  height: var(--toc-icon-button);
+  place-items: center;
   color: var(--toc-text-secondary);
 }
 
@@ -84,8 +99,8 @@
   height: var(--toc-icon-button);
   place-items: center;
   border-radius: 9999px;
-  background: var(--toc-mark);
-  color: var(--toc-on-mark);
+  background: var(--toc-control);
+  color: var(--toc-text);
 }
 
 .ntp-composer-icon {
