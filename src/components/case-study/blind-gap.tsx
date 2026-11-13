@@ -10,8 +10,8 @@ import "./blind-gap.css";
  * A chart on the case-study frame, not a product screen.
  * Across is days employed. Up is days of time off, 0 to 5.
  *
- * Accrued stays flat, then steps up by 14/12 days on each 30th day.
- * Earned uses those same steps, but the first one is on day 60.
+ * Accrued stays flat, then eases up by 14/12 days around each 30th day.
+ * Earned uses those same rises, but the first one is on day 60.
  * The blue area is accrued. The orange area is earned.
  * Both sit directly on the matte placeholder.
  *
@@ -32,9 +32,11 @@ const PER_MONTH = 14 / 12;
 const X_TICKS = [30, 60, 90, 120];
 const Y_TICKS = [0, 1, 2, 3, 4, 5];
 
-/** Days the balance jumps. Accrued starts on day 30. Earned starts on day 60. */
-const ACCRUED_RISES = [30, 60, 90, 120, 150];
-const EARNED_RISES = [60, 90, 120, 150];
+/** Days the balance rises. Accrued starts on day 30. Earned starts on day 60. */
+const ACCRUED_RISES = [30, 60, 90, 120];
+const EARNED_RISES = [60, 90, 120];
+/** Days each rise takes. Short, so the flat month on either side still shows. */
+const RAMP_DAYS = 12;
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -57,20 +59,36 @@ function chartY(value: number): number {
   return SCALE - value;
 }
 
+/** Ease used inside one rise. Slow at both ends, so the corner is round. */
+function smoothRise(progress: number): number {
+  const t = Math.min(1, Math.max(0, progress));
+  return t * t * (3 - 2 * t);
+}
+
 /**
- * A staircase. Flat between rise days, then a vertical step of 14/12.
+ * Flat between rise days, with a short eased climb centered on each one.
  * Accrued also draws the flat run from day 0 up to its first rise.
  */
 function stepPoints(riseDays: number[], fromZero: boolean): string {
   const points: string[] = [];
+  const half = RAMP_DAYS / 2;
   let value = 0;
   if (fromZero) points.push(`0,${chartY(0)}`);
-  points.push(`${riseDays[0]},${chartY(0)}`);
-  riseDays.forEach((day, index) => {
-    if (index > 0) points.push(`${day},${chartY(value)}`);
+
+  riseDays.forEach((day) => {
+    const start = day - half;
+    const end = Math.min(AXIS_DAYS, day + half);
+    points.push(`${start},${chartY(value)}`);
+    const samples = 8;
+    for (let i = 1; i <= samples; i += 1) {
+      const x = start + ((end - start) * i) / samples;
+      const progress = (x - (day - half)) / RAMP_DAYS;
+      points.push(`${x},${chartY(value + PER_MONTH * smoothRise(progress))}`);
+    }
     value += PER_MONTH;
-    points.push(`${day},${chartY(value)}`);
   });
+
+  points.push(`${AXIS_DAYS},${chartY(value)}`);
   return points.join(" ");
 }
 
@@ -156,9 +174,9 @@ export function BlindGap() {
       data-snap={snap ? "true" : undefined}
     >
       <p className="blind-gap-sr">
-        60-day wait, 14 days a year, accrued and earned monthly. Accrued steps
-        up by 14/12 days every 30 days. Earned takes those same steps starting
-        at day 60.
+        60-day wait, 14 days a year, accrued and earned monthly. Accrued eases
+        up by 14/12 days around every 30th day. Earned takes those same rises
+        starting at day 60.
       </p>
 
       <div className="blind-gap-inner">
