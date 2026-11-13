@@ -50,6 +50,15 @@
   border-right: 1px solid var(--toc-line);
 }
 
+/* The report reuses Exploration 02. The case list starts under the year. */
+.dec-result .xp-groups {
+  border-top: 1px solid var(--toc-line);
+}
+
+.dec-result .xp-group-example {
+  margin-inline: 0;
+}
+
 .dec-agent,
 .dec-admin,
 .dec-title,

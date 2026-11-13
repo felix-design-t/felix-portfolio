@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import "./type-what-you-have.css";
 import "./exploration.css";
 import "./decisions.css";
+import { LastYearReport } from "./replay-last-year";
 
 /**
  * Decision 01, as two frames.
@@ -97,16 +98,8 @@ function HistoricalCheck() {
         </div>
       </section>
 
-      <article className="dec-result" aria-label="Result of the historical check">
-        <h3 className="dec-title">12 of 214 requests would change</h3>
-        <p className="dec-meta">Last year&rsquo;s requests, replayed on the new policy</p>
-        <p className="dec-example">
-          <span className="toc-label">Example</span>
-          <span>
-            Day 105. Asked for 2 days with 1 earned. Was approved, now balance&nbsp;−1.
-          </span>
-        </p>
-        <p className="dec-meta">5 requested more than earned after the wait</p>
+      <article className="dec-result" aria-label="Report from last year's requests">
+        <LastYearReport />
       </article>
     </div>
   );

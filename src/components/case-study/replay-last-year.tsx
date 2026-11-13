@@ -45,6 +45,89 @@ const DOT_RADIUS = 2.75;
 const PLOT_WIDTH = (WEEKS - 1) * COLUMN_GAP + DOT_RADIUS * 2;
 const PLOT_HEIGHT = 6 * ROW_GAP;
 
+/** The year of dots, then the cases that would get the policy in trouble. */
+export function LastYearReport() {
+  const changedCount = CHANGED_WEEKS.size;
+
+  return (
+    <>
+      <header className="xp-card-head">
+        <h3 className="xp-card-title">
+          {changedCount} of {TOTAL_REQUESTS} requests would change
+        </h3>
+        <p className="xp-card-meta">Last year&rsquo;s requests, replayed on the new policy</p>
+      </header>
+      <YearPlot changedCount={changedCount} />
+      <CaseGroups />
+    </>
+  );
+}
+
+function YearPlot({ changedCount }: { changedCount: number }) {
+  return (
+    <figure className="xp-year">
+      <svg
+        className="xp-year-dots"
+        viewBox={`0 0 ${PLOT_WIDTH} ${PLOT_HEIGHT}`}
+        role="img"
+        aria-label={`Last year, ${TOTAL_REQUESTS} requests. ${changedCount} would change under the new policy.`}
+      >
+        {REQUESTS_PER_WEEK.map((count, week) =>
+          Array.from({ length: count }, (_, stack) => (
+            <circle
+              key={`${week}-${stack}`}
+              cx={DOT_RADIUS + week * COLUMN_GAP}
+              cy={PLOT_HEIGHT - DOT_RADIUS - stack * ROW_GAP}
+              r={DOT_RADIUS}
+              data-changed={CHANGED_WEEKS.has(week) && stack === week % count ? "true" : undefined}
+            />
+          )),
+        )}
+      </svg>
+      <div className="xp-year-axis" aria-hidden="true">
+        {MONTHS.map((month) => (
+          <span key={month}>{month}</span>
+        ))}
+      </div>
+      <figcaption className="xp-legend">
+        <span className="xp-legend-item">
+          <span className="xp-dot" aria-hidden="true" />
+          Safe
+        </span>
+        <span className="xp-legend-item">
+          <span className="xp-dot" data-changed="true" aria-hidden="true" />
+          Flagged
+        </span>
+      </figcaption>
+    </figure>
+  );
+}
+
+function CaseGroups() {
+  return (
+    <ul className="xp-groups">
+      {GROUPS.map((group, position) => {
+        const isOpen = position === 0;
+        return (
+          <li key={group.label} className="xp-group" data-open={isOpen ? "true" : undefined}>
+            <div className="xp-group-row">
+              <span className="xp-group-count">{group.count}</span>
+              <span className="xp-group-label">{group.label}</span>
+              <Chevron isOpen={isOpen} />
+            </div>
+            {isOpen && group.example ? (
+              <p className="xp-group-example">
+                <span className="toc-label">Example</span>
+                <span>{group.example}</span>
+              </p>
+            ) : null}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 export function ReplayLastYearVisual() {
   const changedCount = CHANGED_WEEKS.size;
 
@@ -58,65 +141,11 @@ export function ReplayLastYearVisual() {
             </h3>
             <p className="xp-card-meta">Last year&rsquo;s requests, replayed on the new policy</p>
           </header>
-
-          <figure className="xp-year">
-            <svg
-              className="xp-year-dots"
-              viewBox={`0 0 ${PLOT_WIDTH} ${PLOT_HEIGHT}`}
-              role="img"
-              aria-label={`Last year, ${TOTAL_REQUESTS} requests. ${changedCount} would change under the new policy.`}
-            >
-              {REQUESTS_PER_WEEK.map((count, week) =>
-                Array.from({ length: count }, (_, stack) => (
-                  <circle
-                    key={`${week}-${stack}`}
-                    cx={DOT_RADIUS + week * COLUMN_GAP}
-                    cy={PLOT_HEIGHT - DOT_RADIUS - stack * ROW_GAP}
-                    r={DOT_RADIUS}
-                    data-changed={CHANGED_WEEKS.has(week) && stack === week % count ? "true" : undefined}
-                  />
-                )),
-              )}
-            </svg>
-            <div className="xp-year-axis" aria-hidden="true">
-              {MONTHS.map((month) => (
-                <span key={month}>{month}</span>
-              ))}
-            </div>
-            <figcaption className="xp-legend">
-              <span className="xp-legend-item">
-                <span className="xp-dot" aria-hidden="true" />
-                Safe
-              </span>
-              <span className="xp-legend-item">
-                <span className="xp-dot" data-changed="true" aria-hidden="true" />
-                Flagged
-              </span>
-            </figcaption>
-          </figure>
+          <YearPlot changedCount={changedCount} />
         </article>
 
         <article className="xp-card" aria-label="Cases that would change">
-          <ul className="xp-groups">
-            {GROUPS.map((group, position) => {
-              const isOpen = position === 0;
-              return (
-                <li key={group.label} className="xp-group" data-open={isOpen ? "true" : undefined}>
-                  <div className="xp-group-row">
-                    <span className="xp-group-count">{group.count}</span>
-                    <span className="xp-group-label">{group.label}</span>
-                    <Chevron isOpen={isOpen} />
-                  </div>
-                  {isOpen && group.example ? (
-                    <p className="xp-group-example">
-                      <span className="toc-label">Example</span>
-                      <span>{group.example}</span>
-                    </p>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
+          <CaseGroups />
         </article>
       </div>
 
