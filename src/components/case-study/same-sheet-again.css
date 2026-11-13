@@ -20,14 +20,19 @@
   /* One step of room on the left for the shorter riffle. */
   --sheet-left: 22px;
   --sheet-step-x: 14px;
+  /* Sheet name is the body step. Rows and notes are the control step. */
+  --sheet-title-size: 12px;
+  --sheet-title-line: 16px;
+  --sheet-row-size: 11px;
+  --sheet-row-line: 14px;
   /* The peek is the title only: padding above the words, plus the line.
      The next card covers the rule and every row. */
-  --sheet-title-pad: 10px;
-  --sheet-step-y: calc(var(--sheet-title-pad) + var(--leading-caption));
+  --sheet-title-pad: 8px;
+  --sheet-step-y: calc(var(--sheet-title-pad) + var(--sheet-title-line));
   /* Centers the taller stack while it is still. One step down still fits. */
-  --sheet-top: 16px;
+  --sheet-top: 12px;
   /* Keeps the back card's right edge inside the stack. */
-  --sheet-inset-right: 16px;
+  --sheet-inset-right: 12px;
 }
 
 /* Read by assistive tech. The cards behind are hidden from it. */
@@ -85,12 +90,12 @@
 }
 
 .same-sheet-type {
-  margin: 0 14px;
+  margin: 0 10px;
   padding: var(--sheet-title-pad) 0 4px;
   border-bottom: 1px solid var(--hairline);
   font-family: var(--font-body);
-  font-size: var(--text-caption);
-  line-height: var(--leading-caption);
+  font-size: var(--sheet-title-size);
+  line-height: var(--sheet-title-line);
   color: var(--text);
 }
 
@@ -107,8 +112,8 @@
   margin: 0;
   color: var(--accent-rose);
   font-family: var(--font-body);
-  font-size: var(--text-caption);
-  line-height: var(--leading-caption);
+  font-size: var(--sheet-row-size);
+  line-height: var(--sheet-row-line);
   white-space: nowrap;
   opacity: 0.35;
   transition: opacity 160ms var(--ease-out);
@@ -131,7 +136,7 @@
 }
 
 .same-sheet-callout-stem {
-  width: 36px;
+  width: 28px;
   height: 1px;
   margin-right: 8px;
   background: currentColor;
@@ -152,7 +157,7 @@
 
 .same-sheet-rows {
   margin: 0;
-  padding: 0 14px 6px;
+  padding: 0 10px 4px;
   list-style: none;
 }
 
@@ -161,8 +166,8 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-2);
-  min-height: 32px;
-  padding: 6px 0;
+  min-height: 28px;
+  padding: 4px 0;
   border-bottom: 1px solid var(--hairline);
 }
 
@@ -173,8 +178,8 @@
 .same-sheet-label,
 .same-sheet-value {
   font-family: var(--font-body);
-  font-size: var(--text-caption);
-  line-height: var(--leading-caption);
+  font-size: var(--sheet-row-size);
+  line-height: var(--sheet-row-line);
 }
 
 .same-sheet-label {
@@ -196,14 +201,14 @@
 
 /*
   A short frame cannot spare the desktop offsets.
-  Type stays on the caption size. Only the pile tightens.
+  Type stays on the sheet steps. Only the pile tightens.
 */
 @container (max-height: 320px) {
   .same-sheet {
     --sheet-left: 20px;
     --sheet-step-x: 8px;
     --sheet-title-pad: 6px;
-    --sheet-step-y: calc(var(--sheet-title-pad) + var(--leading-caption));
+    --sheet-step-y: calc(var(--sheet-title-pad) + var(--sheet-title-line));
     --sheet-top: 8px;
     --sheet-inset-right: 8px;
     --note-col: 118px;

@@ -23,19 +23,29 @@
   --toc-user-muted: #9fb0a7;
   --toc-user-mark: #6fdec0;
   --toc-user-on-mark: #0e1612;
-  /* Type scale: title, body, meta, label. Nothing else. */
-  --toc-title-size: 15px;
-  --toc-title-line: 22px;
-  --toc-body-size: 13px;
-  --toc-body-line: 20px;
-  --toc-meta-size: 12px;
-  --toc-meta-line: 16px;
-  --toc-label-size: 11px;
-  --toc-label-line: 16px;
-  /* Space: 16px card inset, 12px between groups, 44px list row. */
-  --toc-pad: 16px;
-  --toc-gap: 12px;
-  --toc-row: 44px;
+  /*
+    Three steps, quiet like a Notion product screen.
+    The title names the card. The body is the sentence. Controls
+    (buttons, chips, counts) sit a step under the body, in a short pill.
+    A new screen in this frame uses these same variables.
+  */
+  --toc-title-size: 14px;
+  --toc-title-line: 18px;
+  --toc-body-size: 12px;
+  --toc-body-line: 16px;
+  --toc-meta-size: 11px;
+  --toc-meta-line: 14px;
+  --toc-label-size: 10px;
+  --toc-label-line: 13px;
+  /* The control step. Button labels use this, not the body size. */
+  --toc-control-size: 11px;
+  --toc-control-line: 14px;
+  --toc-control-height: 24px;
+  --toc-icon-button: 22px;
+  /* Space: 12px card inset, 8px between groups, 32px list row. */
+  --toc-pad: 12px;
+  --toc-gap: 8px;
+  --toc-row: 32px;
   /* Motion. Section 02 sets the pace; every product visual reuses these.
      JS beats (typing, step, hold) live in toc-motion.ts. */
   --toc-ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -222,7 +232,8 @@ html[data-theme="dark"] .toc-product {
 
 .toc-chat .toc-typed {
   margin: 0;
-  min-height: 44px;
+  /* Two lines of the title step. */
+  min-height: 36px;
   color: var(--toc-user-text);
 }
 
@@ -259,8 +270,8 @@ html[data-theme="dark"] .toc-product {
 
 .toc-attach {
   display: grid;
-  width: 28px;
-  height: 28px;
+  width: var(--toc-icon-button);
+  height: var(--toc-icon-button);
   place-items: center;
   padding: 0;
   border: 0;
@@ -274,8 +285,8 @@ html[data-theme="dark"] .toc-product {
 
 .toc-send {
   display: grid;
-  width: 28px;
-  height: 28px;
+  width: var(--toc-icon-button);
+  height: var(--toc-icon-button);
   place-items: center;
   padding: 0;
   border: 0;
@@ -289,8 +300,8 @@ html[data-theme="dark"] .toc-product {
 
 .toc-send-icon {
   display: block;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.5;
@@ -362,7 +373,7 @@ html[data-theme="dark"] .toc-product {
   top: 4px;
   display: grid;
   width: 16px;
-  height: 20px;
+  height: var(--toc-body-line);
   place-items: center;
   color: var(--toc-mark);
   opacity: 1;
@@ -378,7 +389,8 @@ html[data-theme="dark"] .toc-product {
 .toc-think[data-beat="two"] .toc-think-mark,
 .toc-think[data-beat="three"] .toc-think-mark,
 .toc-think[data-beat="settled"] .toc-think-mark {
-  top: 32px;
+  /* One body line, plus the 8px gap between thinking lines. */
+  top: 28px;
 }
 
 .toc-think[data-beat="three"] .toc-think-mark,
@@ -460,7 +472,7 @@ html[data-theme="dark"] .toc-product {
 }
 
 .toc-doc-title + .toc-doc-lead {
-  margin-top: -8px;
+  margin-top: -4px;
 }
 
 .toc-doc-lead,
@@ -469,7 +481,7 @@ html[data-theme="dark"] .toc-product {
 }
 
 .toc-doc-note {
-  padding: 10px 12px;
+  padding: 6px 8px;
   border-radius: 12px;
   background: color-mix(in srgb, var(--toc-mark) 9%, var(--toc-surface));
 }
@@ -477,13 +489,13 @@ html[data-theme="dark"] .toc-product {
 .toc-doc-lines {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   margin-top: 4px;
 }
 
 .toc-doc-line {
   display: block;
-  height: 8px;
+  height: 6px;
   border-radius: 9999px;
   background: linear-gradient(
     100deg,
@@ -515,17 +527,17 @@ html[data-theme="dark"] .toc-product {
 .toc-file {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   margin-top: 4px;
-  padding-top: 12px;
+  padding-top: 8px;
   border-top: 1px solid var(--toc-line);
 }
 
 .toc-page-mark {
   display: grid;
   flex: none;
-  width: 28px;
-  height: 28px;
+  width: var(--toc-icon-button);
+  height: var(--toc-icon-button);
   place-items: center;
   border-radius: 8px;
   background: var(--toc-control);

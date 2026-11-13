@@ -35,7 +35,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  min-height: 32px;
+  min-height: var(--toc-control-height);
 }
 
 .eol-title,
@@ -77,15 +77,15 @@
 }
 
 .eol-quiet {
-  min-height: 32px;
-  padding: 0 12px;
+  height: var(--toc-control-height);
+  padding: 0 8px;
   border: 0;
   border-radius: 9999px;
   background: var(--toc-raised);
   color: var(--toc-text-secondary);
-  font-size: var(--toc-body-size);
+  font-size: var(--toc-control-size);
   font-weight: 500;
-  line-height: var(--toc-body-line);
+  line-height: var(--toc-control-height);
 }
 
 .eol-quiet:disabled {
@@ -144,8 +144,8 @@
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  min-height: 32px;
-  padding: 0 10px;
+  min-height: var(--toc-control-height);
+  padding: 0 8px;
   border: 1px solid var(--toc-line);
   border-radius: 8px;
   background: var(--toc-surface);
@@ -183,8 +183,8 @@
 .eol-step {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: var(--toc-icon-button);
+  height: var(--toc-icon-button);
   padding: 0;
   border: 0;
   border-radius: 9999px;
@@ -199,8 +199,8 @@
 }
 
 .eol-step-icon {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.5;
@@ -212,19 +212,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 36px;
+  height: var(--toc-control-height);
 }
 
 .eol-preview {
-  min-height: 36px;
-  padding: 0 16px;
+  height: var(--toc-control-height);
+  padding: 0 8px;
   border: 0;
   border-radius: 9999px;
   background: var(--toc-raised);
   color: var(--toc-text-secondary);
-  font-size: var(--toc-body-size);
+  font-size: var(--toc-control-size);
   font-weight: 500;
-  line-height: var(--toc-body-line);
+  line-height: var(--toc-control-height);
   cursor: default;
 }
 

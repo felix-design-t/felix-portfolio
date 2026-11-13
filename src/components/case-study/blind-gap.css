@@ -2,8 +2,8 @@
   Accrued and earned, drawn on the case-study frame.
 
   This frame is white. Other section frames stay on the matte fill.
-  The policy uses section type. Marks use
-  body caption. Accrued and earned are two steps of the site blue,
+  The policy sentence is the title step. Marks and day numbers
+  are the control step. Accrued and earned are two steps of the site blue,
   which is Tailwind blue-600. The request stays rose. Fills are flat
   tints of that blue. No shadow, gradient, or blur.
 
@@ -30,9 +30,9 @@ html[data-theme="dark"] .case-study-frame:has(.blind-gap) {
   --blind-move: 800ms;
   --blind-fade: 560ms;
   --axis-days: 150;
-  --y-gutter: 22px;
-  --plot-top: 16px;
-  --plot-bottom: 28px;
+  --y-gutter: 18px;
+  --plot-top: 12px;
+  --plot-bottom: 20px;
   /* One hue, two strengths. The pale step is the accrued band. */
   --blind-accrued: color-mix(in srgb, var(--accent-blue) 42%, var(--mat));
   --blind-accrued-fill: color-mix(in srgb, var(--accent-blue) 16%, var(--mat));
@@ -43,9 +43,9 @@ html[data-theme="dark"] .case-study-frame:has(.blind-gap) {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 12px;
   min-height: 62.5cqi;
-  padding: var(--space-2);
+  padding: 12px;
   color: var(--text);
 }
 
@@ -65,9 +65,9 @@ html[data-theme="dark"] .case-study-frame:has(.blind-gap) {
   margin: 0;
   max-width: 36rem;
   font-family: var(--font-body);
-  font-size: var(--text-body);
+  font-size: 14px;
   font-weight: 400;
-  line-height: var(--leading-section);
+  line-height: 18px;
   color: var(--text);
   text-wrap: pretty;
   opacity: 0;
@@ -81,7 +81,7 @@ html[data-theme="dark"] .case-study-frame:has(.blind-gap) {
 .blind-gap-legend {
   display: flex;
   flex-wrap: nowrap;
-  gap: var(--space-2);
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -92,8 +92,8 @@ html[data-theme="dark"] .case-study-frame:has(.blind-gap) {
   align-items: center;
   gap: 6px;
   font-family: var(--font-body);
-  font-size: var(--text-caption);
-  line-height: var(--leading-caption);
+  font-size: 11px;
+  line-height: 14px;
   color: var(--text);
   white-space: nowrap;
   opacity: 0;
@@ -176,9 +176,9 @@ html[data-theme="dark"] .case-study-frame:has(.blind-gap) {
   left: 0;
   width: calc(var(--y-gutter) - 6px);
   font-family: var(--font-body);
-  font-size: var(--text-caption);
+  font-size: 11px;
   font-variant-numeric: tabular-nums;
-  line-height: var(--leading-caption);
+  line-height: 14px;
   color: var(--text);
   text-align: right;
   transform: translateY(-50%);
@@ -242,7 +242,7 @@ html[data-theme="dark"] .case-study-frame:has(.blind-gap) {
   right: 0;
   bottom: 0;
   left: 0;
-  height: 16px;
+  height: 14px;
 }
 
 /* Day 105 sits on the same row as the other day numbers, in rose. */
@@ -254,9 +254,9 @@ html[data-theme="dark"] .case-study-frame:has(.blind-gap) {
   position: absolute;
   top: 0;
   font-family: var(--font-body);
-  font-size: var(--text-caption);
+  font-size: 11px;
   font-variant-numeric: tabular-nums;
-  line-height: var(--leading-caption);
+  line-height: 14px;
   color: var(--text);
   transform: translateX(-50%);
 }

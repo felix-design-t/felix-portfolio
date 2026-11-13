@@ -99,7 +99,7 @@
   display: none;
   flex-direction: column;
   gap: 2px;
-  padding: 12px 0;
+  padding: 8px 0;
   border-top: 1px solid var(--toc-line);
 }
 
@@ -179,15 +179,15 @@
   align-items: center;
   gap: 6px;
   margin: 0;
-  padding: 4px 10px;
+  padding: 2px 8px;
   border: 1px solid var(--toc-line);
   border-radius: 999px;
   background: var(--toc-surface);
   color: var(--toc-text);
   font-family: var(--font-body);
-  font-size: var(--text-caption);
+  font-size: var(--toc-control-size);
   font-weight: 400;
-  line-height: var(--leading-caption);
+  line-height: var(--toc-control-line);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   opacity: 0;

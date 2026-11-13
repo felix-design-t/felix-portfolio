@@ -64,7 +64,7 @@
 .dec-admin {
   align-self: flex-end;
   max-width: 92%;
-  padding: 10px 12px;
+  padding: 8px 10px;
   border-radius: 12px;
   background: var(--toc-user);
   color: var(--toc-user-text);
@@ -86,7 +86,7 @@
   flex-direction: column;
   gap: 2px;
   margin: 0;
-  padding: 8px 12px;
+  padding: 6px 8px;
   border-radius: 12px;
   background: var(--toc-raised);
   font-family: var(--font-body);
@@ -160,7 +160,7 @@
   flex: none;
   width: 6px;
   height: 6px;
-  margin-top: 7px;
+  margin-top: 5px;
   border-radius: 9999px;
   background: var(--accent-rose);
   align-self: flex-start;

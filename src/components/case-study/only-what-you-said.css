@@ -55,7 +55,7 @@
   align-self: flex-end;
   width: fit-content;
   max-width: 70%;
-  padding: 12px 16px;
+  padding: 8px 10px;
   border-radius: 16px;
 }
 
@@ -137,8 +137,8 @@
   flex-direction: column;
   gap: 0;
   width: 100%;
-  min-height: 56px;
-  padding: 10px 12px;
+  min-height: 40px;
+  padding: 6px 8px;
   border: 1px solid transparent;
   border-radius: 12px;
   background: var(--toc-raised);
@@ -244,17 +244,17 @@
 }
 
 .ofs-option {
-  min-height: 36px;
-  padding: 0 16px;
+  height: var(--toc-control-height);
+  padding: 0 8px;
   white-space: nowrap;
   border: 1px solid var(--toc-line);
   border-radius: 9999px;
   background: var(--toc-surface);
   color: var(--toc-text);
   font-family: var(--font-body);
-  font-size: var(--toc-body-size);
+  font-size: var(--toc-control-size);
   font-weight: 500;
-  line-height: var(--toc-body-line);
+  line-height: var(--toc-control-height);
   cursor: pointer;
   transition:
     background-color var(--toc-dur-fade) var(--toc-ease),
