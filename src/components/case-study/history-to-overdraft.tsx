@@ -20,9 +20,9 @@ import {
 /**
  * Solution, second frame.
  *
- * One window, one chat column. After the first Yes, the history
- * report fills this same frame, then gives way. The hours question
- * continues in that same chat.
+ * One window. The chat stays on the left: the setup check, then the
+ * hours question in that same thread. After the first Yes, the
+ * history report stays on the right. There is no scenario rail.
  *
  * A new message eases up above the chat box. Messages already open
  * keep their height and slide up with it. The chat box stays put.
@@ -70,7 +70,7 @@ const START: Play = {
 const END: Play = {
   ...START,
   leftYes: true,
-  stage: "chat",
+  stage: "history",
   askShown: true,
   replyShown: true,
   midYes: true,
@@ -145,8 +145,7 @@ export function HistoryToOverdraftVisual() {
     at(time, () => set({ stage: "history" }));
 
     time += TOC_MOVE_MS + TOC_PAUSE_MS * 2;
-    at(time, () => set({ stage: "chat" }));
-    time += TOC_MOVE_MS + TOC_REST_MS;
+    time += TOC_REST_MS;
     time = typeInto(ASK, "askText", time);
     time += TOC_BEAT_MS;
     at(time, () => set({ askSending: true }));
@@ -241,6 +240,7 @@ export function HistoryToOverdraftVisual() {
           />
         </section>
 
+        <div className="hto-stage">
           <article
             className="dec-result hto-panel hto-history"
             data-state={view.stage === "history" ? "current" : "hidden"}
@@ -264,6 +264,7 @@ export function HistoryToOverdraftVisual() {
               <LastYearReport />
             </div>
           </article>
+        </div>
       </div>
     </div>
   );

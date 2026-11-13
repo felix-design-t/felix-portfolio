@@ -1,9 +1,8 @@
 /*
   Solution, second frame.
 
-  One product window. The chat fills the frame. After the first Yes,
-  the history report covers that same frame, then gives way so the
-  hours conversation can continue in the chat.
+  One product window. The chat is the left column. The history report
+  stays on the right. There is no tested-scenarios rail.
 
   Messages ease up above the chat box, the same way as the first
   solution screen. A message that is already open keeps its height.
@@ -20,9 +19,8 @@
 }
 
 .hto-window {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -33,19 +31,24 @@
 
 .hto-chat {
   display: flex;
-  flex: 1;
   flex-direction: column;
   gap: 20px;
-  width: 100%;
   min-width: 0;
   min-height: 0;
   box-sizing: border-box;
   height: 100%;
   padding: 16px;
   overflow: hidden;
+  border-right: 1px solid var(--toc-line);
 }
 
-/* The report covers the chat, then leaves. It is not a second column. */
+.hto-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .hto-panel {
   position: absolute;
   inset: 0;
@@ -259,6 +262,18 @@
 
   .hto-caret {
     display: none;
+  }
+}
+
+@container (max-width: 460px) {
+  .hto-window {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+  .hto-chat {
+    border-right: none;
+    border-bottom: 1px solid var(--toc-line);
   }
 }
 
