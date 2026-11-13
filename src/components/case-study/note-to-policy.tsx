@@ -54,10 +54,6 @@ export function NoteToPolicyVisual() {
       data-fit="row"
     >
       <div className="ntp-window">
-        <header className="ntp-titlebar">
-          <h3 className="ntp-title">Sales PTO policy</h3>
-        </header>
-
         <div className="ntp-thread">
           <article className="ofs-bubble ofs-message" data-state="current" aria-label="Your request">
             <p className="ofs-request">

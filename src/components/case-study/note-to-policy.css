@@ -24,26 +24,6 @@
   background: var(--toc-surface);
 }
 
-.ntp-titlebar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  min-height: 0;
-  padding: 6px 12px;
-  border-bottom: 1px solid var(--toc-line);
-}
-
-.ntp-title {
-  margin: 0;
-  font-family: var(--font-body);
-  font-size: var(--toc-meta-size);
-  font-weight: 400;
-  line-height: var(--toc-meta-line);
-  color: var(--toc-text);
-  text-align: center;
-}
-
 .ntp-thread {
   display: flex;
   flex-direction: column;
