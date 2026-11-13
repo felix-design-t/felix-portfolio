@@ -1,8 +1,8 @@
 /*
   Accrued and earned, drawn on the case-study frame.
 
-  The frame's matte fill is the ground. Nothing sits between the
-  chart and that fill. The policy uses section type. Marks use
+  This frame is white. Other section frames stay on the matte fill.
+  The policy uses section type. Marks use
   body caption. Accrued and earned are two steps of the site blue,
   which is Tailwind blue-600. The request stays rose. Fills are flat
   tints of that blue. No shadow, gradient, or blur.
@@ -10,6 +10,17 @@
   Across: days employed, 0 to 150. Up: days of time off, 0 to 5.
   The horizontal rules are one even step apart.
 */
+
+/* Only the frame that holds this chart. Light mode is white.
+   Dark mode keeps the dark mat: the chart type flips to near-white,
+   so a white fill would hide the title. */
+.case-study-frame:has(.blind-gap) {
+  background: #fff;
+}
+
+html[data-theme="dark"] .case-study-frame:has(.blind-gap) {
+  background: var(--mat);
+}
 
 .blind-gap {
   position: relative;
