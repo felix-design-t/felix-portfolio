@@ -47,10 +47,10 @@
 .ntp-thread {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
   min-width: 0;
   box-sizing: border-box;
-  padding: 16px;
+  padding: 12px;
 }
 
 /* Same steps as the Decisions screen above: conversation at meta,
@@ -66,7 +66,7 @@
 .ntp-thread .eol-quiet,
 .ntp-thread .eol-preview {
   font-size: var(--toc-meta-size);
-  line-height: 20px;
+  line-height: var(--toc-meta-line);
 }
 
 .ntp-thread .eol-title {
@@ -82,8 +82,8 @@
 }
 
 .ntp-thread .ofs-card {
-  gap: 8px;
-  padding: 10px 12px;
+  gap: 6px;
+  padding: 8px 10px;
 }
 
 .ntp-thread .ofs-chips {
@@ -93,7 +93,7 @@
 }
 
 .ntp-thread .ofs-bubble {
-  padding: 8px 10px;
+  padding: 6px 8px;
 }
 
 /* This thread shows the request as plain text. The phrase marks stay for the earlier screen. */
@@ -104,7 +104,7 @@
 .ntp-thread .ofs-chip {
   width: auto;
   min-height: 0;
-  padding: 6px 8px;
+  padding: 2px 8px;
 }
 
 .ntp-thread .ofs-option,
@@ -115,8 +115,8 @@
 }
 
 .ntp-thread .eol-card {
-  gap: 12px;
-  padding: 12px;
+  gap: 8px;
+  padding: 8px 10px;
 }
 
 .ntp-thread .eol-head {
@@ -124,18 +124,18 @@
 }
 
 .ntp-thread .eol-lines {
-  gap: 8px;
+  gap: 2px;
 }
 
 .ntp-thread .eol-line {
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding-top: 1px;
+  padding-bottom: 1px;
   white-space: nowrap;
 }
 
 .ntp-thread .eol-token {
-  min-height: 22px;
-  padding: 0 8px;
+  min-height: 0;
+  padding: 0 6px;
 }
 
 /* The Trust Building chips are buttons. Here they are the finished
