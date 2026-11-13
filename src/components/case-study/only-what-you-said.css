@@ -74,7 +74,8 @@
 
 .ofs-request {
   font-size: var(--toc-title-size);
-  line-height: var(--toc-title-line);
+  /* A step looser than the title line, so the two wrapped lines can breathe. */
+  line-height: 22px;
   color: var(--toc-user-text);
 }
 
