@@ -53,7 +53,7 @@ export function LastYearReport() {
     <>
       <header className="xp-card-head">
         <h3 className="xp-card-title">
-          {changedCount} of {TOTAL_REQUESTS} requests would change
+          {changedCount} of {TOTAL_REQUESTS} requests flagged
         </h3>
         <p className="xp-card-meta">Last year&rsquo;s requests, replayed on the new policy</p>
       </header>
