@@ -118,12 +118,14 @@
   padding: 16px;
 }
 
-.dec-screen[data-screen="history"] .dec-composer {
+.dec-screen[data-screen="history"] .dec-composer,
+.dec-screen[data-screen="scenario"] .dec-composer {
   gap: 12px;
   padding: 12px 12px 10px;
 }
 
 .dec-screen[data-screen="history"] .dec-composer-hint,
+.dec-screen[data-screen="scenario"] .dec-composer-hint,
 .dec-result .xp-card-meta,
 .dec-result .xp-year-axis,
 .dec-result .xp-legend {
