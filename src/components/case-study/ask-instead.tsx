@@ -9,8 +9,8 @@ import "./exploration.css";
  * The admin's inbox card. The agent asks instead of deciding.
  */
 
-const CHOICES = ["Approve, balance −4", "Approve 1, 4 unpaid", "Deny with a reason"];
-const CHOSEN = "Approve 1, 4 unpaid";
+const CHOICES = ["Approve, balance −4", "Approve 1, 1 unpaid", "Deny with a reason"];
+const CHOSEN = "Approve 1, 1 unpaid";
 
 export function AskInsteadVisual() {
   return (
