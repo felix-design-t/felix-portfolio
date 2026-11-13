@@ -109,7 +109,7 @@ export const timeOffCopilot: CaseStudy = {
           title: "03. Test your own scenarios",
           body: "The admin gets a space to name scenarios and test them. They decide which cases matter. They confirm and apply only when the results look right. The agent never publishes.",
           name: "Ask instead of deciding",
-          caption: "Ask instead of deciding",
+          caption: "Before policy launch; Admin initiates",
           aspectRatio: "16 / 10",
         },
       ],
