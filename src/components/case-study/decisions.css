@@ -179,11 +179,15 @@
   font-weight: 400;
 }
 
-.dec-agent,
-.dec-admin,
 .dec-meta {
   font-size: var(--toc-body-size);
   line-height: var(--toc-body-line);
+}
+
+.dec-agent,
+.dec-admin {
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
 }
 
 .dec-agent {
