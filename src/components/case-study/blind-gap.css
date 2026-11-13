@@ -21,8 +21,6 @@
   --y-gutter: 22px;
   --plot-top: 16px;
   --plot-bottom: 28px;
-  /* 1.2 earned days on a 0-to-5 scale. */
-  --credit: 0.24;
 }
 
 .blind-gap-inner {
@@ -96,7 +94,7 @@
 
 .blind-gap-swatch[data-mark="earned"] {
   width: 14px;
-  height: 1.5px;
+  height: 1px;
   background: var(--text);
 }
 
@@ -175,52 +173,21 @@
   opacity: 1;
 }
 
-.blind-gap-flat,
-.blind-gap-rise,
-.blind-gap-level {
+/* One straight stroke on 0. It sits above the rose so the column does not break it. */
+.blind-gap-flat {
   position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: var(--plot-bottom);
+  left: var(--y-gutter);
+  height: 1px;
   background: var(--text);
+  transform: scaleX(0);
+  transform-origin: left center;
   transition: transform var(--blind-move) var(--blind-ease);
 }
 
-.blind-gap-flat {
-  bottom: var(--plot-bottom);
-  left: var(--y-gutter);
-  width: calc((100% - var(--y-gutter)) * 120 / var(--axis-days));
-  height: 1.5px;
-  transform: scaleX(0);
-  transform-origin: left center;
-}
-
 .blind-gap-flat[data-shown="true"] {
-  transform: scaleX(1);
-}
-
-.blind-gap-rise {
-  bottom: var(--plot-bottom);
-  left: calc(var(--y-gutter) + (100% - var(--y-gutter)) * 120 / var(--axis-days));
-  width: 1.5px;
-  height: calc((100% - var(--plot-top) - var(--plot-bottom)) * var(--credit));
-  transform: translateX(-50%) scaleY(0);
-  transform-origin: bottom center;
-}
-
-.blind-gap-rise[data-shown="true"] {
-  transform: translateX(-50%) scaleY(1);
-}
-
-.blind-gap-level {
-  right: 0;
-  bottom: calc(
-    var(--plot-bottom) + (100% - var(--plot-top) - var(--plot-bottom)) * var(--credit)
-  );
-  left: calc(var(--y-gutter) + (100% - var(--y-gutter)) * 120 / var(--axis-days));
-  height: 1.5px;
-  transform: scaleX(0);
-  transform-origin: left center;
-}
-
-.blind-gap-level[data-shown="true"] {
   transform: scaleX(1);
 }
 

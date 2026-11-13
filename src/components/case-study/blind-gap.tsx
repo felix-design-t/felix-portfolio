@@ -10,23 +10,22 @@ import "./blind-gap.css";
  * A chart on the case-study page, not a product screen.
  * Across is days employed. Up is days of time off.
  *
- * The policy earns about 1.2 days a month, and only after the
- * 90-day wait. The first credit lands one month later, near day 120.
- * On day 91 the balance is still 0. A request for 5 days that day
- * is the whole failure: a rose gap from 0 up to 5.
+ * The policy earns monthly, and only after the 90-day wait.
+ * On day 91 nothing has been earned yet, so the balance line
+ * stays a straight 0. A request for 5 days that day is the
+ * whole failure: a rose gap from 0 up to 5.
  *
  * The story plays once:
  *   1. The policy
  *   2. The 90-day wait
- *   3. Days earned, flat at 0 through day 120
- *   4. The first credit, about 1.2 days
- *   5. The request at day 91, and the 5-day gap
+ *   3. Days earned, a straight line at 0
+ *   4. The request at day 91, and the 5-day gap
  *
  * It stays on that last frame. Reduced motion shows it immediately.
  */
 
 /** Last beat. Reduced motion jumps here and stays. */
-const LAST_STEP = 5;
+const LAST_STEP = 4;
 
 /** Axis length in days employed. Ticks stop at 120; the line may run to the end. */
 const AXIS_DAYS = 150;
@@ -95,13 +94,11 @@ export function BlindGap() {
 
           const waitAt = TOC_MOVE_MS;
           const earnedAt = waitAt + TOC_PAUSE_MS;
-          const creditAt = earnedAt + TOC_MOVE_MS;
-          const requestAt = creditAt + TOC_MOVE_MS;
+          const requestAt = earnedAt + TOC_MOVE_MS;
 
           timers.push(window.setTimeout(() => setStep(2), waitAt));
           timers.push(window.setTimeout(() => setStep(3), earnedAt));
-          timers.push(window.setTimeout(() => setStep(4), creditAt));
-          timers.push(window.setTimeout(() => setStep(5), requestAt));
+          timers.push(window.setTimeout(() => setStep(4), requestAt));
         });
       });
     });
@@ -126,9 +123,8 @@ export function BlindGap() {
       data-snap={snap ? "true" : undefined}
     >
       <p className="blind-gap-sr">
-        90-day wait, 14 days a year, earned monthly. Days earned stay at 0
-        through day 120, then step to about 1.2. A request for 5 days on day
-        91 is 5 days short.
+        90-day wait, 14 days a year, earned monthly. Days earned stay at 0.
+        A request for 5 days on day 91 is 5 days short.
       </p>
 
       <div className="blind-gap-inner">
@@ -141,7 +137,7 @@ export function BlindGap() {
             <span className="blind-gap-swatch" data-mark="earned" aria-hidden="true" />
             Earned
           </li>
-          <li data-shown={shown(frameStep, 5)}>
+          <li data-shown={shown(frameStep, 4)}>
             <span className="blind-gap-swatch" data-mark="requested" aria-hidden="true" />
             Requested
           </li>
@@ -160,19 +156,14 @@ export function BlindGap() {
             <span className="blind-gap-band-label">90-day wait</span>
           </div>
 
-          {/*
-            Earned days. Flat at 0 until day 120, then one step to about
-            1.2. That is 1.2 / 5 of the chart height.
-          */}
+          {/* Earned days. One straight stroke along 0. */}
           <div className="blind-gap-flat" data-shown={shown(frameStep, 3)} aria-hidden="true" />
-          <div className="blind-gap-rise" data-shown={shown(frameStep, 4)} aria-hidden="true" />
-          <div className="blind-gap-level" data-shown={shown(frameStep, 4)} aria-hidden="true" />
 
-          <div className="blind-gap-rose" data-shown={shown(frameStep, 5)} aria-hidden="true">
+          <div className="blind-gap-rose" data-shown={shown(frameStep, 4)} aria-hidden="true">
             <div className="blind-gap-rose-fill" />
           </div>
-          <span className="blind-gap-request" data-shown={shown(frameStep, 5)} aria-hidden="true" />
-          <p className="blind-gap-short" data-shown={shown(frameStep, 5)}>
+          <span className="blind-gap-request" data-shown={shown(frameStep, 4)} aria-hidden="true" />
+          <p className="blind-gap-short" data-shown={shown(frameStep, 4)}>
             5 days short
           </p>
 
