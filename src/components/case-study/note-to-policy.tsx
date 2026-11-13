@@ -5,7 +5,14 @@ import "./type-what-you-have.css";
 import "./only-what-you-said.css";
 import "./edit-one-line.css";
 import "./note-to-policy.css";
-import { TOC_HOLD_MS, TOC_STEP_MS } from "./toc-motion";
+import {
+  TOC_BEAT_MS,
+  TOC_CHAR_MS,
+  TOC_HOLD_MS,
+  TOC_PAUSE_MS,
+  TOC_PRESS_HOLD_MS,
+  TOC_STEP_MS,
+} from "./toc-motion";
 
 /**
  * Solution, first frame.
@@ -22,7 +29,8 @@ const FIELDS = [
   { label: "Yearly limit", value: "14 days" },
 ] as const;
 
-const BEATS = 6;
+const NOTE = "I need to create a PTO policy for sales teams, the yearly limit is 14 days.";
+const ANSWER = "Monthly";
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -34,6 +42,8 @@ export function NoteToPolicyVisual() {
   const [run, setRun] = useState(0);
   const [step, setStep] = useState(0);
   const [snap, setSnap] = useState(false);
+  const [typed, setTyped] = useState("");
+  const [pressed, setPressed] = useState(false);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -84,18 +94,51 @@ export function NoteToPolicyVisual() {
   useEffect(() => {
     if (!seen) return;
     if (prefersReducedMotion()) {
-      setStep(BEATS);
+      setStep(6);
+      setTyped("");
+      setPressed(false);
       return;
     }
     setSnap(true);
     setStep(0);
+    setTyped("");
+    setPressed(false);
     const release = window.requestAnimationFrame(() => setSnap(false));
-    const timers = Array.from({ length: BEATS }, (_, index) =>
-      window.setTimeout(() => setStep(index + 1), TOC_STEP_MS * (index + 1)),
-    );
-    timers.push(
-      window.setTimeout(() => setRun((value) => value + 1), TOC_STEP_MS * BEATS + TOC_HOLD_MS),
-    );
+    const timers: number[] = [];
+    const at = (ms: number, work: () => void) => {
+      timers.push(window.setTimeout(work, ms));
+    };
+    // Type a black-bubble line in the chat box, press send, then show the bubble.
+    const typeThenSend = (text: string, revealStep: number, start: number) => {
+      at(start, () => setTyped(""));
+      for (let index = 1; index <= text.length; index += 1) {
+        const count = index;
+        at(start + count * TOC_CHAR_MS, () => setTyped(text.slice(0, count)));
+      }
+      const sendAt = start + text.length * TOC_CHAR_MS + TOC_BEAT_MS;
+      at(sendAt, () => setPressed(true));
+      at(sendAt + TOC_PRESS_HOLD_MS, () => {
+        setPressed(false);
+        setTyped("");
+        setStep(revealStep);
+      });
+      return sendAt + TOC_PRESS_HOLD_MS;
+    };
+
+    let time = TOC_BEAT_MS;
+    time = typeThenSend(NOTE, 1, time);
+    time += TOC_STEP_MS;
+    at(time, () => setStep(2));
+    time += TOC_STEP_MS;
+    at(time, () => setStep(3));
+    time += TOC_PAUSE_MS;
+    time = typeThenSend(ANSWER, 4, time);
+    time += TOC_STEP_MS;
+    at(time, () => setStep(5));
+    time += TOC_STEP_MS;
+    at(time, () => setStep(6));
+    time += TOC_HOLD_MS;
+    at(time, () => setRun((value) => value + 1));
     return () => {
       window.cancelAnimationFrame(release);
       timers.forEach((timerId) => window.clearTimeout(timerId));
@@ -209,14 +252,17 @@ export function NoteToPolicyVisual() {
           </div>
 
           <div className="ntp-composer" aria-label="Message">
-            <p className="ntp-composer-hint">Ask about this policy</p>
+            <p className="ntp-composer-hint" data-typing={typed ? "true" : "false"}>
+              {typed || "Ask about this policy"}
+              {typed && !pressed ? <span className="ntp-caret" aria-hidden="true" /> : null}
+            </p>
             <div className="ntp-composer-bar">
               <span className="ntp-composer-plus" aria-hidden="true">
                 <svg viewBox="0 0 16 16" className="ntp-composer-icon">
                   <path d="M8 3.5v9M3.5 8h9" />
                 </svg>
               </span>
-              <span className="ntp-composer-send" aria-hidden="true">
+              <span className="ntp-composer-send" data-pressed={pressed ? "true" : "false"} aria-hidden="true">
                 <svg viewBox="0 0 16 16" className="ntp-composer-icon">
                   <path d="M8 12.5V3.8M8 3.8 4.6 7.2M8 3.8l3.4 3.4" />
                 </svg>

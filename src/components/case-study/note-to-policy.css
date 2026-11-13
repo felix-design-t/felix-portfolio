@@ -225,6 +225,36 @@
   color: var(--toc-text-secondary);
 }
 
+.ntp-composer-hint[data-typing="true"] {
+  color: var(--toc-text);
+}
+
+.ntp-caret {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  margin-left: 1px;
+  background: currentColor;
+  vertical-align: text-bottom;
+  animation: ntp-caret 1s steps(1, end) infinite;
+}
+
+@keyframes ntp-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.ntp-composer-send[data-pressed="true"] {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ntp-caret {
+    animation: none;
+  }
+}
+
 .ntp-composer-bar {
   display: flex;
   align-items: center;
