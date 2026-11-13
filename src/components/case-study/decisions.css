@@ -105,17 +105,42 @@
   padding: var(--toc-pad);
 }
 
-/* One step under the card title, so the count does not shout over the chart. */
+/*
+  History screen scale, the same four steps as the product, with air between them.
+  Title bar is meta. The report headline is the one title. The sentence under it,
+  the year labels, and the case names are meta. The example is the label step.
+  The conversation stays on the body step, one step under that headline.
+*/
+.dec-screen[data-screen="history"] .dec-thread,
+.dec-screen[data-screen="history"] .dec-result-body {
+  gap: 20px;
+  padding: 16px;
+}
+
+.dec-screen[data-screen="history"] .dec-composer {
+  gap: 12px;
+  padding: 12px 12px 10px;
+}
+
+.dec-screen[data-screen="history"] .dec-composer-hint,
+.dec-result .xp-card-meta,
+.dec-result .xp-year-axis,
+.dec-result .xp-legend {
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
+}
+
 .dec-result .xp-card-title {
-  font-size: var(--toc-body-size);
-  line-height: var(--toc-body-line);
+  font-size: var(--toc-title-size);
+  line-height: var(--toc-title-line);
 }
 
 /* The case names share one line. The list in Exploration 02 stays on the body step. */
 .dec-result .xp-group-row {
   gap: 6px;
-  font-size: 10px;
-  line-height: 13px;
+  min-height: 28px;
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
 }
 
 .dec-result .xp-group-count {
@@ -133,6 +158,8 @@
 
 .dec-result .xp-group-example {
   margin-inline: 0;
+  font-size: var(--toc-label-size);
+  line-height: var(--toc-label-line);
 }
 
 .dec-agent,
