@@ -121,7 +121,7 @@ export function ReplayLastYearVisual() {
       </div>
 
       <ExplorationNotes
-        gain="Real cases"
+        gain="Complete vision over database"
         cost="Needs history"
       />
     </div>
