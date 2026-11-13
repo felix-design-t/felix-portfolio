@@ -135,6 +135,11 @@
   line-height: var(--toc-body-line);
 }
 
+.dec-result .xp-legend {
+  font-size: var(--toc-label-size);
+  line-height: var(--toc-label-line);
+}
+
 /* The case names share one line. The list in Exploration 02 stays on the body step. */
 .dec-result .xp-group-row {
   gap: 6px;
