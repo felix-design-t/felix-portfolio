@@ -56,6 +56,7 @@ export function TryAScenarioVisual() {
             <p className="xp-result-line">
               Earned 1 day. Approved, balance{"\u00a0"}−4
             </p>
+            <span className="xp-result-dot" aria-hidden="true" />
           </div>
         </article>
       </div>
