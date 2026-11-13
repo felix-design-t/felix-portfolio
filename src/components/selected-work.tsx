@@ -18,7 +18,7 @@ export function SelectedWork({ projects }: SelectedWorkProps) {
       aria-labelledby="selected-work-heading"
     >
       <div className="section-heading">
-        <h2 id="selected-work-heading">Selected Work</h2>
+        <h2 id="selected-work-heading">Selected Works</h2>
       </div>
       <div className="selected-grid">
         {projects.map((project) => (

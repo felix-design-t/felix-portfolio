@@ -50,14 +50,22 @@ export function ExperiencePill() {
         <span suppressHydrationWarning>{label}</span>
       </button>
       <span id="experience-clock" className="experience-clock" role="tooltip">
-        {clockUnits.map((unit) => (
-          <span key={unit.key} className="experience-unit">
-            <span className="experience-card" suppressHydrationWarning>
-              {padTwoDigits(elapsed[unit.key])}
-            </span>
-            <span className="experience-unit-label">{unit.label}</span>
-          </span>
-        ))}
+        {clockUnits.map((unit) => {
+            const value = padTwoDigits(elapsed[unit.key]);
+            return (
+              <span
+                key={unit.key}
+                className="experience-unit"
+                aria-label={`${value} ${unit.label}`}
+                suppressHydrationWarning
+              >
+                <FlipCard value={value} />
+                <span className="experience-unit-label" aria-hidden="true">
+                  {unit.label}
+                </span>
+              </span>
+            );
+          })}
       </span>
     </span>
   );
@@ -122,6 +130,57 @@ function formatUnit(amount: number, word: string): string {
 
 function padTwoDigits(amount: number): string {
   return String(amount).padStart(2, "0");
+}
+
+/** Matches the CSS flap timing, so the old number leaves when the fold ends. */
+const flipDurationMs = 460;
+
+/**
+ * One black tile. Like a desk calendar: the top sheet hinges at the
+ * middle and falls onto the bottom, and the next number is underneath.
+ */
+function FlipCard({ value }: { value: string }) {
+  const [settled, setSettled] = useState(value);
+  const [isFlipping, setIsFlipping] = useState(false);
+
+  useEffect(() => {
+    if (value === settled) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setSettled(value);
+      return;
+    }
+
+    setIsFlipping(true);
+    const timerId = window.setTimeout(() => {
+      setSettled(value);
+      setIsFlipping(false);
+    }, flipDurationMs);
+    return () => window.clearTimeout(timerId);
+  }, [value, settled]);
+
+  const nextValue = isFlipping ? value : settled;
+
+  return (
+    <span className="experience-card" suppressHydrationWarning>
+      <span className="experience-face experience-face-top" aria-hidden="true">
+        <span suppressHydrationWarning>{nextValue}</span>
+      </span>
+      <span className="experience-face experience-face-bottom" aria-hidden="true">
+        <span suppressHydrationWarning>{settled}</span>
+      </span>
+      {isFlipping ? (
+        <>
+          <span className="experience-flap experience-flap-top" aria-hidden="true">
+            <span>{settled}</span>
+          </span>
+          <span className="experience-flap experience-flap-bottom" aria-hidden="true">
+            <span>{value}</span>
+          </span>
+        </>
+      ) : null}
+      <span className="experience-card-hinge" aria-hidden="true" />
+    </span>
+  );
 }
 
 function ExperienceIcon() {

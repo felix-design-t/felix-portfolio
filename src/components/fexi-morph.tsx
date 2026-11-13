@@ -4,7 +4,7 @@ import { Morph } from "loading-dev";
  * Fexi's mark: the loading.dev Morph shape, a square that rounds into a
  * circle and back while it turns.
  * Think of it like one component with two variants in Figma:
- * - "idle" is the calm loop in the hero pill, slow enough not to pull focus.
+ * - "idle" is the calm loop in the nav and the bio. Both places share this timing.
  * - "loader" is the library's own pace, for when the chat is thinking.
  * Color comes from --text-secondary through the .fexi-morph rule in globals.css.
  * The library turns the motion off when the visitor asks for reduced motion.
@@ -12,7 +12,7 @@ import { Morph } from "loading-dev";
 
 /** One full morph cycle, in milliseconds. 1200 is the library default. */
 export const fexiMorphDurationMs = {
-  idle: 3600,
+  idle: 2500,
   loader: 1200,
 } as const;
 

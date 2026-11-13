@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { GeistSerif } from "geist/font/serif";
+import { BackButton } from "@/components/back-button";
+import { OnlineStatus } from "@/components/online-status";
 import { DownloadButton } from "@/components/download-cv-button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -42,6 +44,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <SiteHeader />
         <main id="content" className="shell-inner">
+          <OnlineStatus />
+          <BackButton />
           <DownloadButton />
           {children}
         </main>

@@ -103,7 +103,7 @@ export function SiteHeaderBar({ clock }: { clock: ReactNode }) {
                 aria-current={isCurrent ? "page" : undefined}
               >
                 <TabIcon name={tab.id} />
-                {tab.label}
+                <TabLabel id={tab.id} label={tab.label} />
               </Link>
             );
           })}
@@ -155,6 +155,20 @@ function formatClock(date: Date): string {
     hour12: true,
   });
   return formatted.replace(/\s*[AP]M$/i, "");
+}
+
+/**
+ * “Ask” stays in the nav’s sans, like Home and Writing.
+ * “Fexi” is the agent’s name, so it uses the same mono as the bio.
+ */
+function TabLabel({ id, label }: { id: TabId; label: string }) {
+  if (id !== "about") return label;
+
+  return (
+    <span className="pill-tab-label">
+      Ask <span className="pill-fexi-name">Fexi</span>
+    </span>
+  );
 }
 
 function TabIcon({ name }: { name: TabId }) {

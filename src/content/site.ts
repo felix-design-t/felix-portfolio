@@ -31,14 +31,13 @@ export const siteCopy = {
   name: "Felix Teng",
   greeting: "Hi, I'm Felix.",
   description:
-    "A product designer through an engineering lens, with 3 years 9 months of experience building B2B SaaS products across startups and enterprises.",
+    "A product designer through an engineering lens, with 3 years 9 months of experience building B2B SaaS products across startups and enterprises. Most recently at Paycom.",
   positioningLine: "Product designer · 3 years 9 months · B2B SaaS",
 } as const;
 
-/** Footer bar, left to right. Swap the addresses when the real ones are ready. */
+/** Footer bar, left to right. */
 export const footerLinks = [
-  { label: "Email", href: "mailto:felix@felix.design" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/felix-teng" },
-  { label: "Github", href: "https://github.com/felix-design-t" },
-  { label: "CV", href: "/cv.pdf" },
+  { id: "email", label: "Email", href: "mailto:felixtdesign@gmail.com" },
+  { id: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/in/fangyi-teng/" },
+  { id: "github", label: "Github", href: "https://github.com/felix-design-t" },
 ] as const;

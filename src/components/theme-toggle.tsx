@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
 /**
  * One icon button in the status cluster, to the right of the clock.
  * Light on shows a sun. Light off shows a moon and darkens the page.
- * Hovering shows what the next click will do: "turn off" or "turn on".
+ * Hovering shows what the next click will do: "turn off the light" or "turn on the light".
  * The choice is remembered in this browser.
  */
 
@@ -26,7 +26,7 @@ export function ThemeToggle() {
   }, [theme]);
 
   const lightIsOn = theme === "light";
-  const caption = lightIsOn ? "turn off" : "turn on";
+  const caption = lightIsOn ? "turn off the light" : "turn on the light";
   const [captionHost, setCaptionHost] = useState<HTMLElement | null>(null);
 
   useEffect(() => {

@@ -5,7 +5,7 @@
   Prompt with: "Use the tokens in src/app/globals.css. Do not invent hex or font sizes."
 
   Roles
-  - --text on primary titles only (greeting, section headings)
+  - --text on the greeting. Section headings use --text-secondary
   - --text-secondary on hero body paragraphs, skill-pill labels, captions, footer
   - Accents (Craft *-600) only on small marks (skill icons) and quiet link hover. A filled accent pill uses --on-accent
   - Serif: greeting + section titles. Sans: body, captions, footer, pills. Mono: short labels
@@ -49,7 +49,7 @@
   --font-serif: var(--font-geist-serif), "Times New Roman", serif;
   --font-body: var(--font-geist-sans), sans-serif;
   --font-display: var(--font-serif);
-  --text-hero: 22px;
+  --text-hero: 20px;
   --leading-hero: 28px;
   --tracking-hero: -0.02em;
   --text-section: 16px;
@@ -69,8 +69,9 @@
   --space-6: 48px;
   --space-8: 64px;
   --space-16: 128px;
-  /* One reading column: Jinny-width content, side gutters */
-  --content-max: 680px;
+  /* Reading column. Grows with the window, never past 700px.
+     600px is the floor, 50vw is 50% of the window, 700px is the ceiling. */
+  --content-max: clamp(600px, 50vw, 700px);
   --gutter: 1.5rem; /* 24px */
   --gutter-sm: 2rem; /* 32px from sm / 640px */
   --page-width: var(--content-max);
@@ -81,9 +82,16 @@
   --icon-size: 16px;
   --icon-stroke: 1px;
 
+  /* Radius: covers/frames 8 · small UI 4 · pills full
+     Open nav corner is the tab pill plus its side gap and the border.
+     The experience timer uses that same corner. */
+  --radius-xs: 4px;
   --radius-sm: 8px;
-  --radius-md: 16px;
   --radius-pill: 999px;
+  --nav-inset: 4px;
+  --nav-tab-size: 28px;
+  --nav-highlight-radius: calc(var(--nav-tab-size) / 2);
+  --nav-radius: calc(var(--nav-highlight-radius) + var(--nav-inset) + 1px);
   --ease-out: cubic-bezier(0.2, 0, 0, 1);
 }
 
@@ -170,6 +178,7 @@ a {
 /* Shared column. Main + footer sit in this centered measure.
    Pill nav stays viewport-centered on its own and does not use this shell. */
 .shell-inner {
+  position: relative;
   width: min(100%, var(--content-max));
   margin-inline: auto;
   padding-inline: var(--gutter);
@@ -198,16 +207,205 @@ a {
 }
 
 /*
+  Who is here. Front page only, in the corner the back button uses
+  on every other page. The dot breathes so the count feels live.
+*/
+.online-status {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--gutter);
+  z-index: 45;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 38px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+@media (min-width: 640px) {
+  .online-status {
+    left: var(--gutter-sm);
+  }
+}
+
+.online-dot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  background: var(--text-secondary);
+  animation: online-breathe 2.8s ease-in-out infinite;
+}
+
+@keyframes online-breathe {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.72);
+  }
+}
+
+/* Download, and the back control that mirrors it on the left. */
+.corner-button {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--gutter);
+  z-index: 45;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-nav);
+  color: var(--text);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+@media (min-width: 640px) {
+  .corner-button {
+    right: var(--gutter-sm);
+  }
+}
+
+/* Same button, on the left edge of the reading column. */
+.corner-button-back {
+  right: auto;
+  left: var(--gutter);
+}
+
+@media (min-width: 640px) {
+  .corner-button-back {
+    left: var(--gutter-sm);
+  }
+}
+
+.corner-button:hover {
+  background: var(--fg-soft);
+}
+
+.corner-button:focus,
+.corner-button:focus-visible {
+  outline: none;
+}
+
+/* Caption chip shared by the CV label, the theme label, and toolkit names.
+   It fades in when the pointer is there.
+   The theme label is outside the pill, because the pill clips its contents. */
+.corner-button-caption,
+.theme-caption,
+.toolkit-label {
+  position: absolute;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  padding: var(--nav-inset);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  opacity: 0;
+  transition: opacity 150ms var(--ease-out);
+}
+
+.corner-button-caption {
+  top: calc(100% + 6px);
+  left: 50%;
+  translate: -50% 0;
+}
+
+/*
+  The chip is pinned to the sun or moon, not to the nav frame.
+  Closed, 4px of padding and the 1px border sit under the icon,
+  then the same 6px gap as the other captions.
+  Opening the menu grows the frame downward. The icon does not move,
+  so the chip stays in that same spot.
+*/
+.theme-toggle {
+  anchor-name: --theme-toggle;
+}
+
+.theme-caption {
+  position-anchor: --theme-toggle;
+  top: calc(anchor(bottom) + var(--nav-inset) + 1px + 6px);
+  left: anchor(center);
+  translate: -50% 0;
+  z-index: 1;
+}
+
+.corner-button:hover .corner-button-caption,
+.corner-button:focus-visible .corner-button-caption,
+.pill-nav:has(.theme-toggle:hover) .theme-caption,
+.pill-nav:has(.theme-toggle:focus-visible) .theme-caption,
+.toolkit-item:hover .toolkit-label,
+.toolkit-item:focus-visible .toolkit-label {
+  color: var(--text-secondary);
+  opacity: 1;
+}
+
+/*
+  Dark theme, from jakub.kr/skills.
+  The page is the neutral ground. Controls sit in a darker well,
+  then step up one shade when selected or hovered.
+  Text has three jobs: titles, paragraphs, and quiet labels.
+*/
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101010; /* page */
+  --surface: #0b0b0b; /* wells: nav, pills, toggles */
+  --mat: #191919; /* selected tab, pill hover, work plates */
+  --text: #eeeeee; /* titles and button labels */
+  --text-secondary: #b5b5b5; /* paragraphs, labels, section titles */
+  --muted: #b5b5b5; /* quiet labels: nav tabs, supporting lines */
+  --border: rgba(255, 255, 255, 0.08); /* resting hairline */
+  --border-strong: rgba(255, 255, 255, 0.13); /* hover hairline */
+  --fg-soft: #222222; /* icon and ghost hover */
+  --fg-mid: #252525;
+  --on-fg-soft: rgba(16, 16, 16, 0.35);
+  /* Depth stays dark. The white hairline lives on --border, not in the shadow. */
+  --shadow-nav: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --shadow-pop: 0 12px 28px rgba(0, 0, 0, 0.55);
+}
+
+html[data-theme="dark"] body {
+  /* Light mode paints a white wash at the top. Dark mode stays flat. */
+  background: var(--bg);
+}
+
+html[data-theme="dark"] body::before {
+  /* Multiply grain disappears on a dark page. Overlay keeps a faint texture. */
+  mix-blend-mode: overlay;
+  opacity: 0.08;
+}
+
+/*
   Floating pill.
   Fixed, so it hovers over the page and does not reserve a row in the layout.
   Clicks pass through the empty area around it.
   Closed, it is only the status cluster and reads as a full pill.
-  Open, the outer corner is the selected tab's radius plus the gap
-  between that highlight and the frame, so the two curves stay parallel.
+  Open, the frame corner follows the tab hover pill: the pill's radius
+  plus the gap and the border, so the two curves stay parallel.
 */
 .pill-nav {
   position: fixed;
-  top: 0.85rem;
+  top: var(--space-3);
   left: 50%;
   z-index: 45;
   width: max-content;
@@ -217,16 +415,13 @@ a {
 }
 
 .pill-nav-shell {
-  /* One inset. The selected tab sits this far inside the frame. */
-  --nav-inset: 0.35rem;
-  --nav-tab-size: 2.25rem;
-  --nav-highlight-radius: calc(var(--nav-tab-size) / 2);
-  --nav-radius: calc(var(--nav-highlight-radius) + var(--nav-inset) + 1px);
+  /* Inset and corner live on :root so the experience timer can share them. */
   display: flex;
   flex-direction: column;
   align-items: center;
   width: max-content;
   max-width: 100%;
+  /* Same 4px padding on every side, closed or open. */
   padding: var(--nav-inset);
   pointer-events: auto;
   overflow: hidden;
@@ -261,15 +456,22 @@ a {
   background: var(--bg);
   color: var(--fg);
   cursor: pointer;
+  transition: background-color 150ms var(--ease-out);
+}
+
+.pill-icon-button:hover {
+  background: var(--fg-soft);
 }
 
 .pill-clock {
   min-width: 3.25rem;
+  /* Caption size, in the title serif. */
   font-family: var(--font-display);
-  font-size: 0.95rem;
+  font-size: var(--text-caption);
+  line-height: 1;
   font-weight: 400;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
   text-align: center;
 }
 
@@ -336,13 +538,34 @@ a {
   padding-inline: 0.8rem;
   border-radius: var(--nav-highlight-radius);
   color: var(--muted);
-  font-size: var(--text-body);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
   line-height: 1;
   text-decoration: none;
   white-space: nowrap;
   transition:
     background-color 150ms var(--ease-out),
     color 150ms var(--ease-out);
+}
+
+/*
+  Fexi’s mark is drawn inside its 16px box, with empty space around the shape.
+  The house and pencil strokes sit closer to the left edge of that box, so the
+  same 0.8rem padding made Ask Fexi look farther from Writing. 2px less on the
+  start side lines the mark up with the other icons. The end padding stays put.
+*/
+.pill-tab:has(.fexi-morph) {
+  padding-inline-start: calc(0.8rem - 2px);
+}
+
+/* One flex item, so the tab gap stays between the mark and the words. */
+.pill-tab-label {
+  line-height: 1;
+}
+
+.pill-fexi-name {
+  font-family: var(--font-mono);
 }
 
 .pill-tab:hover {
@@ -377,12 +600,11 @@ a {
 }
 
 .hero {
-  /* The heading sits a short step below the open pill's bottom border.
-     Pill top 0.85rem, then its border, padding, status row, tab row, padding, border.
-     The space under the tray is shorter than a normal section gap, so a work card
-     can enter the first screen. */
-  padding-top: calc(0.85rem + 0.35rem + 2.25rem + 0.2rem + 2.25rem + 0.35rem + 2px + 2rem + 16px);
-  padding-bottom: clamp(1.5rem, 2.5vw, 2.25rem);
+  /* Closed pill: 24px from the top, then its border, padding, and status row.
+     The greeting starts 112px under that bottom border. */
+  padding-top: calc(var(--space-3) + var(--nav-inset) * 2 + 2px + var(--nav-tab-size) + 112px);
+  /* 112px of air before Selected Work. Toolkit uses this same gap. */
+  padding-bottom: 112px;
 }
 
 .hero-greeting {
@@ -396,8 +618,7 @@ a {
 }
 
 /*
-  One column: intro text first, toolkit tray stacked under it.
-  No side-by-side row at any breakpoint.
+  One column: the two paragraphs, then Selected Work, then the belt.
 */
 .hero-body {
   display: flex;
@@ -405,7 +626,6 @@ a {
   align-items: stretch;
   gap: var(--space-3);
   margin-top: var(--space-3);
-  container-type: inline-size;
 }
 
 .hero-copy {
@@ -424,27 +644,189 @@ a {
   text-wrap: pretty;
 }
 
-/*
-  The tray's plates use the page's paper, so the drawing sits on the
-  canvas instead of on a white card. The engine reads these names.
-*/
-.hero-figure {
-  /* Full column width under the intro. Height follows that width,
-     plus the name band above the tray and the line under it. */
-  --tray-w: 100%;
-  align-self: stretch;
-  width: var(--tray-w);
-  margin-top: var(--space-1);
-  height: calc(100cqi * 201.7 / 330.1 + 1.15rem + 2.25rem);
-  aspect-ratio: auto;
+/* A word inside the bio. At rest it is plain paragraph text.
+   Hover turns it to the primary ink, then draws a line from the left.
+   Leaving runs that backward: the line retreats, then the color returns. */
+/* One text-link hover, shared by the Paycom word, the footer, and .text-link.
+   At rest the word is plain. Hover turns it to the primary ink, then draws
+   a line from the left. Leaving runs that backward. */
+.hero-inline-link,
+.text-link {
+  position: relative;
+  text-decoration: none;
+  transition: color 180ms var(--ease-out) 280ms;
 }
 
-.hero-figure iframe {
+.hero-inline-link {
+  color: inherit;
+}
+
+.hero-inline-link::after,
+.footer-links a::after,
+.text-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.08em;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 280ms var(--ease-out);
+}
+
+.hero-inline-link:hover,
+.hero-inline-link:focus-visible,
+.footer-links a:hover,
+.footer-links a:focus-visible,
+.text-link:hover,
+.text-link:focus-visible {
+  color: var(--text);
+  transition-delay: 0ms;
+}
+
+.hero-inline-link:hover::after,
+.hero-inline-link:focus-visible::after,
+.footer-links a:hover::after,
+.footer-links a:focus-visible::after,
+.text-link:hover::after,
+.text-link:focus-visible::after {
+  transform: scaleX(1);
+  transition-delay: 180ms;
+}
+
+/*
+  Toolkit under Selected Work.
+  Caption sits under the logo cards. Each mark sits on a filled plate
+  so black and color logos both read on light paper and dark paper.
+  Hover lifts one plate and fades its name in as a chip above it.
+  A narrow column scrolls the row sideways.
+*/
+.toolkit {
+  /* Same 112px air as the gap between the hero and Selected Work. */
+  margin-top: 112px;
+  margin-bottom: 112px;
+}
+
+/* Title, description, and the logo row share one gap.
+   The shared section heading's own bottom margin would add a second gap. */
+.toolkit .toolkit-heading {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: 0;
+}
+
+.toolkit-caption {
+  margin: var(--space-1) 0 0;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
+}
+
+.toolkit-row {
+  /* Biggest a card gets. The row is this tall even at rest,
+     so a growing card never pushes the caption down. */
+  --toolkit-max: 1.42;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 -12px;
+  /* Top room holds the name chip, with a little air under the heading. */
+  padding: calc(var(--space-3) + var(--space-1)) 12px 16px;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.toolkit-slot {
+  /* Width comes from the card. The dock loop sets --scale per card. */
+  flex: none;
+  z-index: 0;
+}
+
+.toolkit-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* The button stays as tall as the biggest card.
+     The card inside grows and shrinks with --scale. */
+  width: calc(var(--toolkit-base, 48px) * var(--scale, 1));
+  height: calc(var(--toolkit-base, 48px) * var(--toolkit-max));
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.toolkit-item:focus-visible {
+  outline: none;
+}
+
+.toolkit-item:focus-visible .toolkit-card {
+  outline: 1.5px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Same caption chip as the CV label. It sits above the swollen plate. */
+.toolkit-label {
+  left: 50%;
+  bottom: calc(100% + 2px);
+  z-index: 2;
+  translate: -50% 0;
+}
+
+.toolkit-card {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  /* Square that follows the dock scale. The button around it stays tall. */
+  height: calc(var(--toolkit-base, 48px) * var(--scale, 1));
+  margin: 0;
+  /* Percentage padding, so the mark grows with the card. */
+  padding: 16%;
+  /* Plate fill and resting hairline, both from the color tokens. */
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--mat);
+  transition:
+    border-color 200ms var(--ease-out),
+    background-color 200ms var(--ease-out);
+}
+
+.toolkit-mark {
   display: block;
   width: 100%;
   height: 100%;
-  border: 0;
-  background: transparent;
+  object-fit: contain;
+}
+
+/* Black drawings become white. Near-black brand color keeps its hue. */
+html[data-theme="dark"] .toolkit-mark[data-ink="mono"] {
+  filter: invert(1);
+}
+
+html[data-theme="dark"] .toolkit-mark[data-ink="ink"] {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.toolkit-item:hover .toolkit-card,
+.toolkit-item:focus-visible .toolkit-card {
+  /* Hover hairline. Same token the skill pills use. */
+  border-color: var(--border-strong);
+}
+
+/* Dark hover steps up one shade. Light --fg-soft is a wash, not a plate. */
+html[data-theme="dark"] .toolkit-item:hover .toolkit-card,
+html[data-theme="dark"] .toolkit-item:focus-visible .toolkit-card {
+  background: var(--fg-soft);
 }
 
 /*
@@ -598,10 +980,12 @@ button.skill-pill {
   left: 50%;
   display: none;
   gap: 0.35rem;
-  padding: 0.55rem 0.55rem 0.4rem;
+  /* The cards sit against this inset. Their corner uses it below. */
+  --experience-pad: 0.55rem;
+  padding: var(--experience-pad) var(--experience-pad) 0.4rem;
   translate: -50% 0;
   border: 1px solid var(--hairline);
-  border-radius: var(--radius-md);
+  border-radius: var(--nav-radius);
   background: var(--surface);
   box-shadow: var(--shadow-pop);
 }
@@ -620,12 +1004,10 @@ button.skill-pill {
 
 .experience-card {
   position: relative;
-  display: grid;
-  place-items: center;
   width: 2.55rem;
   height: 2.3rem;
-  overflow: hidden;
-  border-radius: var(--radius-sm);
+  /* Nested corner: the timer's radius, stepped in by the padding and border. */
+  border-radius: max(0px, calc(var(--nav-radius) - var(--experience-pad) - 1px));
   background: var(--fg);
   color: var(--bg);
   font-size: 1.15rem;
@@ -633,23 +1015,90 @@ button.skill-pill {
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.04em;
   line-height: 1;
+  /* The flap swings in 3D. A flat overflow clip would squash that swing. */
+  perspective: 220px;
 }
 
-.experience-card::after {
-  content: "";
+.experience-face,
+.experience-flap {
   position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  background: var(--fg);
+}
+
+.experience-face-top,
+.experience-flap-top {
+  top: 0;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+
+.experience-face-bottom,
+.experience-flap-bottom {
+  bottom: 0;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+
+.experience-face span,
+.experience-flap span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  display: grid;
+  place-items: center;
+}
+
+.experience-face-bottom span,
+.experience-flap-bottom span {
+  top: -100%;
+}
+
+.experience-flap-top {
+  z-index: 3;
+  transform-origin: center bottom;
+  backface-visibility: hidden;
+  animation: experience-flip-down 460ms ease-in forwards;
+}
+
+.experience-flap-bottom {
+  z-index: 2;
+  transform-origin: center top;
+  backface-visibility: hidden;
+  animation: experience-flip-up 460ms ease-out forwards;
+}
+
+.experience-card-hinge {
+  position: absolute;
+  z-index: 4;
   right: 0;
   left: 0;
   top: 50%;
   height: 1px;
   background: var(--on-fg-soft);
+  pointer-events: none;
+}
+
+@keyframes experience-flip-down {
+  from { transform: rotateX(0deg); }
+  to { transform: rotateX(-90deg); }
+}
+
+@keyframes experience-flip-up {
+  0%,
+  49% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0deg); }
 }
 
 .experience-unit-label {
   color: var(--text-secondary);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--text-caption);
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0;
   line-height: var(--leading-caption);
   text-transform: uppercase;
@@ -659,6 +1108,7 @@ button.skill-pill {
   width: var(--icon-size);
   height: var(--icon-size);
   flex: none;
+  overflow: visible;
   fill: none;
   stroke: currentColor;
   stroke-width: var(--icon-stroke);
@@ -666,14 +1116,63 @@ button.skill-pill {
   stroke-linejoin: round;
 }
 
+/*
+  Hover motions. Each piece is its own shape, like a layer in Figma.
+  They repeat for as long as the pointer stays on the pill.
+  The bottom-left design-systems block stays put. Its top-left block
+  travels up, and its bottom-right block travels right.
+*/
+.skill-move,
+.skill-pill-icon[data-motion="systems"],
+.skill-pill-icon[data-motion="agentic"] {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.skill-move-n { --shift-x: 0px; --shift-y: -1.6px; }
+.skill-move-s { --shift-x: 0px; --shift-y: 1.6px; }
+.skill-move-w { --shift-x: -1.6px; --shift-y: 0px; }
+.skill-move-e { --shift-x: 1.6px; --shift-y: 0px; }
+.skill-move-nw { --shift-x: 0px; --shift-y: -1.4px; }
+.skill-move-ne { --shift-x: 1.4px; --shift-y: -1.4px; }
+.skill-move-sw { --shift-x: -1.4px; --shift-y: 1.4px; }
+.skill-move-se { --shift-x: 1.4px; --shift-y: 0px; }
+
+@keyframes skill-out-back {
+  0%,
+  100% { transform: none; }
+  50% { transform: translate(var(--shift-x), var(--shift-y)); }
+}
+
+@keyframes skill-flip {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+@keyframes skill-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Loop length is the speed. Longer means slower. These are 30% slower than the first pass. */
+.skill-pill:hover [data-motion="strategy"] .skill-move,
+.skill-pill:hover [data-motion="systems-design"] .skill-move:not(.skill-move-sw),
+.skill-pill:hover [data-motion="code"] .skill-move {
+  animation: skill-out-back 1352ms ease-in-out infinite;
+}
+
+.skill-pill:hover [data-motion="systems"] {
+  animation: skill-flip 1664ms var(--ease-out) infinite;
+}
+
+.skill-pill:hover [data-motion="agentic"] {
+  animation: skill-spin 3.64s linear infinite;
+}
+
 .text-link {
   display: inline-flex;
   align-items: center;
   gap: 0.28rem;
   font-size: var(--text-body);
-  text-underline-offset: 0.25em;
-  text-decoration-thickness: 1px;
-  transition: color 150ms var(--ease-out);
 }
 
 .text-link-icon {
@@ -688,16 +1187,10 @@ button.skill-pill {
   transition: translate 180ms var(--ease-out);
 }
 
-.text-link:hover,
-.text-link:focus-visible {
-  color: var(--accent-blue);
-}
-
 .selected-work {
-  /* Next block after the hero. The hero's own bottom padding is the gap;
-     the old 128px step pushed this section too far down the page. */
+  /* The hero's bottom padding is the gap above this section. */
   margin-top: 0;
-  padding-bottom: var(--space-section);
+  padding-bottom: 0;
   scroll-margin-top: var(--space-3);
 }
 
@@ -720,7 +1213,7 @@ button.skill-pill {
   font-weight: 400;
   letter-spacing: 0;
   line-height: var(--leading-section);
-  color: var(--text);
+  color: var(--text-secondary);
 }
 
 .section-heading .text-link {
@@ -729,7 +1222,7 @@ button.skill-pill {
 
 .section-heading .text-link:hover,
 .section-heading .text-link:focus-visible {
-  color: var(--accent-blue);
+  color: var(--text);
 }
 
 .section-heading .text-link:hover .text-link-icon {
@@ -753,16 +1246,17 @@ button.skill-pill {
 .work-slot-cover {
   display: block;
   aspect-ratio: 16 / 10;
-  /* Borderless, sharp plates — no radius, no stroke */
+  /* Borderless plates — Cambio 8px corners, no stroke */
   background: var(--mat);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
 }
 
 .work-slot-caption {
   margin: 0;
   font-family: var(--font-body);
-  font-size: var(--text-caption);
-  font-weight: 500;
+  /* Same size as the hero paragraphs, not the 12px caption. */
+  font-size: var(--text-body);
+  font-weight: 400;
   letter-spacing: 0;
   line-height: var(--leading-caption);
   color: var(--text);
@@ -842,7 +1336,6 @@ button.skill-pill {
 
 .site-footer {
   margin-top: auto;
-  border-top: 1px solid var(--hairline);
   scroll-margin-top: 1.5rem;
 }
 
@@ -851,21 +1344,18 @@ button.skill-pill {
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-2);
-  padding-block: var(--space-1) var(--space-2);
+  /* Hairline lives on the column, so it follows content-max like the text. */
+  border-top: 1px solid var(--hairline);
+  padding-block: 12px var(--space-2);
 }
 
-.footer-strip {
-  width: 6.9rem;
-  height: 32px;
-  flex: none;
-}
-
-.footer-strip iframe {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  background: transparent;
+.footer-credit {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-footer);
+  line-height: var(--leading-footer);
+  letter-spacing: 0;
+  color: var(--text-secondary);
 }
 
 .footer-links {
@@ -880,14 +1370,10 @@ button.skill-pill {
 }
 
 .footer-links a {
+  position: relative;
   color: var(--text-secondary);
   text-decoration: none;
-  transition: color 150ms var(--ease-out);
-}
-
-.footer-links a:hover,
-.footer-links a:focus-visible {
-  color: var(--accent-blue);
+  transition: color 180ms var(--ease-out) 280ms;
 }
 
 @media (min-width: 720px) {
@@ -917,11 +1403,36 @@ button.skill-pill {
   }
 
   .text-link,
+  .text-link::after,
   .text-link-icon,
+  .footer-links a,
+  .footer-links a::after,
+  .hero-inline-link,
+  .hero-inline-link::after,
   .skill-pill,
+  .toolkit-mark,
+  .toolkit-label,
+  .toolkit-card,
+  .toolkit-row,
   .pill-nav-shell,
   .pill-nav-tabs,
-  .pill-tab {
+  .pill-tab,
+  .corner-button-caption,
+  .theme-caption {
     transition: none;
+  }
+
+  .online-dot {
+    animation: none;
+  }
+
+  .experience-flap-top,
+  .experience-flap-bottom,
+  .skill-pill:hover [data-motion="strategy"] .skill-move,
+  .skill-pill:hover [data-motion="systems-design"] .skill-move:not(.skill-move-sw),
+  .skill-pill:hover [data-motion="code"] .skill-move,
+  .skill-pill:hover [data-motion="systems"],
+  .skill-pill:hover [data-motion="agentic"] {
+    animation: none;
   }
 }

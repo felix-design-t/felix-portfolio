@@ -1,5 +1,6 @@
 import { Hero } from "@/components/hero";
 import { SelectedWork } from "@/components/selected-work";
+import { Toolkit } from "@/components/toolkit";
 import { getSelectedProjects } from "@/content/projects";
 
 export default function HomePage() {
@@ -9,6 +10,7 @@ export default function HomePage() {
     <>
       <Hero />
       <SelectedWork projects={selectedProjects} />
+      <Toolkit />
     </>
   );
 }
