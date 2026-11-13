@@ -1,12 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  TOC_HOLD_MS,
-  TOC_MOVE_MS,
-  TOC_PAUSE_MS,
-  TOC_REST_MS,
-} from "./toc-motion";
+import { TOC_MOVE_MS, TOC_PAUSE_MS, TOC_REST_MS } from "./toc-motion";
 import "./blind-gap.css";
 
 /**
@@ -23,7 +18,7 @@ import "./blind-gap.css";
  *   5. Two outcomes, neither one chosen
  *   6. A payroll flag, 6 weeks later, when the admin finds out
  *
- * It rests, then starts again. Reduced motion shows that last frame.
+ * It plays once and stays on the last frame. Reduced motion shows that frame.
  */
 
 /** Last beat. Reduced motion jumps here and stays. */
@@ -48,7 +43,6 @@ export function BlindGap() {
   const [step, setStep] = useState(0);
   const [snap, setSnap] = useState(false);
   const [seen, setSeen] = useState(false);
-  const [run, setRun] = useState(0);
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
@@ -81,8 +75,7 @@ export function BlindGap() {
     const timers: number[] = [];
     let releaseFrame = 0;
     let startFrame = 0;
-    // Park every piece with no transition, so a loop restarts at day 0
-    // instead of playing the story backwards.
+    // Start from an empty chart, with no transition, then play forward once.
     const parkFrame = window.requestAnimationFrame(() => {
       setSnap(true);
       setStep(0);
@@ -98,14 +91,12 @@ export function BlindGap() {
           const requestAt = stepAt + TOC_MOVE_MS;
           const outcomesAt = requestAt + TOC_MOVE_MS;
           const foundAt = outcomesAt + TOC_MOVE_MS;
-          const loopAt = foundAt + TOC_MOVE_MS + TOC_HOLD_MS;
 
           timers.push(window.setTimeout(() => setStep(2), waitAt));
           timers.push(window.setTimeout(() => setStep(3), stepAt));
           timers.push(window.setTimeout(() => setStep(4), requestAt));
           timers.push(window.setTimeout(() => setStep(5), outcomesAt));
           timers.push(window.setTimeout(() => setStep(6), foundAt));
-          timers.push(window.setTimeout(() => setRun((value) => value + 1), loopAt));
         });
       });
     });
@@ -116,7 +107,7 @@ export function BlindGap() {
       window.cancelAnimationFrame(startFrame);
       timers.forEach((timerId) => window.clearTimeout(timerId));
     };
-  }, [seen, reduced, run]);
+  }, [seen, reduced]);
 
   // Reduced motion holds the finished chart. The playhead above is ignored.
   const frameStep = reduced ? LAST_STEP : step;
