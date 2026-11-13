@@ -56,7 +56,7 @@ export function TryAScenarioVisual() {
           <div className="xp-result">
             <span className="toc-label">Result</span>
             <p className="xp-result-line">
-              <span className="xp-mark">Earned 1 day.</span> Approved, balance −4
+              <span className="xp-mark">Earned 1 day.</span> Approved, balance{"\u00a0"}−4
             </p>
           </div>
         </article>
