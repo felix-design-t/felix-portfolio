@@ -102,7 +102,9 @@
 }
 
 .ntp-thread .ofs-chip {
-  width: auto;
+  box-sizing: border-box;
+  width: 73px;
+  min-width: 73px;
   min-height: 0;
   padding: 6px 8px;
 }
