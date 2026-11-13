@@ -182,7 +182,7 @@ function MayaScenario() {
 
       <nav className="dec-rail" aria-label="Scenarios already tested">
         <header className="dec-titlebar">
-          <p className="dec-titlebar-name">Scenarios</p>
+          <p className="dec-titlebar-name">Tested Scenarios</p>
         </header>
         <ul className="dec-scenario-list">
           {SCENARIOS.map((name) => {
