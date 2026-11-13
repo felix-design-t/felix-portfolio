@@ -548,6 +548,10 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
+.dec-solved {
+  color: var(--toc-mark);
+}
+
 .dec-warning {
   display: flex;
   align-items: flex-start;
