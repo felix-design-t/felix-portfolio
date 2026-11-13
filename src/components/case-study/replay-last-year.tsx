@@ -122,7 +122,7 @@ export function ReplayLastYearVisual() {
 
       <ExplorationNotes
         gain="Complete vision over database"
-        cost="Needs history"
+        cost="Future pattern might be unpredictable"
       />
     </div>
   );
