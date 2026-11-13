@@ -60,9 +60,11 @@ export function NoteToPolicyVisual() {
     const match = () => {
       const height = `${decision.offsetHeight}px`;
       frame.style.height = height;
+      frame.style.overflowAnchor = "none";
       if (placeholder instanceof HTMLElement) {
         placeholder.style.height = height;
         placeholder.style.aspectRatio = "auto";
+        placeholder.style.overflowAnchor = "none";
       }
     };
     match();
@@ -71,9 +73,11 @@ export function NoteToPolicyVisual() {
     return () => {
       observer.disconnect();
       frame.style.height = "";
+      frame.style.overflowAnchor = "";
       if (placeholder instanceof HTMLElement) {
         placeholder.style.height = "";
         placeholder.style.aspectRatio = "";
+        placeholder.style.overflowAnchor = "";
       }
     };
   }, []);
