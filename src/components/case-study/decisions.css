@@ -76,6 +76,13 @@
   color: var(--toc-text);
 }
 
+.dec-titlebar-lead {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
 .dec-titlebar-actions {
   display: flex;
   flex: none;
