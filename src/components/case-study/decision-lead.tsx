@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import "./type-what-you-have.css";
 import "./exploration.css";
 import "./decisions.css";
@@ -52,10 +53,30 @@ function HistoricalCheck() {
           </span>
         </div>
 
-        <p className="dec-agent">
-          <span className="toc-sr">Agent. </span>
-          Setup is finished. Check this policy against last year&rsquo;s requests?
-        </p>
+        <div className="dec-agent-message">
+          <p className="dec-agent">
+            <span className="toc-sr">Agent. </span>
+            Setup is finished. Check this policy against last year&rsquo;s requests?
+          </p>
+          <div className="dec-actions" aria-label="Message actions">
+            <span className="dec-action">
+              <CopyIcon />
+              <span className="toc-sr">Copy</span>
+            </span>
+            <span className="dec-action">
+              <ThumbUpIcon />
+              <span className="toc-sr">Good</span>
+            </span>
+            <span className="dec-action">
+              <ThumbDownIcon />
+              <span className="toc-sr">Bad</span>
+            </span>
+            <span className="dec-action">
+              <RetryIcon />
+              <span className="toc-sr">Try again</span>
+            </span>
+          </div>
+        </div>
 
         <p className="dec-admin">Yes</p>
 
@@ -171,5 +192,53 @@ function MayaScenario() {
         </ul>
       </nav>
     </div>
+  );
+}
+
+/**
+ * Message actions, drawn on the site's 16px icon grid.
+ * Stroke weight comes from --icon-stroke, the same token as the nav icons.
+ */
+function ActionIcon({ children }: { children: ReactNode }) {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className="dec-action-icon">
+      {children}
+    </svg>
+  );
+}
+
+function CopyIcon() {
+  return (
+    <ActionIcon>
+      <path d="M6 6.25h6.25V12.5H6z" />
+      <path d="M3.75 9.75V4.25c0-.28.22-.5.5-.5H9.5" />
+    </ActionIcon>
+  );
+}
+
+function ThumbUpIcon() {
+  return (
+    <ActionIcon>
+      <path d="M6.25 7.25 8 3.75c.35-.7 1.4-.45 1.4.4V7.1h2.35c.65 0 1.15.58 1.05 1.22l-.65 3.05c-.1.48-.52.88-1.01.88H6.25" />
+      <path d="M3.5 7.25h2.75V12.25H3.5z" />
+    </ActionIcon>
+  );
+}
+
+function ThumbDownIcon() {
+  return (
+    <ActionIcon>
+      <path d="M6.25 8.75 8 12.25c.35.7 1.4.45 1.4-.4V8.9h2.35c.65 0 1.15-.58 1.05-1.22l-.65-3.05c-.1-.48-.52-.88-1.01-.88H6.25" />
+      <path d="M3.5 8.75h2.75V3.75H3.5z" />
+    </ActionIcon>
+  );
+}
+
+function RetryIcon() {
+  return (
+    <ActionIcon>
+      <path d="M13 8.25a5 5 0 1 1-1.46-3.54" />
+      <path d="M11.4 2.4v3.1H8.3" />
+    </ActionIcon>
   );
 }

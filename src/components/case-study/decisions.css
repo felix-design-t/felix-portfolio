@@ -73,6 +73,37 @@
   text-wrap: pretty;
 }
 
+.dec-agent-message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.dec-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--toc-text-secondary);
+}
+
+.dec-action {
+  display: grid;
+  width: 14px;
+  height: 14px;
+  place-items: center;
+}
+
+.dec-action-icon {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--icon-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .dec-agent-block {
   display: flex;
   flex-direction: column;
