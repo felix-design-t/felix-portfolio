@@ -137,19 +137,17 @@ function MayaScenario() {
           How will this policy handle Maya? She asked for 3 days on day 105. She has earned 1.
         </p>
 
-        <div className="dec-agent-block">
-          <p className="toc-label">Agent</p>
+        <div className="dec-agent-message">
           <p className="dec-agent">
+            <span className="toc-sr">Agent. </span>
             She is 2 days short. The policy doesn&rsquo;t say what to do.
           </p>
-          <p className="dec-agent dec-ask">Is this ok?</p>
+          <p className="dec-agent">Is this ok?</p>
         </div>
 
         <p className="dec-admin">No</p>
 
-        <div className="dec-agent-block">
-          <p className="toc-label">Agent</p>
-          <div className="dec-options" aria-label="Ways to handle Maya">
+        <div className="dec-options" aria-label="Ways to handle Maya">
             <ul className="xp-choices">
               {CHOICES.map((choice) => {
                 const isChosen = choice === CHOSEN;
@@ -180,11 +178,12 @@ function MayaScenario() {
               <span className="xp-solid">Confirm</span>
             </div>
           </div>
-        </div>
       </section>
 
       <nav className="dec-rail" aria-label="Scenarios already tested">
-        <p className="toc-label">Scenarios</p>
+        <header className="dec-titlebar">
+          <p className="dec-titlebar-name">Scenarios</p>
+        </header>
         <ul className="dec-scenario-list">
           {SCENARIOS.map((name) => {
             const isCurrent = name === CURRENT_SCENARIO;

@@ -112,6 +112,7 @@
   The example is the label step. The conversation is the body step too.
 */
 .dec-screen[data-screen="history"] .dec-thread,
+.dec-screen[data-screen="scenario"] .dec-thread,
 .dec-screen[data-screen="history"] .dec-result-body {
   gap: 20px;
   padding: 16px;
@@ -390,9 +391,15 @@
   background: var(--toc-surface);
 }
 
-.dec-rail {
-  gap: 8px;
+.dec-screen[data-screen="scenario"] .dec-rail {
+  padding: 0;
+  gap: 0;
   background: var(--toc-raised);
+}
+
+.dec-screen[data-screen="scenario"] .dec-scenario-list {
+  padding: 8px;
+  gap: 4px;
 }
 
 .dec-scenario-list {
