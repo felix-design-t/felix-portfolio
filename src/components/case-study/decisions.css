@@ -107,9 +107,9 @@
 
 /*
   History screen scale, the same four steps as the product, with air between them.
-  Title bar is meta. The report headline is the one title. The sentence under it,
-  the year labels, and the case names are meta. The example is the label step.
-  The conversation stays on the body step, one step under that headline.
+  Title bar, the line under the count, the year labels, and the case names are meta.
+  The count itself is the body step, one step above that line, and still medium weight.
+  The example is the label step. The conversation is the body step too.
 */
 .dec-screen[data-screen="history"] .dec-thread,
 .dec-screen[data-screen="history"] .dec-result-body {
@@ -131,8 +131,8 @@
 }
 
 .dec-result .xp-card-title {
-  font-size: var(--toc-title-size);
-  line-height: var(--toc-title-line);
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
 }
 
 /* The case names share one line. The list in Exploration 02 stays on the body step. */
