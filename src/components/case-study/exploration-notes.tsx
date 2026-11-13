@@ -34,8 +34,8 @@ const MOMENTS: { id: IdeaMoment; label: string }[] = [
 export function ExplorationNotes({ gain, cost, source, moment }: ExplorationNotesProps) {
   return (
     <div className="xp-notes">
-      <Note title="Gains" line={gain} />
-      <Note title="Costs" line={cost} />
+      <Note title="Gain" line={gain} />
+      <Note title="Cost" line={cost} />
       {source && moment ? <WhereItSits source={source} moment={moment} /> : null}
     </div>
   );
