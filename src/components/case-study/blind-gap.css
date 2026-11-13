@@ -90,8 +90,9 @@
 .blind-gap-swatch {
   display: block;
   flex: none;
-  width: 14px;
-  height: 2px;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-pill);
 }
 
 .blind-gap-swatch[data-mark="accrued"] {
@@ -99,9 +100,6 @@
 }
 
 .blind-gap-swatch[data-mark="earned"] {
-  width: 5px;
-  height: 5px;
-  border-radius: var(--radius-pill);
   background: var(--accent-rose);
 }
 
