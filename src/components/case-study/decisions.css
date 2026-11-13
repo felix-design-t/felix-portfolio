@@ -1,0 +1,178 @@
+/*
+  Decisions.
+
+  Product screens only, on the same tokens as the exploration cards.
+  No shadow, gradient, or blur. Static.
+
+  Decision 01 is one window split like a chat beside the thing it is
+  about: the thread on the left, the case on the right. A narrow frame
+  stacks them, thread first.
+*/
+
+.dec-lead,
+.dec-doc-product {
+  container-type: inline-size;
+  aspect-ratio: auto;
+  height: auto;
+  justify-content: center;
+}
+
+.dec-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--toc-line);
+  border-radius: 16px;
+  background: var(--toc-surface);
+}
+
+.dec-thread,
+.dec-case {
+  display: flex;
+  flex-direction: column;
+  gap: var(--toc-gap);
+  min-width: 0;
+  box-sizing: border-box;
+  padding: var(--toc-pad);
+}
+
+.dec-thread {
+  border-right: 1px solid var(--toc-line);
+}
+
+.dec-ask,
+.dec-admin,
+.dec-case-line {
+  margin: 0;
+}
+
+.dec-ask,
+.dec-admin,
+.dec-case-line {
+  font-family: var(--font-body);
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
+}
+
+.dec-ask {
+  color: var(--toc-text);
+  text-wrap: pretty;
+}
+
+/* The admin's reply is the one inverted layer, held to their side of the thread. */
+.dec-admin {
+  align-self: flex-end;
+  max-width: 92%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--toc-user);
+  color: var(--toc-user-text);
+  text-wrap: pretty;
+}
+
+.dec-gate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: var(--toc-gap);
+  border-top: 1px solid var(--toc-line);
+}
+
+.dec-example {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--toc-raised);
+  font-family: var(--font-body);
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
+  color: var(--toc-text);
+}
+
+/* Decision 02: one policy document. */
+
+.dec-doc {
+  width: 100%;
+}
+
+.dec-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dec-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dec-row {
+  display: grid;
+  grid-template-columns: 7.25rem minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+  margin: 0;
+  padding: 6px 0;
+  border-top: 1px solid var(--toc-line);
+}
+
+.dec-row:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.dec-row dt,
+.dec-row dd {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
+}
+
+.dec-row dt {
+  color: var(--toc-text-secondary);
+}
+
+.dec-row dd {
+  min-width: 0;
+  color: var(--toc-text);
+}
+
+.dec-row:has(.dec-warning) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.dec-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.dec-warning::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin-top: 7px;
+  border-radius: 9999px;
+  background: var(--accent-rose);
+  align-self: flex-start;
+}
+
+@container (max-width: 460px) {
+  .dec-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dec-thread {
+    border-right: none;
+    border-bottom: 1px solid var(--toc-line);
+  }
+}

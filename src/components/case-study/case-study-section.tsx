@@ -11,6 +11,8 @@ type CaseStudySectionProps = {
   closingVisual?: ReactNode;
   /** Built visuals for `section.ideas`, matched by position. */
   ideaVisuals?: ReactNode[];
+  /** A built visual for the follow-up frame. */
+  followUpVisual?: ReactNode;
 };
 
 /**
@@ -23,6 +25,7 @@ export function CaseStudySection({
   visualControls,
   closingVisual,
   ideaVisuals = [],
+  followUpVisual,
 }: CaseStudySectionProps) {
   const headingId = `${section.id}-title`;
 
@@ -111,7 +114,9 @@ export function CaseStudySection({
               name={section.followUp.visual.name}
               caption={section.followUp.visual.caption}
               aspectRatio={section.followUp.visual.aspectRatio}
-            />
+            >
+              {followUpVisual}
+            </CaseStudyFrame>
           ) : null}
           {section.followUp.visual && section.tradeoffs ? (
             <TradeoffFrame note={section.followUp.tradeoffNote} />

@@ -13,6 +13,8 @@ type CaseStudyPageProps = {
   closingVisuals?: Partial<Record<string, ReactNode>>;
   /** Built visuals for a section's idea frames, by section id, in idea order. */
   ideaVisuals?: Partial<Record<string, ReactNode[]>>;
+  /** Built visuals for a section's follow-up frame, by section id. */
+  followUpVisuals?: Partial<Record<string, ReactNode>>;
   cover?: ReactNode;
 };
 
@@ -26,6 +28,7 @@ export function CaseStudyPage({
   visuals = {},
   closingVisuals = {},
   ideaVisuals = {},
+  followUpVisuals = {},
   cover,
 }: CaseStudyPageProps) {
   const topId = "case-study-top";
@@ -63,6 +66,7 @@ export function CaseStudyPage({
               visual={visuals[section.id]}
               closingVisual={closingVisuals[section.id]}
               ideaVisuals={ideaVisuals[section.id]}
+              followUpVisual={followUpVisuals[section.id]}
             />
           ))}
         </div>
