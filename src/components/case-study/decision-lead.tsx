@@ -19,7 +19,7 @@ import { LastYearReport } from "./replay-last-year";
  * Static. Nothing here plays. Say policy, never rule.
  */
 
-const CHOICES = ["Approve, balance −4", "Approve 1, 4 unpaid", "Deny with a reason"];
+const CHOICES = ["Approve, balance −1", "Approve 1, 4 unpaid", "Deny with a reason"];
 const CHOSEN = "Approve 1, 4 unpaid";
 
 const SCENARIOS = [
