@@ -66,8 +66,8 @@
 
 .xp-flag-dot {
   flex: none;
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 9999px;
   background: var(--accent-rose);
 }
@@ -182,8 +182,8 @@
 /* The failed outcome, in front of the Result label. Same rose dot as the changed requests in idea 2. */
 .xp-result-dot {
   flex: none;
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   margin-right: -4px;
   border-radius: 9999px;
   background: var(--accent-rose);
