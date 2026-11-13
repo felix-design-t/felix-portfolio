@@ -91,10 +91,12 @@ export const timeOffCopilot: CaseStudy = {
     {
       id: "where-it-could-go-wrong",
       kind: "Exploration",
-      title: "Test your own scenarios",
-      body: "The admin gets a space to name scenarios and test them. They decide which cases matter. They confirm and apply only when the results look right. The agent never publishes.",
+      title: "Admins get a warning the moment a request goes wrong",
+      body: "When a time-off request hits a case the policy doesn't cover, the agent warns the admin and asks what to do. It doesn't wait for payroll or employee records to flag the error weeks later.",
       ideas: [
         {
+          title: "Test your own scenarios",
+          body: "The admin gets a space to name scenarios and test them. They decide which cases matter. They confirm and apply only when the results look right. The agent never publishes.",
           name: "Try a scenario",
           caption: "Try a scenario",
           aspectRatio: "16 / 10",
@@ -107,8 +109,6 @@ export const timeOffCopilot: CaseStudy = {
           aspectRatio: "16 / 10",
         },
         {
-          title: "Admins get a warning the moment a request goes wrong",
-          body: "When a time-off request hits a case the policy doesn't cover, the agent warns the admin and asks what to do. It doesn't wait for payroll or employee records to flag the error weeks later.",
           name: "Ask instead of deciding",
           caption: "Ask instead of deciding",
           aspectRatio: "16 / 10",
