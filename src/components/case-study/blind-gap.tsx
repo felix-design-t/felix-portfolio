@@ -29,16 +29,15 @@ const SCALE = 5;
 /** One month of a 14-day year. Added as a step, not spread along the slope. */
 const PER_MONTH = 14 / 12;
 
-const X_TICKS = [30, 60, 90, 120];
+const X_TICKS = [30, 60, 90, 115, 120];
 const Y_TICKS = [0, 1, 2, 3, 4, 5];
 
 /** Days the balance rises. Accrued starts on day 30. Earned starts on day 90. */
 const ACCRUED_RISES = [30, 60, 90, 120];
 const EARNED_RISES = [90, 120];
-/** A request on day 100, after earned has finished its first rise. */
-const REQUEST_DAY = 100;
+/** A request on day 115. The dot is at 2 days. */
+const REQUEST_DAY = 115;
 const REQUEST_AT = 2;
-const EARNED_ON_REQUEST = PER_MONTH;
 /**
  * Days each rise takes. Long enough to feel like a slope,
  * short enough that a flat stretch remains between months.
@@ -112,6 +111,24 @@ function stepArea(points: string): string {
 
 const accruedLine = stepPoints(ACCRUED_RISES, true);
 const earnedLine = stepPoints(EARNED_RISES, false);
+
+/** Balance on a series at one day, using the same ramps as the drawn line. */
+function balanceAt(riseDays: number[], day: number): number {
+  const half = RAMP_DAYS / 2;
+  let value = 0;
+  for (const rise of riseDays) {
+    const start = rise - half;
+    if (day <= start) return value;
+    const end = Math.min(AXIS_DAYS, rise + half);
+    if (day < end) {
+      return value + PER_MONTH * smoothRise((day - start) / RAMP_DAYS);
+    }
+    value += PER_MONTH;
+  }
+  return value;
+}
+
+const earnedOnRequest = balanceAt(EARNED_RISES, REQUEST_DAY);
 
 export function BlindGap() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -239,16 +256,29 @@ export function BlindGap() {
             style={{
               left: dayLeft(REQUEST_DAY),
               top: `calc(var(--plot-top) + (100% - var(--plot-top) - var(--plot-bottom)) * ${(SCALE - REQUEST_AT) / SCALE})`,
-              height: `calc((100% - var(--plot-top) - var(--plot-bottom)) * ${(REQUEST_AT - EARNED_ON_REQUEST) / SCALE})`,
+              height: `calc((100% - var(--plot-top) - var(--plot-bottom)) * ${REQUEST_AT / SCALE})`,
             }}
             aria-hidden="true"
           >
+            <span
+              className="blind-gap-request-dash"
+              style={{ height: `${((REQUEST_AT - earnedOnRequest) / REQUEST_AT) * 100}%` }}
+            />
+            <span
+              className="blind-gap-request-solid"
+              style={{ height: `${(earnedOnRequest / REQUEST_AT) * 100}%` }}
+            />
             <span className="blind-gap-request-dot" />
           </span>
 
           <div className="blind-gap-axis" aria-hidden="true">
             {X_TICKS.map((tick) => (
-              <span key={tick} className="blind-gap-tick" style={{ left: dayLeft(tick) }}>
+              <span
+                key={tick}
+                className="blind-gap-tick"
+                data-day={tick === 115 ? "115" : undefined}
+                style={{ left: dayLeft(tick) }}
+              >
                 {tick}
               </span>
             ))}
