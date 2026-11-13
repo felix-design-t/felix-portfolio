@@ -20,7 +20,7 @@ export function AskInsteadVisual() {
             <header className="xp-card-head">
               <span className="toc-label">Ask</span>
               <p className="xp-ask-question">
-                Maya asked for 5 days on day 91. She has earned 1. The policy
+                Maya asked for 3 days on day 105. She has earned 1. The policy
                 doesn&rsquo;t say what to do.
               </p>
             </header>
