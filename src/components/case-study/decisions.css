@@ -380,15 +380,51 @@
   color: var(--toc-text);
 }
 
-/* The choices from "Test your own scenarios," sitting in the thread. */
+/* The choices from "Test your own scenarios," sitting in the thread.
+   Type is the meta step, one under the conversation. The controls shrink with it. */
 .dec-options {
   display: flex;
   flex-direction: column;
-  gap: var(--toc-gap);
-  padding: 8px 10px;
+  gap: 8px;
+  padding: 6px 8px;
   border: 1px solid var(--toc-line);
   border-radius: 12px;
   background: var(--toc-surface);
+}
+
+.dec-options .xp-choice,
+.dec-options .xp-check {
+  gap: 8px;
+  min-height: 22px;
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
+}
+
+.dec-options .xp-radio {
+  width: 12px;
+  height: 12px;
+}
+
+.dec-options .xp-choice[data-chosen="true"] .xp-radio {
+  border-width: 3px;
+}
+
+.dec-options .xp-checkbox {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.dec-options .xp-checkbox svg {
+  width: 10px;
+  height: 10px;
+}
+
+.dec-options .xp-solid {
+  height: 24px;
+  padding: 0 8px;
+  font-size: var(--toc-label-size);
+  line-height: var(--toc-label-line);
 }
 
 .dec-screen[data-screen="scenario"] .dec-rail {
