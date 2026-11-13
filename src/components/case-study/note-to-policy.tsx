@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./type-what-you-have.css";
 import "./only-what-you-said.css";
 import "./edit-one-line.css";
 import "./note-to-policy.css";
+import { TOC_HOLD_MS, TOC_STEP_MS } from "./toc-motion";
 
 /**
  * Solution, first frame.
@@ -21,30 +22,79 @@ const FIELDS = [
   { label: "Yearly limit", value: "14 days" },
 ] as const;
 
+const BEATS = 6;
+
+function prefersReducedMotion(): boolean {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export function NoteToPolicyVisual() {
   const rootRef = useRef<HTMLDivElement>(null);
+  const [seen, setSeen] = useState(false);
+  const [run, setRun] = useState(0);
+  const [step, setStep] = useState(0);
 
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
+    const frame = root.closest(".case-study-frame");
     const figure = root.closest("figure");
     const placeholder = figure?.nextElementSibling?.querySelector(".case-study-frame");
-    if (!figure || !(placeholder instanceof HTMLElement)) return;
+    const decision = document
+      .querySelector("[data-visual='maya-scenario']")
+      ?.closest(".case-study-frame");
+    if (!(frame instanceof HTMLElement) || !(decision instanceof HTMLElement)) return;
 
-    // The empty frame under this one stays the same height as the screen.
+    // Both solution frames stay the same size as the Decisions screen.
     const match = () => {
-      placeholder.style.height = `${figure.offsetHeight}px`;
-      placeholder.style.aspectRatio = "auto";
+      const height = `${decision.offsetHeight}px`;
+      frame.style.height = height;
+      if (placeholder instanceof HTMLElement) {
+        placeholder.style.height = height;
+        placeholder.style.aspectRatio = "auto";
+      }
     };
     match();
     const observer = new ResizeObserver(match);
-    observer.observe(figure);
+    observer.observe(decision);
     return () => {
       observer.disconnect();
-      placeholder.style.height = "";
-      placeholder.style.aspectRatio = "";
+      frame.style.height = "";
+      if (placeholder instanceof HTMLElement) {
+        placeholder.style.height = "";
+        placeholder.style.aspectRatio = "";
+      }
     };
   }, []);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) setSeen(true);
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!seen) return;
+    if (prefersReducedMotion()) {
+      setStep(BEATS);
+      return;
+    }
+    setStep(0);
+    const timers = Array.from({ length: BEATS }, (_, index) =>
+      window.setTimeout(() => setStep(index + 1), TOC_STEP_MS * (index + 1)),
+    );
+    timers.push(
+      window.setTimeout(() => setRun((value) => value + 1), TOC_STEP_MS * BEATS + TOC_HOLD_MS),
+    );
+    return () => timers.forEach((timerId) => window.clearTimeout(timerId));
+  }, [seen, run]);
 
   return (
     <div
@@ -55,7 +105,9 @@ export function NoteToPolicyVisual() {
     >
       <div className="ntp-window">
         <div className="ntp-thread">
-          <article className="ofs-bubble ofs-message" data-state="current" aria-label="Your request">
+          <div className="ntp-feed">
+          {step > 0 ? (
+          <article className="ofs-bubble ofs-message ntp-pop" data-state="current" aria-label="Your request">
             <p className="ofs-request">
               I need to create a <span className="ofs-phrase">PTO</span> policy for{" "}
               <span className="ofs-phrase">sales</span> teams, the{" "}
@@ -63,8 +115,10 @@ export function NoteToPolicyVisual() {
               <span className="ofs-phrase">14 days</span>.
             </p>
           </article>
+          ) : null}
 
-          <article className="ofs-card ofs-message" data-state="current" aria-label="Agent: what I got">
+          {step > 1 ? (
+          <article className="ofs-card ofs-message ntp-pop" data-state="current" aria-label="Agent: what I got">
             <p className="ofs-lead">Here&apos;s what I got from your request</p>
             <ul className="ofs-chips">
               {FIELDS.map((field) => (
@@ -77,8 +131,10 @@ export function NoteToPolicyVisual() {
               ))}
             </ul>
           </article>
+          ) : null}
 
-          <article className="ofs-card ofs-message" data-state="current" aria-label="Agent: accrual question">
+          {step > 2 ? (
+          <article className="ofs-card ofs-message ntp-pop" data-state="current" aria-label="Agent: accrual question">
             <p className="ofs-lead">I didn&apos;t see accrual. How should it work?</p>
             <div className="ofs-resolve ofs-resolve-ask">
               <div className="ofs-resolve-side ofs-options" role="group" aria-label="Accrual">
@@ -94,20 +150,26 @@ export function NoteToPolicyVisual() {
               </div>
             </div>
           </article>
+          ) : null}
 
-          <article className="ofs-bubble ofs-message" data-state="current" aria-label="Your answer">
+          {step > 3 ? (
+          <article className="ofs-bubble ofs-message ntp-pop" data-state="current" aria-label="Your answer">
             <p className="ofs-request">Monthly</p>
           </article>
+          ) : null}
 
-          <article className="ofs-card ofs-message" data-state="current" aria-label="Agent: ready">
+          {step > 4 ? (
+          <article className="ofs-card ofs-message ntp-pop" data-state="current" aria-label="Agent: ready">
             <p className="ofs-lead">Got it.</p>
             <div className="ofs-chip ofs-chip-static" data-shown="true">
               <span className="ofs-chip-label">Accrual</span>
               <span className="ofs-chip-value">Monthly</span>
             </div>
           </article>
+          ) : null}
 
-          <article className="eol-card" aria-label="Sales PTO Policy">
+          {step > 5 ? (
+          <article className="eol-card ntp-pop" aria-label="Sales PTO Policy">
             <header className="eol-head">
               <h3 className="eol-title">Sales PTO Policy</h3>
               <p className="eol-count">1 line changed, 3 unchanged</p>
@@ -148,6 +210,8 @@ export function NoteToPolicyVisual() {
               </span>
             </div>
           </article>
+          ) : null}
+          </div>
 
           <div className="ntp-composer" aria-label="Message">
             <p className="ntp-composer-hint">Ask about this policy</p>

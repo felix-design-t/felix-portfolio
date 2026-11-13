@@ -10,7 +10,7 @@
 .ntp-product {
   container-type: inline-size;
   aspect-ratio: auto;
-  height: auto;
+  height: 100%;
   justify-content: center;
 }
 
@@ -18,6 +18,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   overflow: hidden;
   border: 1px solid var(--toc-line);
   border-radius: 16px;
@@ -26,11 +27,45 @@
 
 .ntp-thread {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 20px;
   min-width: 0;
+  min-height: 0;
   box-sizing: border-box;
   padding: 16px;
+  overflow: hidden;
+}
+
+.ntp-feed {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 20px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ntp-pop {
+  animation: ntp-pop var(--toc-dur-move) var(--toc-ease);
+}
+
+@keyframes ntp-pop {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ntp-pop {
+    animation: none;
+  }
 }
 
 /* Same steps as the Decisions screen above: conversation at meta,
