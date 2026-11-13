@@ -34,14 +34,17 @@
   min-height: 414px;
 }
 
-/* The scenario list stays a narrow rail, like a sidebar of names. */
+/* One conversation. The scenario list is gone, so the thread fills the frame. */
 .dec-screen[data-screen="scenario"] {
-  grid-template-columns: minmax(0, 1fr) 132px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.dec-screen[data-screen="scenario"] .dec-thread {
+  border-right: none;
 }
 
 .dec-thread,
-.dec-result,
-.dec-rail {
+.dec-result {
   display: flex;
   flex-direction: column;
   gap: var(--toc-gap);
@@ -478,44 +481,6 @@
   padding: 0 8px;
   font-size: var(--toc-label-size);
   line-height: var(--toc-label-line);
-}
-
-.dec-screen[data-screen="scenario"] .dec-rail {
-  padding: 0;
-  gap: 0;
-  background: var(--toc-surface);
-}
-
-.dec-screen[data-screen="scenario"] .dec-scenario-list {
-  padding: 8px;
-  gap: 4px;
-}
-
-.dec-scenario-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.dec-scenario {
-  display: flex;
-  align-items: center;
-  min-height: 22px;
-  padding: 0 8px;
-  border-radius: 6px;
-  font-family: var(--font-body);
-  font-size: var(--toc-label-size);
-  line-height: var(--toc-label-line);
-  color: var(--toc-text-secondary);
-}
-
-.dec-scenario[data-current="true"] {
-  background: var(--toc-control);
-  color: var(--toc-text);
-  font-weight: 500;
 }
 
 /* Decision 02: one policy document. */

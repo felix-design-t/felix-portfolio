@@ -12,23 +12,14 @@ import { LastYearReport } from "./replay-last-year";
  * requests, the admin says yes, and that check lands on the right.
  *
  * The second frame starts from a question about Maya. The agent
- * answers and asks if that is ok. The admin says no, so the agent
- * offers the same choices as "Test your own scenarios." The narrow
- * rail lists the scenarios the admin has already tested.
+ * answers and asks if that is ok. The admin says yes, so the agent
+ * offers the same choices as "Test your own scenarios."
  *
  * Static. Nothing here plays. Say policy, never rule.
  */
 
 const CHOICES = ["Approve, balance −1", "Approve 1, 1 unpaid", "Deny with a reason"];
 const CHOSEN = "Approve 1, 1 unpaid";
-
-const SCENARIOS = [
-  "History Data Test",
-  "Overdraft",
-  "Interns",
-  "Blackout Holiday",
-];
-const CURRENT_SCENARIO = "Overdraft";
 
 /** Setup is done. The admin agrees to a historical check, and the result sits on the right. */
 export function HistoricalCheckVisual() {
@@ -171,25 +162,6 @@ function MayaScenario() {
           </div>
         <MessageBox isDisabled />
       </section>
-
-      <nav className="dec-rail" aria-label="Scenarios already tested">
-        <header className="dec-titlebar">
-          <p className="dec-titlebar-name">Tested Scenarios</p>
-        </header>
-        <ul className="dec-scenario-list">
-          {SCENARIOS.map((name) => {
-            const isCurrent = name === CURRENT_SCENARIO;
-            return (
-              <li key={name}>
-                <span className="dec-scenario" data-current={isCurrent ? "true" : undefined}>
-                  {name}
-                  {isCurrent ? <span className="toc-sr">, current</span> : null}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
     </div>
   );
 }
