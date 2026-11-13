@@ -86,17 +86,15 @@ function HistoricalCheck() {
 
       <article className="dec-result" aria-label="Report from last year's requests">
         <header className="dec-titlebar">
-          <span className="dec-titlebar-lead">
-            <span className="dec-titlebar-settings">
-              <SidebarIcon />
-              <span className="toc-sr">Open sidebar</span>
-            </span>
-            <p className="dec-titlebar-name">History Data Test</p>
-          </span>
+          <p className="dec-titlebar-name">History Data Test</p>
           <span className="dec-titlebar-actions">
             <span className="dec-titlebar-settings">
               <ExpandIcon />
               <span className="toc-sr">Expand</span>
+            </span>
+            <span className="dec-titlebar-settings">
+              <SidebarIcon />
+              <span className="toc-sr">Open sidebar</span>
             </span>
           </span>
         </header>
