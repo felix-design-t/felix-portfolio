@@ -71,7 +71,7 @@
   min-width: 0;
   font-family: var(--font-body);
   font-size: var(--toc-meta-size);
-  font-weight: 500;
+  font-weight: 400;
   line-height: var(--toc-meta-line);
   color: var(--toc-text);
 }
