@@ -55,7 +55,7 @@ export function AskInsteadVisual() {
 
       <ExplorationNotes
         gain="Catches unpredicted cases"
-        cost="A real employee waits"
+        cost="Might miss edge cases"
       />
     </div>
   );
