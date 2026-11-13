@@ -62,9 +62,11 @@
   flex-direction: column;
   width: 100%;
   aspect-ratio: 16 / 10;
-  /* Pulls the chat, thinking, and preview in from the frame edge.
+  /* The frame already keeps 8px inside its border. The chart adds
+     another 16px, so its words sit 24px in from that border.
+     This is that same 16px: a card lines up with the chart.
      The frame is the ground. No tinted slab between the frame and a card. */
-  padding: 20px;
+  padding: 16px;
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--toc-text);
