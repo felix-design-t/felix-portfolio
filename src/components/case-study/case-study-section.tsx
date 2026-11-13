@@ -45,8 +45,8 @@ export function CaseStudySection({
       </p>
       {section.ideas?.map((idea, position) => (
         <Fragment key={idea.name}>
-          <h3 className="case-study-section-title">{idea.title}</h3>
-          <p className="case-study-body">{idea.body}</p>
+          {idea.title ? <h3 className="case-study-section-title">{idea.title}</h3> : null}
+          {idea.body ? <p className="case-study-body">{idea.body}</p> : null}
           <CaseStudyFrame
             name={idea.name}
             caption={idea.caption}

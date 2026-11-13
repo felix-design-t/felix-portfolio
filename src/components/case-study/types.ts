@@ -29,10 +29,13 @@ export type CaseStudyVisual = {
   aspectRatio: string;
 };
 
-/** One explored idea: a heading, one paragraph, then its frame. */
+/**
+ * One explored idea: a heading, one paragraph, then its frame.
+ * Leave the heading off when the section's own title introduces it.
+ */
 export type CaseStudyIdea = CaseStudyVisual & {
-  title: string;
-  body: string;
+  title?: string;
+  body?: string;
 };
 
 export type CaseStudySectionData = {
