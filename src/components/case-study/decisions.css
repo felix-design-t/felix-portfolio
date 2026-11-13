@@ -337,6 +337,16 @@
   text-wrap: pretty;
 }
 
+/* The Maya question and the choices stop short of the column edge. */
+.dec-screen[data-screen="scenario"] .dec-admin:first-of-type,
+.dec-screen[data-screen="scenario"] .dec-options {
+  max-width: 82%;
+}
+
+.dec-screen[data-screen="scenario"] .dec-options {
+  align-self: flex-start;
+}
+
 /* The generated policy, named in the thread before the check is offered. */
 .dec-generated {
   display: flex;
