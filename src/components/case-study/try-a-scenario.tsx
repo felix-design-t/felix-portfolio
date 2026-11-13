@@ -53,10 +53,10 @@ export function TryAScenarioVisual() {
 
           <div className="xp-result">
             <span className="toc-label">Result</span>
+            <span className="xp-result-dot" aria-hidden="true" />
             <p className="xp-result-line">
               Earned 1 day. Approved, balance{"\u00a0"}−4
             </p>
-            <span className="xp-result-dot" aria-hidden="true" />
           </div>
         </article>
       </div>

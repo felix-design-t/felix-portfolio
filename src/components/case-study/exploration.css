@@ -150,13 +150,14 @@
   color: var(--toc-text);
 }
 
-/* The failed outcome. Same rose dot as the changed requests in idea 2. */
+/* The failed outcome, in front of the result. Same rose dot as the changed requests in idea 2. */
 .xp-result-dot {
   flex: none;
-  align-self: center;
+  /* Bottom on the first line's baseline, so it centers on the lowercase letters. */
+  align-self: baseline;
   width: 6px;
   height: 6px;
-  margin-left: auto;
+  margin-right: -4px;
   border-radius: 9999px;
   background: var(--accent-rose);
 }
