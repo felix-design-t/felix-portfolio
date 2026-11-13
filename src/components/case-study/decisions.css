@@ -50,6 +50,53 @@
   border-right: 1px solid var(--toc-line);
 }
 
+.dec-result {
+  padding: 0;
+  gap: 0;
+}
+
+.dec-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 8px 0 12px;
+  border-bottom: 1px solid var(--toc-line);
+}
+
+.dec-titlebar-name {
+  margin: 0;
+  min-width: 0;
+  font-family: var(--font-body);
+  font-size: var(--toc-meta-size);
+  font-weight: 500;
+  line-height: var(--toc-meta-line);
+  color: var(--toc-text);
+}
+
+.dec-titlebar-settings {
+  display: grid;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  color: var(--toc-text-secondary);
+}
+
+.dec-titlebar-settings .dec-action-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.dec-result-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--toc-gap);
+  min-width: 0;
+  padding: var(--toc-pad);
+}
+
 /* The report reuses Exploration 02. The case list starts under the year. */
 .dec-result .xp-groups {
   border-top: 1px solid var(--toc-line);

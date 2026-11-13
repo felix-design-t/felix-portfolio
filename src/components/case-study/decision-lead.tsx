@@ -99,7 +99,16 @@ function HistoricalCheck() {
       </section>
 
       <article className="dec-result" aria-label="Report from last year's requests">
-        <LastYearReport />
+        <header className="dec-titlebar">
+          <p className="dec-titlebar-name">History Data Test</p>
+          <span className="dec-titlebar-settings">
+            <SettingsIcon />
+            <span className="toc-sr">Settings</span>
+          </span>
+        </header>
+        <div className="dec-result-body">
+          <LastYearReport />
+        </div>
       </article>
     </div>
   );
@@ -223,6 +232,15 @@ function ThumbDownIcon() {
     <ActionIcon>
       <path d="M6.25 8.75 8 12.25c.35.7 1.4.45 1.4-.4V8.9h2.35c.65 0 1.15-.58 1.05-1.22l-.65-3.05c-.1-.48-.52-.88-1.01-.88H6.25" />
       <path d="M3.5 8.75h2.75V3.75H3.5z" />
+    </ActionIcon>
+  );
+}
+
+function SettingsIcon() {
+  return (
+    <ActionIcon>
+      <circle cx="8" cy="8" r="2" />
+      <path d="M8 3.1v1.5M8 11.4v1.5M3.1 8h1.5M11.4 8h1.5M4.5 4.5l1.1 1.1M10.4 10.4l1.1 1.1M11.5 4.5l-1.1 1.1M5.6 10.4 4.5 11.5" />
     </ActionIcon>
   );
 }
