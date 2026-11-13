@@ -154,7 +154,7 @@ function MayaScenario() {
                     />
                   </svg>
                 </span>
-                <span>Apply to future cases like this</span>
+                <span>Apply to future cases</span>
                 <span className="toc-sr">, checked</span>
               </p>
               <span className="xp-solid">Confirm</span>
