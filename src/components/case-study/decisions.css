@@ -26,8 +26,9 @@
   background: var(--toc-surface);
 }
 
+/* The conversation stays the narrower column so the report can breathe. */
 .dec-screen[data-screen="history"] {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
 }
 
 /* The scenario list stays a narrow rail, like a sidebar of names. */
