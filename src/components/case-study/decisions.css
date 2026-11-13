@@ -138,6 +138,7 @@
   line-height: var(--toc-body-line);
 }
 
+.dec-result .xp-year-axis,
 .dec-result .xp-legend {
   font-size: var(--toc-label-size);
   line-height: var(--toc-label-line);
