@@ -9,8 +9,8 @@ import "./exploration.css";
  * line. Static: this is the end state.
  */
 
-const PRESETS = ["Day 115", "Year end", "Part-time"];
-const ACTIVE_PRESET = "Day 115";
+const PRESETS = ["Day 105", "Year end", "Part-time"];
+const ACTIVE_PRESET = "Day 105";
 
 const FIELDS = [
   { label: "Start date", value: "Jan 5, 2026" },
