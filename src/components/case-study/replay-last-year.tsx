@@ -6,9 +6,9 @@ import "./exploration.css";
  * Exploration idea 2: the agent replays last year's requests against
  * the new policy before launch.
  *
- * Top: a year of requests as dots, one column per week (page system).
- * Gray kept the same outcome. Rose would change. Under it, the product
- * card that groups the changes, with the first group open to one example.
+ * Two product cards. The first is the year: the count, the dots, and
+ * the Safe / Flagged legend. The second is the cases, with the first
+ * group open to one example.
  */
 
 const WEEKS = 52;
@@ -50,44 +50,8 @@ export function ReplayLastYearVisual() {
 
   return (
     <div className="xp-idea" data-visual="replay-last-year">
-      <figure className="xp-year">
-        <svg
-          className="xp-year-dots"
-          viewBox={`0 0 ${PLOT_WIDTH} ${PLOT_HEIGHT}`}
-          role="img"
-          aria-label={`Last year, ${TOTAL_REQUESTS} requests. ${changedCount} would change under the new policy.`}
-        >
-          {REQUESTS_PER_WEEK.map((count, week) =>
-            Array.from({ length: count }, (_, stack) => (
-              <circle
-                key={`${week}-${stack}`}
-                cx={DOT_RADIUS + week * COLUMN_GAP}
-                cy={PLOT_HEIGHT - DOT_RADIUS - stack * ROW_GAP}
-                r={DOT_RADIUS}
-                data-changed={CHANGED_WEEKS.has(week) && stack === week % count ? "true" : undefined}
-              />
-            )),
-          )}
-        </svg>
-        <div className="xp-year-axis" aria-hidden="true">
-          {MONTHS.map((month) => (
-            <span key={month}>{month}</span>
-          ))}
-        </div>
-        <figcaption className="xp-legend">
-          <span className="xp-legend-item">
-            <span className="xp-dot" aria-hidden="true" />
-            Safe
-          </span>
-          <span className="xp-legend-item">
-            <span className="xp-dot" data-changed="true" aria-hidden="true" />
-            Flagged
-          </span>
-        </figcaption>
-      </figure>
-
-      <div className="toc-product xp-product">
-        <article className="xp-card" aria-label="Replay last year">
+      <div className="toc-product xp-product xp-replay">
+        <article className="xp-card" aria-label="Last year's requests">
           <header className="xp-card-head">
             <h3 className="xp-card-title">
               {changedCount} of {TOTAL_REQUESTS} requests would change
@@ -95,6 +59,44 @@ export function ReplayLastYearVisual() {
             <p className="xp-card-meta">Last year&rsquo;s requests, replayed on the new policy</p>
           </header>
 
+          <figure className="xp-year">
+            <svg
+              className="xp-year-dots"
+              viewBox={`0 0 ${PLOT_WIDTH} ${PLOT_HEIGHT}`}
+              role="img"
+              aria-label={`Last year, ${TOTAL_REQUESTS} requests. ${changedCount} would change under the new policy.`}
+            >
+              {REQUESTS_PER_WEEK.map((count, week) =>
+                Array.from({ length: count }, (_, stack) => (
+                  <circle
+                    key={`${week}-${stack}`}
+                    cx={DOT_RADIUS + week * COLUMN_GAP}
+                    cy={PLOT_HEIGHT - DOT_RADIUS - stack * ROW_GAP}
+                    r={DOT_RADIUS}
+                    data-changed={CHANGED_WEEKS.has(week) && stack === week % count ? "true" : undefined}
+                  />
+                )),
+              )}
+            </svg>
+            <div className="xp-year-axis" aria-hidden="true">
+              {MONTHS.map((month) => (
+                <span key={month}>{month}</span>
+              ))}
+            </div>
+            <figcaption className="xp-legend">
+              <span className="xp-legend-item">
+                <span className="xp-dot" aria-hidden="true" />
+                Safe
+              </span>
+              <span className="xp-legend-item">
+                <span className="xp-dot" data-changed="true" aria-hidden="true" />
+                Flagged
+              </span>
+            </figcaption>
+          </figure>
+        </article>
+
+        <article className="xp-card" aria-label="Cases that would change">
           <ul className="xp-groups">
             {GROUPS.map((group, position) => {
               const isOpen = position === 0;

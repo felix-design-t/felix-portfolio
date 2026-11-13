@@ -201,6 +201,10 @@
   border-top: 1px solid var(--toc-line);
 }
 
+.xp-group:first-child {
+  border-top: none;
+}
+
 .xp-group-row {
   display: flex;
   align-items: center;
@@ -356,14 +360,17 @@
 
 /* ---------- Page diagrams ---------- */
 
-/* Idea 2: a year of requests. */
+/* Idea 2: two product cards. The year is the first card. */
+
+.xp-replay {
+  gap: var(--toc-gap);
+}
 
 .xp-year {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 8px;
   margin: 0;
-  padding: var(--space-2) var(--space-2) var(--space-1);
 }
 
 .xp-year-dots {
@@ -373,7 +380,7 @@
 }
 
 .xp-year-dots circle {
-  fill: color-mix(in srgb, var(--text) 26%, transparent);
+  fill: color-mix(in srgb, var(--toc-text) 26%, transparent);
 }
 
 .xp-year-dots circle[data-changed="true"] {
@@ -384,19 +391,20 @@
   display: flex;
   justify-content: space-between;
   font-family: var(--font-body);
-  font-size: var(--text-caption);
-  line-height: var(--leading-caption);
-  color: var(--text-secondary);
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
+  color: var(--toc-text-secondary);
 }
 
 .xp-legend {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+  flex-wrap: nowrap;
+  gap: 12px;
+  margin: 0;
   font-family: var(--font-body);
-  font-size: var(--text-caption);
-  line-height: var(--leading-caption);
-  color: var(--text);
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
+  color: var(--toc-text);
 }
 
 .xp-legend-item {
@@ -408,8 +416,8 @@
 .xp-dot {
   width: 6px;
   height: 6px;
-  border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--text) 26%, transparent);
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--toc-text) 26%, transparent);
 }
 
 .xp-dot[data-changed="true"] {
