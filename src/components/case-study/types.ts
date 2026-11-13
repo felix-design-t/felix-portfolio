@@ -29,6 +29,12 @@ export type CaseStudyVisual = {
   aspectRatio: string;
 };
 
+/** One explored idea: a heading, one paragraph, then its frame. */
+export type CaseStudyIdea = CaseStudyVisual & {
+  title: string;
+  body: string;
+};
+
 export type CaseStudySectionData = {
   /** Anchor id. Wayfinding scrolls to it. */
   id: string;
@@ -53,10 +59,11 @@ export type CaseStudySectionData = {
   closingTitle?: string;
   visual?: CaseStudyVisual;
   /**
-   * Ideas explored side by side, one frame each, in reading order.
-   * They sit under the body, before `visual`.
+   * Ideas explored one after another, in reading order. Each has its
+   * own heading and paragraph above its frame. They sit under the body,
+   * before `visual`.
    */
-  ideas?: CaseStudyVisual[];
+  ideas?: CaseStudyIdea[];
   /** A second frame, under the closing paragraph. */
   closingVisual?: CaseStudyVisual;
   /**

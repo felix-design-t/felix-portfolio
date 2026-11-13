@@ -94,14 +94,28 @@ export const timeOffCopilot: CaseStudy = {
       title: "The agent provides proactive warnings",
       body: "Before anything is published, the agent troubleshoots. It compares the new rule with the current rules, shows where they conflict, and points at what could go wrong.",
       ideas: [
-        { name: "Try a scenario", caption: "1. Try a scenario", aspectRatio: "16 / 10" },
-        { name: "Replay last year", caption: "2. Replay last year", aspectRatio: "16 / 10" },
-        { name: "Ask instead of deciding", caption: "3. Ask instead of deciding", aspectRatio: "16 / 10" },
+        {
+          title: "Admins get a warning the moment a request goes wrong",
+          body: "When a time-off request hits a case the policy doesn't cover, the agent warns the admin and asks what to do. It doesn't wait for payroll or employee records to flag the error weeks later.",
+          name: "Ask instead of deciding",
+          caption: "Ask instead of deciding",
+          aspectRatio: "16 / 10",
+        },
+        {
+          title: "The agent tests past scenarios and gives proactive warnings",
+          body: "The agent replays past time-off requests, groups the ones that would fail by scenario, and shows what could go wrong with the policy before it launches.",
+          name: "Replay last year",
+          caption: "Replay last year",
+          aspectRatio: "16 / 10",
+        },
+        {
+          title: "Test your own scenarios",
+          body: "The admin gets a space to name scenarios and test them. They decide which cases matter. They confirm and apply only when the results look right. The agent never publishes.",
+          name: "Try a scenario",
+          caption: "Try a scenario",
+          aspectRatio: "16 / 10",
+        },
       ],
-      followUp: {
-        title: "Test your own scenarios",
-        body: "Then the admin gets a space to name scenarios and test them. They decide which cases matter. They confirm and apply only when the results look right. The agent never publishes.",
-      },
     },
     {
       id: "decisions",

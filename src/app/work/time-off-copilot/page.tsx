@@ -35,11 +35,11 @@ export default function TimeOffCopilotPage() {
       }}
       closingVisuals={{ "fields-first": <EditOneLineVisual /> }}
       ideaVisuals={{
-        // Exploration: three answers to the blind gap, in reading order.
+        // Exploration: three answers to the blind gap, in the same order as `ideas`.
         "where-it-could-go-wrong": [
-          <TryAScenarioVisual key="try" />,
-          <ReplayLastYearVisual key="replay" />,
           <AskInsteadVisual key="ask" />,
+          <ReplayLastYearVisual key="replay" />,
+          <TryAScenarioVisual key="try" />,
         ],
       }}
     />

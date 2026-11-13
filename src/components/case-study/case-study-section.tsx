@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { CaseStudyFrame } from "./case-study-frame";
 import type { CaseStudySectionData } from "./types";
 
@@ -44,14 +44,17 @@ export function CaseStudySection({
         {section.body}
       </p>
       {section.ideas?.map((idea, position) => (
-        <CaseStudyFrame
-          key={idea.name}
-          name={idea.name}
-          caption={idea.caption}
-          aspectRatio={idea.aspectRatio}
-        >
-          {ideaVisuals[position]}
-        </CaseStudyFrame>
+        <Fragment key={idea.name}>
+          <h3 className="case-study-section-title">{idea.title}</h3>
+          <p className="case-study-body">{idea.body}</p>
+          <CaseStudyFrame
+            name={idea.name}
+            caption={idea.caption}
+            aspectRatio={idea.aspectRatio}
+          >
+            {ideaVisuals[position]}
+          </CaseStudyFrame>
+        </Fragment>
       ))}
       {section.visual ? (
         <CaseStudyFrame
