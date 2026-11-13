@@ -100,7 +100,7 @@ export const timeOffCopilot: CaseStudy = {
           aspectRatio: "16 / 10",
         },
         {
-          title: "The agent provides proactive warnings",
+          title: "02. The agent provides proactive warnings",
           body: "Before anything is published, the agent troubleshoots. It compares the new rule with the current rules, shows where they conflict, and points at what could go wrong.",
           name: "Replay last year",
           caption: "Replay last year",
