@@ -43,6 +43,31 @@
   gap: 2px;
 }
 
+/* A failed request. Rose tint, with a solid rose dot. */
+.xp-flag {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 6px;
+  height: 24px;
+  margin: 0 0 8px;
+  padding: 0 8px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--accent-rose) 14%, var(--toc-surface));
+  color: var(--accent-rose);
+  font-size: var(--toc-meta-size);
+  font-weight: 500;
+  line-height: var(--toc-meta-line);
+}
+
+.xp-flag-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--accent-rose);
+}
+
 .xp-card-title,
 .xp-card-meta,
 .xp-result-line,

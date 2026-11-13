@@ -24,6 +24,10 @@ export function TryAScenarioVisual() {
       <div className="toc-product xp-product">
         <article className="xp-card" aria-label="Try a scenario">
           <header className="xp-card-head">
+            <p className="xp-flag">
+              <span className="xp-flag-dot" aria-hidden="true" />
+              Flagged
+            </p>
             <h3 className="xp-card-title">Sales PTO Request</h3>
             <p className="xp-card-meta">
               90 days before PTO accrues, 14 days a year, earned monthly
