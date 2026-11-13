@@ -234,9 +234,9 @@
   height: 16px;
 }
 
-/* 115 sits one line above 120. Five days apart is too tight for both on one row. */
-.blind-gap-tick[data-day="115"] {
-  top: -16px;
+/* Day 105 sits on the same row as the other day numbers, in rose. */
+.blind-gap-tick[data-day="request"] {
+  color: var(--accent-rose);
 }
 
 .blind-gap-tick {

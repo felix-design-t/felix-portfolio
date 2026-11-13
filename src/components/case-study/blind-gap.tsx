@@ -29,14 +29,14 @@ const SCALE = 5;
 /** One month of a 14-day year. Added as a step, not spread along the slope. */
 const PER_MONTH = 14 / 12;
 
-const X_TICKS = [30, 60, 90, 115, 120];
+const X_TICKS = [30, 60, 90, 105, 120];
 const Y_TICKS = [0, 1, 2, 3, 4, 5];
 
 /** Days the balance rises. Accrued starts on day 30. Earned starts on day 90. */
 const ACCRUED_RISES = [30, 60, 90, 120];
 const EARNED_RISES = [90, 120];
-/** A request on day 115. The dot is at 2 days. */
-const REQUEST_DAY = 115;
+/** A request on day 105. The dot is at 2 days. */
+const REQUEST_DAY = 105;
 const REQUEST_AT = 2;
 /**
  * Days each rise takes. Long enough to feel like a slope,
@@ -276,7 +276,7 @@ export function BlindGap() {
               <span
                 key={tick}
                 className="blind-gap-tick"
-                data-day={tick === 115 ? "115" : undefined}
+                data-day={tick === REQUEST_DAY ? "request" : undefined}
                 style={{ left: dayLeft(tick) }}
               >
                 {tick}
