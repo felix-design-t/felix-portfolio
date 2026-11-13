@@ -1,119 +1,136 @@
 import "./type-what-you-have.css";
+import "./only-what-you-said.css";
+import "./edit-one-line.css";
 import "./note-to-policy.css";
 
 /**
  * Solution, first frame.
  *
- * One product window, not three separate frames. The name of the
- * policy sits in the window title, the way a file name sits in a
- * window bar. Under that, the left side is the conversation, starting
- * from the note the admin typed. The right side is the policy taking
- * shape: the fields the agent pulled out, then the lines the admin
- * corrected. Confirm sits under those lines. Nothing here has become
- * the policy until the admin confirms.
- *
- * The words are reused from "Only what you said" and "See every change".
- * Scale comes from the product tokens: title, then body, then a short
- * control. This frame does not play. Reduced motion is the same picture.
+ * One column. The conversation is the Trust Building thread: the note,
+ * the fields pulled from it, the accrual question, and the answer.
+ * Under that sits the policy card from the same section, with the one
+ * line the admin changed. There is no second column.
  */
 
 const FIELDS = [
   { label: "Type", value: "PTO" },
   { label: "Teams", value: "Sales" },
   { label: "Yearly limit", value: "14 days" },
-  { label: "Accrual", value: "Monthly" },
 ] as const;
 
 export function NoteToPolicyVisual() {
   return (
-    <div className="toc-product ntp-product" data-visual="note-to-policy">
+    <div className="toc-product ntp-product ofs-product" data-visual="note-to-policy" data-fit="row">
       <div className="ntp-window">
         <header className="ntp-titlebar">
           <h3 className="ntp-title">Sales PTO policy</h3>
         </header>
 
-        <section className="ntp-thread" aria-label="Conversation, starting from the note">
-          <p className="ntp-admin">
-            I need to create a <span className="ntp-source">PTO</span> policy for{" "}
-            <span className="ntp-source">sales</span> teams, the{" "}
-            <span className="ntp-source">yearly</span> limit is{" "}
-            <span className="ntp-source">14 days</span>.
-          </p>
-
-          <div className="ntp-agent-block">
-            <p className="toc-label">Agent</p>
-            <p className="ntp-agent">Here&apos;s what I got from your request.</p>
-            <p className="ntp-agent ntp-ask">
-              I didn&apos;t see accrual. How should it work?
+        <div className="ntp-thread">
+          <article className="ofs-bubble ofs-message" data-state="current" aria-label="Your request">
+            <p className="ofs-request">
+              I need to create a <span className="ofs-phrase">PTO</span> policy for{" "}
+              <span className="ofs-phrase">sales</span> teams, the{" "}
+              <span className="ofs-phrase">yearly</span> limit is{" "}
+              <span className="ofs-phrase">14 days</span>.
             </p>
-          </div>
+          </article>
 
-          <p className="ntp-admin">Monthly</p>
+          <article className="ofs-card ofs-message" data-state="current" aria-label="Agent: what I got">
+            <p className="ofs-lead">Here&apos;s what I got from your request</p>
+            <ul className="ofs-chips">
+              {FIELDS.map((field) => (
+                <li key={field.label} className="ofs-chip-slot">
+                  <span className="ofs-chip" data-shown="true">
+                    <span className="ofs-chip-label">{field.label}</span>
+                    <span className="ofs-chip-value">{field.value}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </article>
 
-          <p className="ntp-agent">
-            One line changed. Yearly limit, 14 days to 16.
-          </p>
+          <article className="ofs-card ofs-message" data-state="current" aria-label="Agent: accrual question">
+            <p className="ofs-lead">I didn&apos;t see accrual. How should it work?</p>
+            <div className="ofs-resolve ofs-resolve-ask">
+              <div className="ofs-resolve-side ofs-options" role="group" aria-label="Accrual">
+                <span className="ofs-option" data-kind="pick" data-selected="true">
+                  Monthly
+                </span>
+                <span className="ofs-option" data-kind="pick" data-selected="false">
+                  All at once
+                </span>
+                <span className="ofs-option" data-kind="skip" data-selected="false">
+                  Skip
+                </span>
+              </div>
+            </div>
+          </article>
 
-          <div className="ntp-composer" aria-label="Message">
-            <p className="ntp-composer-hint">Ask about this policy</p>
-            <div className="ntp-composer-bar">
-              <span className="ntp-composer-plus" aria-hidden="true">
-                <svg viewBox="0 0 16 16" className="ntp-composer-icon">
-                  <path d="M8 3.5v9M3.5 8h9" />
-                </svg>
-              </span>
-              <span className="ntp-composer-send" aria-hidden="true">
-                <svg viewBox="0 0 16 16" className="ntp-composer-icon">
-                  <path d="M8 12.5V3.8M8 3.8 4.6 7.2M8 3.8l3.4 3.4" />
-                </svg>
+          <article className="ofs-bubble ofs-message" data-state="current" aria-label="Your answer">
+            <p className="ofs-request">Monthly</p>
+          </article>
+
+          <article className="ofs-card ofs-message" data-state="current" aria-label="Agent: ready">
+            <p className="ofs-lead">Got it.</p>
+            <div className="ofs-chip ofs-chip-static" data-shown="true">
+              <span className="ofs-chip-label">Accrual</span>
+              <span className="ofs-chip-value">Monthly</span>
+            </div>
+          </article>
+
+          <article className="eol-card" aria-label="Sales PTO Policy">
+            <header className="eol-head">
+              <h3 className="eol-title">Sales PTO Policy</h3>
+              <p className="eol-count">1 line changed, 3 unchanged</p>
+            </header>
+            <div className="eol-lines">
+              <p className="eol-line">
+                This policy covers <span className="eol-token">PTO</span>.
+              </p>
+              <p className="eol-line">
+                It applies to the <span className="eol-token">Sales</span> teams.
+              </p>
+              <p className="eol-line">
+                Each employee gets{" "}
+                <span className="eol-token eol-token-limit">
+                  <span className="eol-step" aria-hidden="true">
+                    <StepIcon plus={false} />
+                  </span>
+                  <span className="eol-token-values">
+                    <span className="eol-new">16 days</span>
+                  </span>
+                  <span className="eol-step" aria-hidden="true">
+                    <StepIcon plus />
+                  </span>
+                </span>{" "}
+                of PTO per year.
+              </p>
+              <p className="eol-line">
+                Days are earned <span className="eol-token">Monthly</span>.
+              </p>
+            </div>
+            <div className="eol-foot">
+              <div className="eol-actions">
+                <span className="eol-quiet">Undo</span>
+                <span className="eol-quiet">Keep change</span>
+              </div>
+              <span className="eol-preview" data-ready="true">
+                Preview
               </span>
             </div>
-          </div>
-        </section>
-
-        <article className="ntp-policy" aria-label="Sales PTO policy, not confirmed yet">
-          <div className="ntp-body">
-            <section className="ntp-group" aria-label="Fields the agent pulled out">
-              <p className="toc-label">Fields</p>
-              <ul className="ntp-fields">
-                {FIELDS.map((field) => (
-                  <li key={field.label} className="ntp-field">
-                    <span className="ntp-field-label">{field.label}</span>
-                    <span className="ntp-field-value">{field.value}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            <section className="ntp-group" aria-label="Lines the admin corrected">
-              <div className="ntp-lines-head">
-                <p className="toc-label">Lines</p>
-                <p className="ntp-count">1 line changed, 3 unchanged</p>
-              </div>
-              <div className="ntp-lines">
-                <p className="ntp-line">
-                  This policy covers <span className="ntp-value">PTO</span>.
-                </p>
-                <p className="ntp-line">
-                  It applies to the <span className="ntp-value">Sales</span> teams.
-                </p>
-                <p className="ntp-line" data-changed="true">
-                  Each employee gets <s className="ntp-old">14 days</s>{" "}
-                  <span className="ntp-value">16 days</span> of PTO per year.
-                </p>
-                <p className="ntp-line">
-                  Days are earned <span className="ntp-value">Monthly</span>.
-                </p>
-              </div>
-            </section>
-          </div>
-
-          <div className="ntp-controls">
-            <span className="toc-label">Draft</span>
-            <span className="ntp-confirm">Confirm</span>
-          </div>
-        </article>
+          </article>
+        </div>
       </div>
     </div>
+  );
+}
+
+function StepIcon({ plus }: { plus: boolean }) {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className="eol-step-icon">
+      <path d="M4 8h8" />
+      {plus ? <path d="M8 4v8" /> : null}
+    </svg>
   );
 }

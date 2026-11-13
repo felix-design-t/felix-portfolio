@@ -1,29 +1,13 @@
 /*
-  From the note to the policy.
+  Solution, first frame.
 
-  One window. Conversation on the left, policy on the right. A narrow
-  frame stacks them, conversation first, so the note still leads.
-
-  This screen is a full product window, so its type is a step
-  smaller than the other frames. Notion's words stay small against
-  the window. These sizes do the same job here. They stay on this
-  screen only.
+  One window, one column. The thread is the Trust Building conversation
+  and the policy card from that same section. The type is the shared
+  product scale, so this matches those frames.
   No shadow, gradient, or blur.
 */
 
 .ntp-product {
-  /* Smaller than the shared product scale, for this window only. */
-  --toc-title-size: 12px;
-  --toc-title-line: 16px;
-  --toc-body-size: 11px;
-  --toc-body-line: 15px;
-  --toc-meta-size: 10px;
-  --toc-meta-line: 13px;
-  --toc-label-size: 9px;
-  --toc-label-line: 12px;
-  --toc-control-size: 10px;
-  --toc-control-line: 13px;
-
   container-type: inline-size;
   aspect-ratio: auto;
   height: auto;
@@ -31,8 +15,8 @@
 }
 
 .ntp-window {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  display: flex;
+  flex-direction: column;
   width: 100%;
   overflow: hidden;
   border: 1px solid var(--toc-line);
@@ -40,10 +24,7 @@
   background: var(--toc-surface);
 }
 
-/* The window's title bar. The policy name sits in the middle,
-   where a file name would. A hairline sets it off from the work. */
 .ntp-titlebar {
-  grid-column: 1 / -1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,138 +33,6 @@
   border-bottom: 1px solid var(--toc-line);
 }
 
-.ntp-thread,
-.ntp-policy {
-  display: flex;
-  flex-direction: column;
-  gap: var(--toc-gap);
-  min-width: 0;
-  box-sizing: border-box;
-  padding: var(--toc-pad);
-}
-
-.ntp-thread {
-  border-right: 1px solid var(--toc-line);
-}
-
-/*
-  The prompt is its own section at the bottom of the conversation.
-  Like Notion and Cursor: the words sit on the first line, small
-  against the window, and plus and send sit on the line under them.
-  It stays down even when the policy beside it is taller.
-*/
-.ntp-composer {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: auto;
-  padding: 10px 10px 8px;
-  border: 1px solid var(--toc-line);
-  border-radius: 16px;
-  background: var(--toc-surface);
-}
-
-.ntp-composer-hint {
-  margin: 0;
-  padding: 0 2px;
-  font-family: var(--font-body);
-  font-size: var(--toc-body-size);
-  line-height: var(--toc-body-line);
-  color: var(--toc-text-secondary);
-}
-
-.ntp-composer-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.ntp-composer-plus {
-  display: grid;
-  width: var(--toc-icon-button);
-  height: var(--toc-icon-button);
-  place-items: center;
-  color: var(--toc-text-secondary);
-}
-
-.ntp-composer-send {
-  display: grid;
-  flex: none;
-  width: var(--toc-icon-button);
-  height: var(--toc-icon-button);
-  place-items: center;
-  border-radius: 9999px;
-  background: var(--toc-control);
-  color: var(--toc-text);
-}
-
-.ntp-composer-icon {
-  display: block;
-  width: 14px;
-  height: 14px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.ntp-admin,
-.ntp-agent,
-.ntp-title,
-.ntp-count,
-.ntp-line {
-  margin: 0;
-}
-
-/* The admin's note is a sentence, so it uses the body step, not the title. */
-.ntp-admin,
-.ntp-agent,
-.ntp-line,
-.ntp-field-value {
-  font-family: var(--font-body);
-  font-size: var(--toc-body-size);
-  font-weight: 400;
-  line-height: var(--toc-body-line);
-}
-
-.ntp-admin {
-  align-self: flex-end;
-  width: fit-content;
-  max-width: 100%;
-  padding: 8px 10px;
-  border-radius: 12px;
-  background: var(--toc-user);
-  color: var(--toc-user-text);
-  text-wrap: pretty;
-}
-
-.ntp-agent {
-  color: var(--toc-text);
-  text-wrap: pretty;
-}
-
-.ntp-agent-block {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-/* The question is the one marked line. A 1px rail, not a fill. */
-.ntp-ask {
-  padding-left: 8px;
-  border-left: 1px solid var(--toc-mark);
-}
-
-/* Words the fields were pulled from. The line sits under the word. */
-.ntp-source {
-  text-decoration: underline;
-  text-decoration-color: var(--toc-user-mark);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
-}
-
-/* The window title. Same title step as the rest of the product. */
 .ntp-title {
   margin: 0;
   font-family: var(--font-body);
@@ -192,120 +41,36 @@
   line-height: var(--toc-title-line);
   color: var(--toc-text);
   text-align: center;
-  text-wrap: balance;
 }
 
-.ntp-body {
+.ntp-thread {
   display: flex;
   flex-direction: column;
   gap: var(--toc-gap);
   min-width: 0;
+  box-sizing: border-box;
+  padding: var(--toc-pad);
 }
 
-.ntp-group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
+/* The Trust Building chips are buttons. Here they are the finished
+   state, so they should not look like a control you can press. */
+.ntp-thread .ofs-chip,
+.ntp-thread .ofs-option,
+.ntp-thread .eol-quiet,
+.ntp-thread .eol-preview,
+.ntp-thread .eol-step {
+  cursor: default;
 }
 
-.ntp-fields {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.ntp-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  min-width: 0;
-  padding: 6px 8px;
-  border-radius: 12px;
-  background: var(--toc-raised);
-}
-
-.ntp-field-label,
-.ntp-count {
-  font-family: var(--font-body);
-  font-size: var(--toc-meta-size);
-  font-weight: 400;
-  line-height: var(--toc-meta-line);
-  color: var(--toc-text-secondary);
-}
-
-.ntp-field-value,
-.ntp-value {
-  font-weight: 500;
-  color: var(--toc-text);
-}
-
-.ntp-lines-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 2px 8px;
-}
-
-.ntp-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.ntp-line {
-  padding: 2px 6px;
-  border-radius: 8px;
-  color: var(--toc-text);
-  text-wrap: pretty;
-}
-
-.ntp-line[data-changed="true"] {
-  background: color-mix(in srgb, var(--toc-mark) 12%, transparent);
-}
-
-.ntp-old {
-  color: var(--toc-text-secondary);
-  font-weight: 400;
-  text-decoration: line-through;
-}
-
-.ntp-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: var(--toc-gap);
-  border-top: 1px solid var(--toc-line);
-}
-
-/* Short pill. Control step, under the body. The one solid control. */
-.ntp-confirm {
+.ntp-thread .ofs-option,
+.ntp-thread .eol-quiet,
+.ntp-thread .eol-preview {
   display: inline-flex;
   align-items: center;
-  height: var(--toc-control-height);
-  padding: var(--toc-control-pad);
-  border-radius: 9999px;
-  background: var(--toc-mark);
-  color: var(--toc-on-mark);
-  font-family: var(--font-body);
-  font-size: var(--toc-control-size);
-  font-weight: 500;
-  line-height: var(--toc-control-line);
 }
 
 @container (max-width: 460px) {
-  .ntp-window {
+  .ntp-thread .ofs-chips {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .ntp-thread {
-    border-right: none;
-    border-bottom: 1px solid var(--toc-line);
   }
 }
