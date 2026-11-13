@@ -15,7 +15,7 @@ const ACTIVE_PRESET = "Day 100";
 const FIELDS = [
   { label: "Start date", value: "Jan 5, 2026" },
   { label: "Request date", value: "Apr 5, 2026" },
-  { label: "Days requested", value: "5" },
+  { label: "Days requested", value: "2" },
 ];
 
 export function TryAScenarioVisual() {
