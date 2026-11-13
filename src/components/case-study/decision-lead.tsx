@@ -22,8 +22,13 @@ import { LastYearReport } from "./replay-last-year";
 const CHOICES = ["Approve, balance −4", "Approve 1, 4 unpaid", "Deny with a reason"];
 const CHOSEN = "Approve 1, 4 unpaid";
 
-const SCENARIOS = ["Day 105", "Year end", "Part-time", "Maya"];
-const CURRENT_SCENARIO = "Maya";
+const SCENARIOS = [
+  "History Data Test",
+  "Earned less then requested",
+  "Interns",
+  "Blackout Holiday",
+];
+const CURRENT_SCENARIO = "Earned less then requested";
 
 /** Setup is done. The admin agrees to a historical check, and the result sits on the right. */
 export function HistoricalCheckVisual() {
