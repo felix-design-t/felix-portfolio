@@ -53,8 +53,8 @@ export function DecisionDocumentVisual() {
           </dl>
         </section>
 
-        <section className="dec-block" aria-label="Solved">
-          <p className="toc-label">Solved</p>
+        <section className="dec-block" aria-label="Tested">
+          <p className="toc-label">Tested</p>
           <dl className="dec-rows">
             {SOLVED.map((item) => (
               <div key={item.label} className="dec-row">
