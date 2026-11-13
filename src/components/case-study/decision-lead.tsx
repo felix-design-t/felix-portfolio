@@ -50,7 +50,7 @@ function HistoricalCheck() {
           </svg>
           <span className="dec-generated-copy">
             <span className="dec-generated-name">Sales PTO policy</span>
-            <span className="toc-label">Generated</span>
+            <span className="dec-generated-state">Unpublished</span>
           </span>
         </div>
 

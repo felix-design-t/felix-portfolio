@@ -341,6 +341,14 @@
   color: var(--toc-text);
 }
 
+.dec-generated-state {
+  font-family: var(--font-body);
+  font-size: var(--toc-label-size);
+  font-weight: 400;
+  line-height: var(--toc-label-line);
+  color: var(--toc-text-secondary);
+}
+
 .dec-title {
   font-size: var(--toc-title-size);
   font-weight: 500;
