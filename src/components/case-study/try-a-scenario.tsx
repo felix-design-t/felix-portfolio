@@ -62,12 +62,8 @@ export function TryAScenarioVisual() {
       </div>
 
       <ExplorationNotes
-        gains={["Admin stays in control", "Sees why", "Builds trust"]}
-        costs={[
-          "Finds only what the admin thinks to test",
-          "One case at a time",
-          "Takes effort",
-        ]}
+        gains={["Admin stays in control"]}
+        costs={["Finds only after the incident happens"]}
         source="admin"
         moment="before-launch"
       />
