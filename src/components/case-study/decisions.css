@@ -110,6 +110,21 @@
   line-height: var(--toc-body-line);
 }
 
+/* The case names share one line. The list in Exploration 02 stays on the body step. */
+.dec-result .xp-group-row {
+  gap: 6px;
+  font-size: 10px;
+  line-height: 13px;
+}
+
+.dec-result .xp-group-count {
+  gap: 6px;
+}
+
+.dec-result .xp-group-label {
+  white-space: nowrap;
+}
+
 /* The report reuses Exploration 02. The case list starts under the year. */
 .dec-result .xp-groups {
   border-top: 1px solid var(--toc-line);
