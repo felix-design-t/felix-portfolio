@@ -157,6 +157,65 @@
   align-items: center;
 }
 
+/* Same prompt as the Decisions screen: words on the first line, plus and send under them. */
+.ntp-composer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 12px 10px;
+  border: 1px solid var(--toc-line);
+  border-radius: 16px;
+  background: var(--toc-surface);
+}
+
+.ntp-composer-hint {
+  margin: 0;
+  padding: 0 2px;
+  font-family: var(--font-body);
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
+  color: var(--toc-text-secondary);
+}
+
+.ntp-composer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ntp-composer-plus,
+.ntp-composer-send {
+  display: grid;
+  flex: none;
+  width: var(--toc-icon-button);
+  height: var(--toc-icon-button);
+  place-items: center;
+}
+
+.ntp-composer-plus {
+  color: var(--toc-text-secondary);
+}
+
+.ntp-composer-send {
+  border-radius: 9999px;
+  background: var(--toc-control);
+  color: var(--toc-text);
+}
+
+.ntp-composer-icon {
+  display: block;
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 @container (max-width: 460px) {
   .ntp-thread .ofs-chips {
     grid-template-columns: max-content;

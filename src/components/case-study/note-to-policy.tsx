@@ -152,6 +152,22 @@ export function NoteToPolicyVisual() {
               </span>
             </div>
           </article>
+
+          <div className="ntp-composer" aria-label="Message">
+            <p className="ntp-composer-hint">Ask about this policy</p>
+            <div className="ntp-composer-bar">
+              <span className="ntp-composer-plus" aria-hidden="true">
+                <svg viewBox="0 0 16 16" className="ntp-composer-icon">
+                  <path d="M8 3.5v9M3.5 8h9" />
+                </svg>
+              </span>
+              <span className="ntp-composer-send" aria-hidden="true">
+                <svg viewBox="0 0 16 16" className="ntp-composer-icon">
+                  <path d="M8 12.5V3.8M8 3.8 4.6 7.2M8 3.8l3.4 3.4" />
+                </svg>
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
