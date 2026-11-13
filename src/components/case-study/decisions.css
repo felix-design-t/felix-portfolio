@@ -407,8 +407,28 @@
   height: 12px;
 }
 
+.dec-options .xp-choice[data-chosen="true"] {
+  font-weight: 400;
+}
+
+.dec-options .xp-radio {
+  position: relative;
+}
+
 .dec-options .xp-choice[data-chosen="true"] .xp-radio {
-  border-width: 3px;
+  border: 1px solid var(--toc-text);
+}
+
+.dec-options .xp-choice[data-chosen="true"] .xp-radio::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--toc-text);
+  transform: translate(-50%, -50%);
 }
 
 .dec-options .xp-checkbox {
