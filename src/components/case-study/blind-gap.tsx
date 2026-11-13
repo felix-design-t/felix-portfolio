@@ -11,7 +11,7 @@ import "./blind-gap.css";
  * Across is days employed. Up is days of time off, 0 to 5.
  *
  * Accrued stays flat, then eases up by 14/12 days around each 30th day.
- * Earned uses those same rises, but the first one is on day 60.
+ * Earned uses those same rises, but the first one is on day 90.
  * The violet area is accrued. The blue area is earned.
  * Both sit directly on the matte placeholder.
  *
@@ -32,9 +32,9 @@ const PER_MONTH = 14 / 12;
 const X_TICKS = [30, 60, 90, 120];
 const Y_TICKS = [0, 1, 2, 3, 4, 5];
 
-/** Days the balance rises. Accrued starts on day 30. Earned starts on day 60. */
+/** Days the balance rises. Accrued starts on day 30. Earned starts on day 90. */
 const ACCRUED_RISES = [30, 60, 90, 120];
-const EARNED_RISES = [60, 90, 120];
+const EARNED_RISES = [90, 120];
 /** Days each rise takes. Short, so the flat month on either side still shows. */
 const RAMP_DAYS = 12;
 
@@ -174,14 +174,14 @@ export function BlindGap() {
       data-snap={snap ? "true" : undefined}
     >
       <p className="blind-gap-sr">
-        60-day wait, 14 days a year, accrued and earned monthly. Accrued eases
+        90-day wait, 14 days a year, accrued and earned monthly. Accrued eases
         up by 14/12 days around every 30th day. Earned takes those same rises
-        starting at day 60.
+        starting at day 90.
       </p>
 
       <div className="blind-gap-inner">
         <p className="blind-gap-policy" data-shown={shown(frameStep, 1)}>
-          60-day wait, 14 days a year, accrued and earned monthly.
+          90-day wait, 14 days a year, accrued and earned monthly.
         </p>
 
         <ul className="blind-gap-legend">
