@@ -11,13 +11,13 @@
   height: auto;
 }
 
-/* 16:10 of the product box, minus the 16px inset on each edge.
-   Content can be taller. The 32px is that inset, top and bottom. */
+/* 16:10 of the product box. The case-study frame supplies the inset,
+   so nothing is subtracted here. Content can be taller. */
 .eol-stage {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: calc(62.5cqw - 32px);
+  min-height: 62.5cqw;
 }
 
 .eol-card {
