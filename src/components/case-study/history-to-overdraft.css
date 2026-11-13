@@ -20,7 +20,8 @@
 
 .hto-window {
   display: grid;
-  grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
+  /* Same split as the historical check: a narrower chat, a wider report. */
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
   width: 100%;
   height: 100%;
   overflow: hidden;
