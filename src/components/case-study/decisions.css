@@ -104,6 +104,12 @@
   padding: var(--toc-pad);
 }
 
+/* One step under the card title, so the count does not shout over the chart. */
+.dec-result .xp-card-title {
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
+}
+
 /* The report reuses Exploration 02. The case list starts under the year. */
 .dec-result .xp-groups {
   border-top: 1px solid var(--toc-line);
