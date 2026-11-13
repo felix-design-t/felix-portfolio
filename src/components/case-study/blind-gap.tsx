@@ -10,8 +10,8 @@ import "./blind-gap.css";
  * A chart on the case-study frame, not a product screen.
  * Across is days employed. Up is days of time off, 0 to 5.
  *
- * Accrued climbs 1.167 days every 30 days, from day 0.
- * Earned uses that same pace, but it does not start until day 60.
+ * Accrued stays flat, then steps up by 14/12 days on each 30th day.
+ * Earned uses those same steps, but the first one is on day 60.
  * The blue area is accrued. The rose area is earned.
  * Both sit directly on the matte placeholder.
  *
@@ -24,23 +24,17 @@ const LAST_STEP = 3;
 
 /** Days across the chart. Ticks are every 30 days, through 120. */
 const AXIS_DAYS = 150;
-/** Top of the vertical scale. Accrued stops when it reaches this. */
+/** Top of the vertical scale. A later step may pass it and get clipped. */
 const SCALE = 5;
-/** Days added every 30 days. 14 days a year, spread across 12 months. */
-const PER_MONTH = 1.167;
-const MONTH_DAYS = 30;
-/** Earned waits until this day, then follows the accrued pace. */
-const EARN_START = 60;
+/** One month of a 14-day year. Added as a step, not spread along the slope. */
+const PER_MONTH = 14 / 12;
 
 const X_TICKS = [30, 60, 90, 120];
 const Y_TICKS = [0, 1, 2, 3, 4, 5];
 
-/** Day the accrued line reaches 5. It stops there instead of running off the scale. */
-const ACCRUED_TOP = (SCALE / PER_MONTH) * MONTH_DAYS;
-/** Samples along the accrued line. A steady rate, so these points are one slope. */
-const ACCRUED_DAYS = [0, 30, 60, 90, 120, ACCRUED_TOP];
-/** Earned is flat until day 60, then the same slope. */
-const EARNED_DAYS = [60, 90, 120, 150];
+/** Days the balance jumps. Accrued starts on day 30. Earned starts on day 60. */
+const ACCRUED_RISES = [30, 60, 90, 120, 150];
+const EARNED_RISES = [60, 90, 120, 150];
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -55,17 +49,6 @@ function dayLeft(day: number): string {
   return `calc(var(--y-gutter) + (100% - var(--y-gutter)) * ${day} / ${AXIS_DAYS})`;
 }
 
-/** Days of time off accrued by this day employed. */
-function accruedAt(day: number): number {
-  return (day / MONTH_DAYS) * PER_MONTH;
-}
-
-/** Days earned. Nothing until day 60, then the accrued rate. */
-function earnedAt(day: number): number {
-  if (day <= EARN_START) return 0;
-  return ((day - EARN_START) / MONTH_DAYS) * PER_MONTH;
-}
-
 /**
  * Chart y. The viewBox puts 5 days at the top and 0 at the bottom,
  * so a higher balance is a smaller SVG y.
@@ -74,17 +57,33 @@ function chartY(value: number): number {
   return SCALE - value;
 }
 
-function linePoints(days: number[], valueAt: (day: number) => number): string {
-  return days.map((day) => `${day},${chartY(valueAt(day))}`).join(" ");
+/**
+ * A staircase. Flat between rise days, then a vertical step of 14/12.
+ * Accrued also draws the flat run from day 0 up to its first rise.
+ */
+function stepPoints(riseDays: number[], fromZero: boolean): string {
+  const points: string[] = [];
+  let value = 0;
+  if (fromZero) points.push(`0,${chartY(0)}`);
+  points.push(`${riseDays[0]},${chartY(0)}`);
+  riseDays.forEach((day, index) => {
+    if (index > 0) points.push(`${day},${chartY(value)}`);
+    value += PER_MONTH;
+    points.push(`${day},${chartY(value)}`);
+  });
+  return points.join(" ");
 }
 
-/** Area from the zero line up to the series. */
-function areaPath(days: number[], valueAt: (day: number) => number): string {
-  const top = days.map((day) => `${day},${chartY(valueAt(day))}`).join(" L ");
-  const start = days[0];
-  const end = days[days.length - 1];
-  return `M ${start},${SCALE} L ${top} L ${end},${SCALE} Z`;
+/** The staircase, closed down to the zero line so the area can fill it. */
+function stepArea(points: string): string {
+  const pairs = points.split(" ");
+  const firstX = pairs[0].split(",")[0];
+  const lastX = pairs[pairs.length - 1].split(",")[0];
+  return `M ${firstX},${SCALE} L ${pairs.join(" L ")} L ${lastX},${SCALE} Z`;
 }
+
+const accruedLine = stepPoints(ACCRUED_RISES, true);
+const earnedLine = stepPoints(EARNED_RISES, false);
 
 export function BlindGap() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -157,9 +156,9 @@ export function BlindGap() {
       data-snap={snap ? "true" : undefined}
     >
       <p className="blind-gap-sr">
-        60-day wait, 14 days a year, accrued and earned monthly. Accrued rises
-        by 1.167 days every 30 days from day 0. Earned follows the same pace
-        starting at day 60.
+        60-day wait, 14 days a year, accrued and earned monthly. Accrued steps
+        up by 14/12 days every 30 days. Earned takes those same steps starting
+        at day 60.
       </p>
 
       <div className="blind-gap-inner">
@@ -208,12 +207,12 @@ export function BlindGap() {
               />
             ))}
             <g className="blind-gap-accrued" data-shown={shown(frameStep, 2)}>
-              <path className="blind-gap-accrued-area" d={areaPath(ACCRUED_DAYS, accruedAt)} />
-              <polyline className="blind-gap-accrued-line" points={linePoints(ACCRUED_DAYS, accruedAt)} />
+              <path className="blind-gap-accrued-area" d={stepArea(accruedLine)} />
+              <polyline className="blind-gap-accrued-line" points={accruedLine} />
             </g>
             <g className="blind-gap-earned" data-shown={shown(frameStep, 3)}>
-              <path className="blind-gap-earned-area" d={areaPath(EARNED_DAYS, earnedAt)} />
-              <polyline className="blind-gap-earned-line" points={linePoints(EARNED_DAYS, earnedAt)} />
+              <path className="blind-gap-earned-area" d={stepArea(earnedLine)} />
+              <polyline className="blind-gap-earned-line" points={earnedLine} />
             </g>
           </svg>
 

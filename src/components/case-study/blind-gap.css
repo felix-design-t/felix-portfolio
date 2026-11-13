@@ -151,18 +151,19 @@
 }
 
 .blind-gap-accrued-area {
-  fill: color-mix(in srgb, var(--accent-blue) 42%, transparent);
+  fill: color-mix(in srgb, var(--accent-blue) 42%, var(--mat));
 }
 
+/* Opaque, so where this sits on the accrued area it stays earned, not a blend. */
 .blind-gap-earned-area {
-  fill: color-mix(in srgb, var(--accent-rose) 48%, transparent);
+  fill: color-mix(in srgb, var(--accent-rose) 48%, var(--mat));
 }
 
 .blind-gap-accrued-line,
 .blind-gap-earned-line {
   fill: none;
   stroke-width: 1.5px;
-  stroke-linejoin: round;
+  stroke-linejoin: miter;
   stroke-linecap: butt;
   vector-effect: non-scaling-stroke;
 }
