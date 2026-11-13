@@ -62,12 +62,19 @@ function HistoricalCheck() {
         <p className="dec-admin">Yes</p>
 
         <div className="dec-composer" aria-label="Message">
-          <p className="dec-composer-hint">Message</p>
-          <span className="dec-composer-send" aria-hidden="true">
-            <svg viewBox="0 0 16 16" className="dec-composer-icon">
-              <path d="M8 12.5V3.8M8 3.8 4.6 7.2M8 3.8l3.4 3.4" />
-            </svg>
-          </span>
+          <p className="dec-composer-hint">Ask about this policy</p>
+          <div className="dec-composer-bar">
+            <span className="dec-composer-plus" aria-hidden="true">
+              <svg viewBox="0 0 16 16" className="dec-composer-icon">
+                <path d="M8 3.5v9M3.5 8h9" />
+              </svg>
+            </span>
+            <span className="dec-composer-send" aria-hidden="true">
+              <svg viewBox="0 0 16 16" className="dec-composer-icon">
+                <path d="M8 12.5V3.8M8 3.8 4.6 7.2M8 3.8l3.4 3.4" />
+              </svg>
+            </span>
+          </div>
         </div>
       </section>
 

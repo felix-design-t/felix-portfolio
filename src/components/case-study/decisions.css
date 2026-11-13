@@ -85,26 +85,39 @@
   border-left: 1px solid var(--toc-mark);
 }
 
-/* The message box stays at the bottom of the conversation, even when the result is taller. */
+/* The message box stays at the bottom of the conversation, even when the result is taller.
+   Prompt on the first line. Plus on the left, send on the right. */
 .dec-composer {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 10px;
   margin-top: auto;
-  min-height: 36px;
-  padding: 4px 4px 4px 10px;
+  padding: 10px 10px 8px;
   border: 1px solid var(--toc-line);
-  border-radius: 12px;
-  background: var(--toc-raised);
+  border-radius: 16px;
+  background: var(--toc-surface);
 }
 
 .dec-composer-hint {
-  flex: 1 1 auto;
-  min-width: 0;
   margin: 0;
+  padding: 0 2px;
   font-family: var(--font-body);
   font-size: var(--toc-body-size);
   line-height: var(--toc-body-line);
+  color: var(--toc-text-secondary);
+}
+
+.dec-composer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dec-composer-plus {
+  display: grid;
+  width: var(--toc-icon-button);
+  height: var(--toc-icon-button);
+  place-items: center;
   color: var(--toc-text-secondary);
 }
 
@@ -115,8 +128,8 @@
   height: var(--toc-icon-button);
   place-items: center;
   border-radius: 9999px;
-  background: var(--toc-mark);
-  color: var(--toc-on-mark);
+  background: var(--toc-control);
+  color: var(--toc-text);
 }
 
 .dec-composer-icon {
