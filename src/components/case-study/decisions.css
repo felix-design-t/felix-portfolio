@@ -151,6 +151,13 @@
   white-space: nowrap;
 }
 
+/* Legend and case marks only. The year chart keeps its own dots. */
+.dec-result .xp-dot,
+.dec-result .xp-group-count::before {
+  width: 4px;
+  height: 4px;
+}
+
 /* The report reuses Exploration 02. The case list starts under the year. */
 .dec-result .xp-groups {
   border-top: 1px solid var(--toc-line);
