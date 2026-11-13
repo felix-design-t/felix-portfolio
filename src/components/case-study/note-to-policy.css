@@ -83,6 +83,11 @@
   padding: 8px 10px;
 }
 
+/* This thread shows the request as plain text. The phrase marks stay for the earlier screen. */
+.ntp-thread .ofs-phrase {
+  text-decoration: none;
+}
+
 .ntp-thread .ofs-chip {
   min-height: 0;
   padding: 4px 8px;
