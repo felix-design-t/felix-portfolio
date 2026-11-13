@@ -6,8 +6,8 @@ import "./exploration.css";
  * Exploration idea 1: the admin tries a scenario before launch.
  *
  * A product card: preset chips, three input-like fields, and one result
- * line. The part of the policy that decided the result carries the mark
- * underline. Static: this is the end state.
+ * line. The deciding words in the result carry the mark underline.
+ * Static: this is the end state.
  */
 
 const PRESETS = ["Day 91", "Year end", "Part-time"];
@@ -27,8 +27,7 @@ export function TryAScenarioVisual() {
           <header className="xp-card-head">
             <h3 className="xp-card-title">Sales PTO Policy</h3>
             <p className="xp-card-meta">
-              90-day wait, 14 days a year,{" "}
-              <span className="xp-mark">earned monthly</span>
+              90 days before PTO accrues, 14 days a year, earned monthly
             </p>
           </header>
 
