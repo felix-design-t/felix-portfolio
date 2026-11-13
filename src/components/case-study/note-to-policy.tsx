@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import "./type-what-you-have.css";
 import "./only-what-you-said.css";
 import "./edit-one-line.css";
@@ -19,8 +22,37 @@ const FIELDS = [
 ] as const;
 
 export function NoteToPolicyVisual() {
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const figure = root.closest("figure");
+    const placeholder = figure?.nextElementSibling?.querySelector(".case-study-frame");
+    if (!figure || !(placeholder instanceof HTMLElement)) return;
+
+    // The empty frame under this one stays the same height as the screen.
+    const match = () => {
+      placeholder.style.height = `${figure.offsetHeight}px`;
+      placeholder.style.aspectRatio = "auto";
+    };
+    match();
+    const observer = new ResizeObserver(match);
+    observer.observe(figure);
+    return () => {
+      observer.disconnect();
+      placeholder.style.height = "";
+      placeholder.style.aspectRatio = "";
+    };
+  }, []);
+
   return (
-    <div className="toc-product ntp-product ofs-product" data-visual="note-to-policy" data-fit="row">
+    <div
+      ref={rootRef}
+      className="toc-product ntp-product ofs-product"
+      data-visual="note-to-policy"
+      data-fit="row"
+    >
       <div className="ntp-window">
         <header className="ntp-titlebar">
           <h3 className="ntp-title">Sales PTO policy</h3>

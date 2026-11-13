@@ -29,16 +29,17 @@
   align-items: center;
   justify-content: center;
   min-width: 0;
-  padding: 10px var(--toc-pad);
+  min-height: 32px;
+  padding: 0 12px;
   border-bottom: 1px solid var(--toc-line);
 }
 
 .ntp-title {
   margin: 0;
   font-family: var(--font-body);
-  font-size: var(--toc-title-size);
-  font-weight: 500;
-  line-height: var(--toc-title-line);
+  font-size: var(--toc-meta-size);
+  font-weight: 400;
+  line-height: var(--toc-meta-line);
   color: var(--toc-text);
   text-align: center;
 }
@@ -46,10 +47,62 @@
 .ntp-thread {
   display: flex;
   flex-direction: column;
-  gap: var(--toc-gap);
+  gap: 20px;
   min-width: 0;
   box-sizing: border-box;
-  padding: var(--toc-pad);
+  padding: 16px;
+}
+
+/* Same steps as the Decisions screen above: conversation at meta,
+   card titles at body, the quiet lines at the label step. */
+.ntp-thread .ofs-request,
+.ntp-thread .ofs-lead,
+.ntp-thread .ofs-chip-label,
+.ntp-thread .ofs-chip-value,
+.ntp-thread .ofs-option,
+.ntp-thread .eol-line,
+.ntp-thread .eol-count,
+.ntp-thread .eol-token,
+.ntp-thread .eol-quiet,
+.ntp-thread .eol-preview {
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
+}
+
+.ntp-thread .eol-title {
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
+}
+
+.ntp-thread .ofs-card {
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+.ntp-thread .ofs-bubble {
+  padding: 8px 10px;
+}
+
+.ntp-thread .ofs-chip {
+  min-height: 0;
+  padding: 4px 8px;
+}
+
+.ntp-thread .ofs-option,
+.ntp-thread .eol-quiet,
+.ntp-thread .eol-preview,
+.ntp-thread .eol-step {
+  height: 24px;
+}
+
+.ntp-thread .eol-card {
+  gap: 10px;
+  padding: 12px;
+}
+
+.ntp-thread .eol-token {
+  min-height: 24px;
+  padding: 0 8px;
 }
 
 /* The Trust Building chips are buttons. Here they are the finished
