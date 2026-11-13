@@ -365,8 +365,8 @@
 }
 
 .dec-generated-name {
-  font-size: var(--toc-meta-size);
-  line-height: var(--toc-meta-line);
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
   color: var(--toc-text);
 }
 
