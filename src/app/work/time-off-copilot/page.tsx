@@ -11,6 +11,7 @@ import { TypeWhatYouHaveVisual } from "@/components/case-study/type-what-you-hav
 import { BlindGap } from "@/components/case-study/blind-gap";
 import { DecisionDocumentVisual } from "@/components/case-study/decision-document";
 import { DecisionLeadVisual } from "@/components/case-study/decision-lead";
+import { NoteToPolicyVisual } from "@/components/case-study/note-to-policy";
 import { timeOffCopilot } from "@/content/case-studies/time-off-copilot";
 
 export const metadata: Metadata = {
@@ -36,6 +37,8 @@ export default function TimeOffCopilotPage() {
         "mistakes-in-use": <BlindGap />,
         // Decisions: the warning waits on the left, the case sits on the right.
         decisions: <DecisionLeadVisual />,
+        // Solution, first frame: the note, the fields, the corrected lines, then Confirm.
+        solution: <NoteToPolicyVisual />,
       }}
       followUpVisuals={{
         // The fields, answers, and kept warnings, in one policy document.
