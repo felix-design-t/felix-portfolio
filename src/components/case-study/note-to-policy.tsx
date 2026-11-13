@@ -4,12 +4,13 @@ import "./note-to-policy.css";
 /**
  * Solution, first frame.
  *
- * One product window, not three separate frames. The left side is the
- * conversation, and it starts with the note the admin typed (the same
- * note as Introducing the agent). The right side is the policy taking
- * shape: the fields the agent pulled out of that note, then the lines
- * the admin corrected. Confirm sits under those lines. Nothing here
- * has become the policy until the admin confirms.
+ * One product window, not three separate frames. The name of the
+ * policy sits in the window title, the way a file name sits in a
+ * window bar. Under that, the left side is the conversation, starting
+ * from the note the admin typed. The right side is the policy taking
+ * shape: the fields the agent pulled out, then the lines the admin
+ * corrected. Confirm sits under those lines. Nothing here has become
+ * the policy until the admin confirms.
  *
  * The words are reused from "Only what you said" and "See every change".
  * Scale comes from the product tokens: title, then body, then a short
@@ -27,6 +28,10 @@ export function NoteToPolicyVisual() {
   return (
     <div className="toc-product ntp-product" data-visual="note-to-policy">
       <div className="ntp-window">
+        <header className="ntp-titlebar">
+          <h3 className="ntp-title">Sales PTO policy</h3>
+        </header>
+
         <section className="ntp-thread" aria-label="Conversation, starting from the note">
           <p className="ntp-admin">
             I need to create a <span className="ntp-source">PTO</span> policy for{" "}
@@ -51,8 +56,6 @@ export function NoteToPolicyVisual() {
         </section>
 
         <article className="ntp-policy" aria-label="Sales PTO policy, not confirmed yet">
-          <h3 className="ntp-title">Sales PTO policy</h3>
-
           <div className="ntp-body">
             <section className="ntp-group" aria-label="Fields the agent pulled out">
               <p className="toc-label">Fields</p>

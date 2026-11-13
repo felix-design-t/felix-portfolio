@@ -26,6 +26,18 @@
   background: var(--toc-surface);
 }
 
+/* The window's title bar. The policy name sits in the middle,
+   where a file name would. A hairline sets it off from the work. */
+.ntp-titlebar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 10px var(--toc-pad);
+  border-bottom: 1px solid var(--toc-line);
+}
+
 .ntp-thread,
 .ntp-policy {
   display: flex;
@@ -95,13 +107,16 @@
   text-underline-offset: 2px;
 }
 
-/* Title, then the body, then the controls. One group-gap between each. */
+/* The window title. Same title step as the rest of the product. */
 .ntp-title {
+  margin: 0;
   font-family: var(--font-body);
   font-size: var(--toc-title-size);
   font-weight: 500;
   line-height: var(--toc-title-line);
   color: var(--toc-text);
+  text-align: center;
+  text-wrap: balance;
 }
 
 .ntp-body {
