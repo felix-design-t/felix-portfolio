@@ -6,7 +6,7 @@ import "./decisions.css";
  * Decision 02.
  *
  * Setup was many fields. The result is one policy document: the fields,
- * the answers the admin gave, and the decision that solved the case.
+ * and the decision that solved the case.
  * Approve sits with them. The agent has not published it.
  */
 
@@ -17,11 +17,6 @@ const FIELDS = [
   { label: "Wait time", value: "90 days" },
   { label: "Accrual rate", value: "1.167/month" },
   { label: "Earned rate", value: "same as accrual rate" },
-];
-
-const ANSWERS = [
-  { label: "Accrual", value: "Monthly" },
-  { label: "Day 105", value: "Keep the warning" },
 ];
 
 const SOLVED = [
@@ -42,7 +37,7 @@ export function DecisionDocumentVisual() {
         <header className="xp-card-head">
           <h3 className="xp-card-title">Sales PTO policy</h3>
           <p className="xp-card-meta">
-            Fields, answers, and the decision that solved it
+            Fields, and the decision that solved it
           </p>
         </header>
 
@@ -53,18 +48,6 @@ export function DecisionDocumentVisual() {
               <div key={field.label} className="dec-row">
                 <dt>{field.label}</dt>
                 <dd>{field.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <section className="dec-block" aria-label="Answers">
-          <p className="toc-label">Answers</p>
-          <dl className="dec-rows">
-            {ANSWERS.map((answer) => (
-              <div key={answer.label} className="dec-row">
-                <dt>{answer.label}</dt>
-                <dd>{answer.value}</dd>
               </div>
             ))}
           </dl>
