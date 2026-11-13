@@ -211,6 +211,13 @@
   gap: 6px;
 }
 
+/* The question sits close, and "No" sits far. Pull those two gaps to the same step. */
+.dec-screen[data-screen="scenario"] .dec-agent-message {
+  gap: 12px;
+  margin-top: 8px;
+  margin-bottom: -8px;
+}
+
 .dec-actions {
   display: flex;
   align-items: center;
