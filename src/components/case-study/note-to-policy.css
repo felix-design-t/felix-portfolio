@@ -4,12 +4,26 @@
   One window. Conversation on the left, policy on the right. A narrow
   frame stacks them, conversation first, so the note still leads.
 
-  Type and the confirm pill come from .toc-product: title, body, then
-  the control step. This file does not set those sizes again.
+  This screen is a full product window, so its type is a step
+  smaller than the other frames. Notion's words stay small against
+  the window. These sizes do the same job here. They stay on this
+  screen only.
   No shadow, gradient, or blur.
 */
 
 .ntp-product {
+  /* Smaller than the shared product scale, for this window only. */
+  --toc-title-size: 12px;
+  --toc-title-line: 16px;
+  --toc-body-size: 11px;
+  --toc-body-line: 15px;
+  --toc-meta-size: 10px;
+  --toc-meta-line: 13px;
+  --toc-label-size: 9px;
+  --toc-label-line: 12px;
+  --toc-control-size: 10px;
+  --toc-control-line: 13px;
+
   container-type: inline-size;
   aspect-ratio: auto;
   height: auto;
