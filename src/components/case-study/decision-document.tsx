@@ -68,7 +68,6 @@ export function DecisionDocumentVisual() {
         </section>
 
         <div className="dec-gate">
-          <span className="toc-label">Not published</span>
           <span className="xp-solid">Approve policy</span>
         </div>
       </article>

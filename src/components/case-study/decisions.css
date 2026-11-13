@@ -513,6 +513,21 @@
   gap: 4px;
 }
 
+.dec-doc .dec-block[aria-label="Fields"] .dec-row {
+  border-top: none;
+}
+
+.dec-doc .dec-block[aria-label="Tested"] {
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--toc-line);
+}
+
+.dec-gate {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .dec-rows {
   margin: 0;
   padding: 0;
