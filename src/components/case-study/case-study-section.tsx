@@ -94,7 +94,10 @@ export function CaseStudySection({
       {section.closingVisual && section.tradeoffs ? <TradeoffFrame /> : null}
       {section.followUp ? (
         <>
-          <h3 className="case-study-section-title">{section.followUp.title}</h3>
+          {/* Same space before this title as before "02." in Exploration. */}
+          <h3 className="case-study-section-title" data-idea-start="true">
+            {section.followUp.title}
+          </h3>
           <p
             className="case-study-body"
             data-placeholder={
