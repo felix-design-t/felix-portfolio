@@ -265,9 +265,13 @@
 
 /* Idea 3: the inbox card. */
 
+.xp-ask {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .xp-ask-question {
-  padding-left: 12px;
-  border-left: 1px solid var(--toc-mark);
   font-size: var(--toc-title-size);
   font-weight: 500;
   line-height: var(--toc-title-line);
@@ -285,15 +289,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  min-height: 40px;
-  border-top: 1px solid var(--toc-line);
+  min-height: 36px;
   font-size: var(--toc-body-size);
   line-height: var(--toc-body-line);
   color: var(--toc-text-secondary);
-}
-
-.xp-choice:last-child {
-  border-bottom: 1px solid var(--toc-line);
 }
 
 .xp-choice[data-chosen="true"] {
@@ -341,7 +340,9 @@
 
 .xp-card-foot {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 /* The one solid button in the frame. */

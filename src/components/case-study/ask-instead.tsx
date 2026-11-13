@@ -17,7 +17,7 @@ export function AskInsteadVisual() {
     <div className="xp-idea" data-visual="ask-instead">
       <div className="toc-product xp-product">
           <article className="xp-card" aria-label="Inbox">
-            <header className="xp-card-head">
+            <header className="xp-ask">
               <span className="toc-label">Ask</span>
               <p className="xp-ask-question">
                 Maya asked for 3 days on day 105. She has earned 1. The policy
@@ -38,17 +38,16 @@ export function AskInsteadVisual() {
               })}
             </ul>
 
-            <p className="xp-check">
-              <span className="xp-checkbox" aria-hidden="true">
-                <svg viewBox="0 0 16 16">
-                  <path d="M4 8.5l2.5 2.5L12 5.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                </svg>
-              </span>
-              <span>Apply to future cases like this</span>
-              <span className="toc-sr">, checked</span>
-            </p>
-
             <div className="xp-card-foot">
+              <p className="xp-check">
+                <span className="xp-checkbox" aria-hidden="true">
+                  <svg viewBox="0 0 16 16">
+                    <path d="M4 8.5l2.5 2.5L12 5.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                  </svg>
+                </span>
+                <span>Apply to future cases like this</span>
+                <span className="toc-sr">, checked</span>
+              </p>
               <span className="xp-solid">Confirm</span>
             </div>
           </article>
