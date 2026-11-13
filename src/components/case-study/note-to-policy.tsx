@@ -53,6 +53,15 @@ export function NoteToPolicyVisual() {
           <p className="ntp-agent">
             One line changed. Yearly limit, 14 days to 16.
           </p>
+
+          <div className="ntp-composer" aria-label="Message">
+            <p className="ntp-composer-hint">Message</p>
+            <span className="ntp-composer-send" aria-hidden="true">
+              <svg viewBox="0 0 16 16" className="ntp-composer-icon">
+                <path d="M8 12.5V3.8M8 3.8 4.6 7.2M8 3.8l3.4 3.4" />
+              </svg>
+            </span>
+          </div>
         </section>
 
         <article className="ntp-policy" aria-label="Sales PTO policy, not confirmed yet">
