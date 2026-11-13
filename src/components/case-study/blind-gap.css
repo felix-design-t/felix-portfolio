@@ -3,7 +3,7 @@
 
   The frame's matte fill is the ground. Nothing sits between the
   chart and that fill. The policy uses section type. Marks use
-  body caption. Accrued is the site blue. Earned is the site orange.
+  body caption. Accrued is the site violet. Earned is the site blue.
   Fills are flat tints of those accents. No shadow, gradient, or blur.
 
   Across: days employed, 0 to 150. Up: days of time off, 0 to 5.
@@ -96,11 +96,11 @@
 }
 
 .blind-gap-swatch[data-mark="accrued"] {
-  background: var(--accent-blue);
+  background: var(--accent-violet);
 }
 
 .blind-gap-swatch[data-mark="earned"] {
-  background: var(--accent-orange);
+  background: var(--accent-blue);
 }
 
 .blind-gap-plot {
@@ -151,12 +151,12 @@
 }
 
 .blind-gap-accrued-area {
-  fill: color-mix(in srgb, var(--accent-blue) 42%, var(--mat));
+  fill: color-mix(in srgb, var(--accent-violet) 42%, var(--mat));
 }
 
 /* Opaque, so where this sits on the accrued area it stays earned, not a blend. */
 .blind-gap-earned-area {
-  fill: color-mix(in srgb, var(--accent-orange) 48%, var(--mat));
+  fill: color-mix(in srgb, var(--accent-blue) 48%, var(--mat));
 }
 
 .blind-gap-accrued-line,
@@ -169,11 +169,11 @@
 }
 
 .blind-gap-accrued-line {
-  stroke: var(--accent-blue);
+  stroke: var(--accent-violet);
 }
 
 .blind-gap-earned-line {
-  stroke: var(--accent-orange);
+  stroke: var(--accent-blue);
 }
 
 .blind-gap-axis {

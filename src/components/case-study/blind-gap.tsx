@@ -12,7 +12,7 @@ import "./blind-gap.css";
  *
  * Accrued stays flat, then eases up by 14/12 days around each 30th day.
  * Earned uses those same rises, but the first one is on day 60.
- * The blue area is accrued. The orange area is earned.
+ * The violet area is accrued. The blue area is earned.
  * Both sit directly on the matte placeholder.
  *
  * The story plays once: the policy, then accrued, then earned.
