@@ -169,7 +169,7 @@ function MayaScenario() {
               <span className="xp-solid">Confirm</span>
             </div>
           </div>
-        <MessageBox />
+        <MessageBox isDisabled />
       </section>
 
       <nav className="dec-rail" aria-label="Scenarios already tested">
@@ -195,9 +195,14 @@ function MayaScenario() {
 }
 
 /** The same message box under both conversations. It stays at the bottom of the thread. */
-function MessageBox() {
+function MessageBox({ isDisabled = false }: { isDisabled?: boolean }) {
   return (
-    <div className="dec-composer" aria-label="Message">
+    <div
+      className="dec-composer"
+      data-state={isDisabled ? "disabled" : undefined}
+      aria-disabled={isDisabled ? true : undefined}
+      aria-label="Message"
+    >
       <p className="dec-composer-hint">Ask about this policy</p>
       <div className="dec-composer-bar">
         <span className="dec-composer-plus" aria-hidden="true">

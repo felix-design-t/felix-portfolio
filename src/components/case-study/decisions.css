@@ -294,6 +294,12 @@
   color: var(--toc-text);
 }
 
+/* Sits just under the choices. The history box still pins to the bottom of its column. */
+.dec-composer[data-state="disabled"] {
+  margin-top: -12px;
+  opacity: 0.45;
+}
+
 .dec-composer-icon {
   display: block;
   width: 14px;
