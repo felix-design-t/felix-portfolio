@@ -42,29 +42,53 @@
   flex: 1;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 20px;
+  gap: 0;
   min-height: 0;
   overflow: hidden;
 }
 
-.ntp-pop {
-  animation: ntp-pop var(--toc-dur-move) var(--toc-ease);
+/* A new message eases up into the space above the chat box.
+   The ones already there slide up with it. */
+.ntp-feed .ofs-message,
+.ntp-feed .eol-card {
+  max-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    max-height var(--toc-dur-move) var(--toc-ease),
+    margin-top var(--toc-dur-move) var(--toc-ease),
+    opacity var(--toc-dur-fade) var(--toc-ease),
+    transform var(--toc-dur-move) var(--toc-ease);
 }
 
-@keyframes ntp-pop {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.ntp-feed .ofs-message[data-state="current"] {
+  max-height: 180px;
+  opacity: 1;
+  transform: none;
+}
+
+.ntp-feed .eol-card[data-state="current"] {
+  max-height: 480px;
+  opacity: 1;
+  transform: none;
+}
+
+.ntp-feed > [data-state="current"] + [data-state="current"] {
+  margin-top: 20px;
+}
+
+.ntp-product[data-snap="true"] .ntp-feed .ofs-message,
+.ntp-product[data-snap="true"] .ntp-feed .eol-card {
+  transition: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ntp-pop {
-    animation: none;
+  .ntp-feed .ofs-message,
+  .ntp-feed .eol-card {
+    transition: none;
+    transform: none;
   }
 }
 

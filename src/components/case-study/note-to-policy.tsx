@@ -33,6 +33,7 @@ export function NoteToPolicyVisual() {
   const [seen, setSeen] = useState(false);
   const [run, setRun] = useState(0);
   const [step, setStep] = useState(0);
+  const [snap, setSnap] = useState(false);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -86,14 +87,19 @@ export function NoteToPolicyVisual() {
       setStep(BEATS);
       return;
     }
+    setSnap(true);
     setStep(0);
+    const release = window.requestAnimationFrame(() => setSnap(false));
     const timers = Array.from({ length: BEATS }, (_, index) =>
       window.setTimeout(() => setStep(index + 1), TOC_STEP_MS * (index + 1)),
     );
     timers.push(
       window.setTimeout(() => setRun((value) => value + 1), TOC_STEP_MS * BEATS + TOC_HOLD_MS),
     );
-    return () => timers.forEach((timerId) => window.clearTimeout(timerId));
+    return () => {
+      window.cancelAnimationFrame(release);
+      timers.forEach((timerId) => window.clearTimeout(timerId));
+    };
   }, [seen, run]);
 
   return (
@@ -102,12 +108,12 @@ export function NoteToPolicyVisual() {
       className="toc-product ntp-product ofs-product"
       data-visual="note-to-policy"
       data-fit="row"
+      data-snap={snap ? "true" : undefined}
     >
       <div className="ntp-window">
         <div className="ntp-thread">
           <div className="ntp-feed">
-          {step > 0 ? (
-          <article className="ofs-bubble ofs-message ntp-pop" data-state="current" aria-label="Your request">
+          <article className="ofs-bubble ofs-message" data-state={step > 0 ? "current" : "hidden"} aria-label="Your request">
             <p className="ofs-request">
               I need to create a <span className="ofs-phrase">PTO</span> policy for{" "}
               <span className="ofs-phrase">sales</span> teams, the{" "}
@@ -115,10 +121,8 @@ export function NoteToPolicyVisual() {
               <span className="ofs-phrase">14 days</span>.
             </p>
           </article>
-          ) : null}
 
-          {step > 1 ? (
-          <article className="ofs-card ofs-message ntp-pop" data-state="current" aria-label="Agent: what I got">
+          <article className="ofs-card ofs-message" data-state={step > 1 ? "current" : "hidden"} aria-label="Agent: what I got">
             <p className="ofs-lead">Here&apos;s what I got from your request</p>
             <ul className="ofs-chips">
               {FIELDS.map((field) => (
@@ -131,10 +135,8 @@ export function NoteToPolicyVisual() {
               ))}
             </ul>
           </article>
-          ) : null}
 
-          {step > 2 ? (
-          <article className="ofs-card ofs-message ntp-pop" data-state="current" aria-label="Agent: accrual question">
+          <article className="ofs-card ofs-message" data-state={step > 2 ? "current" : "hidden"} aria-label="Agent: accrual question">
             <p className="ofs-lead">I didn&apos;t see accrual. How should it work?</p>
             <div className="ofs-resolve ofs-resolve-ask">
               <div className="ofs-resolve-side ofs-options" role="group" aria-label="Accrual">
@@ -150,26 +152,20 @@ export function NoteToPolicyVisual() {
               </div>
             </div>
           </article>
-          ) : null}
 
-          {step > 3 ? (
-          <article className="ofs-bubble ofs-message ntp-pop" data-state="current" aria-label="Your answer">
+          <article className="ofs-bubble ofs-message" data-state={step > 3 ? "current" : "hidden"} aria-label="Your answer">
             <p className="ofs-request">Monthly</p>
           </article>
-          ) : null}
 
-          {step > 4 ? (
-          <article className="ofs-card ofs-message ntp-pop" data-state="current" aria-label="Agent: ready">
+          <article className="ofs-card ofs-message" data-state={step > 4 ? "current" : "hidden"} aria-label="Agent: ready">
             <p className="ofs-lead">Got it.</p>
             <div className="ofs-chip ofs-chip-static" data-shown="true">
               <span className="ofs-chip-label">Accrual</span>
               <span className="ofs-chip-value">Monthly</span>
             </div>
           </article>
-          ) : null}
 
-          {step > 5 ? (
-          <article className="eol-card ntp-pop" aria-label="Sales PTO Policy">
+          <article className="eol-card" data-state={step > 5 ? "current" : "hidden"} aria-label="Sales PTO Policy">
             <header className="eol-head">
               <h3 className="eol-title">Sales PTO Policy</h3>
               <p className="eol-count">1 line changed, 3 unchanged</p>
@@ -210,7 +206,6 @@ export function NoteToPolicyVisual() {
               </span>
             </div>
           </article>
-          ) : null}
           </div>
 
           <div className="ntp-composer" aria-label="Message">
