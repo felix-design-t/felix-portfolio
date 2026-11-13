@@ -62,10 +62,11 @@
   flex-direction: column;
   width: 100%;
   aspect-ratio: 16 / 10;
-  /* Pulls the chat, thinking, and preview in from the frame edge. */
+  /* Pulls the chat, thinking, and preview in from the frame edge.
+     The frame is the ground. No tinted slab between the frame and a card. */
   padding: 20px;
   border-radius: var(--radius-sm);
-  background: var(--toc-ground);
+  background: transparent;
   color: var(--toc-text);
 }
 
