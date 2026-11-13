@@ -48,7 +48,7 @@ export default function TimeOffCopilotPage() {
       }}
       closingVisuals={{
         "fields-first": <EditOneLineVisual />,
-        // Solution, second frame: the chat continues into the overdraft question, beside the history report.
+        // Solution, second frame: history passes through the chat frame, then the hours thread continues.
         solution: <HistoryToOverdraftVisual />,
       }}
       ideaVisuals={{

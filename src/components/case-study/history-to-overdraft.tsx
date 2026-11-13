@@ -20,9 +20,9 @@ import {
 /**
  * Solution, second frame.
  *
- * One window, two columns. The left column is the whole chat: the
- * setup check, then the overdraft question in that same thread.
- * The right column is last year's report. There is no scenario rail.
+ * One window, one chat column. After the first Yes, the history
+ * report fills this same frame, then gives way. The hours question
+ * continues in that same chat.
  *
  * A new message eases up above the chat box. Messages already open
  * keep their height and slide up with it. The chat box stays put.
@@ -70,7 +70,7 @@ const START: Play = {
 const END: Play = {
   ...START,
   leftYes: true,
-  stage: "history",
+  stage: "chat",
   askShown: true,
   replyShown: true,
   midYes: true,
@@ -145,7 +145,8 @@ export function HistoryToOverdraftVisual() {
     at(time, () => set({ stage: "history" }));
 
     time += TOC_MOVE_MS + TOC_PAUSE_MS * 2;
-    time += TOC_REST_MS;
+    at(time, () => set({ stage: "chat" }));
+    time += TOC_MOVE_MS + TOC_REST_MS;
     time = typeInto(ASK, "askText", time);
     time += TOC_BEAT_MS;
     at(time, () => set({ askSending: true }));
@@ -240,7 +241,6 @@ export function HistoryToOverdraftVisual() {
           />
         </section>
 
-        <div className="hto-stage">
           <article
             className="dec-result hto-panel hto-history"
             data-state={view.stage === "history" ? "current" : "hidden"}
@@ -264,7 +264,6 @@ export function HistoryToOverdraftVisual() {
               <LastYearReport />
             </div>
           </article>
-        </div>
       </div>
     </div>
   );
@@ -292,7 +291,7 @@ function Composer({ text, sending }: { text: string; sending: boolean }) {
     <div className="dec-composer" aria-label="Message">
       <p className={isTyping ? "hto-typed" : "dec-composer-hint"}>
         {isTyping ? text : "Ask about this policy"}
-        {isTyping ? <span className="hto-caret" aria-hidden="true" /> : null}
+        {isTyping && !sending ? <span className="hto-caret" aria-hidden="true" /> : null}
       </p>
       <div className="dec-composer-bar">
         <span className="dec-composer-plus" aria-hidden="true">
@@ -300,7 +299,12 @@ function Composer({ text, sending }: { text: string; sending: boolean }) {
             <path d="M8 3.5v9M3.5 8h9" />
           </svg>
         </span>
-        <span className="dec-composer-send hto-send" data-pressed={sending ? "true" : undefined} aria-hidden="true">
+        <span
+          className="dec-composer-send hto-send"
+          data-ready={isTyping ? "true" : "false"}
+          data-pressed={sending ? "true" : "false"}
+          aria-hidden="true"
+        >
           <svg viewBox="0 0 16 16" className="dec-composer-icon">
             <path d="M8 12.5V3.8M8 3.8 4.6 7.2M8 3.8l3.4 3.4" />
           </svg>

@@ -1,8 +1,9 @@
 /*
   Solution, second frame.
 
-  One product window, two columns. The left column is the whole chat.
-  The right column is the history report. There is no scenario rail.
+  One product window. The chat fills the frame. After the first Yes,
+  the history report covers that same frame, then gives way so the
+  hours conversation can continue in the chat.
 
   Messages ease up above the chat box, the same way as the first
   solution screen. A message that is already open keeps its height.
@@ -19,8 +20,9 @@
 }
 
 .hto-window {
-  display: grid;
-  grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
+  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -31,28 +33,19 @@
 
 .hto-chat {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
   min-width: 0;
   min-height: 0;
   box-sizing: border-box;
+  height: 100%;
   padding: 16px;
   overflow: hidden;
 }
 
-.hto-chat {
-  height: 100%;
-  border-right: 1px solid var(--toc-line);
-}
-
-.hto-stage {
-  position: relative;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-}
-
-/* The report and the later conversation share this space. */
+/* The report covers the chat, then leaves. It is not a second column. */
 .hto-panel {
   position: absolute;
   inset: 0;
@@ -73,11 +66,13 @@
   transform: none;
   pointer-events: auto;
   z-index: 1;
+  background: var(--toc-surface);
 }
 
 .hto-history {
   padding: 0;
   gap: 0;
+  background: var(--toc-surface);
 }
 
 .hto-report {
@@ -228,7 +223,16 @@
 }
 
 .hto-send {
-  transition: transform var(--toc-dur-press) var(--toc-ease);
+  transition:
+    background-color var(--toc-dur-fade) var(--toc-ease),
+    color var(--toc-dur-fade) var(--toc-ease),
+    transform var(--toc-dur-press) var(--toc-ease);
+}
+
+/* Green as soon as a letter is in the box. The press is the send. */
+.hto-send[data-ready="true"] {
+  background: var(--toc-mark);
+  color: var(--toc-on-mark);
 }
 
 .hto-send[data-pressed="true"] {
@@ -258,14 +262,3 @@
   }
 }
 
-@container (max-width: 460px) {
-  .hto-window {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  }
-
-  .hto-chat {
-    border-right: none;
-    border-bottom: 1px solid var(--toc-line);
-  }
-}
