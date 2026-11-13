@@ -26,7 +26,7 @@ const SOLVED = [
   },
   {
     label: "Auto decision",
-    value: "Approve earned hours, the rest unpaid.",
+    value: "Approve 1 day earned, the rest unpaid.",
   },
 ];
 
