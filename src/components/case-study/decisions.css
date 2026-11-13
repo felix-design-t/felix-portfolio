@@ -174,8 +174,7 @@
 
 .dec-agent,
 .dec-admin,
-.dec-meta,
-.dec-generated-name {
+.dec-meta {
   font-size: var(--toc-body-size);
   line-height: var(--toc-body-line);
 }
@@ -326,6 +325,8 @@
 }
 
 .dec-generated-name {
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
   color: var(--toc-text);
 }
 
