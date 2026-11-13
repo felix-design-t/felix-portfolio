@@ -104,6 +104,15 @@
   scroll-margin-top: calc(112px - var(--space-3));
 }
 
+/*
+  A new idea inside a section sits as far from the caption above it as a
+  continuing section sits from the one before it (--space-6). The flex gap
+  already gives --space-2 of that.
+*/
+.case-study-section-title[data-idea-start="true"] {
+  margin-top: calc(var(--space-6) - var(--space-2));
+}
+
 /* Kind label above the title, e.g. "Problem". */
 .case-study-kicker {
   display: flex;
