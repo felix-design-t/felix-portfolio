@@ -426,12 +426,17 @@
 
 /* ---------- Gains, Costs, and where the idea sits ---------- */
 
-/* Under the product, on the frame. No rule between the card and the pair. */
+/* Under the product, on the frame. No rule between the card and the pair.
+   Side inset matches the card. The pair sits just under it. */
+.toc-product.xp-product:has(+ .xp-notes) {
+  padding-bottom: 8px;
+}
+
 .xp-notes {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--space-2);
-  padding: var(--space-1) var(--space-2) var(--space-2);
+  padding: 0 16px 8px;
   font-family: var(--font-body);
   font-size: var(--text-caption);
   line-height: var(--leading-caption);
