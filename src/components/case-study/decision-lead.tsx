@@ -136,7 +136,7 @@ function MayaScenario() {
           <p className="dec-agent">Do you want me to provide options?</p>
         </div>
 
-        <p className="dec-admin">No</p>
+        <p className="dec-admin">Yes</p>
 
         <div className="dec-options" aria-label="Ways to handle Maya">
             <ul className="xp-choices">
