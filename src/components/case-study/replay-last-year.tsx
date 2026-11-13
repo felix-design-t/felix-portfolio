@@ -124,8 +124,6 @@ export function ReplayLastYearVisual() {
           "Needs history",
           "The past may miss what\u2019s new: no recent hire hit the wait, so day 91 never shows",
         ]}
-        source="agent"
-        moment="before-launch"
       />
     </div>
   );
