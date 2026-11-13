@@ -85,6 +85,51 @@
   border-left: 1px solid var(--toc-mark);
 }
 
+/* The message box stays at the bottom of the conversation, even when the result is taller. */
+.dec-composer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  min-height: 36px;
+  padding: 4px 4px 4px 10px;
+  border: 1px solid var(--toc-line);
+  border-radius: 12px;
+  background: var(--toc-raised);
+}
+
+.dec-composer-hint {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--toc-body-size);
+  line-height: var(--toc-body-line);
+  color: var(--toc-text-secondary);
+}
+
+.dec-composer-send {
+  display: grid;
+  flex: none;
+  width: var(--toc-icon-button);
+  height: var(--toc-icon-button);
+  place-items: center;
+  border-radius: 9999px;
+  background: var(--toc-mark);
+  color: var(--toc-on-mark);
+}
+
+.dec-composer-icon {
+  display: block;
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 /* The admin's reply is the one inverted layer, held to their side. */
 .dec-admin {
   align-self: flex-end;
