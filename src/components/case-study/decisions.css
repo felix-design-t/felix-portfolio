@@ -211,12 +211,10 @@
   gap: 6px;
 }
 
-/* The question sits close, and "No" sits far. Pull those two gaps to the same step.
-   The wrapped question and the two reply lines share one line height. */
+/* The two reply lines share the question's line height.
+   The gaps around them stay the thread gap, the same step as the screen above. */
 .dec-screen[data-screen="scenario"] .dec-agent-message {
   gap: 0;
-  margin-top: 8px;
-  margin-bottom: -8px;
 }
 
 .dec-screen[data-screen="scenario"] .dec-admin:first-of-type,
