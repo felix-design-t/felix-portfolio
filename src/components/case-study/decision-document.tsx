@@ -26,7 +26,7 @@ const SOLVED = [
   },
   {
     label: "Auto decision",
-    value: "Approve 1 day earned, the rest unpaid.",
+    value: "Approve earned hours, the rest unpaid.",
   },
 ];
 
@@ -36,9 +36,7 @@ export function DecisionDocumentVisual() {
       <article className="xp-card dec-doc" aria-label="Sales PTO policy">
         <header className="xp-card-head">
           <h3 className="xp-card-title">Sales PTO policy</h3>
-          <p className="xp-card-meta">
-            Fields, and the decision that solved it
-          </p>
+          <p className="xp-card-meta">Edited: 01/15/2026</p>
         </header>
 
         <section className="dec-block" aria-label="Fields">
@@ -68,7 +66,8 @@ export function DecisionDocumentVisual() {
         </section>
 
         <div className="dec-gate">
-          <span className="xp-solid">Approve policy</span>
+          <span className="dec-secondary">Edit</span>
+          <span className="xp-solid">Approve</span>
         </div>
       </article>
     </div>

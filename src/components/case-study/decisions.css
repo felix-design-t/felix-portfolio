@@ -517,7 +517,7 @@
 .dec-block {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 12px;
 }
 
 .dec-doc .dec-block[aria-label="Fields"] .dec-row,
@@ -533,7 +533,25 @@
 
 .dec-gate {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Quiet pair to the solid Approve. Same pill, a line instead of a fill. */
+.dec-secondary {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  height: var(--toc-control-height);
+  padding: var(--toc-control-pad);
+  border: 1px solid var(--toc-line);
+  border-radius: 9999px;
+  background: var(--toc-surface);
+  color: var(--toc-text);
+  font-size: var(--toc-control-size);
+  font-weight: 500;
+  line-height: var(--toc-control-line);
 }
 
 .dec-rows {
