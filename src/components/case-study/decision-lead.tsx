@@ -131,9 +131,9 @@ function MayaScenario() {
         <div className="dec-agent-message">
           <p className="dec-agent">
             <span className="toc-sr">Agent. </span>
-            She is 2 days short. The policy doesn&rsquo;t say what to do.
+            Your current policy doesn&rsquo;t have a solution.
           </p>
-          <p className="dec-agent">Is this ok?</p>
+          <p className="dec-agent">Do you want me to provide options?</p>
         </div>
 
         <p className="dec-admin">No</p>
