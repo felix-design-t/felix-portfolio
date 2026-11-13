@@ -435,7 +435,8 @@
 /* ---------- Gains, Costs, and where the idea sits ---------- */
 
 /* Under the product, on the frame. No rule between the card and the pair.
-   Side inset matches the card. The pair sits just under it. */
+   The card's words start 16px in from its edge. The notes start there
+   too, so the labels are not sitting on the frame border. */
 .toc-product.xp-product:has(+ .xp-notes) {
   padding-bottom: 8px;
 }
@@ -444,7 +445,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--space-2);
-  padding: 0 0 8px;
+  padding: 0 var(--space-2) 8px;
   font-family: var(--font-body);
   font-size: var(--text-caption);
   line-height: var(--leading-caption);
