@@ -150,8 +150,8 @@
 /* A small dot on the right of the title. Gray is the request. Rose is added. */
 .toc-dot {
   flex: none;
-  width: 8px;
-  height: 8px;
+  width: 5px;
+  height: 5px;
   border-radius: 999px;
   background: var(--toc-text-secondary);
 }
