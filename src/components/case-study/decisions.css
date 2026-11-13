@@ -394,7 +394,7 @@
 .dec-screen[data-screen="scenario"] .dec-rail {
   padding: 0;
   gap: 0;
-  background: var(--toc-raised);
+  background: var(--toc-surface);
 }
 
 .dec-screen[data-screen="scenario"] .dec-scenario-list {
@@ -424,7 +424,7 @@
 }
 
 .dec-scenario[data-current="true"] {
-  background: var(--toc-surface);
+  background: var(--toc-control);
   color: var(--toc-text);
   font-weight: 500;
 }
