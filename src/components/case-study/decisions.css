@@ -452,12 +452,12 @@
 .dec-scenario {
   display: flex;
   align-items: center;
-  min-height: 28px;
+  min-height: 22px;
   padding: 0 8px;
   border-radius: 6px;
   font-family: var(--font-body);
-  font-size: var(--toc-meta-size);
-  line-height: var(--toc-meta-line);
+  font-size: var(--toc-label-size);
+  line-height: var(--toc-label-line);
   color: var(--toc-text-secondary);
 }
 
