@@ -121,7 +121,9 @@
   font-size: var(--text-caption);
   font-variant-numeric: tabular-nums;
   line-height: var(--leading-caption);
-  color: var(--text-secondary);
+  /* --text, not secondary. The frame is the matte placeholder, and
+     secondary gray misses contrast on that fill. */
+  color: var(--text);
   text-align: right;
 }
 
@@ -164,7 +166,7 @@
   font-family: var(--font-body);
   font-size: var(--text-caption);
   line-height: var(--leading-caption);
-  color: var(--text-secondary);
+  color: var(--text);
   opacity: 0;
   transition: opacity var(--blind-fade) var(--blind-ease);
 }
@@ -274,7 +276,11 @@
   font-family: var(--font-body);
   font-size: var(--text-caption);
   line-height: var(--leading-caption);
-  color: var(--accent-rose);
+  color: var(--text);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--accent-rose);
+  text-underline-offset: 3px;
   white-space: nowrap;
   transform: translateY(-50%);
   opacity: 0;
@@ -300,7 +306,7 @@
   font-size: var(--text-caption);
   font-variant-numeric: tabular-nums;
   line-height: var(--leading-caption);
-  color: var(--text-secondary);
+  color: var(--text);
   transform: translateX(-50%);
 }
 
