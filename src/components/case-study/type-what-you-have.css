@@ -42,9 +42,11 @@
   --toc-control-line: 14px;
   --toc-control-height: 24px;
   --toc-icon-button: 22px;
-  /* Space: 12px card inset, 8px between groups, 32px list row. */
+  /* Card inset stays 12. The gap between sections stays 12, the same
+     step as before the type got smaller. A smaller font does not
+     pull the next block up against the one above it. */
   --toc-pad: 12px;
-  --toc-gap: 8px;
+  --toc-gap: 12px;
   --toc-row: 32px;
   /* Motion. Section 02 sets the pace; every product visual reuses these.
      JS beats (typing, step, hold) live in toc-motion.ts. */
@@ -529,7 +531,7 @@ html[data-theme="dark"] .toc-product {
   align-items: center;
   gap: 8px;
   margin-top: 4px;
-  padding-top: 8px;
+  padding-top: 12px;
   border-top: 1px solid var(--toc-line);
 }
 
