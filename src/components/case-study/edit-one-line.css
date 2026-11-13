@@ -11,13 +11,11 @@
   height: auto;
 }
 
-/* 16:10 of the product box. The case-study frame supplies the inset,
-   so nothing is subtracted here. Content can be taller. */
+/* The frame's own padding is the inset on every side. A 16:10
+   minimum left empty bands above and below the card. */
 .eol-stage {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: 62.5cqw;
 }
 
 .eol-card {
