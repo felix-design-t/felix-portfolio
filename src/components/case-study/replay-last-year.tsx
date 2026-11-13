@@ -32,7 +32,7 @@ const GROUPS = [
   {
     count: 5,
     label: "Requested more than earned after the wait",
-    example: "Day 132. Asked for 4 days with 2 earned. Was approved, now balance\u00a0−2.",
+    example: "Day 105. Asked for 2 days with 1 earned. Was approved, now balance\u00a0−1.",
   },
   { count: 4, label: "Requested during the 90-day wait" },
   { count: 3, label: "Part-time, earned less each month" },
