@@ -37,9 +37,9 @@ export default function TimeOffCopilotPage() {
       ideaVisuals={{
         // Exploration: three answers to the blind gap, in the same order as `ideas`.
         "where-it-could-go-wrong": [
-          <AskInsteadVisual key="ask" />,
-          <ReplayLastYearVisual key="replay" />,
           <TryAScenarioVisual key="try" />,
+          <ReplayLastYearVisual key="replay" />,
+          <AskInsteadVisual key="ask" />,
         ],
       }}
     />
