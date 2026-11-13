@@ -14,7 +14,7 @@ const FIELDS = [
   { label: "Type", value: "PTO" },
   { label: "Teams", value: "Sales" },
   { label: "Yearly limit", value: "14 days" },
-  { label: "Wait", value: "90 days" },
+  { label: "Wait time", value: "90 days" },
 ];
 
 const ANSWERS = [
