@@ -191,6 +191,13 @@
 
 /* Idea 2: groups that open to one example. */
 
+/* The row is 44px, so the line already sits 12px inside it. A full 16px
+   card inset on top of that made the top and bottom look looser than the
+   sides. 4px plus that 12px lands the line on the same 16px as the sides. */
+.xp-card:has(> .xp-groups) {
+  padding-block: 4px;
+}
+
 .xp-groups {
   margin: 0;
   padding: 0;
