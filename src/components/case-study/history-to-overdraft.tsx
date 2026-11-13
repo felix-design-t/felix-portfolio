@@ -197,7 +197,7 @@ export function HistoryToOverdraftVisual() {
       data-beat={beat}
       data-snap={snap ? "true" : undefined}
     >
-      <div className="hto-window">
+      <div className="hto-window" data-report={view.stage === "history" ? "open" : "closed"}>
         <section className="hto-chat" aria-label="Conversation after the policy is generated">
           <span className="dec-titlebar-settings dec-corner-sidebar">
             <SidebarIcon />

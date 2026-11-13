@@ -1,8 +1,9 @@
 /*
   Solution, second frame.
 
-  One product window. The chat is the left column. The history report
-  stays on the right. There is no tested-scenarios rail.
+  One product window. The chat fills the frame until the first Yes
+  is sent. Then the history report opens on the right and stays.
+  There is no tested-scenarios rail.
 
   Messages ease up above the chat box, the same way as the first
   solution screen. A message that is already open keeps its height.
@@ -20,14 +21,19 @@
 
 .hto-window {
   display: grid;
-  /* Same split as the historical check: a narrower chat, a wider report. */
-  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  /* Full chat until the report opens. Then the historical-check split. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0fr);
   width: 100%;
   height: 100%;
   overflow: hidden;
   border: 1px solid var(--toc-line);
   border-radius: 16px;
   background: var(--toc-surface);
+  transition: grid-template-columns var(--toc-dur-move) var(--toc-ease);
+}
+
+.hto-window[data-report="open"] {
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
 }
 
 .hto-chat {
@@ -41,7 +47,11 @@
   height: 100%;
   padding: 16px;
   overflow: hidden;
-  border-right: 1px solid var(--toc-line);
+  border-right: 1px solid transparent;
+}
+
+.hto-window[data-report="open"] .hto-chat {
+  border-right-color: var(--toc-line);
 }
 
 .hto-stage {
@@ -246,14 +256,16 @@
 
 .hto-product[data-snap="true"] .hto-message,
 .hto-product[data-snap="true"] .hto-panel,
-.hto-product[data-snap="true"] .hto-send {
+.hto-product[data-snap="true"] .hto-send,
+.hto-product[data-snap="true"] .hto-window {
   transition: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hto-message,
   .hto-panel,
-  .hto-send {
+  .hto-send,
+  .hto-window {
     transition: none;
   }
 
@@ -268,13 +280,17 @@
 }
 
 @container (max-width: 460px) {
-  .hto-window {
+  .hto-window,
+  .hto-window[data-report="open"] {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hto-window[data-report="open"] {
     grid-template-rows: minmax(0, 1.1fr) minmax(0, 0.9fr);
   }
 
-  .hto-chat {
-    border-right: none;
+  .hto-window[data-report="open"] .hto-chat {
+    border-right-color: transparent;
     border-bottom: 1px solid var(--toc-line);
   }
 }
