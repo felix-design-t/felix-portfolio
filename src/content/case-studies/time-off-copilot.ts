@@ -84,7 +84,6 @@ export const timeOffCopilot: CaseStudy = {
       body: "Today a rule is published, and its mistakes wait until an employee makes a request. The request is approved or denied for the wrong reason. Only then does the admin go back and change the rule.",
       visual: {
         name: "Blind gap",
-        caption: "Day 91, four days short, six weeks later",
         aspectRatio: "16 / 10",
       },
     },

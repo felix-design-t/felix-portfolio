@@ -190,17 +190,6 @@ export function BlindGap() {
           90-day wait, 14 days a year, accrued and earned monthly.
         </p>
 
-        <ul className="blind-gap-legend">
-          <li data-shown={shown(frameStep, 2)}>
-            <span className="blind-gap-swatch" data-mark="accrued" aria-hidden="true" />
-            Accrued
-          </li>
-          <li data-shown={shown(frameStep, 3)}>
-            <span className="blind-gap-swatch" data-mark="earned" aria-hidden="true" />
-            Earned
-          </li>
-        </ul>
-
         <div className="blind-gap-plot">
           {Y_TICKS.map((tick) => (
             <span
@@ -248,6 +237,17 @@ export function BlindGap() {
             ))}
           </div>
         </div>
+
+        <ul className="blind-gap-legend">
+          <li data-shown={shown(frameStep, 2)}>
+            <span className="blind-gap-swatch" data-mark="accrued" aria-hidden="true" />
+            Accrued
+          </li>
+          <li data-shown={shown(frameStep, 3)}>
+            <span className="blind-gap-swatch" data-mark="earned" aria-hidden="true" />
+            Earned
+          </li>
+        </ul>
       </div>
     </div>
   );
