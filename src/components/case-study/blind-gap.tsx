@@ -35,8 +35,11 @@ const Y_TICKS = [0, 1, 2, 3, 4, 5];
 /** Days the balance rises. Accrued starts on day 30. Earned starts on day 90. */
 const ACCRUED_RISES = [30, 60, 90, 120];
 const EARNED_RISES = [90, 120];
-/** Days each rise takes. Short, so the flat month on either side still shows. */
-const RAMP_DAYS = 12;
+/**
+ * Days each rise takes. Long enough to feel like a slope,
+ * short enough that a flat stretch remains between months.
+ */
+const RAMP_DAYS = 18;
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -59,10 +62,13 @@ function chartY(value: number): number {
   return SCALE - value;
 }
 
-/** Ease used inside one rise. Slow at both ends, so the corner is round. */
+/**
+ * S-curve for one rise. It barely moves at the start and the end,
+ * and does most of the climbing in the middle.
+ */
 function smoothRise(progress: number): number {
   const t = Math.min(1, Math.max(0, progress));
-  return t * t * (3 - 2 * t);
+  return t * t * t * (t * (t * 6 - 15) + 10);
 }
 
 /**
@@ -79,7 +85,7 @@ function stepPoints(riseDays: number[], fromZero: boolean): string {
     const start = day - half;
     const end = Math.min(AXIS_DAYS, day + half);
     points.push(`${start},${chartY(value)}`);
-    const samples = 8;
+    const samples = 12;
     for (let i = 1; i <= samples; i += 1) {
       const x = start + ((end - start) * i) / samples;
       const progress = (x - (day - half)) / RAMP_DAYS;

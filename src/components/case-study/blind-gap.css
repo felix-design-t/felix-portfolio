@@ -163,8 +163,8 @@
 .blind-gap-earned-line {
   fill: none;
   stroke-width: 1.5px;
-  stroke-linejoin: miter;
-  stroke-linecap: butt;
+  stroke-linejoin: round;
+  stroke-linecap: round;
   vector-effect: non-scaling-stroke;
 }
 
