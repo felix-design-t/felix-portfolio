@@ -99,6 +99,9 @@
 }
 
 .blind-gap-swatch[data-mark="earned"] {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-pill);
   background: var(--accent-rose);
 }
 
