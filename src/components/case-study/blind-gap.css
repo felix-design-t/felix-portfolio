@@ -64,7 +64,7 @@
 
 .blind-gap-legend {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--space-2);
   margin: 0;
   padding: 0;
@@ -79,6 +79,7 @@
   font-size: var(--text-caption);
   line-height: var(--leading-caption);
   color: var(--text);
+  white-space: nowrap;
   opacity: 0;
   transition: opacity var(--blind-fade) var(--blind-ease);
 }
@@ -101,6 +102,35 @@
 
 .blind-gap-swatch[data-mark="earned"] {
   background: var(--accent-blue);
+}
+
+.blind-gap-swatch[data-mark="requested"] {
+  background: var(--accent-rose);
+}
+
+.blind-gap-request {
+  position: absolute;
+  z-index: 2;
+  width: 1px;
+  background: var(--accent-rose);
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity var(--blind-fade) var(--blind-ease);
+}
+
+.blind-gap-request[data-shown="true"] {
+  opacity: 1;
+}
+
+.blind-gap-request-dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-rose);
+  transform: translate(-50%, -50%);
 }
 
 .blind-gap-plot {

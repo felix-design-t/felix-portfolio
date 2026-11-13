@@ -35,6 +35,10 @@ const Y_TICKS = [0, 1, 2, 3, 4, 5];
 /** Days the balance rises. Accrued starts on day 30. Earned starts on day 90. */
 const ACCRUED_RISES = [30, 60, 90, 120];
 const EARNED_RISES = [90, 120];
+/** A request on day 100, after earned has finished its first rise. */
+const REQUEST_DAY = 100;
+const REQUEST_AT = 2;
+const EARNED_ON_REQUEST = PER_MONTH;
 /**
  * Days each rise takes. Long enough to feel like a slope,
  * short enough that a flat stretch remains between months.
@@ -182,7 +186,7 @@ export function BlindGap() {
       <p className="blind-gap-sr">
         90-day wait, 14 days a year, accrued and earned monthly. Accrued eases
         up by 14/12 days around every 30th day. Earned takes those same rises
-        starting at day 90.
+        starting at day 90. On day 100, 2 days are requested.
       </p>
 
       <div className="blind-gap-inner">
@@ -229,6 +233,19 @@ export function BlindGap() {
             </g>
           </svg>
 
+          <span
+            className="blind-gap-request"
+            data-shown={shown(frameStep, 3)}
+            style={{
+              left: dayLeft(REQUEST_DAY),
+              top: `calc(var(--plot-top) + (100% - var(--plot-top) - var(--plot-bottom)) * ${(SCALE - REQUEST_AT) / SCALE})`,
+              height: `calc((100% - var(--plot-top) - var(--plot-bottom)) * ${(REQUEST_AT - EARNED_ON_REQUEST) / SCALE})`,
+            }}
+            aria-hidden="true"
+          >
+            <span className="blind-gap-request-dot" />
+          </span>
+
           <div className="blind-gap-axis" aria-hidden="true">
             {X_TICKS.map((tick) => (
               <span key={tick} className="blind-gap-tick" style={{ left: dayLeft(tick) }}>
@@ -246,6 +263,10 @@ export function BlindGap() {
           <li data-shown={shown(frameStep, 3)}>
             <span className="blind-gap-swatch" data-mark="earned" aria-hidden="true" />
             Earned
+          </li>
+          <li data-shown={shown(frameStep, 3)}>
+            <span className="blind-gap-swatch" data-mark="requested" aria-hidden="true" />
+            2 days requested
           </li>
         </ul>
       </div>
