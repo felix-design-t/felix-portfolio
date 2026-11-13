@@ -1,12 +1,12 @@
 /*
   Decisions.
 
-  Product screens only, on the same tokens as the exploration cards.
+  Product screens only, on the same tokens as the other product windows.
   No shadow, gradient, or blur. Static.
 
-  Decision 01 is one window split like a chat beside the thing it is
-  about: the thread on the left, the case on the right. A narrow frame
-  stacks them, thread first.
+  Decision 01 is two frames. Each frame is one window: the conversation,
+  then the thing that conversation produced. A narrow frame stacks the
+  two sides, conversation first.
 */
 
 .dec-lead,
@@ -17,9 +17,8 @@
   justify-content: center;
 }
 
-.dec-split {
+.dec-screen {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   width: 100%;
   overflow: hidden;
   border: 1px solid var(--toc-line);
@@ -27,8 +26,18 @@
   background: var(--toc-surface);
 }
 
+.dec-screen[data-screen="history"] {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+}
+
+/* The scenario list stays a narrow rail, like a sidebar of names. */
+.dec-screen[data-screen="scenario"] {
+  grid-template-columns: minmax(0, 1fr) 132px;
+}
+
 .dec-thread,
-.dec-case {
+.dec-result,
+.dec-rail {
   display: flex;
   flex-direction: column;
   gap: var(--toc-gap);
@@ -41,29 +50,46 @@
   border-right: 1px solid var(--toc-line);
 }
 
-.dec-ask,
+.dec-agent,
 .dec-admin,
-.dec-case-line {
+.dec-title,
+.dec-meta,
+.dec-generated-name {
   margin: 0;
+  font-family: var(--font-body);
+  font-weight: 400;
 }
 
-.dec-ask,
+.dec-agent,
 .dec-admin,
-.dec-case-line {
-  font-family: var(--font-body);
+.dec-meta,
+.dec-generated-name {
   font-size: var(--toc-body-size);
   line-height: var(--toc-body-line);
 }
 
-.dec-ask {
+.dec-agent {
   color: var(--toc-text);
   text-wrap: pretty;
 }
 
-/* The admin's reply is the one inverted layer, held to their side of the thread. */
+.dec-agent-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* The question is the one marked line. A 1px rail, not a fill. */
+.dec-ask {
+  padding-left: 8px;
+  border-left: 1px solid var(--toc-mark);
+}
+
+/* The admin's reply is the one inverted layer, held to their side. */
 .dec-admin {
   align-self: flex-end;
-  max-width: 92%;
+  width: fit-content;
+  max-width: 100%;
   padding: 8px 10px;
   border-radius: 12px;
   background: var(--toc-user);
@@ -71,14 +97,46 @@
   text-wrap: pretty;
 }
 
-.dec-gate {
+/* The generated policy, named in the thread before the check is offered. */
+.dec-generated {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: auto;
-  padding-top: var(--toc-gap);
-  border-top: 1px solid var(--toc-line);
+  gap: 8px;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--toc-line);
+  border-radius: 12px;
+  background: var(--toc-raised);
+}
+
+.dec-generated-mark {
+  flex: none;
+  width: 14px;
+  height: 18px;
+  color: var(--toc-text-secondary);
+}
+
+.dec-generated-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.dec-generated-name {
+  color: var(--toc-text);
+}
+
+.dec-title {
+  font-size: var(--toc-title-size);
+  font-weight: 500;
+  line-height: var(--toc-title-line);
+  color: var(--toc-text);
+}
+
+.dec-meta {
+  color: var(--toc-text-secondary);
 }
 
 .dec-example {
@@ -86,13 +144,56 @@
   flex-direction: column;
   gap: 2px;
   margin: 0;
-  padding: 6px 8px;
+  padding: 8px 10px;
   border-radius: 12px;
   background: var(--toc-raised);
   font-family: var(--font-body);
   font-size: var(--toc-meta-size);
   line-height: var(--toc-meta-line);
   color: var(--toc-text);
+}
+
+/* The choices from "Test your own scenarios," sitting in the thread. */
+.dec-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--toc-gap);
+  padding: 8px 10px;
+  border: 1px solid var(--toc-line);
+  border-radius: 12px;
+  background: var(--toc-surface);
+}
+
+.dec-rail {
+  gap: 8px;
+  background: var(--toc-raised);
+}
+
+.dec-scenario-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dec-scenario {
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
+  color: var(--toc-text-secondary);
+}
+
+.dec-scenario[data-current="true"] {
+  background: var(--toc-surface);
+  color: var(--toc-text);
+  font-weight: 500;
 }
 
 /* Decision 02: one policy document. */
@@ -166,8 +267,13 @@
   align-self: flex-start;
 }
 
+.dec-options .xp-card-foot {
+  flex-wrap: wrap;
+}
+
 @container (max-width: 460px) {
-  .dec-split {
+  .dec-screen[data-screen="history"],
+  .dec-screen[data-screen="scenario"] {
     grid-template-columns: minmax(0, 1fr);
   }
 

@@ -120,10 +120,10 @@ export const timeOffCopilot: CaseStudy = {
       navTitle: "Decisions",
       title: "01. The admin holds the lead. The warning only assists.",
       body: "Not every warning is an error, so the warning stays an assistant. The admin reads it, decides what matters, and confirms before anything is applied. The agent never publishes.",
-      visual: {
-        name: "The warning waits",
-        aspectRatio: "16 / 10",
-      },
+      ideas: [
+        { name: "Historical check", aspectRatio: "16 / 10" },
+        { name: "Maya scenario", aspectRatio: "16 / 10" },
+      ],
       followUp: {
         title: "02. One document for the final policy.",
         body: "Setup is many fields. The result is one document. The fields, the answers, and the warnings the admin kept all land there, so they review one place and approve the policy that ships.",

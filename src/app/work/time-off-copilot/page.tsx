@@ -10,7 +10,10 @@ import { SaidTooMuchVisual } from "@/components/case-study/said-too-much";
 import { TypeWhatYouHaveVisual } from "@/components/case-study/type-what-you-have";
 import { BlindGap } from "@/components/case-study/blind-gap";
 import { DecisionDocumentVisual } from "@/components/case-study/decision-document";
-import { DecisionLeadVisual } from "@/components/case-study/decision-lead";
+import {
+  HistoricalCheckVisual,
+  MayaScenarioVisual,
+} from "@/components/case-study/decision-lead";
 import { NoteToPolicyVisual } from "@/components/case-study/note-to-policy";
 import { timeOffCopilot } from "@/content/case-studies/time-off-copilot";
 
@@ -35,8 +38,6 @@ export default function TimeOffCopilotPage() {
         "fields-first": <OnlyWhatYouSaidVisual />,
         // Admin's worry: the 90-day wait, then a request that is 4 days short.
         "mistakes-in-use": <BlindGap />,
-        // Decisions: the warning waits on the left, the case sits on the right.
-        decisions: <DecisionLeadVisual />,
         // Solution, first frame: the note, the fields, the corrected lines, then Confirm.
         solution: <NoteToPolicyVisual />,
       }}
@@ -51,6 +52,11 @@ export default function TimeOffCopilotPage() {
           <TryAScenarioVisual key="try" />,
           <ReplayLastYearVisual key="replay" />,
           <AskInsteadVisual key="ask" />,
+        ],
+        // Decision 01: one frame for the historical check, one for Maya.
+        decisions: [
+          <HistoricalCheckVisual key="history" />,
+          <MayaScenarioVisual key="maya" />,
         ],
       }}
     />
