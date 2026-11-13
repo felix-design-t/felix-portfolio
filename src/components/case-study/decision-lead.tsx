@@ -125,7 +125,7 @@ function MayaScenario() {
     <div className="dec-screen" data-screen="scenario">
       <section className="dec-thread" aria-label="Conversation about the Maya scenario">
         <p className="dec-admin">
-          How will this policy handle Maya? She asked for 3 days on day 105. She has earned 1.
+          What happens if an employee requests 2 hours, with more than 2 hours accrued but less than 2 hours earned?
         </p>
 
         <div className="dec-agent-message">
