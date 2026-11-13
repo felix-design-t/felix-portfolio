@@ -14,7 +14,7 @@ const ACTIVE_PRESET = "Day 105";
 
 const FIELDS = [
   { label: "Start date", value: "Jan 5, 2026" },
-  { label: "Request date", value: "Apr 30, 2026" },
+  { label: "Request date", value: "Apr 20, 2026" },
   { label: "Days requested", value: "2" },
 ];
 
