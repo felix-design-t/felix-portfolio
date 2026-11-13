@@ -51,6 +51,9 @@
    The ones already there slide up with it. */
 .ntp-feed .ofs-message,
 .ntp-feed .eol-card {
+  /* Don't let a growing neighbor squash a message that is already open.
+     overflow: hidden would otherwise let the flex row shrink it. */
+  flex-shrink: 0;
   max-height: 0;
   margin-top: 0;
   overflow: hidden;
