@@ -199,6 +199,10 @@ export function HistoryToOverdraftVisual() {
     >
       <div className="hto-window">
         <section className="hto-chat" aria-label="Conversation after the policy is generated">
+          <span className="dec-titlebar-settings dec-corner-sidebar">
+            <SidebarIcon />
+            <span className="toc-sr">Open sidebar</span>
+          </span>
           <div className="hto-feed">
             <ThreadMessage shown size="chip">
               <FileChip />
@@ -253,10 +257,6 @@ export function HistoryToOverdraftVisual() {
                 <span className="dec-titlebar-settings">
                   <ExpandIcon />
                   <span className="toc-sr">Expand</span>
-                </span>
-                <span className="dec-titlebar-settings">
-                  <SidebarIcon />
-                  <span className="toc-sr">Open sidebar</span>
                 </span>
               </span>
             </header>

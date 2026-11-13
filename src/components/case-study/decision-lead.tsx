@@ -34,6 +34,10 @@ function HistoricalCheck() {
   return (
     <div className="dec-screen" data-screen="history">
       <section className="dec-thread" aria-label="Conversation after the policy is generated">
+        <span className="dec-titlebar-settings dec-corner-sidebar">
+          <SidebarIcon />
+          <span className="toc-sr">Open sidebar</span>
+        </span>
         <div className="dec-generated">
           <svg className="dec-generated-mark" viewBox="0 0 16 20" aria-hidden="true">
             <path
@@ -87,10 +91,6 @@ function HistoricalCheck() {
             <span className="dec-titlebar-settings">
               <ExpandIcon />
               <span className="toc-sr">Expand</span>
-            </span>
-            <span className="dec-titlebar-settings">
-              <SidebarIcon />
-              <span className="toc-sr">Open sidebar</span>
             </span>
           </span>
         </header>

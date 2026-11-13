@@ -54,7 +54,16 @@
 }
 
 .dec-thread {
+  position: relative;
   border-right: 1px solid var(--toc-line);
+}
+
+/* The open-sidebar control sits on the chat, not on the history title bar. */
+.dec-corner-sidebar {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  z-index: 1;
 }
 
 .dec-result {

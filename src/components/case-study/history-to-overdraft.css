@@ -36,6 +36,7 @@
   min-width: 0;
   min-height: 0;
   box-sizing: border-box;
+  position: relative;
   height: 100%;
   padding: 16px;
   overflow: hidden;
