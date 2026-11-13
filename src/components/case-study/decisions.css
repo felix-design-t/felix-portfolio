@@ -26,9 +26,12 @@
   background: var(--toc-surface);
 }
 
-/* The conversation stays the narrower column so the report can breathe. */
+/* The conversation stays the narrower column so the report can breathe.
+   The height matches the Maya screen below. The leftover space falls
+   between Yes and the message box, and under the report. */
 .dec-screen[data-screen="history"] {
   grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  min-height: 414px;
 }
 
 /* The scenario list stays a narrow rail, like a sidebar of names. */
@@ -603,6 +606,10 @@
   .dec-screen[data-screen="history"],
   .dec-screen[data-screen="scenario"] {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dec-screen[data-screen="history"] {
+    min-height: 0;
   }
 
   .dec-thread {
