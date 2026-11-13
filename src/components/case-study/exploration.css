@@ -138,7 +138,7 @@
 
 .xp-result {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 12px;
   padding-top: var(--toc-gap);
   border-top: 1px solid var(--toc-line);
@@ -150,11 +150,9 @@
   color: var(--toc-text);
 }
 
-/* The failed outcome, in front of the result. Same rose dot as the changed requests in idea 2. */
+/* The failed outcome, in front of the Result label. Same rose dot as the changed requests in idea 2. */
 .xp-result-dot {
   flex: none;
-  /* Bottom on the first line's baseline, so it centers on the lowercase letters. */
-  align-self: baseline;
   width: 6px;
   height: 6px;
   margin-right: -4px;
