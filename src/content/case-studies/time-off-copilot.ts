@@ -91,7 +91,7 @@ export const timeOffCopilot: CaseStudy = {
     {
       id: "where-it-could-go-wrong",
       kind: "Exploration",
-      title: "Admins get a warning the moment a request goes wrong",
+      title: "01. Admins get a warning the moment a request goes wrong",
       body: "When a time-off request hits a case the policy doesn't cover, the agent warns the admin and asks what to do. It doesn't wait for payroll or employee records to flag the error weeks later.",
       ideas: [
         {
