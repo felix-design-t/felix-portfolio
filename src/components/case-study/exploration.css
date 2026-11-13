@@ -503,6 +503,7 @@
 
 /* ---------- Gains, Costs, and where the idea sits ---------- */
 
+/* Under the product, on the frame. No rule between the card and the pair. */
 .xp-notes {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -516,7 +517,8 @@
 .xp-note {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  min-width: 0;
 }
 
 .xp-note-title {
@@ -525,15 +527,17 @@
   color: var(--text-secondary);
 }
 
-.xp-note-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.xp-note-line {
   margin: 0;
-  padding: 0;
-  list-style: none;
   color: var(--text);
-  text-wrap: pretty;
+  white-space: nowrap;
+}
+
+/* A half column is too narrow for the longer sentences, so they stack and stay one line. */
+@container (max-width: 460px) {
+  .xp-notes {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* Two-by-two: rows are who starts it, columns are when. */

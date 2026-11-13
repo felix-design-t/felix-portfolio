@@ -12,8 +12,10 @@ export type IdeaSource = "agent" | "admin";
 export type IdeaMoment = "before-launch" | "in-use";
 
 type ExplorationNotesProps = {
-  gains: string[];
-  costs: string[];
+  /** One gain. */
+  gain: string;
+  /** One cost. */
+  cost: string;
   /** Leave both off to show the notes without the two-by-two. */
   source?: IdeaSource;
   moment?: IdeaMoment;
@@ -29,25 +31,21 @@ const MOMENTS: { id: IdeaMoment; label: string }[] = [
   { id: "in-use", label: "In use" },
 ];
 
-export function ExplorationNotes({ gains, costs, source, moment }: ExplorationNotesProps) {
+export function ExplorationNotes({ gain, cost, source, moment }: ExplorationNotesProps) {
   return (
     <div className="xp-notes">
-      <NoteList title="Gains" items={gains} />
-      <NoteList title="Costs" items={costs} />
+      <Note title="Gains" line={gain} />
+      <Note title="Costs" line={cost} />
       {source && moment ? <WhereItSits source={source} moment={moment} /> : null}
     </div>
   );
 }
 
-function NoteList({ title, items }: { title: string; items: string[] }) {
+function Note({ title, line }: { title: string; line: string }) {
   return (
     <div className="xp-note">
       <p className="xp-note-title">{title}</p>
-      <ul className="xp-note-list">
-        {items.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
+      <p className="xp-note-line">{line}</p>
     </div>
   );
 }

@@ -77,11 +77,11 @@ export function ReplayLastYearVisual() {
         <figcaption className="xp-legend">
           <span className="xp-legend-item">
             <span className="xp-dot" aria-hidden="true" />
-            Same outcome
+            Safe
           </span>
           <span className="xp-legend-item">
             <span className="xp-dot" data-changed="true" aria-hidden="true" />
-            Would change
+            Flagged
           </span>
         </figcaption>
       </figure>
@@ -119,11 +119,8 @@ export function ReplayLastYearVisual() {
       </div>
 
       <ExplorationNotes
-        gains={["Real cases", "Measurable risk before launch", "Almost no admin work"]}
-        costs={[
-          "Needs history",
-          "The past may miss what\u2019s new: no recent hire hit the wait, so day 91 never shows",
-        ]}
+        gain="Real cases"
+        cost="Needs history"
       />
     </div>
   );

@@ -66,8 +66,8 @@ export function TryAScenarioVisual() {
       </div>
 
       <ExplorationNotes
-        gains={["Admin stays in control"]}
-        costs={["Finds only after the incident happens"]}
+        gain="Admin stays in control"
+        cost="Finds only after the incident happens"
       />
     </div>
   );

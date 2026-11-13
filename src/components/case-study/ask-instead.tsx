@@ -86,16 +86,8 @@ export function AskInsteadVisual() {
       </div>
 
       <ExplorationNotes
-        gains={[
-          "Catches unpredicted cases",
-          "Works from real requests",
-          "Each answer improves the policy",
-        ]}
-        costs={[
-          "A real employee waits",
-          "Admin gets interrupted",
-          "Agent needs a reliable sense of when to ask",
-        ]}
+        gain="Catches unpredicted cases"
+        cost="A real employee waits"
       />
     </div>
   );
