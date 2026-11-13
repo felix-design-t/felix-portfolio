@@ -57,7 +57,7 @@
   margin: 0;
   padding: 0 8px;
   border-radius: 9999px;
-  background: color-mix(in srgb, var(--accent-rose) 14%, var(--toc-surface));
+  background: color-mix(in srgb, var(--accent-rose) 8%, var(--toc-surface));
   color: var(--accent-rose);
   font-size: var(--toc-meta-size);
   font-weight: 400;
