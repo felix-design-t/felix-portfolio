@@ -37,11 +37,13 @@
   --toc-meta-line: 14px;
   --toc-label-size: 10px;
   --toc-label-line: 13px;
-  /* The control step. Button labels use this, not the body size. */
+  /* The control step. Button labels stay under the body.
+     The pill is 28px: bigger than the 24px pass, still under the old 36px. */
   --toc-control-size: 11px;
   --toc-control-line: 14px;
-  --toc-control-height: 24px;
-  --toc-icon-button: 22px;
+  --toc-control-height: 28px;
+  --toc-control-pad: 0 10px;
+  --toc-icon-button: 24px;
   /* Card inset stays 12. The gap between sections stays 12, the same
      step as before the type got smaller. A smaller font does not
      pull the next block up against the one above it. */

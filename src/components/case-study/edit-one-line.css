@@ -78,7 +78,7 @@
 
 .eol-quiet {
   height: var(--toc-control-height);
-  padding: 0 8px;
+  padding: var(--toc-control-pad);
   border: 0;
   border-radius: 9999px;
   background: var(--toc-raised);
@@ -145,7 +145,7 @@
   display: inline-flex;
   align-items: center;
   min-height: var(--toc-control-height);
-  padding: 0 8px;
+  padding: var(--toc-control-pad);
   border: 1px solid var(--toc-line);
   border-radius: 8px;
   background: var(--toc-surface);
@@ -217,7 +217,7 @@
 
 .eol-preview {
   height: var(--toc-control-height);
-  padding: 0 8px;
+  padding: var(--toc-control-pad);
   border: 0;
   border-radius: 9999px;
   background: var(--toc-raised);

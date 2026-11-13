@@ -246,7 +246,7 @@
 
 .ofs-option {
   height: var(--toc-control-height);
-  padding: 0 8px;
+  padding: var(--toc-control-pad);
   white-space: nowrap;
   border: 1px solid var(--toc-line);
   border-radius: 9999px;

@@ -198,7 +198,7 @@
   display: inline-flex;
   align-items: center;
   height: var(--toc-control-height);
-  padding: 0 8px;
+  padding: var(--toc-control-pad);
   border-radius: 9999px;
   background: var(--toc-mark);
   color: var(--toc-on-mark);
