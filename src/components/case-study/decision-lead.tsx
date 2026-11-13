@@ -24,11 +24,11 @@ const CHOSEN = "Approve 1, 4 unpaid";
 
 const SCENARIOS = [
   "History Data Test",
-  "Earned less then requested",
+  "Overdraft",
   "Interns",
   "Blackout Holiday",
 ];
-const CURRENT_SCENARIO = "Earned less then requested";
+const CURRENT_SCENARIO = "Overdraft";
 
 /** Setup is done. The admin agrees to a historical check, and the result sits on the right. */
 export function HistoricalCheckVisual() {
