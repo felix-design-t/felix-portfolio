@@ -15,6 +15,8 @@ const FIELDS = [
   { label: "Teams", value: "Sales" },
   { label: "Yearly limit", value: "14 days" },
   { label: "Wait time", value: "90 days" },
+  { label: "Accrual rate", value: "1.167/month" },
+  { label: "Earned rate", value: "same as accrual rate" },
 ];
 
 const ANSWERS = [
