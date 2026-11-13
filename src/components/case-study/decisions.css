@@ -520,7 +520,8 @@
   gap: 4px;
 }
 
-.dec-doc .dec-block[aria-label="Fields"] .dec-row {
+.dec-doc .dec-block[aria-label="Fields"] .dec-row,
+.dec-doc .dec-block[aria-label="Tested"] .dec-row {
   border-top: none;
 }
 
