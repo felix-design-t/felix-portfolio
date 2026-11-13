@@ -66,15 +66,6 @@
   color: var(--toc-text-secondary);
 }
 
-/* The words that decided it. Text keeps its color; the line is the mark. */
-.xp-mark {
-  color: var(--toc-text);
-  text-decoration: underline;
-  text-decoration-color: var(--toc-mark);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-}
-
 /* Idea 1: presets, fields, result. */
 
 .xp-presets {

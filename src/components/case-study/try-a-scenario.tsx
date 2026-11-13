@@ -6,8 +6,7 @@ import "./exploration.css";
  * Exploration idea 1: the admin tries a scenario before launch.
  *
  * A product card: preset chips, three input-like fields, and one result
- * line. The deciding words in the result carry the mark underline.
- * Static: this is the end state.
+ * line. Static: this is the end state.
  */
 
 const PRESETS = ["Day 91", "Year end", "Part-time"];
@@ -55,7 +54,7 @@ export function TryAScenarioVisual() {
           <div className="xp-result">
             <span className="toc-label">Result</span>
             <p className="xp-result-line">
-              <span className="xp-mark">Earned 1 day.</span> Approved, balance{"\u00a0"}−4
+              Earned 1 day. Approved, balance{"\u00a0"}−4
             </p>
           </div>
         </article>
