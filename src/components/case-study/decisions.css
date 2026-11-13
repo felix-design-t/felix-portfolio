@@ -404,8 +404,8 @@
 }
 
 .dec-options .xp-radio {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
 }
 
 .dec-options .xp-choice[data-chosen="true"] {
@@ -425,22 +425,22 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
   border-radius: 9999px;
   background: var(--toc-text);
   transform: translate(-50%, -50%);
 }
 
 .dec-options .xp-checkbox {
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
 }
 
 .dec-options .xp-checkbox svg {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 .dec-options .xp-solid {
