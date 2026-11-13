@@ -1,0 +1,271 @@
+/*
+  Solution, second frame.
+
+  One product window, two columns. The left column is the whole chat.
+  The right column is the history report. There is no scenario rail.
+
+  Messages ease up above the chat box, the same way as the first
+  solution screen. A message that is already open keeps its height.
+  If a message leaves through the top of the thread, it fades. The
+  chat box stays solid, outside that fade.
+  No shadow, gradient, or blur.
+*/
+
+.hto-product {
+  container-type: inline-size;
+  aspect-ratio: auto;
+  height: 100%;
+  justify-content: center;
+}
+
+.hto-window {
+  display: grid;
+  grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--toc-line);
+  border-radius: 16px;
+  background: var(--toc-surface);
+}
+
+.hto-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.hto-chat {
+  height: 100%;
+  border-right: 1px solid var(--toc-line);
+}
+
+.hto-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* The report and the later conversation share this space. */
+.hto-panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition:
+    opacity var(--toc-dur-fade) var(--toc-ease),
+    transform var(--toc-dur-move) var(--toc-ease);
+}
+
+.hto-panel[data-state="current"] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.hto-history {
+  padding: 0;
+  gap: 0;
+}
+
+.hto-report {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* The case names can wrap in this narrower column. */
+.hto-history .xp-group-label {
+  white-space: normal;
+}
+
+.hto-feed {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0;
+  min-height: 0;
+  overflow: hidden;
+  /* Messages dissolve as they leave through the top, instead of cutting off. */
+  mask-image: linear-gradient(to bottom, transparent, #000 40px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 40px);
+}
+
+/* A new message eases up into the space above the chat box.
+   The ones already there slide up with it. */
+.hto-message {
+  /* Don't let a growing neighbor squash a message that is already open. */
+  flex-shrink: 0;
+  max-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    max-height var(--toc-dur-move) var(--toc-ease),
+    margin-top var(--toc-dur-move) var(--toc-ease),
+    opacity var(--toc-dur-fade) var(--toc-ease),
+    transform var(--toc-dur-move) var(--toc-ease);
+}
+
+.hto-message[data-state="current"] {
+  opacity: 1;
+  transform: none;
+}
+
+.hto-message[data-state="current"][data-size="chip"] {
+  max-height: 72px;
+}
+
+.hto-message[data-state="current"][data-size="note"] {
+  max-height: 140px;
+}
+
+.hto-message[data-state="current"][data-size="yes"] {
+  max-height: 56px;
+}
+
+.hto-message[data-state="current"][data-size="ask"] {
+  max-height: 180px;
+}
+
+.hto-message[data-state="current"][data-size="reply"] {
+  max-height: 80px;
+}
+
+.hto-message[data-state="current"][data-size="choices"] {
+  max-height: 240px;
+}
+
+.hto-feed > [data-state="current"] + [data-state="current"] {
+  margin-top: 20px;
+}
+
+.hto-message[data-size="chip"] {
+  align-self: flex-start;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.hto-message[data-size="yes"],
+.hto-message[data-size="ask"] {
+  align-self: flex-end;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.hto-message[data-size="note"],
+.hto-message[data-size="reply"],
+.hto-message[data-size="choices"] {
+  align-self: stretch;
+}
+
+.hto-chat .dec-agent,
+.hto-chat .dec-admin {
+  line-height: 20px;
+}
+
+.hto-chat .dec-agent-message {
+  gap: 0;
+}
+
+.hto-chat .dec-options .xp-card-foot {
+  flex-wrap: nowrap;
+}
+
+.hto-product .dec-composer {
+  flex-shrink: 0;
+  gap: 12px;
+  padding: 12px 12px 10px;
+}
+
+.hto-product .dec-composer-hint,
+.hto-typed {
+  font-size: var(--toc-meta-size);
+  line-height: var(--toc-meta-line);
+}
+
+.hto-typed {
+  margin: 0;
+  padding: 0 2px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--toc-text);
+}
+
+.hto-caret {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  margin-left: 1px;
+  background: currentColor;
+  vertical-align: text-bottom;
+  animation: hto-caret 1s steps(1, end) infinite;
+}
+
+@keyframes hto-caret {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.hto-send {
+  transition: transform var(--toc-dur-press) var(--toc-ease);
+}
+
+.hto-send[data-pressed="true"] {
+  transform: scale(0.98);
+}
+
+.hto-product[data-snap="true"] .hto-message,
+.hto-product[data-snap="true"] .hto-panel,
+.hto-product[data-snap="true"] .hto-send {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hto-message,
+  .hto-panel,
+  .hto-send {
+    transition: none;
+  }
+
+  .hto-message,
+  .hto-panel {
+    transform: none;
+  }
+
+  .hto-caret {
+    display: none;
+  }
+}
+
+@container (max-width: 460px) {
+  .hto-window {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+  .hto-chat {
+    border-right: none;
+    border-bottom: 1px solid var(--toc-line);
+  }
+}

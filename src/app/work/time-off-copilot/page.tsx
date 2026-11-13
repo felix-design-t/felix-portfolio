@@ -14,6 +14,7 @@ import {
   HistoricalCheckVisual,
   MayaScenarioVisual,
 } from "@/components/case-study/decision-lead";
+import { HistoryToOverdraftVisual } from "@/components/case-study/history-to-overdraft";
 import { NoteToPolicyVisual } from "@/components/case-study/note-to-policy";
 import { timeOffCopilot } from "@/content/case-studies/time-off-copilot";
 
@@ -45,7 +46,11 @@ export default function TimeOffCopilotPage() {
         // The fields, answers, and kept warnings, in one policy document.
         decisions: <DecisionDocumentVisual />,
       }}
-      closingVisuals={{ "fields-first": <EditOneLineVisual /> }}
+      closingVisuals={{
+        "fields-first": <EditOneLineVisual />,
+        // Solution, second frame: the chat continues into the overdraft question, beside the history report.
+        solution: <HistoryToOverdraftVisual />,
+      }}
       ideaVisuals={{
         // Exploration: three answers to the blind gap, in the same order as `ideas`.
         "where-it-could-go-wrong": [
