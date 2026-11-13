@@ -64,8 +64,6 @@ export function TryAScenarioVisual() {
       <ExplorationNotes
         gains={["Admin stays in control"]}
         costs={["Finds only after the incident happens"]}
-        source="admin"
-        moment="before-launch"
       />
     </div>
   );

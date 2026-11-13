@@ -14,8 +14,9 @@ export type IdeaMoment = "before-launch" | "in-use";
 type ExplorationNotesProps = {
   gains: string[];
   costs: string[];
-  source: IdeaSource;
-  moment: IdeaMoment;
+  /** Leave both off to show the notes without the two-by-two. */
+  source?: IdeaSource;
+  moment?: IdeaMoment;
 };
 
 const SOURCES: { id: IdeaSource; label: string }[] = [
@@ -33,7 +34,7 @@ export function ExplorationNotes({ gains, costs, source, moment }: ExplorationNo
     <div className="xp-notes">
       <NoteList title="Gains" items={gains} />
       <NoteList title="Costs" items={costs} />
-      <WhereItSits source={source} moment={moment} />
+      {source && moment ? <WhereItSits source={source} moment={moment} /> : null}
     </div>
   );
 }
