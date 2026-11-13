@@ -96,8 +96,6 @@ export function AskInsteadVisual() {
           "Admin gets interrupted",
           "Agent needs a reliable sense of when to ask",
         ]}
-        source="agent"
-        moment="in-use"
       />
     </div>
   );
