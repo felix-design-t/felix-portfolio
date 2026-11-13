@@ -278,6 +278,15 @@
   border-radius: 9999px;
   background: var(--toc-control);
   color: var(--toc-text);
+  transition:
+    background-color var(--toc-dur-fade) var(--toc-ease),
+    color var(--toc-dur-fade) var(--toc-ease),
+    transform var(--toc-dur-press) var(--toc-ease);
+}
+
+.ntp-composer-send[data-ready="true"] {
+  background: var(--toc-mark);
+  color: var(--toc-on-mark);
 }
 
 .ntp-composer-icon {

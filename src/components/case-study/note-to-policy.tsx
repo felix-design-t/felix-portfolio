@@ -262,7 +262,12 @@ export function NoteToPolicyVisual() {
                   <path d="M8 3.5v9M3.5 8h9" />
                 </svg>
               </span>
-              <span className="ntp-composer-send" data-pressed={pressed ? "true" : "false"} aria-hidden="true">
+              <span
+                className="ntp-composer-send"
+                data-ready={typed ? "true" : "false"}
+                data-pressed={pressed ? "true" : "false"}
+                aria-hidden="true"
+              >
                 <svg viewBox="0 0 16 16" className="ntp-composer-icon">
                   <path d="M8 12.5V3.8M8 3.8 4.6 7.2M8 3.8l3.4 3.4" />
                 </svg>
