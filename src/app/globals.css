@@ -1248,8 +1248,6 @@ button.skill-pill {
   display: block;
   box-sizing: border-box;
   width: 100%;
-  /* Same 16/10 frame as the Time-Off case study cover. */
-  aspect-ratio: 16 / 10;
   height: auto;
   /* Same 8px inset as the case study cover. */
   padding: var(--space-1);
@@ -1259,14 +1257,22 @@ button.skill-pill {
   background: var(--mat);
 }
 
+/* An empty plate holds the same shape as the Time-Off product inside
+   the same padding, so every plate is the Time-Off cover's size. */
+.work-slot-cover:not(.case-study-frame)::before {
+  content: "";
+  display: block;
+  aspect-ratio: 25 / 18;
+}
+
 /* The cover animation measures its report and sets a pixel height.
-   The home frame stays on the case study's 16/10 ratio instead. */
+   The home frame sizes itself from the product's shape instead. */
 .work-slot-cover.case-study-frame {
   display: grid;
   grid-template-rows: minmax(0, 1fr);
   place-items: stretch;
   height: auto !important;
-  aspect-ratio: 16 / 10 !important;
+  aspect-ratio: auto !important;
   padding: var(--space-1);
   overflow-anchor: none;
 }

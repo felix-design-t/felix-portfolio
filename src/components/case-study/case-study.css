@@ -221,13 +221,13 @@
 }
 
 /*
-  The cover was drawn at 16/10. The animation measures the report and
-  writes a pixel height onto this frame. That measurement is not the
-  frame, so the cover keeps the ratio it was given.
+  The animation measures the report and writes a pixel height onto this
+  frame. The cover sizes itself from the product's shape instead, so
+  the frame is only as tall as the product plus its padding.
 */
 .case-study-cover .case-study-frame {
   height: auto !important;
-  aspect-ratio: 16 / 10 !important;
+  aspect-ratio: auto !important;
   /* The placeholder's 8px on every side. */
   padding: var(--space-1);
 }
