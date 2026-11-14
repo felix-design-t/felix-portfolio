@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { HistoryToOverdraftVisual } from "./history-to-overdraft";
 import { NoteToPolicyVisual } from "./note-to-policy";
-import { TOC_HOLD_MS } from "./toc-motion";
+import { TOC_MOVE_MS } from "./toc-motion";
 import "./cover-sequence.css";
 
 /**
@@ -11,9 +11,8 @@ import "./cover-sequence.css";
  *
  * One loop. The chat box sits alone in the middle of the cover. The note
  * is typed, send turns green and presses, and the dark bubble takes the
- * box's place for 0.8s. Then the hours screen appears, already on the
- * second Yes, and the choices follow. The frame holds, and the empty
- * box returns.
+ * box's place for 0.8s. Then the hours screen types "What happens if…",
+ * plays the rest of that thread, holds 0.8s, and the empty box returns.
  *
  * Each screen already knows its own motion. This only decides which
  * one is on, and when the pair loops.
@@ -121,7 +120,7 @@ export function CoverSequence() {
     const hold = window.setTimeout(() => {
       setNoteEpoch((epoch) => epoch + 1);
       setPhase("note");
-    }, TOC_HOLD_MS);
+    }, TOC_MOVE_MS);
     return () => window.clearTimeout(hold);
   }, [phase]);
 
@@ -136,8 +135,8 @@ export function CoverSequence() {
     phase === "end" || phase === "hold"
       ? { mode: "end" as const }
       : phase !== "history"
-        ? { mode: "second-yes" as const }
-        : { mode: "play" as const, epoch: historyEpoch, onDone: finishHistory, from: "second-yes" as const };
+        ? { mode: "ask-ready" as const }
+        : { mode: "play" as const, epoch: historyEpoch, onDone: finishHistory, from: "ask" as const };
 
   return (
     <div

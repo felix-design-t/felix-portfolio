@@ -67,7 +67,14 @@ const START: Play = {
   choicesShown: false,
 };
 
-/** Cover joins once the second Yes is already in the thread. */
+/** Cover joins here: the first Yes is sent and the report is already open. */
+const ASK_READY: Play = {
+  ...START,
+  leftYes: true,
+  stage: "history",
+};
+
+/** Cover can also join once the second Yes is already in the thread. */
 const SECOND_YES: Play = {
   ...START,
   leftYes: true,
@@ -105,12 +112,13 @@ type HistoryPlayback =
   | { mode: "start" }
   | { mode: "end" }
   | { mode: "second-yes" }
+  | { mode: "ask-ready" }
   | {
       mode: "play";
       epoch: number;
       onDone: () => void;
-      /** Cover only. Begin once the second Yes is already on screen. */
-      from?: "second-yes";
+      /** Cover only. Begin as the hours question is typed, or on the second Yes. */
+      from?: "ask" | "second-yes";
     };
 
 type HistoryToOverdraftProps = {
@@ -127,9 +135,12 @@ export function HistoryToOverdraftVisual({ playback }: HistoryToOverdraftProps =
   const controlled = playback !== undefined;
   const playing = playback?.mode === "play";
   const fromSecondYes = playback?.mode === "play" && playback.from === "second-yes";
+  const fromAsk = playback?.mode === "play" && playback.from === "ask";
   const epoch = playback?.mode === "play" ? playback.epoch : -1;
   const onDone = playback?.mode === "play" ? playback.onDone : undefined;
-  const [play, setPlay] = useState<Play>(fromSecondYes ? SECOND_YES : START);
+  const [play, setPlay] = useState<Play>(
+    fromSecondYes ? SECOND_YES : fromAsk ? ASK_READY : START,
+  );
 
   useEffect(() => {
     onDoneRef.current = onDone;
@@ -143,9 +154,11 @@ export function HistoryToOverdraftVisual({ playback }: HistoryToOverdraftProps =
       ? END
       : playback.mode === "second-yes"
         ? SECOND_YES
-        : playback.mode === "start"
-          ? START
-          : play;
+        : playback.mode === "ask-ready"
+          ? ASK_READY
+          : playback.mode === "start"
+            ? START
+            : play;
   const shownSnap = playback?.mode === "start" ? true : snap;
 
   useEffect(() => {
@@ -172,7 +185,7 @@ export function HistoryToOverdraftVisual({ playback }: HistoryToOverdraftProps =
     let release = 0;
     const startFrame = window.requestAnimationFrame(() => {
       setSnap(true);
-      setPlay(fromSecondYes ? SECOND_YES : START);
+      setPlay(fromSecondYes ? SECOND_YES : fromAsk ? ASK_READY : START);
       release = window.requestAnimationFrame(() => setSnap(false));
     });
 
@@ -196,17 +209,22 @@ export function HistoryToOverdraftVisual({ playback }: HistoryToOverdraftProps =
       // Same pause the solution keeps after the second Yes, before the choices.
       time = TOC_MOVE_MS + TOC_STEP_MS;
     } else {
-      time = typeInto(YES, "leftText", time);
-      time += TOC_BEAT_MS;
-      at(time, () => set({ leftSending: true }));
-      time += TOC_PRESS_HOLD_MS;
-      at(time, () => set({ leftSending: false, leftText: "", leftYes: true }));
+      if (!fromAsk) {
+        time = typeInto(YES, "leftText", time);
+        time += TOC_BEAT_MS;
+        at(time, () => set({ leftSending: true }));
+        time += TOC_PRESS_HOLD_MS;
+        at(time, () => set({ leftSending: false, leftText: "", leftYes: true }));
 
-      time += TOC_MOVE_MS + TOC_STEP_MS;
-      at(time, () => set({ stage: "history" }));
+        time += TOC_MOVE_MS + TOC_STEP_MS;
+        at(time, () => set({ stage: "history" }));
 
-      time += TOC_MOVE_MS + TOC_PAUSE_MS * 2;
-      time += TOC_REST_MS;
+        time += TOC_MOVE_MS + TOC_PAUSE_MS * 2;
+        time += TOC_REST_MS;
+      } else {
+        // The report is already open. Typing the hours question is the first beat.
+        time = TOC_BEAT_MS;
+      }
       time = typeInto(ASK, "askText", time);
       time += TOC_BEAT_MS;
       at(time, () => set({ askSending: true }));
@@ -241,7 +259,7 @@ export function HistoryToOverdraftVisual({ playback }: HistoryToOverdraftProps =
       window.cancelAnimationFrame(release);
       timers.forEach((timerId) => window.clearTimeout(timerId));
     };
-  }, [controlled, playing, fromSecondYes, epoch, seen, run, reduced]);
+  }, [controlled, playing, fromAsk, fromSecondYes, epoch, seen, run, reduced]);
 
   const beat = view.choicesShown
     ? "choices"

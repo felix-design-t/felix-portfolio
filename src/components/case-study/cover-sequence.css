@@ -54,7 +54,7 @@
 .cover-sequence [data-solo="true"] .ntp-window {
   flex: none;
   /* Narrow enough that the sent note wraps onto two lines. */
-  width: min(220px, 64%);
+  width: min(252px, 70%);
   height: auto;
   max-height: none;
   border: none;
