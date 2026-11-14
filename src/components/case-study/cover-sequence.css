@@ -2,15 +2,15 @@
   Cover sequence.
 
   The chat box and the dark bubble share one spot in the middle.
-  The product screen is a slightly larger copy of itself, grown from
-  the right edge, so the top and bottom are cut by the frame and the
-  right edge sits on the frame border. A small bounce marks each swap.
-  No shadow, gradient, or blur.
+  The product screen fills the frame, cut to the report's contents
+  so the empty white under the case list is not part of the frame.
+  A small bounce marks each swap. No shadow, gradient, or blur.
+  The thread fade lives on the solution screens themselves.
 */
 
 .cover-sequence {
-  /* How far the product grows past the frame. */
-  --cover-product-scale: 1.1;
+  --cover-product-scale: 0.78;
+  --cover-fade: 24px;
   position: relative;
   display: grid;
   width: 100%;
@@ -18,6 +18,82 @@
   min-height: 0;
   overflow: hidden;
   overflow-anchor: none;
+  /* 24px edge on the top, bottom, and right. It eases down until
+     the rim is only barely visible. The left side stays solid. */
+  -webkit-mask-image:
+    linear-gradient(
+      to right,
+      #000 0,
+      #000 calc(100% - var(--cover-fade)),
+      rgba(0, 0, 0, 0.99) calc(100% - var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.91) calc(100% - var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.77) calc(100% - var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.58) calc(100% - var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.24) calc(100% - var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.15) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.15) 0,
+      rgba(0, 0, 0, 0.16) calc(var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.24) calc(var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.38) calc(var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.58) calc(var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.77) calc(var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.91) calc(var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.99) calc(var(--cover-fade) * 0.875),
+      #000 var(--cover-fade),
+      #000 calc(100% - var(--cover-fade)),
+      rgba(0, 0, 0, 0.99) calc(100% - var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.91) calc(100% - var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.77) calc(100% - var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.58) calc(100% - var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.24) calc(100% - var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.15) 100%
+    );
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(
+      to right,
+      #000 0,
+      #000 calc(100% - var(--cover-fade)),
+      rgba(0, 0, 0, 0.99) calc(100% - var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.91) calc(100% - var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.77) calc(100% - var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.58) calc(100% - var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.24) calc(100% - var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.15) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.15) 0,
+      rgba(0, 0, 0, 0.16) calc(var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.24) calc(var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.38) calc(var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.58) calc(var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.77) calc(var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.91) calc(var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.99) calc(var(--cover-fade) * 0.875),
+      #000 var(--cover-fade),
+      #000 calc(100% - var(--cover-fade)),
+      rgba(0, 0, 0, 0.99) calc(100% - var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.91) calc(100% - var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.77) calc(100% - var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.58) calc(100% - var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.38) calc(100% - var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.24) calc(100% - var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.16) calc(100% - var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.15) 100%
+    );
+  mask-composite: intersect;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
 }
 
 .cover-sequence-pane {
@@ -55,7 +131,7 @@
 .cover-sequence [data-solo="true"] .ntp-window {
   flex: none;
   /* Narrow enough that the sent note wraps onto two lines. */
-  width: min(300px, 82%);
+  width: min(252px, 70%);
   height: auto;
   max-height: none;
   border: none;
@@ -132,13 +208,13 @@
   display: none;
 }
 
-/* Grown from the right edge. The right border stays on the frame.
-   The extra height is what the frame cuts off at the top and bottom. */
+/* The product screen is a smaller copy of itself. It sits 15% to the
+   right (25% minus 10% of the frame), so the right edge is still cut off. */
 .cover-sequence-pane:has(.hto-product) {
-  width: 100%;
-  height: 100%;
-  transform: scale(var(--cover-product-scale));
-  transform-origin: right center;
+  width: calc(100% / var(--cover-product-scale));
+  height: calc(100% / var(--cover-product-scale));
+  transform: scale(var(--cover-product-scale)) translateX(15%);
+  transform-origin: top left;
 }
 
 .cover-sequence-pane[data-active="true"] .hto-window {

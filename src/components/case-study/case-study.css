@@ -228,9 +228,6 @@
 .case-study-cover .case-study-frame {
   height: auto !important;
   aspect-ratio: 16 / 10 !important;
-  padding: 0;
-  /* The product's 16px corner plus the 1px frame border. */
-  border-radius: 17px;
 }
 
 .case-study-placeholder {

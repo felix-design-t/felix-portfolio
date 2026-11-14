@@ -1251,10 +1251,10 @@ button.skill-pill {
   /* Same 16/10 frame as the Time-Off case study cover. */
   aspect-ratio: 16 / 10;
   height: auto;
-  padding: 0;
+  padding: var(--space-1);
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 17px;
+  border-radius: calc(var(--radius-sm) + var(--space-1) + 1px);
   background: var(--mat);
 }
 
