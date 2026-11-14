@@ -10,7 +10,7 @@
 
 .cover-sequence {
   --cover-product-scale: 0.78;
-  --cover-fade: 40px;
+  --cover-fade: 24px;
   position: relative;
   display: grid;
   width: 100%;
