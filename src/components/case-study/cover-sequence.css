@@ -4,13 +4,12 @@
   The chat box and the dark bubble share one spot in the middle.
   The product screen fills the frame, cut to the report's contents
   so the empty white under the case list is not part of the frame.
-  A small bounce marks each swap. No shadow, gradient, or blur.
+  A small bounce marks each swap. No shadow, gradient, blur, or edge fade.
   The thread fade lives on the solution screens themselves.
 */
 
 .cover-sequence {
   --cover-product-scale: 0.78;
-  --cover-fade: 24px;
   position: relative;
   display: grid;
   width: 100%;
@@ -18,82 +17,6 @@
   min-height: 0;
   overflow: hidden;
   overflow-anchor: none;
-  /* 24px edge on the top, bottom, and right. It eases down until
-     the rim is only barely visible. The left side stays solid. */
-  -webkit-mask-image:
-    linear-gradient(
-      to right,
-      #000 0,
-      #000 calc(100% - var(--cover-fade)),
-      rgba(0, 0, 0, 0.99) calc(100% - var(--cover-fade) * 0.875),
-      rgba(0, 0, 0, 0.91) calc(100% - var(--cover-fade) * 0.75),
-      rgba(0, 0, 0, 0.77) calc(100% - var(--cover-fade) * 0.625),
-      rgba(0, 0, 0, 0.58) calc(100% - var(--cover-fade) * 0.5),
-      rgba(0, 0, 0, 0.38) calc(100% - var(--cover-fade) * 0.375),
-      rgba(0, 0, 0, 0.24) calc(100% - var(--cover-fade) * 0.25),
-      rgba(0, 0, 0, 0.16) calc(100% - var(--cover-fade) * 0.125),
-      rgba(0, 0, 0, 0.15) 100%
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.15) 0,
-      rgba(0, 0, 0, 0.16) calc(var(--cover-fade) * 0.125),
-      rgba(0, 0, 0, 0.24) calc(var(--cover-fade) * 0.25),
-      rgba(0, 0, 0, 0.38) calc(var(--cover-fade) * 0.375),
-      rgba(0, 0, 0, 0.58) calc(var(--cover-fade) * 0.5),
-      rgba(0, 0, 0, 0.77) calc(var(--cover-fade) * 0.625),
-      rgba(0, 0, 0, 0.91) calc(var(--cover-fade) * 0.75),
-      rgba(0, 0, 0, 0.99) calc(var(--cover-fade) * 0.875),
-      #000 var(--cover-fade),
-      #000 calc(100% - var(--cover-fade)),
-      rgba(0, 0, 0, 0.99) calc(100% - var(--cover-fade) * 0.875),
-      rgba(0, 0, 0, 0.91) calc(100% - var(--cover-fade) * 0.75),
-      rgba(0, 0, 0, 0.77) calc(100% - var(--cover-fade) * 0.625),
-      rgba(0, 0, 0, 0.58) calc(100% - var(--cover-fade) * 0.5),
-      rgba(0, 0, 0, 0.38) calc(100% - var(--cover-fade) * 0.375),
-      rgba(0, 0, 0, 0.24) calc(100% - var(--cover-fade) * 0.25),
-      rgba(0, 0, 0, 0.16) calc(100% - var(--cover-fade) * 0.125),
-      rgba(0, 0, 0, 0.15) 100%
-    );
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(
-      to right,
-      #000 0,
-      #000 calc(100% - var(--cover-fade)),
-      rgba(0, 0, 0, 0.99) calc(100% - var(--cover-fade) * 0.875),
-      rgba(0, 0, 0, 0.91) calc(100% - var(--cover-fade) * 0.75),
-      rgba(0, 0, 0, 0.77) calc(100% - var(--cover-fade) * 0.625),
-      rgba(0, 0, 0, 0.58) calc(100% - var(--cover-fade) * 0.5),
-      rgba(0, 0, 0, 0.38) calc(100% - var(--cover-fade) * 0.375),
-      rgba(0, 0, 0, 0.24) calc(100% - var(--cover-fade) * 0.25),
-      rgba(0, 0, 0, 0.16) calc(100% - var(--cover-fade) * 0.125),
-      rgba(0, 0, 0, 0.15) 100%
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.15) 0,
-      rgba(0, 0, 0, 0.16) calc(var(--cover-fade) * 0.125),
-      rgba(0, 0, 0, 0.24) calc(var(--cover-fade) * 0.25),
-      rgba(0, 0, 0, 0.38) calc(var(--cover-fade) * 0.375),
-      rgba(0, 0, 0, 0.58) calc(var(--cover-fade) * 0.5),
-      rgba(0, 0, 0, 0.77) calc(var(--cover-fade) * 0.625),
-      rgba(0, 0, 0, 0.91) calc(var(--cover-fade) * 0.75),
-      rgba(0, 0, 0, 0.99) calc(var(--cover-fade) * 0.875),
-      #000 var(--cover-fade),
-      #000 calc(100% - var(--cover-fade)),
-      rgba(0, 0, 0, 0.99) calc(100% - var(--cover-fade) * 0.875),
-      rgba(0, 0, 0, 0.91) calc(100% - var(--cover-fade) * 0.75),
-      rgba(0, 0, 0, 0.77) calc(100% - var(--cover-fade) * 0.625),
-      rgba(0, 0, 0, 0.58) calc(100% - var(--cover-fade) * 0.5),
-      rgba(0, 0, 0, 0.38) calc(100% - var(--cover-fade) * 0.375),
-      rgba(0, 0, 0, 0.24) calc(100% - var(--cover-fade) * 0.25),
-      rgba(0, 0, 0, 0.16) calc(100% - var(--cover-fade) * 0.125),
-      rgba(0, 0, 0, 0.15) 100%
-    );
-  mask-composite: intersect;
-  mask-repeat: no-repeat;
-  mask-size: 100% 100%;
 }
 
 .cover-sequence-pane {
