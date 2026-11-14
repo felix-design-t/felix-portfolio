@@ -1232,8 +1232,8 @@ button.skill-pill {
 .selected-grid {
   display: grid;
   grid-template-columns: 1fr;
-  /* One step more air between studies than the old 32–48px gap. */
-  gap: clamp(var(--space-6), 6vw, var(--space-8));
+  /* One step more air than the previous 48–64px gap. */
+  gap: clamp(var(--space-8), 7vw, 80px);
 }
 
 .work-slot {
