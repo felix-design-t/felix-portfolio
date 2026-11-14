@@ -67,6 +67,16 @@ const START: Play = {
   choicesShown: false,
 };
 
+/** Cover joins once the second Yes is already in the thread. */
+const SECOND_YES: Play = {
+  ...START,
+  leftYes: true,
+  stage: "history",
+  askShown: true,
+  replyShown: true,
+  midYes: true,
+};
+
 const END: Play = {
   ...START,
   leftYes: true,
@@ -87,16 +97,56 @@ function reducedMotionSnapshot() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-export function HistoryToOverdraftVisual() {
+/**
+ * The cover plays this screen after the dark bubble.
+ * Left unset, the solution frame keeps its own loop.
+ */
+type HistoryPlayback =
+  | { mode: "start" }
+  | { mode: "end" }
+  | {
+      mode: "play";
+      epoch: number;
+      onDone: () => void;
+      /** Cover only. Begin once the second Yes is already on screen. */
+      from?: "second-yes";
+    };
+
+type HistoryToOverdraftProps = {
+  playback?: HistoryPlayback;
+};
+
+export function HistoryToOverdraftVisual({ playback }: HistoryToOverdraftProps = {}) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const onDoneRef = useRef<(() => void) | undefined>(undefined);
   const [seen, setSeen] = useState(false);
   const [run, setRun] = useState(0);
   const [snap, setSnap] = useState(false);
   const reduced = useSyncExternalStore(subscribeToReducedMotion, reducedMotionSnapshot, () => false);
-  const [play, setPlay] = useState<Play>(START);
-  const view = reduced ? END : play;
+  const controlled = playback !== undefined;
+  const playing = playback?.mode === "play";
+  const fromSecondYes = playback?.mode === "play" && playback.from === "second-yes";
+  const epoch = playback?.mode === "play" ? playback.epoch : -1;
+  const onDone = playback?.mode === "play" ? playback.onDone : undefined;
+  const [play, setPlay] = useState<Play>(fromSecondYes ? SECOND_YES : START);
 
   useEffect(() => {
+    onDoneRef.current = onDone;
+  }, [onDone]);
+
+  const view = !playback
+    ? reduced
+      ? END
+      : play
+    : playback.mode === "end"
+      ? END
+      : playback.mode === "start"
+        ? START
+        : play;
+  const shownSnap = playback?.mode === "start" ? true : snap;
+
+  useEffect(() => {
+    if (controlled) return;
     const root = rootRef.current;
     if (!root) return;
     const observer = new IntersectionObserver(
@@ -107,15 +157,19 @@ export function HistoryToOverdraftVisual() {
     );
     observer.observe(root);
     return () => observer.disconnect();
-  }, []);
+  }, [controlled]);
 
   useEffect(() => {
-    if (reduced || !seen) return;
+    if (controlled) {
+      if (!playing) return;
+    } else if (reduced || !seen) {
+      return;
+    }
 
     let release = 0;
     const startFrame = window.requestAnimationFrame(() => {
       setSnap(true);
-      setPlay(START);
+      setPlay(fromSecondYes ? SECOND_YES : START);
       release = window.requestAnimationFrame(() => setSnap(false));
     });
 
@@ -135,45 +189,56 @@ export function HistoryToOverdraftVisual() {
     };
 
     let time = TOC_REST_MS;
-    time = typeInto(YES, "leftText", time);
-    time += TOC_BEAT_MS;
-    at(time, () => set({ leftSending: true }));
-    time += TOC_PRESS_HOLD_MS;
-    at(time, () => set({ leftSending: false, leftText: "", leftYes: true }));
+    if (fromSecondYes) {
+      // Same pause the solution keeps after the second Yes, before the choices.
+      time = TOC_MOVE_MS + TOC_STEP_MS;
+    } else {
+      time = typeInto(YES, "leftText", time);
+      time += TOC_BEAT_MS;
+      at(time, () => set({ leftSending: true }));
+      time += TOC_PRESS_HOLD_MS;
+      at(time, () => set({ leftSending: false, leftText: "", leftYes: true }));
 
-    time += TOC_MOVE_MS + TOC_STEP_MS;
-    at(time, () => set({ stage: "history" }));
+      time += TOC_MOVE_MS + TOC_STEP_MS;
+      at(time, () => set({ stage: "history" }));
 
-    time += TOC_MOVE_MS + TOC_PAUSE_MS * 2;
-    time += TOC_REST_MS;
-    time = typeInto(ASK, "askText", time);
-    time += TOC_BEAT_MS;
-    at(time, () => set({ askSending: true }));
-    time += TOC_PRESS_HOLD_MS;
-    at(time, () => set({ askSending: false, askText: "", askShown: true }));
+      time += TOC_MOVE_MS + TOC_PAUSE_MS * 2;
+      time += TOC_REST_MS;
+      time = typeInto(ASK, "askText", time);
+      time += TOC_BEAT_MS;
+      at(time, () => set({ askSending: true }));
+      time += TOC_PRESS_HOLD_MS;
+      at(time, () => set({ askSending: false, askText: "", askShown: true }));
 
-    time += TOC_MOVE_MS + TOC_STEP_MS;
-    at(time, () => set({ replyShown: true }));
+      time += TOC_MOVE_MS + TOC_STEP_MS;
+      at(time, () => set({ replyShown: true }));
 
-    time += TOC_MOVE_MS + TOC_STEP_MS;
-    time = typeInto(YES, "midText", time);
-    time += TOC_BEAT_MS;
-    at(time, () => set({ midSending: true }));
-    time += TOC_PRESS_HOLD_MS;
-    at(time, () => set({ midSending: false, midText: "", midYes: true }));
+      time += TOC_MOVE_MS + TOC_STEP_MS;
+      time = typeInto(YES, "midText", time);
+      time += TOC_BEAT_MS;
+      at(time, () => set({ midSending: true }));
+      time += TOC_PRESS_HOLD_MS;
+      at(time, () => set({ midSending: false, midText: "", midYes: true }));
 
-    time += TOC_MOVE_MS + TOC_STEP_MS;
+      time += TOC_MOVE_MS + TOC_STEP_MS;
+    }
     at(time, () => set({ choicesShown: true }));
 
-    time += TOC_MOVE_MS + TOC_HOLD_MS;
-    at(time, () => setRun((value) => value + 1));
+    if (controlled) {
+      // The choices finish arriving. The cover holds, then loops the whole story.
+      time += TOC_MOVE_MS;
+      at(time, () => onDoneRef.current?.());
+    } else {
+      time += TOC_MOVE_MS + TOC_HOLD_MS;
+      at(time, () => setRun((value) => value + 1));
+    }
 
     return () => {
       window.cancelAnimationFrame(startFrame);
       window.cancelAnimationFrame(release);
       timers.forEach((timerId) => window.clearTimeout(timerId));
     };
-  }, [seen, run, reduced]);
+  }, [controlled, playing, fromSecondYes, epoch, seen, run, reduced]);
 
   const beat = view.choicesShown
     ? "choices"
@@ -195,7 +260,7 @@ export function HistoryToOverdraftVisual() {
       className="toc-product hto-product"
       data-visual="history-to-overdraft"
       data-beat={beat}
-      data-snap={snap ? "true" : undefined}
+      data-snap={shownSnap ? "true" : undefined}
     >
       <div className="hto-window" data-report={view.stage === "history" ? "open" : "closed"}>
         <section className="hto-chat" aria-label="Conversation after the policy is generated">

@@ -15,6 +15,11 @@ type CaseStudyFrameProps = {
   controls?: ReactNode;
   /** The real visual. Leave empty and the frame draws its placeholder state. */
   children?: ReactNode;
+  /**
+   * Keep the ratio after the visual is built. Motion inside the frame
+   * stays in the box, so the page height does not change while it plays.
+   */
+  lockRatio?: boolean;
 };
 
 /**
@@ -33,16 +38,19 @@ export function CaseStudyFrame({
   note,
   controls,
   children,
+  lockRatio = false,
 }: CaseStudyFrameProps) {
   const isPlaceholder = children === undefined || children === null;
+  const locked = lockRatio && !isPlaceholder;
 
   return (
     <figure className="case-study-figure">
       {controls ? <div className="case-study-frame-controls">{controls}</div> : null}
       <div
         className="case-study-frame"
-        style={isPlaceholder ? { aspectRatio } : undefined}
+        style={isPlaceholder || locked ? { aspectRatio } : undefined}
         data-state={isPlaceholder ? "placeholder" : "filled"}
+        data-lock={locked ? "ratio" : undefined}
       >
         {isPlaceholder ? (
           <p className="case-study-placeholder">

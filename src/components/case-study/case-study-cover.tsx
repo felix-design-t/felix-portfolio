@@ -16,7 +16,11 @@ type CaseStudyCoverProps = {
 export function CaseStudyCover({ cover, meta, children }: CaseStudyCoverProps) {
   return (
     <div className="case-study-cover">
-      <CaseStudyFrame name={cover.label} aspectRatio={cover.aspectRatio}>
+      <CaseStudyFrame
+        name={cover.label}
+        aspectRatio={cover.aspectRatio}
+        lockRatio={children != null && children !== false}
+      >
         {children}
       </CaseStudyFrame>
       <dl className="case-study-meta">

@@ -9,6 +9,7 @@ import {
   TOC_BEAT_MS,
   TOC_CHAR_MS,
   TOC_HOLD_MS,
+  TOC_MOVE_MS,
   TOC_PAUSE_MS,
   TOC_PRESS_HOLD_MS,
   TOC_STEP_MS,
@@ -36,8 +37,28 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-export function NoteToPolicyVisual() {
+/**
+ * The cover plays this screen as one chapter of a longer loop.
+ * Left unset, the solution frame keeps its own loop and its own height lock.
+ */
+type NotePlayback =
+  | { mode: "start" }
+  | { mode: "end" }
+  | {
+      mode: "play";
+      epoch: number;
+      onDone: () => void;
+      /** Cover only. Stop once the dark bubble is on screen. */
+      through?: "bubble";
+    };
+
+type NoteToPolicyProps = {
+  playback?: NotePlayback;
+};
+
+export function NoteToPolicyVisual({ playback }: NoteToPolicyProps = {}) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const onDoneRef = useRef<(() => void) | undefined>(undefined);
   const [seen, setSeen] = useState(false);
   const [run, setRun] = useState(0);
   const [step, setStep] = useState(0);
@@ -45,7 +66,27 @@ export function NoteToPolicyVisual() {
   const [typed, setTyped] = useState("");
   const [pressed, setPressed] = useState(false);
 
+  // The cover owns the clock. The solution page does not pass playback.
+  const controlled = playback !== undefined;
+  const playing = playback?.mode === "play";
+  const epoch = playback?.mode === "play" ? playback.epoch : -1;
+  const onDone = playback?.mode === "play" ? playback.onDone : undefined;
+  const throughBubble = playback?.mode === "play" && playback.through === "bubble";
+  // The cover's opening beat is the chat box and the bubble, with no product window.
+  const solo = playback?.mode === "start" || throughBubble;
+
   useEffect(() => {
+    onDoneRef.current = onDone;
+  }, [onDone]);
+
+  // Start and end are still frames. Play uses the timers below.
+  const shownStep = playback?.mode === "end" ? 6 : playback?.mode === "start" ? 0 : step;
+  const shownTyped = !playback || playing ? typed : "";
+  const shownPressed = !playback || playing ? pressed : false;
+  const shownSnap = playback?.mode === "start" ? true : snap;
+
+  useEffect(() => {
+    if (controlled) return;
     const root = rootRef.current;
     if (!root) return;
     const frame = root.closest(".case-study-frame");
@@ -80,9 +121,10 @@ export function NoteToPolicyVisual() {
         placeholder.style.overflowAnchor = "";
       }
     };
-  }, []);
+  }, [controlled]);
 
   useEffect(() => {
+    if (controlled) return;
     const root = rootRef.current;
     if (!root) return;
     const observer = new IntersectionObserver(
@@ -93,11 +135,17 @@ export function NoteToPolicyVisual() {
     );
     observer.observe(root);
     return () => observer.disconnect();
-  }, []);
+  }, [controlled]);
 
   useEffect(() => {
-    if (!seen) return;
-    if (prefersReducedMotion()) {
+    if (controlled) {
+      if (!playing) return;
+    } else if (!seen) {
+      return;
+    }
+    // The cover decides reduced motion for the whole loop. This frame
+    // only snaps to the end when it is playing on its own.
+    if (!controlled && prefersReducedMotion()) {
       setStep(6);
       setTyped("");
       setPressed(false);
@@ -131,23 +179,34 @@ export function NoteToPolicyVisual() {
 
     let time = TOC_BEAT_MS;
     time = typeThenSend(NOTE, 1, time);
-    time += TOC_STEP_MS;
-    at(time, () => setStep(2));
-    time += TOC_STEP_MS;
-    at(time, () => setStep(3));
-    time += TOC_PAUSE_MS;
-    time = typeThenSend(ANSWER, 4, time);
-    time += TOC_STEP_MS;
-    at(time, () => setStep(5));
-    time += TOC_STEP_MS;
-    at(time, () => setStep(6));
-    time += TOC_HOLD_MS;
-    at(time, () => setRun((value) => value + 1));
+    if (throughBubble) {
+      // The bubble eases up. Then the cover switches to the hours thread.
+      time += TOC_MOVE_MS;
+      at(time, () => onDoneRef.current?.());
+    } else {
+      time += TOC_STEP_MS;
+      at(time, () => setStep(2));
+      time += TOC_STEP_MS;
+      at(time, () => setStep(3));
+      time += TOC_PAUSE_MS;
+      time = typeThenSend(ANSWER, 4, time);
+      time += TOC_STEP_MS;
+      at(time, () => setStep(5));
+      time += TOC_STEP_MS;
+      at(time, () => setStep(6));
+      if (controlled) {
+        time += TOC_MOVE_MS + TOC_PAUSE_MS;
+        at(time, () => onDoneRef.current?.());
+      } else {
+        time += TOC_HOLD_MS;
+        at(time, () => setRun((value) => value + 1));
+      }
+    }
     return () => {
       window.cancelAnimationFrame(release);
       timers.forEach((timerId) => window.clearTimeout(timerId));
     };
-  }, [seen, run]);
+  }, [controlled, playing, epoch, throughBubble, seen, run]);
 
   return (
     <div
@@ -155,12 +214,13 @@ export function NoteToPolicyVisual() {
       className="toc-product ntp-product ofs-product"
       data-visual="note-to-policy"
       data-fit="row"
-      data-snap={snap ? "true" : undefined}
+      data-solo={solo ? "true" : undefined}
+      data-snap={shownSnap ? "true" : undefined}
     >
       <div className="ntp-window">
         <div className="ntp-thread">
           <div className="ntp-feed">
-          <article className="ofs-bubble ofs-message" data-state={step > 0 ? "current" : "hidden"} aria-label="Your request">
+          <article className="ofs-bubble ofs-message" data-state={shownStep > 0 ? "current" : "hidden"} aria-label="Your request">
             <p className="ofs-request">
               I need to create a <span className="ofs-phrase">PTO</span> policy for{" "}
               <span className="ofs-phrase">sales</span> teams, the{" "}
@@ -169,7 +229,7 @@ export function NoteToPolicyVisual() {
             </p>
           </article>
 
-          <article className="ofs-card ofs-message" data-state={step > 1 ? "current" : "hidden"} aria-label="Agent: what I got">
+          <article className="ofs-card ofs-message" data-state={shownStep > 1 ? "current" : "hidden"} aria-label="Agent: what I got">
             <p className="ofs-lead">Here&apos;s what I got from your request</p>
             <ul className="ofs-chips">
               {FIELDS.map((field) => (
@@ -183,7 +243,7 @@ export function NoteToPolicyVisual() {
             </ul>
           </article>
 
-          <article className="ofs-card ofs-message" data-state={step > 2 ? "current" : "hidden"} aria-label="Agent: accrual question">
+          <article className="ofs-card ofs-message" data-state={shownStep > 2 ? "current" : "hidden"} aria-label="Agent: accrual question">
             <p className="ofs-lead">I didn&apos;t see accrual. How should it work?</p>
             <div className="ofs-resolve ofs-resolve-ask">
               <div className="ofs-resolve-side ofs-options" role="group" aria-label="Accrual">
@@ -200,11 +260,11 @@ export function NoteToPolicyVisual() {
             </div>
           </article>
 
-          <article className="ofs-bubble ofs-message" data-state={step > 3 ? "current" : "hidden"} aria-label="Your answer">
+          <article className="ofs-bubble ofs-message" data-state={shownStep > 3 ? "current" : "hidden"} aria-label="Your answer">
             <p className="ofs-request">Monthly</p>
           </article>
 
-          <article className="ofs-card ofs-message" data-state={step > 4 ? "current" : "hidden"} aria-label="Agent: ready">
+          <article className="ofs-card ofs-message" data-state={shownStep > 4 ? "current" : "hidden"} aria-label="Agent: ready">
             <p className="ofs-lead">Got it.</p>
             <div className="ofs-chip ofs-chip-static" data-shown="true">
               <span className="ofs-chip-label">Accrual</span>
@@ -212,7 +272,7 @@ export function NoteToPolicyVisual() {
             </div>
           </article>
 
-          <article className="eol-card" data-state={step > 5 ? "current" : "hidden"} aria-label="Sales PTO Policy">
+          <article className="eol-card" data-state={shownStep > 5 ? "current" : "hidden"} aria-label="Sales PTO Policy">
             <header className="eol-head">
               <h3 className="eol-title">Sales PTO Policy</h3>
               <p className="eol-count">1 line changed, 3 unchanged</p>
@@ -256,9 +316,9 @@ export function NoteToPolicyVisual() {
           </div>
 
           <div className="ntp-composer" aria-label="Message">
-            <p className="ntp-composer-hint" data-typing={typed ? "true" : "false"}>
-              {typed || "Ask about this policy"}
-              {typed && !pressed ? <span className="ntp-caret" aria-hidden="true" /> : null}
+            <p className="ntp-composer-hint" data-typing={shownTyped ? "true" : "false"}>
+              {shownTyped || "Ask about this policy"}
+              {shownTyped && !shownPressed ? <span className="ntp-caret" aria-hidden="true" /> : null}
             </p>
             <div className="ntp-composer-bar">
               <span className="ntp-composer-plus" aria-hidden="true">
@@ -268,8 +328,8 @@ export function NoteToPolicyVisual() {
               </span>
               <span
                 className="ntp-composer-send"
-                data-ready={typed ? "true" : "false"}
-                data-pressed={pressed ? "true" : "false"}
+                data-ready={shownTyped ? "true" : "false"}
+                data-pressed={shownPressed ? "true" : "false"}
                 aria-hidden="true"
               >
                 <svg viewBox="0 0 16 16" className="ntp-composer-icon">

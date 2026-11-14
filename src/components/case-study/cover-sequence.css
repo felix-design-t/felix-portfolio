@@ -1,0 +1,80 @@
+/*
+  Cover sequence.
+
+  The two solution screens share this box. Only one is on at a time.
+  The frame around it keeps a fixed ratio, so a new message cannot
+  change the page height. No shadow, gradient, or blur. The thread
+  fade lives on the solution screens themselves.
+*/
+
+.cover-sequence {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  overflow-anchor: none;
+}
+
+.cover-sequence-pane {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.cover-sequence-pane[data-active="false"] {
+  display: none;
+}
+
+.cover-sequence-pane > * {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+}
+
+/*
+  Opening beat. Only the chat box and the dark bubble, centered on the
+  placeholder. The bordered product window stays on the solution page.
+  The box stays put. The bubble eases up above it.
+*/
+
+.cover-sequence [data-solo="true"] {
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.cover-sequence [data-solo="true"] .ntp-window {
+  flex: none;
+  width: min(460px, 84%);
+  height: auto;
+  max-height: none;
+  border: none;
+  background: transparent;
+  overflow: visible;
+}
+
+.cover-sequence [data-solo="true"] .ntp-thread {
+  position: relative;
+  height: auto;
+  padding: 0;
+  gap: 0;
+  overflow: visible;
+}
+
+.cover-sequence [data-solo="true"] .ntp-feed {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 20px);
+  left: 0;
+  flex: none;
+  overflow: visible;
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+.cover-sequence [data-solo="true"] .ofs-card,
+.cover-sequence [data-solo="true"] .eol-card {
+  display: none;
+}

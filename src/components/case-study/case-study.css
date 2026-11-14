@@ -208,6 +208,18 @@
   height: auto;
 }
 
+/*
+  A locked frame keeps the ratio it had as a placeholder. The visual
+  plays inside that box. Growing messages cannot push the page down.
+*/
+.case-study-frame[data-state="filled"][data-lock="ratio"] {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  place-items: stretch;
+  overflow: hidden;
+  overflow-anchor: none;
+}
+
 .case-study-placeholder {
   display: flex;
   flex-direction: column;

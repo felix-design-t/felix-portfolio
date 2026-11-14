@@ -14,6 +14,7 @@ import {
   HistoricalCheckVisual,
   MayaScenarioVisual,
 } from "@/components/case-study/decision-lead";
+import { CoverSequence } from "@/components/case-study/cover-sequence";
 import { HistoryToOverdraftVisual } from "@/components/case-study/history-to-overdraft";
 import { NoteToPolicyVisual } from "@/components/case-study/note-to-policy";
 import { timeOffCopilot } from "@/content/case-studies/time-off-copilot";
@@ -30,6 +31,7 @@ export default function TimeOffCopilotPage() {
   return (
     <CaseStudyPage
       study={timeOffCopilot}
+      cover={<CoverSequence />}
       visuals={{
         // Problem section: the three setup sheets, with the hover riffle.
         "blank-form": <SameSheetAgain />,
