@@ -32,6 +32,8 @@ const FIELDS = [
 
 const NOTE = "I need to create a PTO policy for sales teams, the yearly limit is 14 days.";
 const ANSWER = "Monthly";
+/** How long the cover's dark bubble stays before the product screen. */
+const COVER_BUBBLE_HOLD_MS = 1600;
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -180,8 +182,8 @@ export function NoteToPolicyVisual({ playback }: NoteToPolicyProps = {}) {
     let time = TOC_BEAT_MS;
     time = typeThenSend(NOTE, 1, time);
     if (throughBubble) {
-      // The bubble takes the chat box's place and stays for 0.8s.
-      time += TOC_MOVE_MS;
+      // The bubble takes the chat box's place and stays long enough to read.
+      time += COVER_BUBBLE_HOLD_MS;
       at(time, () => onDoneRef.current?.());
     } else {
       time += TOC_STEP_MS;

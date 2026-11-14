@@ -11,7 +11,7 @@ import "./cover-sequence.css";
  *
  * One loop. The chat box sits alone in the middle of the cover. The note
  * is typed, send turns green and presses, and the dark bubble takes the
- * box's place for 0.8s. Then the hours screen types "What happens if…",
+ * box's place for 1.6s. Then the hours screen types "What happens if…",
  * plays the rest of that thread, holds 0.8s, and the empty box returns.
  *
  * Each screen already knows its own motion. This only decides which
