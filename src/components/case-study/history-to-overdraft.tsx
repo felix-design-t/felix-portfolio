@@ -104,6 +104,7 @@ function reducedMotionSnapshot() {
 type HistoryPlayback =
   | { mode: "start" }
   | { mode: "end" }
+  | { mode: "second-yes" }
   | {
       mode: "play";
       epoch: number;
@@ -140,9 +141,11 @@ export function HistoryToOverdraftVisual({ playback }: HistoryToOverdraftProps =
       : play
     : playback.mode === "end"
       ? END
-      : playback.mode === "start"
-        ? START
-        : play;
+      : playback.mode === "second-yes"
+        ? SECOND_YES
+        : playback.mode === "start"
+          ? START
+          : play;
   const shownSnap = playback?.mode === "start" ? true : snap;
 
   useEffect(() => {

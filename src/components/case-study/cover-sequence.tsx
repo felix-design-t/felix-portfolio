@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { HistoryToOverdraftVisual } from "./history-to-overdraft";
 import { NoteToPolicyVisual } from "./note-to-policy";
 import { TOC_HOLD_MS } from "./toc-motion";
@@ -10,9 +10,10 @@ import "./cover-sequence.css";
  * Cover.
  *
  * One loop. The chat box sits alone in the middle of the cover. The note
- * is typed, send turns green and presses, and the dark bubble appears.
- * Then the hours screen appears, already on the second Yes, and the
- * choices follow. The frame holds, and the empty box returns.
+ * is typed, send turns green and presses, and the dark bubble takes the
+ * box's place for 0.8s. Then the hours screen appears, already on the
+ * second Yes, and the choices follow. The frame holds, and the empty
+ * box returns.
  *
  * Each screen already knows its own motion. This only decides which
  * one is on, and when the pair loops.
@@ -55,6 +56,55 @@ export function CoverSequence() {
     };
   }, []);
 
+  // The cover is as tall as the report's contents, so the empty white
+  // under the case list is not part of the frame. The height stays put
+  // while the chat box and the bubble swap in the middle.
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    const frame = root?.closest(".case-study-frame");
+    if (!(root instanceof HTMLElement) || !(frame instanceof HTMLElement)) return;
+
+    const fit = () => {
+      const report = root.querySelector(".hto-report");
+      const bar = root.querySelector(".hto-history .dec-titlebar");
+      if (!(report instanceof HTMLElement) || !(bar instanceof HTMLElement)) return;
+      const reportStyle = getComputedStyle(report);
+      const gap = parseFloat(reportStyle.rowGap || reportStyle.gap) || 0;
+      const pad =
+        parseFloat(reportStyle.paddingTop) + parseFloat(reportStyle.paddingBottom);
+      let content = bar.offsetHeight + pad;
+      const children = [...report.children];
+      children.forEach((child, index) => {
+        if (child instanceof HTMLElement) content += child.offsetHeight;
+        if (index > 0) content += gap;
+      });
+      const frameStyle = getComputedStyle(frame);
+      const chrome =
+        parseFloat(frameStyle.paddingTop) +
+        parseFloat(frameStyle.paddingBottom) +
+        parseFloat(frameStyle.borderTopWidth) +
+        parseFloat(frameStyle.borderBottomWidth);
+      const next = Math.ceil(content + chrome + 2);
+      if (next < 80) return;
+      const height = `${next}px`;
+      if (frame.style.height !== height) frame.style.height = height;
+      frame.style.aspectRatio = "auto";
+      frame.style.overflow = "hidden";
+      frame.style.overflowAnchor = "none";
+    };
+
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(frame);
+    return () => {
+      observer.disconnect();
+      frame.style.height = "";
+      frame.style.aspectRatio = "";
+      frame.style.overflow = "";
+      frame.style.overflowAnchor = "";
+    };
+  }, []);
+
   const finishNote = useCallback(() => {
     setHistoryEpoch((epoch) => epoch + 1);
     setPhase("history");
@@ -83,8 +133,8 @@ export function CoverSequence() {
   const historyPlayback =
     phase === "end" || phase === "hold"
       ? { mode: "end" as const }
-      : !seen || phase === "note"
-        ? { mode: "start" as const }
+      : phase !== "history"
+        ? { mode: "second-yes" as const }
         : { mode: "play" as const, epoch: historyEpoch, onDone: finishHistory, from: "second-yes" as const };
 
   return (

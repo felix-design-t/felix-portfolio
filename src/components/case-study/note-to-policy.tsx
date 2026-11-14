@@ -180,7 +180,7 @@ export function NoteToPolicyVisual({ playback }: NoteToPolicyProps = {}) {
     let time = TOC_BEAT_MS;
     time = typeThenSend(NOTE, 1, time);
     if (throughBubble) {
-      // The bubble eases up. Then the cover switches to the hours thread.
+      // The bubble takes the chat box's place and stays for 0.8s.
       time += TOC_MOVE_MS;
       at(time, () => onDoneRef.current?.());
     } else {
