@@ -131,12 +131,15 @@
   display: none;
 }
 
-/* The product screen is a smaller copy of itself. It sits 15% to the
-   right (25% minus 10% of the frame), so the right edge is still cut off. */
+/* The product screen is a smaller copy of itself. It starts 15% in from
+   the left and ends on the frame's right edge. The frame's top and bottom
+   padding set its height. */
 .cover-sequence-pane:has(.hto-product) {
-  width: calc(100% / var(--cover-product-scale));
+  --cover-product-inset: 15%;
+  width: calc((100% - var(--cover-product-inset)) / var(--cover-product-scale));
   height: calc(100% / var(--cover-product-scale));
-  transform: scale(var(--cover-product-scale)) translateX(15%);
+  margin-left: var(--cover-product-inset);
+  transform: scale(var(--cover-product-scale));
   transform-origin: top left;
 }
 

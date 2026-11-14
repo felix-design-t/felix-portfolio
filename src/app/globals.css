@@ -1251,8 +1251,8 @@ button.skill-pill {
   /* Same 16/10 frame as the Time-Off case study cover. */
   aspect-ratio: 16 / 10;
   height: auto;
-  /* No inset, same as the case study cover. */
-  padding: 0;
+  /* Same inset as the case study cover: 8px above and below, none on the sides. */
+  padding: var(--space-1) 0;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: calc(var(--radius-sm) + var(--space-1) + 1px);
@@ -1267,7 +1267,7 @@ button.skill-pill {
   place-items: stretch;
   height: auto !important;
   aspect-ratio: 16 / 10 !important;
-  padding: 0;
+  padding: var(--space-1) 0;
   overflow-anchor: none;
 }
 
