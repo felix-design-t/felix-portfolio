@@ -136,14 +136,15 @@
   display: none;
 }
 
-/* The product screen is a smaller copy of itself. It starts 15% in from
-   the left and ends on the frame's right edge. The frame's top and bottom
-   padding set its height. */
+/* The product screen is a smaller copy of itself, centered in the frame
+   with the same gap on the left and right. The frame's padding sets its
+   height. */
 .cover-sequence-pane:has(.hto-product) {
+  /* Total side gap, split evenly between left and right. */
   --cover-product-inset: 15%;
   width: calc((100% - var(--cover-product-inset)) / var(--cover-product-scale));
   height: calc(100% / var(--cover-product-scale));
-  margin-left: var(--cover-product-inset);
+  margin-left: calc(var(--cover-product-inset) / 2);
   transform: scale(var(--cover-product-scale));
   transform-origin: top left;
 }
