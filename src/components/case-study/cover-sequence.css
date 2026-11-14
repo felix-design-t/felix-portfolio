@@ -148,7 +148,7 @@
 }
 
 .cover-sequence [data-solo="true"] .ntp-composer {
-  animation: cover-bounce 0.85s cubic-bezier(0.22, 1.12, 0.36, 1) both;
+  animation: cover-bounce 0.55s cubic-bezier(0.22, 1.12, 0.36, 1) both;
 }
 
 /* The bubble is centered on the chat box, so the swap stays in one spot. */
@@ -195,7 +195,7 @@
 
 .cover-sequence [data-solo="true"] .ofs-bubble[data-state="current"] {
   opacity: 1;
-  animation: cover-bubble 0.85s cubic-bezier(0.22, 1.12, 0.36, 1) both;
+  animation: cover-bubble 0.55s cubic-bezier(0.22, 1.12, 0.36, 1) both;
 }
 
 .cover-sequence [data-solo="true"]:has(.ofs-bubble[data-state="current"]) .ntp-composer {
@@ -218,7 +218,7 @@
 }
 
 .cover-sequence-pane[data-active="true"] .hto-window {
-  animation: cover-bounce 0.9s cubic-bezier(0.22, 1.12, 0.36, 1) both;
+  animation: cover-bounce 0.55s cubic-bezier(0.22, 1.12, 0.36, 1) both;
 }
 
 @keyframes cover-bubble {
