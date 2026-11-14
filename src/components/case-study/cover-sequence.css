@@ -131,11 +131,12 @@
   display: none;
 }
 
-/* The product screen is a smaller copy of itself, then bounces in. */
+/* The product screen is a smaller copy of itself, shifted right so the
+   frame cuts off the right quarter, then bounces in. */
 .cover-sequence-pane:has(.hto-product) {
   width: calc(100% / var(--cover-product-scale));
   height: calc(100% / var(--cover-product-scale));
-  transform: scale(var(--cover-product-scale));
+  transform: scale(var(--cover-product-scale)) translateX(25%);
   transform-origin: top left;
 }
 
