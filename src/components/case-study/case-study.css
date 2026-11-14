@@ -169,6 +169,11 @@
   margin: var(--space-2) 0 0;
 }
 
+/* A little air between a solution caption and the next image. */
+#solution .case-study-figure + .case-study-figure {
+  margin-top: var(--space-4);
+}
+
 /* A paragraph between two cards. The card below already carries
    the figure's top margin, so this matches that gap above. */
 .case-study-figure + .case-study-body {

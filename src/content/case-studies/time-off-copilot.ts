@@ -141,10 +141,12 @@ export const timeOffCopilot: CaseStudy = {
       body: "The agent helps the admin finish setup faster. It takes over the manual entry, so a missed or mistyped field does not slip through, and it flags conflicts before the policy is published. Seeing each decision gives the admin the confidence to approve.",
       visual: {
         name: "From the note to the policy",
+        caption: "Build Time-Off policy structure with your agent",
         aspectRatio: "16 / 10",
       },
       closingVisual: {
         name: "Content later.",
+        caption: "Review and Editing to provide guardrails",
         aspectRatio: "16 / 10",
       },
     },
