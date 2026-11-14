@@ -1232,7 +1232,8 @@ button.skill-pill {
 .selected-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(var(--space-4), 4vw, var(--space-6));
+  /* One step more air between studies than the old 32–48px gap. */
+  gap: clamp(var(--space-6), 6vw, var(--space-8));
 }
 
 .work-slot {
@@ -1249,6 +1250,23 @@ button.skill-pill {
   /* Borderless plates — Cambio 8px corners, no stroke */
   background: var(--mat);
   border-radius: var(--radius-sm);
+}
+
+/* Time-Off on the home page is the case study cover, not a blank plate.
+   Same padding, stroke, and corner as that frame, so the fitter measures
+   the same box it measures on the case study. */
+.work-slot-cover.case-study-frame {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  place-items: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--space-1);
+  overflow: hidden;
+  overflow-anchor: none;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius-sm) + var(--space-1) + 1px);
+  background: var(--mat);
 }
 
 .work-slot-caption {

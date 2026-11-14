@@ -1,4 +1,5 @@
 import type { Project } from "@/content/projects";
+import { MatchCoverSize } from "@/components/match-cover-size";
 import { ProjectCard } from "@/components/project-card";
 
 type SelectedWorkProps = {
@@ -6,9 +7,9 @@ type SelectedWorkProps = {
 };
 
 /**
- * Four covers in a row pair. Each cover is only a placeholder; the caption
- * under it is the project name and one short label. The whole slot links
- * to that project's page.
+ * Four studies, one per row. Time-Off plays its cover. The other three
+ * keep a plate of that same size. The caption under each one is the
+ * project name and one short label. The whole slot links to that page.
  */
 export function SelectedWork({ projects }: SelectedWorkProps) {
   return (
@@ -25,6 +26,7 @@ export function SelectedWork({ projects }: SelectedWorkProps) {
           <ProjectCard key={project.slug} project={project} />
         ))}
       </div>
+      <MatchCoverSize />
     </section>
   );
 }
