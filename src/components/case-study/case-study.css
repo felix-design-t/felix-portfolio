@@ -228,6 +228,8 @@
 .case-study-cover .case-study-frame {
   height: auto !important;
   aspect-ratio: 16 / 10 !important;
+  /* The cover fills the frame edge to edge. */
+  padding: 0;
 }
 
 .case-study-placeholder {
