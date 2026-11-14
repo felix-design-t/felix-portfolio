@@ -52,14 +52,19 @@
 }
 
 .cover-sequence [data-solo="true"] .ntp-window {
+  /* How much larger the opening chat box and bubble are drawn. */
+  --cover-solo-scale: 1.35;
   flex: none;
-  /* Narrow enough that the sent note wraps onto two lines. */
-  width: min(252px, 70%);
+  /* Narrow enough that the sent note wraps onto two lines. Scaled up from
+     the center, it still never grows past 88% of the frame. */
+  width: min(252px, calc(88% / var(--cover-solo-scale)));
   height: auto;
   max-height: none;
   border: none;
   background: transparent;
   overflow: visible;
+  transform: scale(var(--cover-solo-scale));
+  transform-origin: center;
 }
 
 .cover-sequence [data-solo="true"] .ntp-thread {
