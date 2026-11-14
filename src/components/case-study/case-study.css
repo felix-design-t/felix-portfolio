@@ -228,8 +228,8 @@
 .case-study-cover .case-study-frame {
   height: auto !important;
   aspect-ratio: auto !important;
-  /* The placeholder's 8px on every side. */
-  padding: var(--space-1);
+  /* 8px on the bottom and left only. The product runs off the top and right. */
+  padding: 0 0 var(--space-1) var(--space-1);
 }
 
 .case-study-placeholder {

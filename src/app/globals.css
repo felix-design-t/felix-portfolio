@@ -1249,8 +1249,8 @@ button.skill-pill {
   box-sizing: border-box;
   width: 100%;
   height: auto;
-  /* Same 8px inset as the case study cover. */
-  padding: var(--space-1);
+  /* Same inset as the case study cover: 8px on the bottom and left only. */
+  padding: 0 0 var(--space-1) var(--space-1);
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: calc(var(--radius-sm) + var(--space-1) + 1px);
@@ -1273,7 +1273,7 @@ button.skill-pill {
   place-items: stretch;
   height: auto !important;
   aspect-ratio: auto !important;
-  padding: var(--space-1);
+  padding: 0 0 var(--space-1) var(--space-1);
   overflow-anchor: none;
 }
 
