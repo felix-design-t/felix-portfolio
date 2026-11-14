@@ -140,12 +140,12 @@
   display: none;
 }
 
-/* The product screen is a scaled copy of itself. It sits 15% toward the
+/* The product screen is a scaled copy of itself. It sits 10% toward the
    top right corner, so the frame cuts off its top and right edges. */
 .cover-sequence-pane:has(.hto-product) {
   width: calc(100% / var(--cover-product-scale));
   height: calc(100% / var(--cover-product-scale));
-  transform: scale(var(--cover-product-scale)) translate(15%, -15%);
+  transform: scale(var(--cover-product-scale)) translate(10%, -10%);
   transform-origin: top left;
 }
 
