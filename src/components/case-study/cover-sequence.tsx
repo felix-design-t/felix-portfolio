@@ -84,7 +84,9 @@ export function CoverSequence() {
         parseFloat(frameStyle.paddingBottom) +
         parseFloat(frameStyle.borderTopWidth) +
         parseFloat(frameStyle.borderBottomWidth);
-      const next = Math.ceil(content + chrome + 2);
+      const scale =
+        parseFloat(getComputedStyle(root).getPropertyValue("--cover-product-scale")) || 1;
+      const next = Math.ceil(content * scale + chrome + 2);
       if (next < 80) return;
       const height = `${next}px`;
       if (frame.style.height !== height) frame.style.height = height;

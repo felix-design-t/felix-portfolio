@@ -9,6 +9,7 @@
 */
 
 .cover-sequence {
+  --cover-product-scale: 0.78;
   position: relative;
   display: grid;
   width: 100%;
@@ -52,7 +53,8 @@
 
 .cover-sequence [data-solo="true"] .ntp-window {
   flex: none;
-  width: min(380px, 78%);
+  /* Narrow enough that the sent note wraps onto two lines. */
+  width: min(220px, 64%);
   height: auto;
   max-height: none;
   border: none;
@@ -72,13 +74,17 @@
   animation: cover-bounce 0.52s cubic-bezier(0.22, 1.2, 0.36, 1) both;
 }
 
+/* The bubble is centered on the chat box, so the swap stays in one spot. */
 .cover-sequence [data-solo="true"] .ntp-feed {
   position: absolute;
   inset: 0;
   flex: none;
   overflow: visible;
+  transform: none;
   mask-image: none;
   -webkit-mask-image: none;
+  align-items: center;
+  justify-content: center;
 }
 
 .cover-sequence [data-solo="true"] .ntp-feed .ofs-message,
@@ -86,23 +92,33 @@
   max-height: none;
   margin: 0;
   overflow: visible;
-  opacity: 0;
-  transform: scale(0.94);
   transition: none;
 }
 
 .cover-sequence [data-solo="true"] .ofs-bubble {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
   align-self: stretch;
+  box-sizing: border-box;
   width: 100%;
   max-width: none;
-  height: 100%;
+  height: auto;
+  /* Even space above and below the two lines. */
+  padding: 8px 12px;
+  opacity: 0;
+  transform: translateY(-50%) scale(0.94);
+}
+
+.cover-sequence [data-solo="true"] .ofs-request {
+  line-height: 18px;
+  white-space: normal;
 }
 
 .cover-sequence [data-solo="true"] .ofs-bubble[data-state="current"] {
-  display: flex;
-  align-items: center;
   opacity: 1;
-  animation: cover-bounce 0.52s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+  animation: cover-bubble 0.52s cubic-bezier(0.22, 1.2, 0.36, 1) both;
 }
 
 .cover-sequence [data-solo="true"]:has(.ofs-bubble[data-state="current"]) .ntp-composer {
@@ -115,9 +131,31 @@
   display: none;
 }
 
-/* The product screen arrives with the same soft bounce. */
+/* The product screen is a smaller copy of itself, then bounces in. */
+.cover-sequence-pane:has(.hto-product) {
+  width: calc(100% / var(--cover-product-scale));
+  height: calc(100% / var(--cover-product-scale));
+  transform: scale(var(--cover-product-scale));
+  transform-origin: top left;
+}
+
 .cover-sequence-pane[data-active="true"] .hto-window {
   animation: cover-bounce 0.56s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+}
+
+@keyframes cover-bubble {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.94);
+  }
+  62% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.028);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
 }
 
 @keyframes cover-bounce {
