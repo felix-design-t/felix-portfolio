@@ -10,7 +10,7 @@
 
 .cover-sequence {
   --cover-product-scale: 0.78;
-  --cover-fade: 32px;
+  --cover-fade: 28px;
   position: relative;
   display: grid;
   width: 100%;
@@ -18,7 +18,7 @@
   min-height: 0;
   overflow: hidden;
   overflow-anchor: none;
-  /* 32px edge on the top, bottom, and right. It eases down until
+  /* 28px edge on the top, bottom, and right. It eases down until
      the rim is only barely visible. The left side stays solid. */
   -webkit-mask-image:
     linear-gradient(
