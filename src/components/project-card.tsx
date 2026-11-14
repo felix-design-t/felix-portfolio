@@ -6,8 +6,8 @@ import "@/components/case-study/case-study.css";
 /**
  * One Selected Work slot.
  *
- * Time-Off uses the same cover frame as its case study, at that frame's
- * own height. The other projects keep an empty plate. The caption sits
+ * Time-Off uses the same 16/10 cover frame as its case study.
+ * The other projects keep an empty plate of that same size. The caption sits
  * under the plate, on the same left edge. The whole slot is the link,
  * the way a list row is one hit target.
  */

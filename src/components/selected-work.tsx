@@ -1,5 +1,4 @@
 import type { Project } from "@/content/projects";
-import { MatchCoverSize } from "@/components/match-cover-size";
 import { ProjectCard } from "@/components/project-card";
 
 type SelectedWorkProps = {
@@ -26,7 +25,6 @@ export function SelectedWork({ projects }: SelectedWorkProps) {
           <ProjectCard key={project.slug} project={project} />
         ))}
       </div>
-      <MatchCoverSize />
     </section>
   );
 }

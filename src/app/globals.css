@@ -1246,27 +1246,27 @@ button.skill-pill {
 
 .work-slot-cover {
   display: block;
+  box-sizing: border-box;
+  width: 100%;
+  /* Same 16/10 frame as the Time-Off case study cover. */
   aspect-ratio: 16 / 10;
-  /* Borderless plates — Cambio 8px corners, no stroke */
+  height: auto;
+  padding: var(--space-1);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius-sm) + var(--space-1) + 1px);
   background: var(--mat);
-  border-radius: var(--radius-sm);
 }
 
-/* Time-Off on the home page is the case study cover, not a blank plate.
-   Same padding, stroke, and corner as that frame, so the fitter measures
-   the same box it measures on the case study. */
+/* The cover animation measures its report and sets a pixel height.
+   The home frame stays on the case study's 16/10 ratio instead. */
 .work-slot-cover.case-study-frame {
   display: grid;
   grid-template-rows: minmax(0, 1fr);
   place-items: stretch;
-  box-sizing: border-box;
-  width: 100%;
-  padding: var(--space-1);
-  overflow: hidden;
+  height: auto !important;
+  aspect-ratio: 16 / 10 !important;
   overflow-anchor: none;
-  border: 1px solid var(--border);
-  border-radius: calc(var(--radius-sm) + var(--space-1) + 1px);
-  background: var(--mat);
 }
 
 .work-slot-caption {

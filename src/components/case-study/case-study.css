@@ -220,6 +220,16 @@
   overflow-anchor: none;
 }
 
+/*
+  The cover was drawn at 16/10. The animation measures the report and
+  writes a pixel height onto this frame. That measurement is not the
+  frame, so the cover keeps the ratio it was given.
+*/
+.case-study-cover .case-study-frame {
+  height: auto !important;
+  aspect-ratio: 16 / 10 !important;
+}
+
 .case-study-placeholder {
   display: flex;
   flex-direction: column;
