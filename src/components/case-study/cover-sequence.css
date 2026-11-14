@@ -18,43 +18,43 @@
   min-height: 0;
   overflow: hidden;
   overflow-anchor: none;
-  /* 32px edge on the top, bottom, and right. The stops follow a
-     smoother S-curve, so the falloff eases in and out.
+  /* 32px edge on the top, bottom, and right. The curve eases out,
+     and the rim stays partly visible instead of disappearing.
      The left side stays solid. */
   -webkit-mask-image:
     linear-gradient(
       to right,
       #000 0,
       #000 calc(100% - var(--cover-fade)),
-      rgba(0, 0, 0, 0.98) calc(100% - var(--cover-fade) * 0.875),
-      rgba(0, 0, 0, 0.9) calc(100% - var(--cover-fade) * 0.75),
-      rgba(0, 0, 0, 0.73) calc(100% - var(--cover-fade) * 0.625),
-      rgba(0, 0, 0, 0.5) calc(100% - var(--cover-fade) * 0.5),
-      rgba(0, 0, 0, 0.27) calc(100% - var(--cover-fade) * 0.375),
-      rgba(0, 0, 0, 0.1) calc(100% - var(--cover-fade) * 0.25),
-      rgba(0, 0, 0, 0.02) calc(100% - var(--cover-fade) * 0.125),
-      transparent 100%
+      rgba(0, 0, 0, 0.99) calc(100% - var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.84) calc(100% - var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.7) calc(100% - var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.56) calc(100% - var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.46) calc(100% - var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.41) calc(100% - var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.4) 100%
     ),
     linear-gradient(
       to bottom,
-      transparent 0,
-      rgba(0, 0, 0, 0.02) calc(var(--cover-fade) * 0.125),
-      rgba(0, 0, 0, 0.1) calc(var(--cover-fade) * 0.25),
-      rgba(0, 0, 0, 0.27) calc(var(--cover-fade) * 0.375),
-      rgba(0, 0, 0, 0.5) calc(var(--cover-fade) * 0.5),
-      rgba(0, 0, 0, 0.73) calc(var(--cover-fade) * 0.625),
-      rgba(0, 0, 0, 0.9) calc(var(--cover-fade) * 0.75),
-      rgba(0, 0, 0, 0.98) calc(var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.4) 0,
+      rgba(0, 0, 0, 0.41) calc(var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.46) calc(var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.56) calc(var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.7) calc(var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.84) calc(var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.94) calc(var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.99) calc(var(--cover-fade) * 0.875),
       #000 var(--cover-fade),
       #000 calc(100% - var(--cover-fade)),
-      rgba(0, 0, 0, 0.98) calc(100% - var(--cover-fade) * 0.875),
-      rgba(0, 0, 0, 0.9) calc(100% - var(--cover-fade) * 0.75),
-      rgba(0, 0, 0, 0.73) calc(100% - var(--cover-fade) * 0.625),
-      rgba(0, 0, 0, 0.5) calc(100% - var(--cover-fade) * 0.5),
-      rgba(0, 0, 0, 0.27) calc(100% - var(--cover-fade) * 0.375),
-      rgba(0, 0, 0, 0.1) calc(100% - var(--cover-fade) * 0.25),
-      rgba(0, 0, 0, 0.02) calc(100% - var(--cover-fade) * 0.125),
-      transparent 100%
+      rgba(0, 0, 0, 0.99) calc(100% - var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.84) calc(100% - var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.7) calc(100% - var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.56) calc(100% - var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.46) calc(100% - var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.41) calc(100% - var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.4) 100%
     );
   -webkit-mask-composite: source-in;
   mask-image:
@@ -62,35 +62,35 @@
       to right,
       #000 0,
       #000 calc(100% - var(--cover-fade)),
-      rgba(0, 0, 0, 0.98) calc(100% - var(--cover-fade) * 0.875),
-      rgba(0, 0, 0, 0.9) calc(100% - var(--cover-fade) * 0.75),
-      rgba(0, 0, 0, 0.73) calc(100% - var(--cover-fade) * 0.625),
-      rgba(0, 0, 0, 0.5) calc(100% - var(--cover-fade) * 0.5),
-      rgba(0, 0, 0, 0.27) calc(100% - var(--cover-fade) * 0.375),
-      rgba(0, 0, 0, 0.1) calc(100% - var(--cover-fade) * 0.25),
-      rgba(0, 0, 0, 0.02) calc(100% - var(--cover-fade) * 0.125),
-      transparent 100%
+      rgba(0, 0, 0, 0.99) calc(100% - var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.84) calc(100% - var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.7) calc(100% - var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.56) calc(100% - var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.46) calc(100% - var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.41) calc(100% - var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.4) 100%
     ),
     linear-gradient(
       to bottom,
-      transparent 0,
-      rgba(0, 0, 0, 0.02) calc(var(--cover-fade) * 0.125),
-      rgba(0, 0, 0, 0.1) calc(var(--cover-fade) * 0.25),
-      rgba(0, 0, 0, 0.27) calc(var(--cover-fade) * 0.375),
-      rgba(0, 0, 0, 0.5) calc(var(--cover-fade) * 0.5),
-      rgba(0, 0, 0, 0.73) calc(var(--cover-fade) * 0.625),
-      rgba(0, 0, 0, 0.9) calc(var(--cover-fade) * 0.75),
-      rgba(0, 0, 0, 0.98) calc(var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.4) 0,
+      rgba(0, 0, 0, 0.41) calc(var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.46) calc(var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.56) calc(var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.7) calc(var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.84) calc(var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.94) calc(var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.99) calc(var(--cover-fade) * 0.875),
       #000 var(--cover-fade),
       #000 calc(100% - var(--cover-fade)),
-      rgba(0, 0, 0, 0.98) calc(100% - var(--cover-fade) * 0.875),
-      rgba(0, 0, 0, 0.9) calc(100% - var(--cover-fade) * 0.75),
-      rgba(0, 0, 0, 0.73) calc(100% - var(--cover-fade) * 0.625),
-      rgba(0, 0, 0, 0.5) calc(100% - var(--cover-fade) * 0.5),
-      rgba(0, 0, 0, 0.27) calc(100% - var(--cover-fade) * 0.375),
-      rgba(0, 0, 0, 0.1) calc(100% - var(--cover-fade) * 0.25),
-      rgba(0, 0, 0, 0.02) calc(100% - var(--cover-fade) * 0.125),
-      transparent 100%
+      rgba(0, 0, 0, 0.99) calc(100% - var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.84) calc(100% - var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.7) calc(100% - var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.56) calc(100% - var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.46) calc(100% - var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.41) calc(100% - var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.4) 100%
     );
   mask-composite: intersect;
   mask-repeat: no-repeat;
