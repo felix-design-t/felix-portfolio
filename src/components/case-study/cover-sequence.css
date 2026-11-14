@@ -10,6 +10,7 @@
 
 .cover-sequence {
   --cover-product-scale: 0.78;
+  --cover-fade: 40px;
   position: relative;
   display: grid;
   width: 100%;
@@ -17,6 +18,29 @@
   min-height: 0;
   overflow: hidden;
   overflow-anchor: none;
+  /* Soft edge on the top, bottom, and right. The left side stays solid. */
+  -webkit-mask-image:
+    linear-gradient(to right, #000 0, #000 calc(100% - var(--cover-fade)), transparent 100%),
+    linear-gradient(
+      to bottom,
+      transparent 0,
+      #000 var(--cover-fade),
+      #000 calc(100% - var(--cover-fade)),
+      transparent 100%
+    );
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, #000 0, #000 calc(100% - var(--cover-fade)), transparent 100%),
+    linear-gradient(
+      to bottom,
+      transparent 0,
+      #000 var(--cover-fade),
+      #000 calc(100% - var(--cover-fade)),
+      transparent 100%
+    );
+  mask-composite: intersect;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
 }
 
 .cover-sequence-pane {
@@ -131,12 +155,12 @@
   display: none;
 }
 
-/* The product screen is a smaller copy of itself, shifted right so the
-   frame cuts off the right quarter, then bounces in. */
+/* The product screen is a smaller copy of itself. It sits 15% to the
+   right (25% minus 10% of the frame), so the right edge is still cut off. */
 .cover-sequence-pane:has(.hto-product) {
   width: calc(100% / var(--cover-product-scale));
   height: calc(100% / var(--cover-product-scale));
-  transform: scale(var(--cover-product-scale)) translateX(25%);
+  transform: scale(var(--cover-product-scale)) translateX(15%);
   transform-origin: top left;
 }
 
