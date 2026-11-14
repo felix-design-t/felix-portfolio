@@ -10,7 +10,7 @@
 
 .cover-sequence {
   --cover-product-scale: 0.78;
-  --cover-fade: 16px;
+  --cover-fade: 32px;
   position: relative;
   display: grid;
   width: 100%;
@@ -18,33 +18,42 @@
   min-height: 0;
   overflow: hidden;
   overflow-anchor: none;
-  /* 16px edge on the top, bottom, and right. Stops follow a smooth
-     curve so the falloff eases instead of dropping in a straight line.
+  /* 32px edge on the top, bottom, and right. The stops follow a
+     smoother S-curve, so the falloff eases in and out.
      The left side stays solid. */
   -webkit-mask-image:
     linear-gradient(
       to right,
       #000 0,
       #000 calc(100% - var(--cover-fade)),
-      rgba(0, 0, 0, 0.9) calc(100% - var(--cover-fade) * 0.8),
-      rgba(0, 0, 0, 0.65) calc(100% - var(--cover-fade) * 0.6),
-      rgba(0, 0, 0, 0.35) calc(100% - var(--cover-fade) * 0.4),
-      rgba(0, 0, 0, 0.1) calc(100% - var(--cover-fade) * 0.2),
+      rgba(0, 0, 0, 0.98) calc(100% - var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.9) calc(100% - var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.73) calc(100% - var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.5) calc(100% - var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.27) calc(100% - var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.1) calc(100% - var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.02) calc(100% - var(--cover-fade) * 0.125),
       transparent 100%
     ),
     linear-gradient(
       to bottom,
       transparent 0,
-      rgba(0, 0, 0, 0.1) calc(var(--cover-fade) * 0.2),
-      rgba(0, 0, 0, 0.35) calc(var(--cover-fade) * 0.4),
-      rgba(0, 0, 0, 0.65) calc(var(--cover-fade) * 0.6),
-      rgba(0, 0, 0, 0.9) calc(var(--cover-fade) * 0.8),
+      rgba(0, 0, 0, 0.02) calc(var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.1) calc(var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.27) calc(var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.5) calc(var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.73) calc(var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.9) calc(var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.98) calc(var(--cover-fade) * 0.875),
       #000 var(--cover-fade),
       #000 calc(100% - var(--cover-fade)),
-      rgba(0, 0, 0, 0.9) calc(100% - var(--cover-fade) * 0.8),
-      rgba(0, 0, 0, 0.65) calc(100% - var(--cover-fade) * 0.6),
-      rgba(0, 0, 0, 0.35) calc(100% - var(--cover-fade) * 0.4),
-      rgba(0, 0, 0, 0.1) calc(100% - var(--cover-fade) * 0.2),
+      rgba(0, 0, 0, 0.98) calc(100% - var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.9) calc(100% - var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.73) calc(100% - var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.5) calc(100% - var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.27) calc(100% - var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.1) calc(100% - var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.02) calc(100% - var(--cover-fade) * 0.125),
       transparent 100%
     );
   -webkit-mask-composite: source-in;
@@ -53,25 +62,34 @@
       to right,
       #000 0,
       #000 calc(100% - var(--cover-fade)),
-      rgba(0, 0, 0, 0.9) calc(100% - var(--cover-fade) * 0.8),
-      rgba(0, 0, 0, 0.65) calc(100% - var(--cover-fade) * 0.6),
-      rgba(0, 0, 0, 0.35) calc(100% - var(--cover-fade) * 0.4),
-      rgba(0, 0, 0, 0.1) calc(100% - var(--cover-fade) * 0.2),
+      rgba(0, 0, 0, 0.98) calc(100% - var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.9) calc(100% - var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.73) calc(100% - var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.5) calc(100% - var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.27) calc(100% - var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.1) calc(100% - var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.02) calc(100% - var(--cover-fade) * 0.125),
       transparent 100%
     ),
     linear-gradient(
       to bottom,
       transparent 0,
-      rgba(0, 0, 0, 0.1) calc(var(--cover-fade) * 0.2),
-      rgba(0, 0, 0, 0.35) calc(var(--cover-fade) * 0.4),
-      rgba(0, 0, 0, 0.65) calc(var(--cover-fade) * 0.6),
-      rgba(0, 0, 0, 0.9) calc(var(--cover-fade) * 0.8),
+      rgba(0, 0, 0, 0.02) calc(var(--cover-fade) * 0.125),
+      rgba(0, 0, 0, 0.1) calc(var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.27) calc(var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.5) calc(var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.73) calc(var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.9) calc(var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.98) calc(var(--cover-fade) * 0.875),
       #000 var(--cover-fade),
       #000 calc(100% - var(--cover-fade)),
-      rgba(0, 0, 0, 0.9) calc(100% - var(--cover-fade) * 0.8),
-      rgba(0, 0, 0, 0.65) calc(100% - var(--cover-fade) * 0.6),
-      rgba(0, 0, 0, 0.35) calc(100% - var(--cover-fade) * 0.4),
-      rgba(0, 0, 0, 0.1) calc(100% - var(--cover-fade) * 0.2),
+      rgba(0, 0, 0, 0.98) calc(100% - var(--cover-fade) * 0.875),
+      rgba(0, 0, 0, 0.9) calc(100% - var(--cover-fade) * 0.75),
+      rgba(0, 0, 0, 0.73) calc(100% - var(--cover-fade) * 0.625),
+      rgba(0, 0, 0, 0.5) calc(100% - var(--cover-fade) * 0.5),
+      rgba(0, 0, 0, 0.27) calc(100% - var(--cover-fade) * 0.375),
+      rgba(0, 0, 0, 0.1) calc(100% - var(--cover-fade) * 0.25),
+      rgba(0, 0, 0, 0.02) calc(100% - var(--cover-fade) * 0.125),
       transparent 100%
     );
   mask-composite: intersect;
