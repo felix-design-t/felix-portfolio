@@ -83,8 +83,8 @@ export type CaseStudySectionData = {
     text: string;
     /** Exact phrases inside `text` drawn in the accent color. */
     highlights: string[];
-    /** Blue is the objective. Amber is the question that follows testing. */
-    accent?: "blue" | "amber";
+    /** Blue is the objective. Amber or violet is the question that follows testing. */
+    accent?: "blue" | "amber" | "violet";
     /** Target for an objective. Question for an open question. */
     icon?: "target" | "question";
   };

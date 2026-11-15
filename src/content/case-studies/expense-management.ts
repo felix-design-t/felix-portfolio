@@ -13,7 +13,7 @@ import type { CaseStudy } from "@/components/case-study/types";
  * 100 is the bottom-right. Change `x` and `y` to move a pin.
  */
 export const expenseManagement: CaseStudy = {
-  title: "Expense Management Redesign",
+  title: "Expense Management",
   cover: {
     label: "Cover",
     aspectRatio: "16 / 10",
@@ -282,25 +282,25 @@ export const iterationSlides: {
   scale: number;
 }[] = [
   {
-    src: "/work/expense-redesign/iteration-2.1.png",
+    src: "/work/expense-management/iteration-2.1.png",
     label: "CTA",
     caption: "CTA overview to initiate the action",
     scale: 0.45,
   },
   {
-    src: "/work/expense-redesign/iteration-2.2.png",
+    src: "/work/expense-management/iteration-2.2.png",
     label: "Card",
     caption: "Essential information for quick approval",
     scale: 0.45,
   },
   {
-    src: "/work/expense-redesign/iteration-2.3.png",
+    src: "/work/expense-management/iteration-2.3.png",
     label: "Drawer",
     caption: "Review attached receipt for matching info",
     scale: 0.8,
   },
   {
-    src: "/work/expense-redesign/iteration-2.4.png",
+    src: "/work/expense-management/iteration-2.4.png",
     label: "Full Review",
     caption: "All fields, only for rare complex cases",
     scale: 1,
@@ -385,13 +385,13 @@ export const designChangeSteps: TimelineStep[] = [
     kind: "iteration",
     images: [
       {
-        src: "/work/expense-redesign/change-1.png",
+        src: "/work/expense-management/change-1.png",
         alt: "First iteration of the CTA widgets, screen 1 of 2",
         width: 972,
         height: 276,
       },
       {
-        src: "/work/expense-redesign/change-2.png",
+        src: "/work/expense-management/change-2.png",
         alt: "First iteration of the CTA widgets, screen 2 of 2",
         width: 972,
         height: 276,
@@ -407,13 +407,13 @@ export const designChangeSteps: TimelineStep[] = [
     kind: "iteration",
     images: [
       {
-        src: "/work/expense-redesign/change-3.png",
+        src: "/work/expense-management/change-3.png",
         alt: "Second iteration of the CTA widgets, screen 1 of 2",
         width: 981,
         height: 264,
       },
       {
-        src: "/work/expense-redesign/change-4.png",
+        src: "/work/expense-management/change-4.png",
         alt: "Second iteration of the CTA widgets, screen 2 of 2",
         width: 981,
         height: 264,
@@ -430,7 +430,7 @@ export const designChangeSteps: TimelineStep[] = [
     final: true,
     images: [
       {
-        src: "/work/expense-redesign/change-5.png",
+        src: "/work/expense-management/change-5.png",
         alt: "Final design of the CTA widgets",
         width: 1980,
         height: 546,
@@ -452,7 +452,7 @@ export const successBlocks: SuccessBlock[] = [
       },
     ],
     image: {
-      src: "/work/expense-redesign/success-1.png",
+      src: "/work/expense-management/success-1.png",
       alt: "Data visualization hub showing policy risks on the dashboard",
       width: 1125,
       height: 800,
@@ -468,7 +468,7 @@ export const successBlocks: SuccessBlock[] = [
       { direction: "up", value: "80%", label: "first click success rate" },
     ],
     image: {
-      src: "/work/expense-redesign/success-2.png",
+      src: "/work/expense-management/success-2.png",
       alt: "Progressive review screen for approving an expense",
       width: 1125,
       height: 800,

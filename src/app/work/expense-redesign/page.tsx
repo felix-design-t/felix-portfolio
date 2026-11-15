@@ -22,7 +22,7 @@ import {
   overloadRiskNotes,
   problemNotes,
   successBlocks,
-} from "@/content/case-studies/expense-redesign";
+} from "@/content/case-studies/expense-management";
 import "@/components/case-study/analysis-frame.css";
 import "@/components/case-study/cover-sequence.css";
 
@@ -49,7 +49,7 @@ export default function ExpenseManagementPage() {
             <Image
               className="work-slot-shot"
               data-theme-image="light"
-              src="/work/expense-redesign/cover.png"
+              src="/work/expense-management/cover.png"
               alt="Redesigned Paycom expense dashboard"
               width={861}
               height={714}
@@ -58,7 +58,7 @@ export default function ExpenseManagementPage() {
             <Image
               className="work-slot-shot"
               data-theme-image="dark"
-              src="/work/expense-redesign/cover-dark.jpg"
+              src="/work/expense-management/cover-dark.jpg"
               alt="Redesigned Paycom expense dashboard"
               width={1152}
               height={864}
@@ -73,15 +73,15 @@ export default function ExpenseManagementPage() {
         ),
         "outcome-overview": (
           <ComparisonSlider
-            beforeSrc="/work/expense-redesign/legacy.png"
-            afterSrc="/work/expense-redesign/redesign.png"
+            beforeSrc="/work/expense-management/legacy.png"
+            afterSrc="/work/expense-management/redesign.png"
             beforeLabel="Legacy"
             afterLabel="Redesign"
           />
         ),
         problem: (
           <AnnotatedImage
-            src="/work/expense-redesign/problem.png"
+            src="/work/expense-management/problem.png"
             alt="Legacy expense dashboard"
             width={1050}
             height={866}
@@ -93,7 +93,7 @@ export default function ExpenseManagementPage() {
         analysis: [
           <div key="analysis-1" className="analysis-diagram">
             <img
-              src="/work/expense-redesign/analysis-1.png?v=2"
+              src="/work/expense-management/analysis-1.png?v=2"
               alt=""
               width={1311}
               height={813}
@@ -166,7 +166,7 @@ export default function ExpenseManagementPage() {
             key="analysis-2"
             images={[
               {
-                src: "/work/expense-redesign/analysis-2.1.png",
+                src: "/work/expense-management/analysis-2.1.png",
                 alt: "A cluttered expense table",
                 width: 462,
                 height: 316,
@@ -174,7 +174,7 @@ export default function ExpenseManagementPage() {
                 asList: true,
               },
               {
-                src: "/work/expense-redesign/analysis-2.2.png",
+                src: "/work/expense-management/analysis-2.2.png",
                 alt: "Risk indicators separated from the expense a user is acting on",
                 width: 438,
                 height: 306,
@@ -187,7 +187,7 @@ export default function ExpenseManagementPage() {
         "initial-design": [
           <AnnotatedImage
             key="approach-1"
-            src="/work/expense-redesign/approach-1.png"
+            src="/work/expense-management/approach-1.png"
             alt="Expense dashboard with totals, status, trends, and range exceeded"
             width={1080}
             height={768}
@@ -196,7 +196,7 @@ export default function ExpenseManagementPage() {
           />,
           <AnnotatedImage
             key="approach-2"
-            src="/work/expense-redesign/approach-2.png"
+            src="/work/expense-management/approach-2.png"
             alt="Expense list with status flags and row actions"
             width={998}
             height={530}
@@ -239,7 +239,7 @@ export default function ExpenseManagementPage() {
         "iteration-approach": [
           <AnnotatedImage
             key="iteration-1"
-            src="/work/expense-redesign/iteration-1.png"
+            src="/work/expense-management/iteration-1.png"
             alt="Expense dashboard with Critical Overview and Expense Warnings"
             width={2160}
             height={1536}
