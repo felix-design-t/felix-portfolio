@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { AnnotatedImage } from "@/components/case-study/annotated-image";
 import { CaseStudyPage } from "@/components/case-study/case-study-page";
 import { ComparisonSlider } from "@/components/case-study/comparison-slider";
@@ -24,7 +25,6 @@ import {
 } from "@/content/case-studies/expense-redesign";
 import "@/components/case-study/analysis-frame.css";
 import "@/components/case-study/cover-sequence.css";
-import "@/components/case-study/expense-cover.css";
 
 export const metadata: Metadata = {
   title: expenseManagement.title,
@@ -34,33 +34,38 @@ export const metadata: Metadata = {
  * A fixed route wins over /work/[slug], so this study gets the full
  * template while the other projects keep their placeholder page.
  *
- * The cover image sits in the same box as the Time-Off cover. That
- * box is `.cover-sequence`: width of the column, shape 25/18.
- * `.expense-cover` adds the missing top and right mat.
+ * The cover is the home card's picture: the same frame, with the
+ * dashboard set in from the top and left and running off the other edges.
  */
 export default function ExpenseManagementPage() {
   return (
     <CaseStudyPage
       study={expenseManagement}
       cover={
-        <div className="cover-sequence expense-cover">
-          <img
-            src="/work/expense-redesign/cover.png"
-            alt="Expense Dashboard"
-            width={861}
-            height={714}
-            draggable={false}
-            style={{
-              width: "100%",
-              height: "100%",
-              minWidth: 0,
-              minHeight: 0,
-              objectFit: "cover",
-              objectPosition: "center top",
-              borderRadius: "var(--radius-sm)",
-            }}
-          />
-        </div>
+        <>
+          {/* Holds the home plate's shape. The screenshot sits on top of it. */}
+          <div className="cover-sequence" aria-hidden="true" />
+          <div className="work-slot-media">
+            <Image
+              className="work-slot-shot"
+              data-theme-image="light"
+              src="/work/expense-redesign/cover.png"
+              alt="Redesigned Paycom expense dashboard"
+              width={861}
+              height={714}
+              sizes="(max-width: 640px) 90vw, 480px"
+            />
+            <Image
+              className="work-slot-shot"
+              data-theme-image="dark"
+              src="/work/expense-redesign/cover-dark.jpg"
+              alt="Redesigned Paycom expense dashboard"
+              width={1152}
+              height={864}
+              sizes="(max-width: 640px) 90vw, 480px"
+            />
+          </div>
+        </>
       }
       visuals={{
         "further-testing": (
