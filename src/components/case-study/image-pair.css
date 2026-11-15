@@ -1,0 +1,26 @@
+/*
+  Two pictures inside one case-study frame.
+  Stacked on a phone, side by side once the window is wide enough.
+*/
+
+.image-pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-1);
+  width: 100%;
+  align-items: center;
+}
+
+.image-pair img {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-width: 0;
+  border-radius: var(--radius-sm);
+}
+
+@media (min-width: 640px) {
+  .image-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

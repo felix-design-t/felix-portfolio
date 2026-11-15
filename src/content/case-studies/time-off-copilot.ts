@@ -12,6 +12,7 @@ export const timeOffCopilot: CaseStudy = {
   cover: {
     label: "Cover, content later.",
     aspectRatio: "16 / 10",
+    backdrop: "sage",
   },
   meta: [
     { label: "Timeline", value: "January – February 2026" },

@@ -1,0 +1,221 @@
+/*
+  A centered row of screens.
+  The active picture sits in the middle. Its neighbors peek in
+  from either side. Tokens only, from globals.css.
+*/
+
+.flow-carousel {
+  width: 100%;
+  container-type: inline-size;
+}
+
+.flow-carousel-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  --flow-gap-block: calc(10cqw - 9px);
+  box-sizing: border-box;
+  /* Bottom matches the space from the step bar to the frame border:
+     the steps' margin plus the frame's 8px padding. */
+  --flow-gap-bottom: calc(var(--space-1) * 2);
+  padding-block: var(--flow-gap-block) var(--flow-gap-bottom);
+  height: calc(min(560px, 76.6cqw) + var(--flow-gap-block) + var(--flow-gap-bottom));
+  gap: var(--space-2);
+  overflow-x: auto;
+  overflow-anchor: none;
+  scroll-snap-type: x mandatory;
+  /* Half of the space beside an 80% slide, so the first and last
+     pictures can sit in the center of the carousel. */
+  padding-inline: 10cqw;
+  scroll-padding-inline: 10cqw;
+  scrollbar-width: none;
+}
+
+.flow-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.flow-carousel-slide {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 80cqw;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  scroll-snap-align: center;
+  cursor: pointer;
+}
+
+.flow-carousel-slide img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(min(560px, 76.6cqw) * var(--flow-scale, 1));
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  opacity: 0.5;
+}
+
+.flow-carousel-slide[data-active="true"] img {
+  opacity: 1;
+}
+
+.flow-carousel-captions {
+  position: relative;
+  width: 100%;
+  height: calc(var(--leading-caption) * 2);
+  margin-bottom: var(--space-1);
+}
+
+.flow-carousel-caption {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  text-align: center;
+  opacity: 0;
+}
+
+.flow-carousel-caption[data-active="true"] {
+  opacity: 1;
+}
+
+.flow-carousel-steps {
+  --flow-steps: 4;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--flow-steps), minmax(0, 1fr));
+  max-width: 22rem;
+  margin: 0 auto var(--space-1);
+}
+
+.flow-carousel-steps::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: calc(100% / var(--flow-steps) / 2);
+  right: calc(100% / var(--flow-steps) / 2);
+  height: 1px;
+  background: var(--border);
+}
+
+.flow-carousel-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.flow-carousel-line {
+  display: none;
+}
+
+.flow-carousel-number {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.flow-carousel-number[aria-current="step"] {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
+}
+
+.flow-carousel-step-label {
+  max-width: 100%;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  text-align: center;
+}
+
+@media (max-width: 639px) {
+  .flow-carousel-track {
+    height: calc(min(380px, 76.6cqw) + var(--flow-gap-block) + var(--flow-gap-bottom));
+    padding-inline: 6cqw;
+    scroll-padding-inline: 6cqw;
+  }
+
+  .flow-carousel-slide {
+    max-width: 88cqw;
+  }
+
+  .flow-carousel-slide img {
+    max-height: calc(min(380px, 76.6cqw) * var(--flow-scale, 1));
+  }
+
+  .flow-carousel-step-label {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-carousel-track {
+    scroll-behavior: auto;
+  }
+
+  .flow-carousel-slide img,
+  .flow-carousel-caption {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .flow-carousel-slide img,
+  .flow-carousel-caption {
+    transition: opacity 200ms var(--ease-out);
+  }
+}
+
+.flow-carousel-slide[data-slide="0"] img,
+.flow-carousel-slide[data-slide="1"] img {
+  height: min(calc(min(560px, 76.6cqw) * var(--flow-scale, 1)), 22.7cqw);
+}
+
+@media (max-width: 640px) {
+  .flow-carousel-slide[data-slide="0"] img,
+  .flow-carousel-slide[data-slide="1"] img {
+    height: min(calc(min(380px, 76.6cqw) * var(--flow-scale, 1)), 22.7cqw);
+  }
+}
+
+.flow-carousel-slide[data-slide="0"] img {
+  height: calc(min(calc(min(560px, 76.6cqw) * var(--flow-scale, 1)), 22.7cqw) * 0.9);
+}
+
+@media (max-width: 640px) {
+  .flow-carousel-slide[data-slide="0"] img {
+    height: calc(min(calc(min(380px, 76.6cqw) * var(--flow-scale, 1)), 22.7cqw) * 0.9);
+  }
+}
+
+.flow-carousel-slide[data-slide="1"] img {
+  height: calc(min(calc(min(560px, 76.6cqw) * var(--flow-scale, 1)), 22.7cqw) * 1.1);
+}
+
+@media (max-width: 640px) {
+  .flow-carousel-slide[data-slide="1"] img {
+    height: calc(min(calc(min(380px, 76.6cqw) * var(--flow-scale, 1)), 22.7cqw) * 1.1);
+  }
+}

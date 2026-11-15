@@ -1,0 +1,12 @@
+/*
+  Expense cover only.
+
+  The shared cover frame leaves the top and right open so the Time-Off
+  product can run off those edges. This screenshot needs the same 8px
+  mat on every side, so the picture sits inside the frame.
+  The fill is the shared placeholder mat, the same color as the
+  Time-Off cover. It changes with the theme because it uses that token.
+*/
+.case-study-cover .case-study-frame:has(.expense-cover) {
+  padding: var(--space-1);
+}

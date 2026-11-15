@@ -1,0 +1,143 @@
+/*
+  A three-step staircase of information levels.
+  Each row is pushed right by --stair-step x the indent size, so row 2
+  sits one step in and row 3 two steps in. Tokens only, from globals.css.
+*/
+
+.case-study-frame:has(.staircase) {
+  padding: calc(var(--space-1) + 12px);
+}
+
+.staircase {
+  --stair-indent: 8cqw;
+  --stair-gap: var(--space-2);
+  --stair-accent: var(--accent-violet);
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: var(--stair-gap);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.staircase-row {
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(8.5rem, 10.5rem) minmax(0, 1fr);
+  gap: var(--space-2);
+  align-items: start;
+  margin-left: calc(var(--stair-step, 0) * var(--stair-indent));
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  transition:
+    border-color 160ms ease,
+    opacity 160ms ease;
+}
+
+/* Row 01 is the one that is always visible. It keeps the card fill of the
+   other rows and carries the accent as a tint on its chips. */
+.staircase-row[data-emphasis="true"] .staircase-chip {
+  background: color-mix(in srgb, var(--stair-accent) 5%, var(--surface));
+}
+
+/* A thin vertical line from this row down to the next one. It sits just
+   inside the next row's left edge, so it lands on that row. */
+.staircase-row:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: calc(var(--stair-indent) + var(--space-3));
+  width: 1px;
+  height: var(--stair-gap);
+  background: var(--border-strong);
+  pointer-events: none;
+}
+
+.staircase-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.staircase-number {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.staircase-name {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.staircase-tag {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.staircase-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.staircase-chip {
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+/* Hover: the rows other than the one under the pointer dim. */
+@media (hover: hover) {
+  .staircase:has(.staircase-row:hover) .staircase-row:not(:hover) {
+    opacity: 0.6;
+  }
+}
+
+/* Mobile: no indent, full-width rows, meta above the chips.
+   The connectors stay, moved to a fixed spot near the left edge. */
+@media (max-width: 639px) {
+  .staircase {
+    --stair-indent: 0px;
+  }
+
+  .staircase-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
+
+  .staircase-row:not(:last-child)::after {
+    left: var(--space-3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .staircase-row {
+    transition: none;
+  }
+}

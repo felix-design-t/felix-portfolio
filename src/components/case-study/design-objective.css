@@ -1,0 +1,87 @@
+/*
+  The pivot sentence between two beats.
+
+  Its padding is the largest vertical space on a case study page.
+  The sentence is one step under the page title and spans the
+  column, the same width as the pictures above it. Left aligned.
+*/
+
+.case-study-sections > .case-study-section.design-objective-section {
+  margin-top: 0;
+  padding-block: var(--space-16);
+}
+
+.case-study-sections > .design-objective-section + .case-study-section {
+  margin-top: 0;
+}
+
+.design-objective {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.design-objective-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+}
+
+.design-objective-icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  fill: none;
+  stroke: var(--accent-violet);
+  stroke-width: var(--icon-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.design-objective[data-accent="amber"] .design-objective-icon {
+  stroke: var(--accent-amber);
+}
+
+.design-objective-text {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-serif);
+  font-size: var(--text-section);
+  font-weight: 400;
+  line-height: var(--leading-hero);
+  color: var(--text);
+  text-align: left;
+  text-wrap: pretty;
+}
+
+.design-objective-mark {
+  color: var(--text);
+  background-color: color-mix(in srgb, var(--accent-violet) 22%, transparent);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.design-objective[data-accent="amber"] .design-objective-mark {
+  background-color: color-mix(in srgb, var(--accent-amber) 22%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .design-objective {
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 600ms var(--ease-out),
+      transform 600ms var(--ease-out);
+  }
+
+  .design-objective[data-shown="true"] {
+    opacity: 1;
+    transform: none;
+  }
+}

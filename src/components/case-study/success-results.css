@@ -1,0 +1,127 @@
+/*
+  Result blocks: label, headline, numbers, then the screen.
+  Tokens only, from globals.css.
+*/
+
+.success-results {
+  --success-stat-size: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.success-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border);
+}
+
+.success-label {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.success-title {
+  margin: 0;
+}
+
+.success-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.success-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.success-stat-value {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--success-stat-size);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.success-stat-arrow {
+  color: var(--text);
+  font-size: 0.5em;
+  font-weight: 500;
+}
+
+.success-stat-label {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+/* The screen on a soft card. It keeps its shape and is never cropped. */
+.success-card {
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--mat);
+}
+
+.success-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: calc(var(--radius-sm) / 2);
+  object-fit: contain;
+}
+
+.success-placeholder {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 10;
+  margin: 0;
+  border-radius: calc(var(--radius-sm) / 2);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  text-align: center;
+}
+
+.success-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 639px) {
+  .success-stats {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+}

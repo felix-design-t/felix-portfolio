@@ -1,0 +1,118 @@
+/*
+  Before/after slider.
+
+  The stage is one card. Both pictures share its box, so they stay
+  the same size while the divider moves. Labels sit above the corners,
+  the way a caption names a frame. Tokens only, from globals.css.
+*/
+
+/*
+  This slider is the visual. The shared frame's mat, border, and
+  inset would sit around it as a second placeholder, so they come off
+  and the pictures use the full column width.
+*/
+.case-study-frame:has(.comparison-slider) {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.comparison-slider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.comparison-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+}
+
+.comparison-slider-mark {
+  color: var(--text);
+  background-color: color-mix(in srgb, var(--accent-orange) 22%, transparent);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.comparison-slider-mark[data-tone="violet"] {
+  background-color: color-mix(in srgb, var(--accent-violet) 22%, transparent);
+}
+
+.comparison-slider-stage {
+  position: relative;
+  width: 100%;
+  /* Both source files are 2160 × 1536. The card keeps that shape. */
+  aspect-ratio: 2160 / 1536;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--mat);
+  cursor: ew-resize;
+  touch-action: none;
+  user-select: none;
+}
+
+.comparison-slider-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.comparison-slider-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.comparison-slider-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: var(--space-4);
+  height: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-nav);
+  transform: translate(-50%, -50%);
+  cursor: ew-resize;
+  pointer-events: auto;
+}
+
+.comparison-slider-handle svg {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--icon-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.comparison-slider-handle:focus {
+  outline: none;
+}
+
+.comparison-slider-handle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}

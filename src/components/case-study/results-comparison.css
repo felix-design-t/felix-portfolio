@@ -1,0 +1,242 @@
+/*
+  Round 1 vs Round 2 results.
+  One grid of three columns shared by the label row and every result
+  row, so the columns line up. Tokens only, from globals.css.
+*/
+
+/* Same fill and inset as the metrics strip: the page surface, so dark
+   mode follows the theme. */
+.case-study-frame:has(.results-comparison) {
+  padding: var(--space-4) var(--space-3);
+  background: var(--surface);
+}
+
+.results-comparison {
+  --results-columns: minmax(0, 1.05fr) minmax(0, 1.05fr) minmax(0, 1fr);
+  --results-gap: var(--space-2);
+  width: 100%;
+}
+
+.results-head {
+  display: grid;
+  grid-template-columns: var(--results-columns);
+  column-gap: var(--results-gap);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--border);
+}
+
+.results-head-label {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.results-head-label[data-round="1"] {
+  color: var(--text-secondary);
+}
+
+.results-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.results-row {
+  display: grid;
+  grid-template-columns: var(--results-columns);
+  grid-template-areas:
+    "round1 round2 quote"
+    "metric verdict quote";
+  column-gap: var(--results-gap);
+  row-gap: 2px;
+  align-items: start;
+  padding: var(--space-2) 0;
+}
+
+.results-row + .results-row {
+  border-top: 1px solid var(--border);
+}
+
+.results-rows .results-row:last-child {
+  padding-bottom: 0;
+}
+
+.results-cell,
+.results-metric,
+.results-quote,
+.results-quote p {
+  margin: 0;
+}
+
+.results-round1 {
+  grid-area: round1;
+}
+
+.results-round2 {
+  grid-area: round2;
+}
+
+.results-metric {
+  grid-area: metric;
+}
+
+.results-quote {
+  grid-area: quote;
+}
+
+.results-arrow {
+  display: none;
+}
+
+/* On desktop the second round's value and verdict are separate grid
+   items, so the verdict shares a line with the metric caption. */
+.results-row .results-round2 {
+  display: contents;
+}
+
+.results-round2 .results-value {
+  grid-area: round2;
+}
+
+.results-round2 .results-verdict {
+  grid-area: verdict;
+}
+
+.results-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* The first round is a little faded so the second round leads. */
+.results-round1 .results-value {
+  opacity: 0.6;
+}
+
+.results-value {
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-section);
+  font-weight: 500;
+  line-height: var(--leading-section);
+}
+
+.results-verdict {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.results-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--results-tone);
+}
+
+.results-metric {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.results-quote p {
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+/* Mobile-only pieces stay out of the desktop layout. */
+.results-cell-label {
+  display: none;
+}
+
+.results-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*
+  Phone: every row is a card. The metric sits on top, the two values
+  sit side by side with an arrow between them, the quote goes below.
+*/
+@media (max-width: 639px) {
+  .results-head {
+    display: none;
+  }
+
+  .results-rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .results-row {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-areas:
+      "metric metric metric"
+      "round1 arrow round2"
+      "quote quote quote";
+    row-gap: var(--space-1);
+    padding: var(--space-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  .results-row + .results-row {
+    border-top: 1px solid var(--border);
+  }
+
+  .results-rows .results-row:last-child {
+    padding-bottom: var(--space-2);
+  }
+
+  .results-row .results-round2 {
+    display: flex;
+  }
+
+  .results-metric {
+    color: var(--text);
+  }
+
+  .results-arrow {
+    display: block;
+    grid-area: arrow;
+    align-self: center;
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+    font-size: var(--text-section);
+    line-height: var(--leading-section);
+  }
+
+  .results-cell-label {
+    display: block;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+  }
+
+  .results-quote {
+    padding-top: var(--space-1);
+    border-top: 1px solid var(--border);
+  }
+}

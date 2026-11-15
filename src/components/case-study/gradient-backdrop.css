@@ -1,0 +1,102 @@
+/*
+  Soft wash behind a product screen.
+
+  One layer holds every color. It is larger than the frame, then blurred,
+  and the frame clips it. The screenshot stays a later sibling, so it
+  paints on top. Missing a preset leaves the frame's gray mat alone.
+*/
+
+.gradient-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* Noise blends with the wash, not with the screenshot on top. */
+  isolation: isolate;
+  --gradient-base: var(--gradient-base-light);
+}
+
+/* 20% larger than the frame, so the gradient edges sit outside the card. */
+.gradient-wash {
+  position: absolute;
+  inset: -10%;
+  --c1: var(--c1-light);
+  --c2: var(--c2-light);
+  --c3: var(--c3-light);
+  background:
+    radial-gradient(ellipse 140% 110% at 0% 0%, var(--c1) 0%, transparent 70%),
+    radial-gradient(ellipse 130% 120% at 100% 20%, var(--c2) 0%, transparent 70%),
+    radial-gradient(ellipse 150% 110% at 60% 110%, var(--c3) 0%, transparent 70%),
+    var(--gradient-base);
+  filter: blur(48px);
+  opacity: 0.7;
+  animation: gradient-drift 32s ease-in-out infinite;
+}
+
+.gradient-backdrop-noise {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.015;
+}
+
+html[data-theme="dark"] .gradient-backdrop {
+  --gradient-base: var(--gradient-base-dark);
+}
+
+html[data-theme="dark"] .gradient-wash {
+  --c1: var(--c1-dark);
+  --c2: var(--c2-dark);
+  --c3: var(--c3-dark);
+  opacity: 0.75;
+}
+
+html[data-theme="dark"] .gradient-backdrop-noise {
+  opacity: 0.01;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .gradient-backdrop {
+    --gradient-base: var(--gradient-base-dark);
+  }
+
+  html:not([data-theme]) .gradient-wash {
+    --c1: var(--c1-dark);
+    --c2: var(--c2-dark);
+    --c3: var(--c3-dark);
+    opacity: 0.75;
+  }
+
+  html:not([data-theme]) .gradient-backdrop-noise {
+    opacity: 0.01;
+  }
+}
+
+/* The product sits above the wash. Relative only adds a layer, not a shift. */
+.gradient-backdrop ~ .cover-sequence {
+  position: relative;
+  z-index: 1;
+}
+
+.gradient-backdrop ~ .work-slot-media {
+  z-index: 1;
+}
+
+/* A few percent, so the colors breathe without sliding across the card. */
+@keyframes gradient-drift {
+  0%,
+  100% {
+    background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+  }
+  50% {
+    background-position: 2% 1%, -2% 2%, 1% -1%, 0% 0%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-wash {
+    animation: none;
+  }
+}

@@ -1265,6 +1265,73 @@ button.skill-pill {
   aspect-ratio: 25 / 18;
 }
 
+/*
+  A plate with a screenshot. The plate keeps its size (the ::before above).
+  The media layer covers it and clips whatever runs past the edge.
+  The screenshot starts 15% in from the top and left, is 90% as wide as
+  the plate, and runs off the right and bottom.
+*/
+.work-slot-cover[data-media="true"] {
+  position: relative;
+}
+
+.work-slot-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.work-slot-shot {
+  position: absolute;
+  top: 10%;
+  /* Same left edge as the Time-Off product screen: the frame's left
+     padding, then 10% of the area inside that padding. */
+  left: calc(10% + 0.9 * var(--space-1));
+  width: 90%;
+  height: auto;
+  max-width: none;
+  border-radius: var(--radius-sm);
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light shows the light screenshot. Dark swaps them, with CSS only. */
+.work-slot-shot[data-theme-image="dark"],
+html[data-theme="dark"] .work-slot-shot[data-theme-image="light"] {
+  display: none;
+}
+
+html[data-theme="dark"] .work-slot-shot[data-theme-image="dark"] {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .work-slot-shot[data-theme-image="light"] {
+    display: none;
+  }
+
+  html:not([data-theme]) .work-slot-shot[data-theme-image="dark"] {
+    display: block;
+  }
+}
+
+@media (hover: hover) {
+  .work-slot:hover .work-slot-shot,
+  .work-slot:focus-visible .work-slot-shot {
+    transform: translate(-6px, -6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-slot-shot {
+    transition: none;
+  }
+
+  .work-slot:hover .work-slot-shot,
+  .work-slot:focus-visible .work-slot-shot {
+    transform: none;
+  }
+}
+
 /* The cover animation measures its report and sets a pixel height.
    The home frame sizes itself from the product's shape instead. */
 .work-slot-cover.case-study-frame {

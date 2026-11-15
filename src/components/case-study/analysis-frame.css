@@ -1,0 +1,133 @@
+/*
+  The hierarchy picture uses the same 20px inset as the Time-Off
+  chart frame (8px frame plus 12px inside the chart).
+*/
+
+.case-study-frame:has(.hierarchy-diagram),
+.case-study-frame:has(.analysis-diagram) {
+  padding: calc(var(--space-1) + 12px);
+}
+
+/*
+  analysis-1.png is the flowchart shapes. Every label uses the
+  caption size and the secondary text color.
+*/
+.analysis-diagram {
+  position: relative;
+  width: 100%;
+  container-type: inline-size;
+}
+
+.analysis-diagram img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.analysis-flow-copy {
+  position: absolute;
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.analysis-flow-copy p {
+  margin: 0;
+}
+
+/* The dashed box is the top 224px of the 813px picture. */
+.analysis-flow-callout {
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 27.55%;
+  gap: var(--space-1);
+  text-align: center;
+}
+
+.analysis-flow-node {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 4px;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.analysis-flow-branch {
+  font-weight: 500;
+  transform: translate(-50%, -50%);
+}
+
+/* Three testing results in one row. The green mark is a good
+   result. The orange marks are the results that fell short. */
+.case-study-frame:has(.testing-metrics) {
+  padding: var(--space-4) var(--space-3);
+  background: var(--surface);
+}
+
+.testing-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.testing-metrics li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.testing-metric-value {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-section);
+  font-weight: 500;
+  line-height: var(--leading-section);
+}
+
+.testing-metric-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  text-align: center;
+}
+
+.testing-metric-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-orange);
+}
+
+.testing-metric-dot[data-tone="good"] {
+  background: var(--accent-emerald);
+}

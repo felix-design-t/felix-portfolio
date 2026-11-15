@@ -1,0 +1,143 @@
+/*
+  Numbered pins on a picture.
+
+  The card is hidden until a pin is hovered, tapped, or focused,
+  then it sits beside that number. A pin on the right half of the
+  picture opens the card to its left, so the card stays on the image.
+  Card type is the site sans.
+  Tokens only, from globals.css.
+*/
+
+.annotated-image {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.annotated-stage {
+  position: relative;
+  width: 100%;
+  /* A step under the 28px nav tab, so the mark reads as a pin. */
+  --annotated-pin: 22px;
+}
+
+.annotated-stage img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Default card corner, 8px. Overflow clips the picture to that curve. */
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+
+.annotated-pin,
+.annotated-note {
+  font-family: inherit;
+  appearance: none;
+}
+
+.annotated-pin {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--annotated-pin);
+  height: var(--annotated-pin);
+  padding: 0;
+  border: 1px solid var(--accent-orange);
+  border-radius: var(--radius-pill);
+  background-color: var(--accent-orange);
+  color: var(--on-accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.annotated-pin[data-active="true"] {
+  z-index: 2;
+}
+
+/* Approach pins mark a design step, so they use violet instead of the problem rose. */
+#initial-design .annotated-pin,
+#iteration-approach .annotated-pin {
+  border-color: var(--accent-violet);
+  background-color: var(--accent-violet);
+}
+
+.annotated-note {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: min(220px, 58%);
+  margin: 0;
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: var(--shadow-pop);
+  font-family: var(--font-body);
+  text-align: left;
+  /* The pin is centered on the point. Start the card just past its edge. */
+  transform: translate(calc(var(--annotated-pin) / 2 + var(--space-1)), -50%);
+  pointer-events: none;
+}
+
+.annotated-note[data-side="left"] {
+  transform: translate(
+    calc(-100% - var(--annotated-pin) / 2 - var(--space-1)),
+    -50%
+  );
+}
+
+.annotated-stat {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text);
+}
+
+.annotated-points {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding-left: 1.1em;
+  list-style: disc;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+}
+
+.annotated-points li {
+  display: list-item;
+}
+
+.annotated-context {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+}
+
+.annotated-image[data-has-active="true"] .annotated-pin {
+  opacity: 0.62;
+  transition: opacity 150ms var(--ease-out);
+}
+
+.annotated-image[data-has-active="true"] .annotated-pin[data-active="true"] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .annotated-image[data-has-active="true"] .annotated-pin {
+    transition: none;
+  }
+}

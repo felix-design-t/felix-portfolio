@@ -32,12 +32,14 @@ export function CaseStudyPage({
   cover,
 }: CaseStudyPageProps) {
   const topId = "case-study-top";
-  const wayfindingItems = study.sections.map((section, position) => ({
-    id: section.id,
-    index: formatSectionIndex(position + 1),
-    title: section.navTitle ?? section.kind,
-    continuesPrevious: section.continuesPrevious,
-  }));
+  const wayfindingItems = study.sections
+    .filter((section) => !section.hideFromNav)
+    .map((section, position) => ({
+      id: section.id,
+      index: formatSectionIndex(position + 1),
+      title: section.navTitle ?? section.kind,
+      continuesPrevious: section.continuesPrevious,
+    }));
 
   return (
     <article className="case-study-page" aria-labelledby={topId}>

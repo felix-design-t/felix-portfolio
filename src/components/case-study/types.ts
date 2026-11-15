@@ -1,3 +1,5 @@
+import type { GradientName } from "@/content/gradients";
+
 /**
  * The shape of one case study page.
  *
@@ -17,7 +19,18 @@ export type CaseStudySectionKind =
   | "Decisions"
   | "Solution"
   | "Trust Building"
-  | "Reflection";
+  | "Reflection"
+  | "Outcome Overview"
+  | "Analysis"
+  | "Design Objective"
+  | "Initial Design Approach"
+  | "Usability Testing Debrief"
+  | "Iteration Approach"
+  | "Further Testing Results"
+  | "Further Design Changes"
+  | "Measuring Success"
+  | "Reflections"
+  | "Unpack Insights to an actionable question…";
 
 /** A frame that will hold a visual. Until `children` exist it is a placeholder. */
 export type CaseStudyVisual = {
@@ -36,6 +49,11 @@ export type CaseStudyVisual = {
 export type CaseStudyIdea = CaseStudyVisual & {
   title?: string;
   body?: string;
+  /**
+   * The visual already draws its own frame or frames.
+   * The section does not wrap it in another placeholder.
+   */
+  unframed?: boolean;
 };
 
 export type CaseStudySectionData = {
@@ -54,6 +72,22 @@ export type CaseStudySectionData = {
    * previous row (the dot stays there), and the gap above tightens.
    */
   continuesPrevious?: boolean;
+  /** Leave this beat out of the left rail and the step counter. */
+  hideFromNav?: boolean;
+  /**
+   * A pivot statement instead of the usual kicker, title, and frame.
+   * The section title and body stay for the type, and are not shown.
+   */
+  statement?: {
+    eyebrow: string;
+    text: string;
+    /** Exact phrases inside `text` drawn in the accent color. */
+    highlights: string[];
+    /** Blue is the objective. Amber is the question that follows testing. */
+    accent?: "blue" | "amber";
+    /** Target for an objective. Question for an open question. */
+    icon?: "target" | "question";
+  };
   /** One paragraph, three lines or fewer at body size in the column. */
   body: string;
   /** A paragraph under the frame. The body stays above it. */
@@ -67,6 +101,8 @@ export type CaseStudySectionData = {
    * before `visual`.
    */
   ideas?: CaseStudyIdea[];
+  /** "columns" sets the ideas side by side on desktop. They stack on mobile. */
+  ideasLayout?: "columns";
   /** A second frame, under the closing paragraph. */
   closingVisual?: CaseStudyVisual;
   /**
@@ -96,7 +132,12 @@ export type CaseStudyMetaItem = { label: string; value: string };
 
 export type CaseStudy = {
   title: string;
-  cover: { label: string; aspectRatio: string };
+  cover: {
+    label: string;
+    aspectRatio: string;
+    /** Soft wash behind the cover. Missing means the gray mat. */
+    backdrop?: GradientName;
+  };
   meta: CaseStudyMetaItem[];
   sections: CaseStudySectionData[];
 };

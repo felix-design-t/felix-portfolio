@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { CaseStudyFrame } from "./case-study-frame";
+import { GradientBackdrop } from "./GradientBackdrop";
 import type { CaseStudy } from "./types";
 
 type CaseStudyCoverProps = {
@@ -21,7 +22,9 @@ export function CaseStudyCover({ cover, meta, children }: CaseStudyCoverProps) {
         aspectRatio={cover.aspectRatio}
         lockRatio={children != null && children !== false}
       >
-        {children}
+        {children ? (
+          <GradientBackdrop name={cover.backdrop ?? null}>{children}</GradientBackdrop>
+        ) : null}
       </CaseStudyFrame>
       <dl className="case-study-meta">
         {meta.map((item) => (

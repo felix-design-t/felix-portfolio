@@ -1,0 +1,183 @@
+/*
+  Vertical timeline of iterations and reflections.
+  The gutter on the left holds the line and the nodes. The violet
+  accent is the site's --accent-violet. Tokens only, from globals.css.
+*/
+
+.iteration-timeline {
+  --timeline-gutter: var(--space-4);
+  --timeline-node: 11px;
+  --timeline-accent: var(--accent-violet);
+  --timeline-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --timeline-start: 8px;
+  --timeline-length: 0px;
+  --timeline-fill: 0px;
+  width: 100%;
+}
+
+.timeline-steps {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0 0 0 var(--timeline-gutter);
+  list-style: none;
+}
+
+/* The hairline track, and the violet fill on top of it. They run from
+   the first node's center to the last node's center. */
+.timeline-steps::before,
+.timeline-steps::after {
+  content: "";
+  position: absolute;
+  top: var(--timeline-start);
+  left: calc(var(--timeline-node) / 2 - 0.5px);
+  width: 1px;
+  pointer-events: none;
+}
+
+.timeline-steps::before {
+  height: var(--timeline-length);
+  background: var(--border-strong);
+}
+
+.timeline-steps::after {
+  height: var(--timeline-fill);
+  background: var(--text);
+  transition: height 120ms var(--timeline-ease);
+}
+
+.timeline-step {
+  position: relative;
+  min-width: 0;
+}
+
+/* Hidden only after the script has run, so the page still reads
+   without JavaScript. */
+.iteration-timeline[data-ready="true"] .timeline-step:not([data-visible="true"]) {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.iteration-timeline[data-ready="true"] .timeline-step {
+  transition:
+    opacity 500ms var(--timeline-ease),
+    transform 500ms var(--timeline-ease);
+}
+
+.timeline-node {
+  position: absolute;
+  top: 3px;
+  left: calc(var(--timeline-gutter) * -1);
+  box-sizing: border-box;
+  width: var(--timeline-node);
+  height: var(--timeline-node);
+  border-radius: var(--radius-pill);
+  background: var(--text);
+}
+
+/* Reflection: hollow node. The page color hides the line behind it. */
+.timeline-step[data-kind="reflection"] .timeline-node {
+  border: 1.5px solid var(--text);
+  background: var(--bg);
+}
+
+.timeline-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.timeline-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.timeline-tag {
+  padding: 0 6px;
+  border: 1px solid var(--timeline-accent);
+  border-radius: var(--radius-pill);
+  color: var(--timeline-accent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 14px;
+}
+
+/* Iteration: screens on a soft card. Images keep their shape. */
+.timeline-images {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--mat);
+}
+
+.timeline-images[data-count="1"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.timeline-images img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: calc(var(--radius-sm) / 2);
+  object-fit: contain;
+}
+
+/* Reflection: a light callout on the page surface. */
+.timeline-callout {
+  box-sizing: border-box;
+  max-width: 60%;
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.timeline-callout-title {
+  margin: 0 0 var(--space-1);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.timeline-callout-body {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+@media (max-width: 639px) {
+  .iteration-timeline {
+    --timeline-gutter: var(--space-3);
+  }
+
+  .timeline-images {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .timeline-callout {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-steps::after,
+  .iteration-timeline[data-ready="true"] .timeline-step {
+    transition: none;
+  }
+}

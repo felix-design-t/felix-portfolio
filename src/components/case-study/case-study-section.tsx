@@ -1,5 +1,6 @@
 import { Fragment, type ReactNode } from "react";
 import { CaseStudyFrame } from "./case-study-frame";
+import { DesignObjective } from "./design-objective";
 import type { CaseStudySectionData } from "./types";
 
 type CaseStudySectionProps = {
@@ -29,34 +30,40 @@ export function CaseStudySection({
 }: CaseStudySectionProps) {
   const headingId = `${section.id}-title`;
 
-  return (
-    <section
-      id={section.id}
-      className="case-study-section"
-      aria-labelledby={headingId}
-      data-continues={section.continuesPrevious ? "true" : undefined}
-    >
-      <p className="case-study-kicker">{section.kind}</p>
-      <h2 id={headingId} className="case-study-section-title">
-        {section.title}
-      </h2>
-      <p
-        className="case-study-body"
-        data-placeholder={section.isPlaceholderText ? "true" : undefined}
+  if (section.statement) {
+    return (
+      <section
+        id={section.id}
+        className="case-study-section design-objective-section"
+        aria-label={section.statement.eyebrow}
       >
-        {section.body}
-      </p>
-      {section.ideas?.map((idea, position) => (
-        <Fragment key={idea.name}>
-          {idea.title ? (
-            <h3
-              className="case-study-section-title"
-              data-idea-start={position > 0 ? "true" : undefined}
-            >
-              {idea.title}
-            </h3>
-          ) : null}
-          {idea.body ? <p className="case-study-body">{idea.body}</p> : null}
+        <DesignObjective
+          eyebrow={section.statement.eyebrow}
+          text={section.statement.text}
+          highlights={section.statement.highlights}
+          accent={section.statement.accent}
+          icon={section.statement.icon}
+        />
+      </section>
+    );
+  }
+
+  const inColumns = section.ideasLayout === "columns";
+  const ideaBlocks = section.ideas?.map((idea, position) => {
+    const content = (
+      <>
+        {idea.title ? (
+          <h3
+            className="case-study-section-title"
+            data-idea-start={position > 0 && !inColumns ? "true" : undefined}
+          >
+            {idea.title}
+          </h3>
+        ) : null}
+        {idea.body ? <p className="case-study-body">{idea.body}</p> : null}
+        {idea.unframed ? (
+          ideaVisuals[position]
+        ) : (
           <CaseStudyFrame
             name={idea.name}
             caption={idea.caption}
@@ -64,8 +71,45 @@ export function CaseStudySection({
           >
             {ideaVisuals[position]}
           </CaseStudyFrame>
-        </Fragment>
-      ))}
+        )}
+      </>
+    );
+    return inColumns ? (
+      <div className="case-study-idea-column" key={idea.name}>
+        {content}
+      </div>
+    ) : (
+      <Fragment key={idea.name}>{content}</Fragment>
+    );
+  });
+
+  return (
+    <section
+      id={section.id}
+      className="case-study-section"
+      aria-labelledby={section.title ? headingId : undefined}
+      aria-label={section.title ? undefined : section.kind}
+      data-continues={section.continuesPrevious ? "true" : undefined}
+    >
+      <p className="case-study-kicker">{section.kind}</p>
+      {section.title ? (
+        <h2 id={headingId} className="case-study-section-title">
+          {section.title}
+        </h2>
+      ) : null}
+      {section.body ? (
+        <p
+          className="case-study-body"
+          data-placeholder={section.isPlaceholderText ? "true" : undefined}
+        >
+          {section.body}
+        </p>
+      ) : null}
+      {ideaBlocks && section.ideasLayout === "columns" ? (
+        <div className="case-study-ideas-columns">{ideaBlocks}</div>
+      ) : (
+        ideaBlocks
+      )}
       {section.visual ? (
         <CaseStudyFrame
           name={section.visual.name}

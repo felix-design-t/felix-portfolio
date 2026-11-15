@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { isGradientName, type GradientName } from "@/content/gradients";
 
 /**
  * Reads every project file once, when the app starts.
@@ -16,6 +17,12 @@ import path from "node:path";
 
 export type ProjectStatus = "shipped" | "in-progress";
 
+/** Cover screenshot per site theme. Both paths live in the MDX frontmatter. */
+export type ProjectMedia = {
+  light: string;
+  dark: string;
+};
+
 export type Project = {
   slug: string;
   title: string;
@@ -25,7 +32,9 @@ export type Project = {
   meta: string | null;
   selected: boolean;
   status: ProjectStatus;
-  media: string | null;
+  media: ProjectMedia | null;
+  /** Soft wash behind the cover. Missing means the gray mat. */
+  backdrop: GradientName | null;
 };
 
 /**
@@ -35,7 +44,7 @@ export type Project = {
  */
 const selectedSlugsInOrder = [
   "time-off-copilot",
-  "expense-management",
+  "expense-redesign",
   "employee-engagement",
   "city-on-your-foot",
 ];
@@ -83,7 +92,8 @@ function parseProjectFile(source: string, fileName: string): Project {
     meta: fields.meta ? fields.meta : null,
     selected: fields.selected === "true",
     status,
-    media: fields.media === "null" || fields.media === "" ? null : fields.media,
+    media: parseMedia(fields, fileName),
+    backdrop: parseBackdrop(fields, fileName),
   };
 }
 
@@ -127,6 +137,34 @@ function requireField(
   const value = fields[key];
   if (!value) {
     throw new Error(`Missing "${key}" in ${fileName}.`);
+  }
+  return value;
+}
+
+/** `media.light` and `media.dark` are a pair. Leave both off for an empty plate. */
+function parseMedia(
+  fields: Record<string, string>,
+  fileName: string,
+): ProjectMedia | null {
+  const light = fields["media.light"];
+  const dark = fields["media.dark"];
+
+  if (!light && !dark) return null;
+  if (!light || !dark) {
+    throw new Error(`${fileName} needs both media.light and media.dark.`);
+  }
+  return { light, dark };
+}
+
+/** `backdrop: sage` picks a preset. Leave it off for the gray plate. */
+function parseBackdrop(
+  fields: Record<string, string>,
+  fileName: string,
+): GradientName | null {
+  const value = fields.backdrop;
+  if (!value || value === "null") return null;
+  if (!isGradientName(value)) {
+    throw new Error(`Unknown backdrop "${value}" in ${fileName}.`);
   }
   return value;
 }

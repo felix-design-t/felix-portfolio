@@ -1,7 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/content/projects";
 import { CoverSequence } from "@/components/case-study/cover-sequence";
+import { GradientBackdrop } from "@/components/case-study/GradientBackdrop";
 import "@/components/case-study/case-study.css";
+
+const coverAlt = "Redesigned Paycom expense dashboard";
 
 /**
  * One Selected Work slot.
@@ -13,6 +17,7 @@ import "@/components/case-study/case-study.css";
  */
 export function ProjectCard({ project }: { project: Project }) {
   const isTimeOffCover = project.slug === "time-off-copilot";
+  const media = project.media;
 
   return (
     <Link href={`/work/${project.slug}`} className="work-slot">
@@ -24,9 +29,37 @@ export function ProjectCard({ project }: { project: Project }) {
         }
         data-state={isTimeOffCover ? "filled" : undefined}
         data-lock={isTimeOffCover ? "ratio" : undefined}
-        aria-hidden="true"
+        data-media={media ? "true" : undefined}
+        aria-hidden={media ? undefined : "true"}
       >
-        {isTimeOffCover ? <CoverSequence /> : null}
+        <GradientBackdrop name={project.backdrop}>
+          {isTimeOffCover ? <CoverSequence /> : null}
+          {media ? (
+          <div className="work-slot-media">
+            {/* Both themes render. CSS hides one, so a theme change never waits on an image. */}
+            <Image
+              className="work-slot-shot"
+              data-theme-image="light"
+              src={media.light}
+              alt={coverAlt}
+              width={861}
+              height={714}
+              sizes="(max-width: 640px) 90vw, 480px"
+              loading="eager"
+            />
+            <Image
+              className="work-slot-shot"
+              data-theme-image="dark"
+              src={media.dark}
+              alt={coverAlt}
+              width={1152}
+              height={864}
+              sizes="(max-width: 640px) 90vw, 480px"
+              loading="eager"
+            />
+          </div>
+          ) : null}
+        </GradientBackdrop>
       </div>
       <h3 className="work-slot-caption">
         {project.title}
