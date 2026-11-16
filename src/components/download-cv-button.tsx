@@ -1,3 +1,7 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+
 /**
  * The CV control.
  *
@@ -7,9 +11,13 @@
  * name it gets when someone takes a copy.
  */
 export function DownloadButton() {
+  const pathname = usePathname();
+  const staysPut = pathname !== "/";
+
   return (
     <a
       className="corner-button"
+      data-fixed={staysPut ? "true" : undefined}
       href="/Felix_Teng_Resume.pdf"
       download="Felix_Teng_Resume.pdf"
       aria-label="cv"

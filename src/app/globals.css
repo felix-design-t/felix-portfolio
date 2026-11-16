@@ -255,7 +255,9 @@ a {
   }
 }
 
-/* Download, and the back control that mirrors it on the left. */
+/* Download, and the back control that mirrors it on the left.
+   Off the front page they stay put while the study scrolls,
+   the same way the center pill does. */
 .corner-button {
   position: absolute;
   top: var(--space-3);
@@ -275,6 +277,18 @@ a {
   text-decoration: none;
 }
 
+.corner-button[data-fixed="true"] {
+  position: fixed;
+  /* The column is centered and never wider than content-max.
+     Keep the button on that column's padded edge, not the window edge. */
+  right: max(var(--gutter), calc((100% - var(--content-max)) / 2 + var(--gutter)));
+}
+
+.corner-button-back[data-fixed="true"] {
+  right: auto;
+  left: max(var(--gutter), calc((100% - var(--content-max)) / 2 + var(--gutter)));
+}
+
 @media (min-width: 640px) {
   .corner-button {
     right: var(--gutter-sm);
@@ -290,6 +304,14 @@ a {
 @media (min-width: 640px) {
   .corner-button-back {
     left: var(--gutter-sm);
+  }
+
+  .corner-button[data-fixed="true"] {
+    right: max(var(--gutter-sm), calc((100% - var(--content-max)) / 2 + var(--gutter-sm)));
+  }
+
+  .corner-button-back[data-fixed="true"] {
+    left: max(var(--gutter-sm), calc((100% - var(--content-max)) / 2 + var(--gutter-sm)));
   }
 }
 

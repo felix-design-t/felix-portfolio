@@ -44,8 +44,8 @@ export type Project = {
  */
 const selectedSlugsInOrder = [
   "time-off-copilot",
-  "expense-redesign",
-  "employee-engagement",
+  "expense-management",
+  "event-planning",
   "city-on-your-foot",
 ];
 

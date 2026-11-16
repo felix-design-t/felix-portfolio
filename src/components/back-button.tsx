@@ -18,7 +18,12 @@ export function BackButton() {
   if (pathname === "/") return null;
 
   return (
-    <Link href="/" className="corner-button corner-button-back" aria-label="back">
+    <Link
+      href="/"
+      className="corner-button corner-button-back"
+      data-fixed="true"
+      aria-label="back"
+    >
       <BackIcon />
       <span className="corner-button-caption">back</span>
     </Link>

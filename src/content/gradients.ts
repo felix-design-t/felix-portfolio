@@ -51,6 +51,17 @@ export const gradientPresets = {
     blobs: ["#F0DCC6", "#EBCBBE", "#F3D7D7"],
     positions: ["top-left", "top-right", "bottom-right"],
   },
+  /*
+    Event Planning. Rose is the largest pool, mauve sits at the
+    top right, and the mint stays the small quiet one, the same
+    40% as dusk's lilac, so the three melt instead of reading as circles.
+  */
+  tide: {
+    base: "#FAF5F6",
+    blobs: ["#F4D3DE", "#E9D5EC", "#D4EEDF"],
+    positions: ["top-left", "top-right", "bottom-right"],
+    sizes: ["68%", "55%", "40%"],
+  },
 } as const satisfies Record<string, GradientPreset>;
 
 export type GradientName = keyof typeof gradientPresets;

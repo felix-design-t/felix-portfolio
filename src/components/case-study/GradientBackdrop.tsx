@@ -14,6 +14,8 @@ const darkBlobs: Record<GradientName, [string, string, string]> = {
   dusk: ["#1F2A44", "#2C2440", "#3A2A26"],
   periwinkle: ["#212A47", "#2B2745", "#3A2530"],
   clay: ["#3A2E22", "#3A2620", "#3A2629"],
+  /* Same hues as the tide pools, mixed down onto the shared dark base. */
+  tide: ["#3A2E22", "#243838", "#3A2822"],
 };
 
 const darkBase = "#121417";

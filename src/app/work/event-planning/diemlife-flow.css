@@ -1,0 +1,189 @@
+/*
+  Context media for Event Planning.
+
+  The column gap is --space-4, the larger step in the two-column
+  case-study frames. A small inset leaves most of the frame for the photo.
+*/
+
+.event-context {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: var(--space-1);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.event-context-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+}
+
+.event-context-visual {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 0;
+}
+
+.event-context-item img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.event-context-caption {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .event-context {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .event-context-item {
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    height: 100%;
+  }
+
+  .event-context-item:last-child .event-context-visual {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .event-context-item:last-child .diem-flow-frame {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .event-context-caption {
+    white-space: nowrap;
+  }
+}
+
+/*
+  Six tiles. The gaps are a slice of the column, about 40px when the
+  diagram is near 280px wide, and they shrink with the phone.
+*/
+
+.diem-flow-frame {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  container-type: inline-size;
+}
+
+.diem-flow {
+  --arrow-gap: 10px;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr) minmax(0, var(--arrow-gap)) minmax(0, 1fr) minmax(0, var(--arrow-gap)) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, var(--arrow-gap)) auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  align-items: center;
+  justify-items: center;
+}
+
+/* Absolutely positioned, so an SVG's intrinsic size cannot widen the grid. */
+.diem-flow > * {
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .diem-flow {
+    --arrow-gap: 22px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .diem-flow {
+    --arrow-gap: 44px;
+  }
+}
+
+.diem-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  aspect-ratio: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-body);
+  /* A fraction of the whole diagram, so Fundraising stays inside the tile. */
+  font-size: clamp(8px, 3.2cqi, 12px);
+  font-weight: 500;
+  line-height: 1.15;
+  text-align: center;
+  box-shadow: 0 1px 2px var(--fg-mid);
+}
+
+.diem-tile[data-highlight="true"] {
+  border: 2px solid var(--accent-cyan);
+  background: color-mix(in srgb, var(--accent-cyan) 14%, var(--surface));
+}
+
+.diem-arrow-slot {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  color: var(--accent-cyan);
+}
+
+.diem-arrow-slot svg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  /* Long axis matches the gap, so vertical arrows are as long as horizontal ones. */
+  width: var(--arrow-gap);
+  height: 14px;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.diem-arrow-slot line,
+.diem-arrow-slot polyline {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
