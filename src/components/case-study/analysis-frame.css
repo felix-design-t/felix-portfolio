@@ -8,6 +8,21 @@
   padding: calc(var(--space-1) + 12px);
 }
 
+/* Only the expense flowchart. Other frames keep the gray mat. */
+.case-study-frame:has(.analysis-diagram) {
+  background: #ffffff;
+}
+
+html[data-theme="dark"] .case-study-frame:has(.analysis-diagram) {
+  background: var(--surface);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .case-study-frame:has(.analysis-diagram) {
+    background: var(--surface);
+  }
+}
+
 /*
   analysis-1.png is the flowchart shapes. Every label uses the
   caption size and the secondary text color.

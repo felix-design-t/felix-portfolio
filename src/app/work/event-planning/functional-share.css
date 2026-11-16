@@ -1,0 +1,130 @@
+/*
+  Two frames for the share step.
+  The label matches "step 1: choosing the post layout".
+  In the comparison, the arrow shares a row with the pictures so it
+  stays on their middle. The notes sit in the row below.
+*/
+
+.case-study-frame:has(.functional-share) {
+  padding: var(--space-3);
+}
+
+.functional-share {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+.functional-step {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  line-height: var(--leading-caption);
+}
+
+.functional-share video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.functional-compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--space-2);
+  width: 100%;
+  min-width: 0;
+}
+
+.functional-side {
+  display: contents;
+}
+
+.functional-side img {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.functional-side ul {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: max-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  justify-self: center;
+  color: var(--text-secondary);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.functional-side li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.functional-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin-top: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-rose);
+}
+
+.functional-side ul[data-tone="good"] .functional-dot {
+  background: var(--accent-emerald);
+}
+
+.functional-arrow {
+  justify-self: center;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1;
+  transform: rotate(90deg);
+}
+
+@media (min-width: 640px) {
+  .functional-compare {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    column-gap: var(--space-2);
+    align-items: center;
+  }
+
+  .functional-side:nth-child(1) > * {
+    grid-column: 1;
+  }
+
+  .functional-arrow {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    transform: none;
+  }
+
+  .functional-side:nth-child(3) > * {
+    grid-column: 3;
+  }
+
+  .functional-side img {
+    grid-row: 1;
+    align-self: center;
+  }
+
+  .functional-side ul {
+    grid-row: 2;
+    align-self: start;
+  }
+}

@@ -8,7 +8,7 @@ type DesignObjectiveProps = {
   text: string;
   /** Exact phrases inside `text`, drawn in the accent color. */
   highlights: string[];
-  accent?: "blue" | "violet" | "amber";
+  accent?: "blue" | "violet" | "amber" | "cyan";
   icon?: "target" | "question";
 };
 

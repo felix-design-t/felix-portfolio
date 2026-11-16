@@ -1,0 +1,123 @@
+/*
+  Previous dropdown beside the sliding-bar video.
+  Headings use the same small label size as "step 1: choosing the post layout".
+  The arrow shares a row with the pictures, so it stays on their middle.
+  Captions sit in the row below and do not pull the arrow down.
+*/
+
+.case-study-frame:has(.interaction-compare) {
+  padding: var(--space-3);
+}
+
+.interaction-compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--space-2);
+  width: 100%;
+  min-width: 0;
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+/* The two sides step aside so their pieces can share the parent rows. */
+.interaction-side {
+  display: contents;
+}
+
+.interaction-heading {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  line-height: var(--leading-caption);
+  text-align: center;
+}
+
+.interaction-side img,
+.interaction-side video {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.interaction-side ul {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: max-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  justify-self: center;
+  color: var(--text-secondary);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.interaction-side li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.interaction-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin-top: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-rose);
+}
+
+.interaction-side ul[data-tone="good"] .interaction-dot {
+  background: var(--accent-emerald);
+}
+
+.interaction-arrow {
+  justify-self: center;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1;
+  transform: rotate(90deg);
+}
+
+@media (min-width: 640px) {
+  .interaction-compare {
+    grid-template-columns: minmax(0, 0.72fr) auto minmax(0, 1.28fr);
+    column-gap: var(--space-2);
+    align-items: center;
+  }
+
+  .interaction-side:nth-child(1) > * {
+    grid-column: 1;
+  }
+
+  .interaction-arrow {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+    transform: none;
+  }
+
+  .interaction-side:nth-child(3) > * {
+    grid-column: 3;
+  }
+
+  .interaction-heading {
+    grid-row: 1;
+  }
+
+  .interaction-side img,
+  .interaction-side video {
+    grid-row: 2;
+    align-self: center;
+  }
+
+  .interaction-side ul {
+    grid-row: 3;
+    align-self: start;
+  }
+}

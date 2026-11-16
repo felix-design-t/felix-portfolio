@@ -19,8 +19,15 @@ export function ProjectCard({ project }: { project: Project }) {
   const isTimeOffCover = project.slug === "time-off-copilot";
   const media = project.media;
 
+  const metaParts = project.meta
+    ? project.meta.split(" / ").map((part) => part.trim()).filter(Boolean)
+    : [];
+
   return (
-    <Link href={`/work/${project.slug}`} className="work-slot">
+    <Link
+      href={`/work/${project.slug}`}
+      className="work-slot"
+    >
       <div
         className={
           isTimeOffCover
@@ -30,9 +37,9 @@ export function ProjectCard({ project }: { project: Project }) {
         data-state={isTimeOffCover ? "filled" : undefined}
         data-lock={isTimeOffCover ? "ratio" : undefined}
         data-media={media ? "true" : undefined}
-        aria-hidden={media ? undefined : "true"}
       >
         <GradientBackdrop name={project.backdrop}>
+          <div className="work-slot-stage">
           {isTimeOffCover ? <CoverSequence /> : null}
           {media ? (
           <div className="work-slot-media">
@@ -59,14 +66,21 @@ export function ProjectCard({ project }: { project: Project }) {
             />
           </div>
           ) : null}
+          </div>
         </GradientBackdrop>
+        <div className="work-slot-band">
+          <div className="work-slot-band-frame">
+            <h3 className="work-slot-caption">{project.title}</h3>
+            {metaParts.length > 0 ? (
+              <p className="work-slot-band-meta">
+                {metaParts.map((part) => (
+                  <span key={part}>{part}</span>
+                ))}
+              </p>
+            ) : null}
+          </div>
+        </div>
       </div>
-      <h3 className="work-slot-caption">
-        {project.title}
-        {project.meta ? (
-          <span className="work-slot-meta"> / {project.meta}</span>
-        ) : null}
-      </h3>
     </Link>
   );
 }

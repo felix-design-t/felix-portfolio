@@ -48,6 +48,10 @@
   stroke: var(--accent-amber);
 }
 
+.design-objective[data-accent="cyan"] .design-objective-icon {
+  stroke: var(--accent-cyan);
+}
+
 .design-objective-text {
   margin: 0;
   width: 100%;
@@ -69,6 +73,10 @@
 
 .design-objective[data-accent="amber"] .design-objective-mark {
   background-color: color-mix(in srgb, var(--accent-amber) 22%, transparent);
+}
+
+.design-objective[data-accent="cyan"] .design-objective-mark {
+  background-color: color-mix(in srgb, var(--accent-cyan) 22%, transparent);
 }
 
 @media (prefers-reduced-motion: no-preference) {

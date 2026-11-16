@@ -1,0 +1,202 @@
+/*
+  Three feed-card options in one placeholder.
+  A green dot marks the layout that worked. Rose marks the ones that did not.
+
+  "Visual: Crafting the ideal feed post card" is the first idea in this section, so the
+  shared template does not give it the extra gap that "01" gets in
+  Design Ideation. This adds that same gap above the subtitle.
+  The section already has 16px between items, so 32px more lands on 48px.
+*/
+#iteration > h3.case-study-section-title:first-of-type {
+  margin-top: calc(var(--space-6) - var(--space-2));
+}
+
+.case-study-frame:has(.post-layouts) {
+  padding: var(--space-3);
+}
+
+.post-layouts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+  font-family: var(--font-body);
+}
+
+.post-layouts-step {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  line-height: var(--leading-caption);
+}
+
+.post-layouts-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.post-layouts-grid li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.post-layouts-caption {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.post-layouts-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  /* Sit on the middle of the first line, even when the caption wraps. */
+  margin-top: calc((var(--leading-caption) - 6px) / 2);
+  border-radius: var(--radius-pill);
+  background: var(--accent-rose);
+}
+
+.post-layouts-caption[data-tone="good"] .post-layouts-dot {
+  background: var(--accent-emerald);
+}
+
+.tag-colors {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+}
+
+.tag-colors-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--space-1);
+  justify-items: stretch;
+}
+
+/* The card steps aside so its picture and caption follow one another. */
+.tag-colors-item {
+  display: contents;
+}
+
+.tag-colors-item img {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.tag-colors-arrow {
+  justify-self: center;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1;
+  transform: rotate(90deg);
+}
+
+@media (min-width: 640px) {
+  .tag-colors-row {
+    /* Picture, arrow, picture, arrow, picture.
+       Pictures and arrows share the first row, so each arrow sits on the
+       middle of the pictures. Captions sit in the second row. */
+    grid-template-columns: minmax(0, 0.7fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+    column-gap: var(--space-1);
+    align-items: center;
+    justify-items: stretch;
+  }
+
+  .tag-colors-item:nth-child(1) img,
+  .tag-colors-item:nth-child(1) figcaption {
+    grid-column: 1;
+  }
+
+  .tag-colors-arrow:nth-child(2) {
+    grid-column: 2;
+  }
+
+  .tag-colors-item:nth-child(3) img,
+  .tag-colors-item:nth-child(3) figcaption {
+    grid-column: 3;
+  }
+
+  .tag-colors-arrow:nth-child(4) {
+    grid-column: 4;
+  }
+
+  .tag-colors-item:nth-child(5) img,
+  .tag-colors-item:nth-child(5) figcaption {
+    grid-column: 5;
+  }
+
+  .tag-colors-item img {
+    grid-row: 1;
+    align-self: center;
+  }
+
+  .tag-colors-item figcaption {
+    grid-row: 2;
+    align-self: start;
+  }
+
+  .tag-colors-arrow {
+    grid-row: 1;
+    align-self: center;
+    justify-self: center;
+    transform: none;
+  }
+}
+
+.case-study-frame:has(.tag-colors) {
+  padding: var(--space-3);
+}
+
+.post-layouts-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+/* Two small options on top. The wide option sits below, with its label beside it. */
+@media (min-width: 640px) {
+  .post-layouts-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-2);
+  }
+
+  .post-layouts-grid li:not(:last-child) .post-layouts-caption {
+    justify-content: center;
+  }
+
+  .post-layouts-grid li:last-child {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) auto;
+    grid-template-areas: "shot caption";
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .post-layouts-grid li:last-child img {
+    grid-area: shot;
+  }
+
+  .post-layouts-grid li:last-child .post-layouts-caption {
+    grid-area: caption;
+  }
+}

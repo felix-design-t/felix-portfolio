@@ -3,6 +3,12 @@ import Image from "next/image";
 import { CaseStudyPage } from "@/components/case-study/case-study-page";
 import { eventPlanning } from "@/content/case-studies/event-planning";
 import { EventContextMedia } from "./diemlife-flow";
+import { FundraisingScatter } from "./fundraising-scatter";
+import { DonationFlowCompare, DonationScreens } from "./donation-redesign";
+import { IdeationFlow } from "./ideation-flow";
+import { FunctionalCompare, FunctionalSpread } from "./functional-share";
+import { InteractionCompare } from "./interaction-compare";
+import { PostLayouts, TagColors } from "./post-layouts";
 import { ResearchInsight, ResearchStats } from "./research-stats";
 import "@/components/case-study/cover-sequence.css";
 
@@ -55,10 +61,76 @@ export default function EventPlanningPage() {
         context: <EventContextMedia />,
       }}
       ideaVisuals={{
+        "design-ideation": [
+          <IdeationFlow key="ideation-flow" />,
+          <video
+            key="ideation-2"
+            src="/work/event-planning/Ideation-2.mp4"
+            width={1916}
+            height={1080}
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-label="Activity posts for sharing task progress in an event"
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
+              borderRadius: "var(--radius-sm)",
+            }}
+          />,
+          <DonationFlowCompare key="donation-flow" />,
+          <DonationScreens key="donation-screens" />,
+        ],
         research: [
           <ResearchStats key="research-stats" />,
           null,
           <ResearchInsight key="research-insight" />,
+          <FundraisingScatter key="fundraising-scatter" />,
+        ],
+        iteration: [
+          <PostLayouts key="post-layouts" />,
+          <TagColors key="tag-colors" />,
+          <InteractionCompare key="interaction-compare" />,
+          <FunctionalCompare key="functional-compare" />,
+          <FunctionalSpread key="functional-spread" />,
+        ],
+        "measuring-success": [
+          <video
+            key="success-1"
+            src="/work/event-planning/outcome-1.mp4"
+            width={1916}
+            height={1080}
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-label="Sharing activities in a DIEMlife event"
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
+              borderRadius: "var(--radius-sm)",
+            }}
+          />,
+          <video
+            key="success-2"
+            src="/work/event-planning/outcome-2.mp4"
+            width={1916}
+            height={1080}
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-label="The redesigned DIEMlife donation flow"
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
+              borderRadius: "var(--radius-sm)",
+            }}
+          />,
         ],
         "outcome-overview": [
           <video

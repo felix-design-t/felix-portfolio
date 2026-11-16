@@ -1281,7 +1281,23 @@ button.skill-pill {
 
 /* An empty plate holds the same shape as the Time-Off product inside
    the same padding, so every plate is the Time-Off cover's size. */
-.work-slot-cover:not(.case-study-frame)::before {
+.work-slot-stage {
+  position: relative;
+}
+
+/* A screenshot is sized to the plate, not to the taller caption area. */
+.work-slot-cover[data-media="true"] .work-slot-stage {
+  margin-left: calc(var(--space-1) * -1);
+  width: calc(100% + var(--space-1));
+  height: 0;
+  padding-bottom: calc((100% - var(--space-1)) * 18 / 25);
+}
+
+.work-slot-cover[data-media="true"] .work-slot-stage::before {
+  display: none;
+}
+
+.work-slot-cover:not(.case-study-frame) .work-slot-stage::before {
   content: "";
   display: block;
   aspect-ratio: 25 / 18;
@@ -1289,7 +1305,8 @@ button.skill-pill {
 
 /*
   A plate with a screenshot. The plate keeps its size (the ::before above).
-  The media layer covers it and clips whatever runs past the edge.
+  The media layer covers the plate. The picture can run past that
+  plate; only the outer card frame crops it.
   The screenshot starts 15% in from the top and left, is 90% as wide as
   the plate, and runs off the right and bottom.
 */
@@ -1300,7 +1317,7 @@ button.skill-pill {
 .work-slot-media {
   position: absolute;
   inset: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .work-slot-shot {
@@ -1364,6 +1381,48 @@ html[data-theme="dark"] .work-slot-shot[data-theme-image="dark"] {
   aspect-ratio: auto !important;
   padding: 0 0 var(--space-1) var(--space-1);
   overflow-anchor: none;
+}
+
+/* The cover is the one outer frame. The wash fills the room under
+   the visual. The visual stays its own size. The caption sits in a
+   glass frame 4px inside the outer edge. */
+.work-slot-cover .work-slot-band {
+  position: relative;
+  z-index: 1;
+  margin-left: calc(var(--space-1) * -1);
+  margin-bottom: calc(var(--space-1) * -1);
+  width: calc(100% + var(--space-1));
+  padding: 4px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.work-slot-band-frame {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  /* The wash behind shows through. The type stays solid. */
+  background: color-mix(in srgb, var(--surface) 40%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  /* Same corner as the cover frame around it. */
+  border-radius: calc(var(--radius-sm) + var(--space-1) + 1px);
+}
+
+.work-slot-band-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
 }
 
 .work-slot-caption {

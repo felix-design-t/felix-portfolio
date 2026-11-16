@@ -6,11 +6,6 @@
 
 .case-study-frame:has(.research-stats) {
   padding: var(--space-4) var(--space-3);
-  background: #fff;
-}
-
-html[data-theme="dark"] .case-study-frame:has(.research-stats) {
-  background: var(--surface);
 }
 
 .research-stats {
@@ -96,5 +91,61 @@ html[data-theme="dark"] .case-study-frame:has(.research-stats) {
   width: 0;
   min-width: 100%;
   height: auto;
+}
+
+/* The scatter is wider than its title, so the chart can use the card. */
+.research-insight:has(.research-scatter) {
+  width: 100%;
+}
+
+.research-insight:has(.research-scatter) .research-callout {
+  align-self: center;
+  text-align: center;
+}
+
+.research-scatter {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+.research-insight img {
   border-radius: var(--radius-sm);
+}
+
+.research-scatter-region {
+  fill: color-mix(in srgb, var(--accent-cyan) 14%, transparent);
+}
+
+.research-scatter-grid {
+  fill: var(--text-secondary);
+  stroke: var(--border);
+  stroke-width: 1;
+  font-family: var(--font-body);
+  font-size: 11px;
+}
+
+.research-scatter-even {
+  stroke: var(--text-secondary);
+  stroke-width: 1.25;
+  stroke-dasharray: 5 4;
+}
+
+.research-scatter-zone {
+  fill: var(--text);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.research-scatter-dot {
+  fill: var(--accent-cyan);
+}
+
+.research-scatter-axis {
+  fill: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 12px;
 }

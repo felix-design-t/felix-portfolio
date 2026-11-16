@@ -1,0 +1,217 @@
+/*
+  Donation redesign. Same white card as the fundraising chart.
+  Step labels use a cyan edge. Share impact stays a plain chip.
+*/
+
+.case-study-frame:has(.donation-flows),
+.case-study-frame:has(.donation-screens) {
+  padding: var(--space-3);
+}
+
+.donation-flows {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+.donation-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Sit the three steps on the vertical middle of the previous list. */
+.donation-redesign-row {
+  margin-block: auto;
+}
+
+.donation-heading {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  line-height: var(--leading-caption);
+  text-align: center;
+}
+
+.donation-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.donation-stack li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.donation-stack .donation-chip {
+  color: var(--text-secondary);
+}
+
+.donation-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 36px;
+  margin: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+}
+
+html[data-theme="dark"] .donation-chip {
+  background: var(--surface);
+}
+
+.donation-chip[data-kind="step"] {
+  border: 1.5px solid var(--accent-cyan);
+  background: color-mix(in srgb, var(--accent-cyan) 14%, #fff);
+}
+
+html[data-theme="dark"] .donation-chip[data-kind="step"] {
+  background: color-mix(in srgb, var(--accent-cyan) 18%, var(--surface));
+}
+
+.donation-down,
+.donation-between,
+.donation-step-arrow {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.donation-between {
+  align-self: center;
+}
+
+.donation-redesign-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
+.donation-redesign-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.donation-step-line {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.donation-step-line .donation-chip {
+  flex: 1 1 auto;
+}
+
+.donation-screens {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+  font-family: var(--font-body);
+}
+
+.donation-notes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+.donation-notes ul {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-secondary);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+}
+
+.donation-notes li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.donation-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin-top: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-rose);
+}
+
+.donation-notes ul[data-tone="good"] .donation-dot {
+  background: var(--accent-emerald);
+}
+
+.donation-screens-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr);
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.donation-screen-long,
+.donation-screen-row img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.donation-screen-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.donation-screen-row {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  gap: 6px;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .donation-notes {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .donation-flows {
+    flex-direction: column;
+  }
+
+  .donation-between {
+    transform: rotate(90deg);
+  }
+}
