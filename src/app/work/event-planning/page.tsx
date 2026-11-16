@@ -3,6 +3,7 @@ import Image from "next/image";
 import { CaseStudyPage } from "@/components/case-study/case-study-page";
 import { eventPlanning } from "@/content/case-studies/event-planning";
 import { EventContextMedia } from "./diemlife-flow";
+import { ResearchInsight, ResearchStats } from "./research-stats";
 import "@/components/case-study/cover-sequence.css";
 
 export const metadata: Metadata = {
@@ -54,6 +55,11 @@ export default function EventPlanningPage() {
         context: <EventContextMedia />,
       }}
       ideaVisuals={{
+        research: [
+          <ResearchStats key="research-stats" />,
+          null,
+          <ResearchInsight key="research-insight" />,
+        ],
         "outcome-overview": [
           <video
             key="outcome-1"

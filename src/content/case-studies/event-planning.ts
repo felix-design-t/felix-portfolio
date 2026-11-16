@@ -1,4 +1,4 @@
-import type { CaseStudy } from "@/components/case-study/types";
+import type { CaseStudy, CaseStudySectionKind } from "@/components/case-study/types";
 
 /**
  * Event Planning page copy.
@@ -52,6 +52,31 @@ export const eventPlanning: CaseStudy = {
         name: "Context",
         aspectRatio: "16 / 9",
       },
+    },
+    {
+      id: "research",
+      kind: "Research" as CaseStudySectionKind,
+      title: "Quick statistics on current user engagement",
+      body: "Quest, the main tool companies use to organize events, had low retention and engagement, leaving clear room to better meet company goals.",
+      ideas: [
+        {
+          name: "Research stats",
+          aspectRatio: "16 / 5",
+        },
+        {
+          title: "Why did users fail to actively engage with the platform?",
+          body: "To understand the numbers, I ran 11 in-depth interviews and collected 153 survey responses with past users, which revealed two main insights:",
+          name: "Why engagement failed",
+          aspectRatio: "16 / 10",
+          unframed: true,
+        },
+        {
+          title: "01. Lack of call-to-action to get involved on the platform",
+          body: "Checking off tasks was users' only way to engage, so they got bored quickly. With few online activities, they never formed a connection with the platform and wanted more ways to interact with other participants.",
+          name: "Lack of call to action",
+          aspectRatio: "751 / 551",
+        },
+      ],
     },
   ],
 };

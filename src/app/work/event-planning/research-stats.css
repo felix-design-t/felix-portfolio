@@ -1,0 +1,100 @@
+/*
+  Research stats. The frame turns into the same pale card as the
+  expense testing row. Numbers use the site text color, so dark mode
+  flips them with the rest of the page.
+*/
+
+.case-study-frame:has(.research-stats) {
+  padding: var(--space-4) var(--space-3);
+  background: #fff;
+}
+
+html[data-theme="dark"] .case-study-frame:has(.research-stats) {
+  background: var(--surface);
+}
+
+.research-stats {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.research-stats li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.research-stat-value {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--text-section);
+  font-weight: 500;
+  line-height: var(--leading-section);
+}
+
+.research-stat-label {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .research-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+}
+
+.case-study-frame:has(.research-insight) {
+  padding: var(--space-3);
+}
+
+.research-insight {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+  margin-inline: auto;
+}
+
+.research-callout {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: pretty;
+  width: max-content;
+  max-width: 100%;
+}
+
+.research-callout-mark {
+  color: var(--text);
+  background-color: color-mix(in srgb, var(--accent-cyan) 22%, transparent);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.research-insight img {
+  display: block;
+  /* Follow the line above. A percentage width would stretch the frame. */
+  width: 0;
+  min-width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
