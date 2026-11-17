@@ -166,6 +166,7 @@ export const eventPlanning: CaseStudy = {
       kind: "Measuring Success",
       title:
         "After the social redesign, 4+ partners hosted 10+ events on DIEMlife. Engagement rose 25%, and the events raised over $100,000.",
+      body: "",
       ideas: [
         {
           name: "Post activities",

@@ -30,7 +30,7 @@ export function ThemeToggle() {
   const [captionHost, setCaptionHost] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    setCaptionHost(document.querySelector(".pill-nav"));
+    setCaptionHost(document.querySelector<HTMLElement>(".pill-nav"));
   }, []);
 
   return (
