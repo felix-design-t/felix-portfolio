@@ -1,0 +1,22 @@
+/*
+  The Google Maps mark on the case study cover.
+  It uses the same 28% width as the home card, and sits in the middle
+  of the plate so the wash stays visible around it.
+*/
+
+.maps-cover {
+  position: relative;
+  width: calc(100% + var(--space-1));
+  margin-left: calc(var(--space-1) * -1);
+  margin-bottom: calc(var(--space-1) * -1);
+  aspect-ratio: 25 / 18;
+}
+
+.maps-cover img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 28%;
+  height: auto;
+  transform: translate(-50%, -50%);
+}

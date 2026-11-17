@@ -1,0 +1,20 @@
+/*
+  Two screens and the arrow between them.
+  The arrow class lives with the ideation comparison.
+*/
+
+.iteration-redraw {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.iteration-redraw img {
+  display: block;
+  /* 34% smaller than the previous 42% / 200px cap. */
+  width: min(27.72%, 132px);
+  height: auto;
+  border-radius: var(--radius-sm);
+}

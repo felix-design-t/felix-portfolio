@@ -94,7 +94,7 @@ export function CaseStudySection({
       <p className="case-study-kicker">{section.kind}</p>
       {section.title ? (
         <h2 id={headingId} className="case-study-section-title">
-          {section.title}
+          <TitleText title={section.title} highlights={section.titleHighlights} />
         </h2>
       ) : null}
       {section.body ? (
@@ -168,6 +168,29 @@ export function CaseStudySection({
         </>
       ) : null}
     </section>
+  );
+}
+
+function TitleText({
+  title,
+  highlights,
+}: {
+  title: string;
+  highlights?: string[];
+}) {
+  if (!highlights?.length) return title;
+  const pattern = new RegExp(
+    `(${highlights.map((phrase) => phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`,
+    "g",
+  );
+  return title.split(pattern).map((part, index) =>
+    highlights.includes(part) ? (
+      <span key={index} className="case-study-title-mark">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
   );
 }
 

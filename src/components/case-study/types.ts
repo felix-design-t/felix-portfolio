@@ -62,6 +62,8 @@ export type CaseStudySectionData = {
   kind: CaseStudySectionKind;
   /** A story beat, not a label. The page heading uses this. */
   title: string;
+  /** Exact phrases inside `title` drawn with the blue highlight. */
+  titleHighlights?: string[];
   /**
    * Short name in the left rail. The page heading stays `title`.
    * Leave it off and the rail uses the kicker (`kind`).

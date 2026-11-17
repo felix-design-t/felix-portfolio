@@ -23,6 +23,7 @@ import {
   problemNotes,
   successBlocks,
 } from "@/content/case-studies/expense-management";
+import { StudyGate } from "@/components/case-study/study-gate";
 import "@/components/case-study/analysis-frame.css";
 import "@/components/case-study/cover-sequence.css";
 
@@ -39,6 +40,7 @@ export const metadata: Metadata = {
  */
 export default function ExpenseManagementPage() {
   return (
+    <StudyGate>
     <CaseStudyPage
       study={expenseManagement}
       cover={
@@ -250,5 +252,6 @@ export default function ExpenseManagementPage() {
         ],
       }}
     />
+    </StudyGate>
   );
 }

@@ -1,0 +1,51 @@
+/*
+  Three interview pains in one frame.
+  Same 24px inset as the chart above it.
+*/
+
+.case-study-frame:has(.research-pains) {
+  padding: var(--space-3);
+}
+
+.research-pains {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.research-pains li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+}
+
+.research-pains img {
+  display: block;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.research-pains p {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
+  color: var(--text);
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .research-pains {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+}

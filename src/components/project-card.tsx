@@ -23,9 +23,16 @@ export function ProjectCard({ project }: { project: Project }) {
     ? project.meta.split(" / ").map((part) => part.trim()).filter(Boolean)
     : [];
 
+  // This study's file is still keyed city-on-your-foot so it stays
+  // in the home order. The page itself lives at /work/google-maps.
+  const href =
+    project.slug === "city-on-your-foot"
+      ? "/work/google-maps"
+      : `/work/${project.slug}`;
+
   return (
     <Link
-      href={`/work/${project.slug}`}
+      href={href}
       className="work-slot"
     >
       <div
@@ -43,27 +50,52 @@ export function ProjectCard({ project }: { project: Project }) {
           {isTimeOffCover ? <CoverSequence /> : null}
           {media ? (
           <div className="work-slot-media">
-            {/* Both themes render. CSS hides one, so a theme change never waits on an image. */}
-            <Image
-              className="work-slot-shot"
-              data-theme-image="light"
-              src={media.light}
-              alt={coverAlt}
-              width={861}
-              height={714}
-              sizes="(max-width: 640px) 90vw, 480px"
-              loading="eager"
-            />
-            <Image
-              className="work-slot-shot"
-              data-theme-image="dark"
-              src={media.dark}
-              alt={coverAlt}
-              width={1152}
-              height={864}
-              sizes="(max-width: 640px) 90vw, 480px"
-              loading="eager"
-            />
+            {/* Both themes render. CSS hides one, so a theme change never waits on an image.
+                An SVG is drawn as a plain image. The optimizer does not accept that file type. */}
+            {media.light.endsWith(".svg") ? (
+              <img
+                className="work-slot-shot"
+                data-theme-image="light"
+                data-fit={project.slug === "google-maps" ? "center" : undefined}
+                src={media.light}
+                alt={project.slug === "google-maps" ? "Google Maps" : coverAlt}
+                width={2017}
+                height={1816}
+              />
+            ) : (
+              <Image
+                className="work-slot-shot"
+                data-theme-image="light"
+                src={media.light}
+                alt={coverAlt}
+                width={861}
+                height={714}
+                sizes="(max-width: 640px) 90vw, 480px"
+                loading="eager"
+              />
+            )}
+            {media.dark.endsWith(".svg") ? (
+              <img
+                className="work-slot-shot"
+                data-theme-image="dark"
+                data-fit={project.slug === "google-maps" ? "center" : undefined}
+                src={media.dark}
+                alt=""
+                width={2017}
+                height={1816}
+              />
+            ) : (
+              <Image
+                className="work-slot-shot"
+                data-theme-image="dark"
+                src={media.dark}
+                alt={coverAlt}
+                width={1152}
+                height={864}
+                sizes="(max-width: 640px) 90vw, 480px"
+                loading="eager"
+              />
+            )}
           </div>
           ) : null}
           </div>

@@ -1,0 +1,56 @@
+/*
+  Two clips inside the section's single frame.
+  The frame is already the mat. These sit on that fill.
+*/
+
+.outcome-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  width: 100%;
+  margin: 0;
+}
+
+.outcome-pair-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+}
+
+/*
+  The export is a rectangle. The four corners outside the phone
+  are a flat dark fill. This radius matches that phone's outer
+  curve (64px on the 524×1080 file), so the dark corners clip
+  away and the phone stays.
+*/
+.outcome-pair-phone {
+  overflow: hidden;
+  border-radius: 12.2% / 5.93%;
+  line-height: 0;
+}
+
+.outcome-pair video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.outcome-pair figcaption {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
+  color: var(--text);
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .outcome-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+    align-items: start;
+  }
+}

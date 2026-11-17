@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { ExperiencePill } from "@/components/experience-pill";
-import { FexiMorph } from "@/components/fexi-morph";
+import { FexiNameButton } from "@/components/fexi-chat/fexi-chat";
 import { heroSkills, siteCopy, type HeroPill } from "@/content/site";
 
 /**
@@ -9,6 +9,7 @@ import { heroSkills, siteCopy, type HeroPill } from "@/content/site";
  * Three sans paragraphs follow, in the same centered reading column.
  * The years and the skills are inline chips. Fexi is a mark and a word.
  * The experience chip opens a live timer. The other chips only react to hover.
+ * The Fexi name opens the chat panel.
  */
 export function Hero() {
   return (
@@ -40,7 +41,7 @@ export function Hero() {
           <p>
             For a closer look at how I think and work,{" "}
             <span className="fexi-phrase">
-              ask <FexiLink />.
+              ask <FexiNameButton />.
             </span>
           </p>
         </div>
@@ -65,20 +66,6 @@ function SkillPill({ pill }: { pill: HeroPill }) {
       <SkillIcon id={pill.id} />
       {pill.label}
     </span>
-  );
-}
-
-/**
- * Fexi is the site agent: its mark and its name, inline in the sentence.
- * It is a button so the agent panel can hook its click in later;
- * for now it only reacts to hover and focus.
- */
-function FexiLink() {
-  return (
-    <button type="button" className="fexi-link">
-      <FexiMorph speed="idle" />
-      <span className="fexi-word">Fexi</span>
-    </button>
   );
 }
 

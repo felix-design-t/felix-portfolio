@@ -1,0 +1,326 @@
+/*
+  Fexi chat panel.
+
+  Same tokens as the rest of the site: type, radius, hairline, paper.
+  The edge is a hairline only. No shadow, blur, or new gradient.
+
+  Two placements, like two variants of one frame:
+  - Wide: the reading column is centered and never wider than --content-max.
+    The panel sits in the empty margin on the right, from just under the
+    closed nav to the bottom of the screen. Its width is that margin minus
+    a gap at the screen edge and a gap before the column, so it cannot
+    cover the writing. 1280px is where the margin is about 320px.
+  - Narrower: that margin cannot hold a chat, so the panel rises from the
+    bottom and stays under half the screen height. It sits inside the
+    reading column, on the same inset as the text, not on the column edge.
+*/
+
+.fexi-panel {
+  position: fixed;
+  /* Under the nav (45), over the case-study stepper (40) and the grain. */
+  z-index: 42;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  /* Inside the column: the text inset, the same edge the page copy uses. */
+  left: max(var(--gutter), calc((100% - var(--content-max)) / 2 + var(--gutter)));
+  right: max(var(--gutter), calc((100% - var(--content-max)) / 2 + var(--gutter)));
+  bottom: 0;
+  max-height: calc(50vh - var(--space-2));
+  padding: var(--space-2);
+  padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--hairline);
+  border-bottom: 0;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+@media (min-width: 640px) {
+  .fexi-panel {
+    left: max(var(--gutter-sm), calc((100% - var(--content-max)) / 2 + var(--gutter-sm)));
+    right: max(var(--gutter-sm), calc((100% - var(--content-max)) / 2 + var(--gutter-sm)));
+  }
+}
+
+@media (min-width: 1280px) {
+  .fexi-panel {
+    top: calc(
+      var(--space-3) + var(--nav-inset) * 2 + 2px + var(--nav-tab-size) +
+        var(--space-2)
+    );
+    right: var(--space-2);
+    bottom: 0;
+    left: auto;
+    width: min(
+      360px,
+      calc(
+        (100% - min(100%, var(--content-max))) / 2 - var(--space-2) -
+          var(--space-3)
+      )
+    );
+    max-height: none;
+    padding-bottom: var(--space-2);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fexi-panel {
+    animation: fexi-panel-rise 220ms var(--ease-out);
+  }
+}
+
+@media (min-width: 1280px) and (prefers-reduced-motion: no-preference) {
+  .fexi-panel {
+    animation-name: fexi-panel-side;
+  }
+}
+
+@keyframes fexi-panel-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes fexi-panel-side {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+}
+
+.fexi-panel-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  min-height: var(--nav-tab-size);
+}
+
+.fexi-panel-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-footer);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--text);
+}
+
+/* Sits on the right of the name. Caption type, quiet ink, hairline pill. */
+.fexi-beta {
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--text-secondary);
+}
+
+.fexi-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.fexi-icon-button,
+.fexi-send {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.fexi-icon-button {
+  width: var(--nav-tab-size);
+  height: var(--nav-tab-size);
+  border: 0;
+  border-radius: var(--nav-highlight-radius);
+  background: transparent;
+  color: var(--text-secondary);
+  transition:
+    background-color 150ms var(--ease-out),
+    color 150ms var(--ease-out);
+}
+
+.fexi-icon-button:hover {
+  background: var(--fg-soft);
+  color: var(--text);
+}
+
+.fexi-svg {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--icon-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The thread grows with messages, then scrolls once the frame is full. */
+.fexi-thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding-block: var(--space-2);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.fexi-message {
+  margin: 0;
+  max-width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--text-footer);
+  font-weight: 400;
+  line-height: var(--leading-footer);
+  overflow-wrap: anywhere;
+}
+
+/* Visitor text sits in a pill on the right, like a selected chip. */
+.fexi-message-user {
+  align-self: flex-end;
+  max-width: 88%;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  background: var(--mat);
+  color: var(--text);
+}
+
+.fexi-message-assistant {
+  align-self: stretch;
+  color: var(--text-secondary);
+}
+
+.fexi-reply-link {
+  color: var(--text);
+}
+
+.fexi-dock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.fexi-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.fexi-chip {
+  max-width: 100%;
+  margin: 0;
+  padding: 0.28rem 0.65rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 150ms var(--ease-out),
+    border-color 150ms var(--ease-out),
+    color 150ms var(--ease-out);
+}
+
+.fexi-chip:hover {
+  background: var(--mat);
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+/* The composer is a pill. The field is quiet inside it; the arrow sends. */
+.fexi-composer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: calc(var(--nav-tab-size) + var(--nav-inset) * 2);
+  padding: var(--nav-inset) var(--nav-inset) var(--nav-inset) var(--space-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+}
+
+.fexi-composer:focus-within {
+  border-color: var(--border-strong);
+}
+
+.fexi-input {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--text-footer);
+  font-weight: 400;
+  line-height: var(--leading-footer);
+}
+
+.fexi-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.fexi-input:focus,
+.fexi-input:focus-visible {
+  outline: none;
+}
+
+.fexi-send {
+  width: var(--nav-tab-size);
+  height: var(--nav-tab-size);
+  flex: none;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  background: var(--mat);
+  color: var(--text);
+}
+
+.fexi-send:hover {
+  border-color: var(--border-strong);
+}
+
+/* Empty box: the quiet button above. Text in the box: black fill, white arrow.
+   These stay the light ink and white, so dark mode does not flip them. */
+.fexi-send:not(:disabled),
+.fexi-send:not(:disabled):hover {
+  background: #171717;
+  border-color: #171717;
+  color: #ffffff;
+}
+
+.fexi-send:disabled {
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+/* Names a message for assistive tech without showing a second label. */
+.fexi-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

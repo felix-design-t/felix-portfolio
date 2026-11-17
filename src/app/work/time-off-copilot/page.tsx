@@ -18,6 +18,7 @@ import { CoverSequence } from "@/components/case-study/cover-sequence";
 import { HistoryToOverdraftVisual } from "@/components/case-study/history-to-overdraft";
 import { NoteToPolicyVisual } from "@/components/case-study/note-to-policy";
 import { timeOffCopilot } from "@/content/case-studies/time-off-copilot";
+import { StudyGate } from "@/components/case-study/study-gate";
 
 export const metadata: Metadata = {
   title: timeOffCopilot.title,
@@ -29,6 +30,7 @@ export const metadata: Metadata = {
  */
 export default function TimeOffCopilotPage() {
   return (
+    <StudyGate>
     <CaseStudyPage
       study={timeOffCopilot}
       cover={<CoverSequence />}
@@ -67,5 +69,6 @@ export default function TimeOffCopilotPage() {
         ],
       }}
     />
+    </StudyGate>
   );
 }

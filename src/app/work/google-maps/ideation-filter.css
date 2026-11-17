@@ -1,0 +1,164 @@
+/*
+  One comparison inside the section frame.
+  Same 24px inset as the research frames.
+*/
+
+.case-study-frame:has(.ideation-filter) {
+  padding: var(--space-3);
+}
+
+.ideation-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  margin: 0;
+}
+
+.ideation-filter-lead {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
+  color: var(--text);
+  text-align: center;
+}
+
+.ideation-filter-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.ideation-filter-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  width: min(100%, 220px);
+}
+
+.ideation-filter-side img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.ideation-filter-side p {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.ideation-filter-mark {
+  display: block;
+  width: 72px;
+  height: auto;
+}
+
+.ideation-fork {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 420px);
+}
+
+.ideation-fork-button {
+  display: block;
+  width: auto;
+  max-width: none;
+  /* The blue button's file is 54px tall, with a little clear space.
+     36px here is the height it is drawn at. */
+  height: 36px;
+}
+
+.ideation-fork-arrows {
+  display: block;
+  width: 100%;
+  height: 40px;
+  color: var(--text-secondary);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ideation-fork-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.ideation-fork-pair .ideation-filter-side {
+  width: auto;
+}
+
+/* The column rule stretches every picture to full width.
+   These are buttons, so they keep the Walk Explore height. */
+.ideation-fork-pair .ideation-filter-side img {
+  width: auto;
+  max-width: none;
+  /* These files have no clear space, so a shorter box matches
+     the blue button's visible height. */
+  height: calc(36px * 47 / 54);
+}
+
+.ideation-filter-arrow {
+  display: block;
+  width: 20px;
+  height: 14px;
+  flex: none;
+  fill: none;
+  stroke: var(--text-secondary);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 639px) {
+  .ideation-filter-arrow {
+    transform: rotate(90deg);
+  }
+}
+
+@media (min-width: 640px) {
+  .ideation-filter-row {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+
+  /* Maps match the three walk-time pictures below. Those are one third
+     of this same row, minus the two gaps between them. */
+  .ideation-filter-row[data-layout="compare"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+  }
+
+  .ideation-filter-row[data-layout="compare"] .ideation-filter-side {
+    width: calc((100% - 2 * var(--space-2)) / 3);
+    flex: none;
+  }
+
+  .ideation-filter-row[data-layout="trio"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .ideation-filter-side {
+    width: 100%;
+  }
+}

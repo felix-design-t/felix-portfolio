@@ -1,0 +1,85 @@
+/*
+  One approved order above two that were not.
+  The line above the winner is a label. The scores are captions.
+*/
+
+.case-study-frame:has(.iteration-hierarchy) {
+  padding: var(--space-3);
+}
+
+.iteration-hierarchy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  margin: 0;
+}
+
+.iteration-hierarchy figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  margin: 0;
+}
+
+.iteration-hierarchy-winner {
+  width: min(100%, 220px);
+}
+
+.iteration-hierarchy p,
+.iteration-hierarchy figcaption {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
+  text-align: center;
+}
+
+.iteration-hierarchy p {
+  color: var(--text);
+}
+
+.iteration-hierarchy figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.iteration-hierarchy .iteration-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-rose);
+}
+
+.iteration-hierarchy .iteration-dot[data-tone="good"] {
+  background: var(--accent-emerald);
+}
+
+.iteration-hierarchy img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.iteration-hierarchy-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .iteration-hierarchy-pair {
+    grid-template-columns: repeat(2, minmax(0, 220px));
+    justify-content: center;
+  }
+}

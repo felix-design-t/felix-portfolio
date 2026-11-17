@@ -1,0 +1,13 @@
+/*
+  Same pause as Event Planning's unpack line.
+  The shared component paints violet unless a case names a color.
+  This page names blue.
+*/
+
+#unpack-insights .design-objective-icon {
+  stroke: var(--accent-blue);
+}
+
+#unpack-insights .design-objective-mark {
+  background-color: color-mix(in srgb, var(--accent-blue) 22%, transparent);
+}

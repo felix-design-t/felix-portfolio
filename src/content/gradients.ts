@@ -62,6 +62,17 @@ export const gradientPresets = {
     positions: ["top-left", "top-right", "bottom-right"],
     sizes: ["68%", "55%", "40%"],
   },
+  /*
+    Google Maps. Sky blue is the largest pool, the pale sky sits
+    small at the top right, and lemon sits at the bottom right.
+    The near-white base is meant to stay visible between them.
+  */
+  stone: {
+    base: "#FCFDFE",
+    blobs: ["#C4DDF7", "#E3EEFB", "#F7EFC4"],
+    positions: ["top-left", "top-right", "bottom-right"],
+    sizes: ["68%", "40%", "55%"],
+  },
 } as const satisfies Record<string, GradientPreset>;
 
 export type GradientName = keyof typeof gradientPresets;

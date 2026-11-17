@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { GeistSerif } from "geist/font/serif";
 import { BackButton } from "@/components/back-button";
+import { FexiChatRoot } from "@/components/fexi-chat/fexi-chat";
 import { OnlineStatus } from "@/components/online-status";
 import { DownloadButton } from "@/components/download-cv-button";
 import { SiteFooter } from "@/components/site-footer";
@@ -30,6 +31,7 @@ export const metadata: Metadata = {
 /**
  * Root layout is the master frame.
  * Every route keeps this header, column, and footer.
+ * The chat sits on that same frame, so it can open from any page.
  * A page only replaces the middle.
  */
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -39,17 +41,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${GeistSerif.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <a className="skip-link" href="#content">
-          Skip to content
-        </a>
-        <SiteHeader />
-        <main id="content" className="shell-inner">
-          <OnlineStatus />
-          <BackButton />
-          <DownloadButton />
-          {children}
-        </main>
-        <SiteFooter />
+        <FexiChatRoot>
+          <a className="skip-link" href="#content">
+            Skip to content
+          </a>
+          <SiteHeader />
+          <main id="content" className="shell-inner">
+            <OnlineStatus />
+            <BackButton />
+            <DownloadButton />
+            {children}
+          </main>
+          <SiteFooter />
+        </FexiChatRoot>
       </body>
     </html>
   );

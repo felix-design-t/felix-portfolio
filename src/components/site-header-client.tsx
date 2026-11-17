@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useAskFexi } from "@/components/fexi-chat/fexi-chat";
 import { FexiMorph } from "@/components/fexi-morph";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { usePathname } from "next/navigation";
@@ -28,19 +29,20 @@ import {
  * whole pill closes it, so the pointer can still travel down to a tab.
  * The CV download sits in its own control at the right of the column.
  *
- * Destinations: Home, Writing, and /about. The about tab reads “Ask Fexi”.
+ * Destinations: Home and Writing. Ask Fexi opens the chat panel.
+ * “Ask” stays in the nav’s sans. “Fexi” uses the same mono as the bio.
  */
 
-type TabId = "home" | "writing" | "about";
+type PageTabId = "home" | "writing";
 
-const tabs: { id: TabId; label: string; href: string }[] = [
+const pageTabs: { id: PageTabId; label: string; href: string }[] = [
   { id: "home", label: "Home", href: "/" },
   { id: "writing", label: "Writing", href: "/writing" },
-  { id: "about", label: "Ask Fexi", href: "/about" },
 ];
 
 export function SiteHeaderBar({ clock }: { clock: ReactNode }) {
   const pathname = usePathname();
+  const { isOpen: isChatOpen, toggleChat } = useAskFexi();
   const [menuOpen, setMenuOpen] = useState(false);
   // True only after a mouse hover. A click from that hover must not
   // toggle the menu shut. Touch and keyboard still toggle it.
@@ -92,7 +94,7 @@ export function SiteHeaderBar({ clock }: { clock: ReactNode }) {
         </div>
 
         <nav id="site-tabs" className="pill-nav-tabs" aria-label="Primary">
-          {tabs.map((tab) => {
+          {pageTabs.map((tab) => {
             const isCurrent = tab.id === activeTab;
 
             return (
@@ -107,6 +109,16 @@ export function SiteHeaderBar({ clock }: { clock: ReactNode }) {
               </Link>
             );
           })}
+          <button
+            type="button"
+            className="pill-tab"
+            aria-expanded={isChatOpen}
+            aria-controls="fexi-panel"
+            onClick={toggleChat}
+          >
+            <TabIcon name="about" />
+            <TabLabel id="about" label="Ask Fexi" />
+          </button>
         </nav>
       </div>
     </header>
@@ -134,9 +146,10 @@ export function PillClock() {
   );
 }
 
-function getActiveTab(pathname: string): TabId {
+function getActiveTab(pathname: string): PageTabId | null {
   if (pathname.startsWith("/writing")) return "writing";
-  if (pathname.startsWith("/about")) return "about";
+  // Ask Fexi is the chat, not a page, so /about does not light a tab.
+  if (pathname.startsWith("/about")) return null;
   return "home";
 }
 
@@ -161,7 +174,7 @@ function formatClock(date: Date): string {
  * “Ask” stays in the nav’s sans, like Home and Writing.
  * “Fexi” is the agent’s name, so it uses the same mono as the bio.
  */
-function TabLabel({ id, label }: { id: TabId; label: string }) {
+function TabLabel({ id, label }: { id: PageTabId | "about"; label: string }) {
   if (id !== "about") return label;
 
   return (
@@ -171,7 +184,7 @@ function TabLabel({ id, label }: { id: TabId; label: string }) {
   );
 }
 
-function TabIcon({ name }: { name: TabId }) {
+function TabIcon({ name }: { name: PageTabId | "about" }) {
   if (name === "home") return <HomeIcon />;
   if (name === "writing") return <WritingIcon />;
   // Same mark as the hero line: slow idle, 16px, --text-secondary.

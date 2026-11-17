@@ -1,0 +1,67 @@
+/*
+  Thought bubble over the traveler.
+  The picture is transparent, so the frame's mat shows around her.
+  The cloud is a surface card with the site's border and radius.
+  No shadow. The two circles are the tail of the thought.
+*/
+
+/* The shared frame is 8px. This picture needs more air around the cloud and her hair. */
+.case-study-frame:has(.context-thought) {
+  padding: var(--space-3);
+}
+
+.context-thought {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+}
+
+.context-thought-bubble {
+  position: relative;
+  z-index: 1;
+  max-width: 20rem;
+  margin: 0 0 var(--space-2);
+  padding: var(--space-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text);
+  text-align: center;
+  text-wrap: pretty;
+}
+
+/* Smaller circle, then a tiny one, stepping down toward her head. */
+.context-thought-bubble::before,
+.context-thought-bubble::after {
+  content: "";
+  position: absolute;
+  left: 42%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+
+.context-thought-bubble::before {
+  bottom: -18px;
+  width: 12px;
+  height: 12px;
+}
+
+.context-thought-bubble::after {
+  bottom: -30px;
+  left: 47%;
+  width: 7px;
+  height: 7px;
+}
+
+.context-thought img {
+  display: block;
+  width: min(148px, 46%);
+  height: auto;
+}

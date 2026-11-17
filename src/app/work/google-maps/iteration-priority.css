@@ -1,0 +1,93 @@
+/*
+  Two city scenarios. Every line is caption size.
+  Same 24px inset as the other Google Maps frames.
+*/
+
+.case-study-frame:has(.iteration-priority),
+.case-study-frame:has(.iteration-entry) {
+  padding: var(--space-3);
+}
+
+.iteration-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.iteration-entry > p {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
+  color: var(--text);
+  text-align: center;
+}
+
+.iteration-priority {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  width: 100%;
+  margin: 0;
+}
+
+.iteration-priority figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+}
+
+.iteration-priority figcaption,
+.iteration-priority p {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
+  color: var(--text);
+  text-align: center;
+}
+
+.iteration-priority figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.iteration-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-rose);
+}
+
+.iteration-dot[data-tone="good"] {
+  background: var(--accent-emerald);
+}
+
+.iteration-priority img {
+  display: block;
+  width: min(100%, 280px);
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+@media (min-width: 640px) {
+  .iteration-priority {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .iteration-priority[data-count="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

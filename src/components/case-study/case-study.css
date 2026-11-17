@@ -154,6 +154,13 @@
   color: var(--text);
 }
 
+.case-study-title-mark {
+  color: var(--text);
+  background-color: color-mix(in srgb, var(--accent-blue) 22%, transparent);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 .case-study-body {
   margin: 0;
   max-width: 40rem;

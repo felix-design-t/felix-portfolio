@@ -1,0 +1,136 @@
+/*
+  Research profile. One frame, three pictures.
+  Blue is --accent-blue. The pale ring and the overlap are that
+  same blue, mixed down onto the surface so dark mode stays calm.
+*/
+
+.case-study-frame:has(.research-profile) {
+  padding: var(--space-3);
+}
+
+.research-profile {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  width: 100%;
+  margin: 0;
+}
+
+.research-profile-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+}
+
+.research-ring {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-blue) 28%, var(--surface));
+}
+
+.research-ring-core {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: var(--text-section);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.research-key {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-secondary);
+}
+
+.research-key li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Same 6px mark as the Event Planning notes. */
+.research-key-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--accent-blue) 28%, var(--surface));
+}
+
+.research-key-dot[data-tone="strong"] {
+  background: var(--accent-blue);
+}
+
+.research-profile figcaption {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--leading-caption);
+  color: var(--text);
+  text-align: center;
+}
+
+/*
+  Each circle is smaller than a ring so the pair fits the same
+  column. The shared row below keeps all three pictures level.
+*/
+.research-venn {
+  display: block;
+  width: min(100%, 156px);
+  height: auto;
+  aspect-ratio: 156 / 96;
+  overflow: visible;
+}
+
+.research-venn-fill circle {
+  fill: color-mix(in srgb, var(--accent-blue) 28%, var(--surface));
+}
+
+.research-venn-stroke {
+  fill: none;
+  stroke: var(--accent-blue);
+  stroke-width: 1.25;
+}
+
+.research-venn text {
+  fill: var(--text);
+  font-family: var(--font-body);
+  font-size: 10px;
+}
+
+@media (min-width: 640px) {
+  .research-profile {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    gap: var(--space-2) var(--space-3);
+    align-items: start;
+  }
+
+  /* Caption, picture, then key. The picture row is shared, so a
+     wrapped label cannot push one circle down. */
+  .research-profile-item {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    align-items: center;
+    justify-items: center;
+  }
+}
