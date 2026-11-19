@@ -10,9 +10,8 @@
     closed nav to the bottom of the screen. Its width is that margin minus
     a gap at the screen edge and a gap before the column, so it cannot
     cover the writing. 1280px is where the margin is about 320px.
-  - Narrower: that margin cannot hold a chat, so the panel rises from the
-    bottom and stays under half the screen height. It sits inside the
-    reading column, on the same inset as the text, not on the column edge.
+  - Narrower: a sheet follows the visible viewport above the keyboard.
+    Phones use the available height; tablets keep a shorter bottom sheet.
 */
 
 .fexi-panel {
@@ -21,12 +20,14 @@
   z-index: 42;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
   box-sizing: border-box;
   /* Inside the column: the text inset, the same edge the page copy uses. */
   left: max(var(--gutter), calc((100% - var(--content-max)) / 2 + var(--gutter)));
   right: max(var(--gutter), calc((100% - var(--content-max)) / 2 + var(--gutter)));
-  bottom: 0;
-  max-height: calc(50vh - var(--space-2));
+  bottom: calc(100% - var(--fexi-viewport-height, 100dvh) - var(--fexi-viewport-top, 0px));
+  height: min(70dvh, calc(var(--fexi-viewport-height, 100dvh) - var(--space-2)));
   padding: var(--space-2);
   padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
   background: var(--bg);
@@ -59,8 +60,46 @@
           var(--space-3)
       )
     );
+    height: auto;
     max-height: none;
     padding-bottom: var(--space-2);
+  }
+}
+
+@media (max-width: 1279px) {
+  .fexi-panel {
+    /* The sheet must remain above the navigation while the keyboard pans. */
+    z-index: 60;
+  }
+
+  .fexi-panel:focus {
+    outline: none;
+  }
+
+  .fexi-panel:has(.fexi-input:focus) .fexi-chips,
+  .fexi-panel[data-has-messages="true"] .fexi-chips {
+    display: none;
+  }
+
+  .fexi-panel .fexi-input {
+    /* iOS zooms focused fields below 16px. Keep pinch zoom available. */
+    font-size: max(16px, var(--text-footer));
+  }
+
+  .fexi-panel .fexi-icon-button,
+  .fexi-panel .fexi-send {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 639px) {
+  .fexi-panel {
+    top: calc(var(--fexi-viewport-top, 0px) + env(safe-area-inset-top) + var(--space-1));
+    bottom: auto;
+    left: max(var(--space-1), env(safe-area-inset-left));
+    right: max(var(--space-1), env(safe-area-inset-right));
+    height: calc(var(--fexi-viewport-height, 100dvh) - env(safe-area-inset-top) - var(--space-1));
   }
 }
 

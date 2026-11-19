@@ -64,7 +64,7 @@ export function FexiChatRoot({ children }: { children: ReactNode }) {
     setIsOpen((open) => {
       if (open) {
         const opener = openerRef.current;
-        requestAnimationFrame(() => opener?.focus());
+        requestAnimationFrame(() => opener?.focus({ preventScroll: true }));
         return false;
       }
       openerRef.current =
@@ -78,7 +78,7 @@ export function FexiChatRoot({ children }: { children: ReactNode }) {
   const closeChat = useCallback(() => {
     setIsOpen(false);
     const opener = openerRef.current;
-    requestAnimationFrame(() => opener?.focus());
+    requestAnimationFrame(() => opener?.focus({ preventScroll: true }));
   }, []);
 
   const value = useMemo(
@@ -190,11 +190,86 @@ function FexiChatPanel({
   onRefresh,
   onClose,
 }: FexiChatPanelProps) {
+  const panelRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const threadRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    inputRef.current?.focus();
+    // Opening chat on a phone should not immediately summon the keyboard.
+    if (window.matchMedia("(min-width: 1280px) and (pointer: fine)").matches) {
+      inputRef.current?.focus({ preventScroll: true });
+    } else {
+      panelRef.current?.focus({ preventScroll: true });
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    if (!panel) return;
+    const viewport = window.visualViewport;
+    let frame = 0;
+
+    // Safari resizes/pans the visual viewport, not the layout viewport,
+    // when its keyboard opens. Update the panel without React rerenders.
+    function updateViewport() {
+      if (!panel) return;
+      panel.style.setProperty("--fexi-viewport-height", `${viewport?.height ?? window.innerHeight}px`);
+      panel.style.setProperty("--fexi-viewport-top", `${viewport?.offsetTop ?? 0}px`);
+      const thread = threadRef.current;
+      if (thread) thread.scrollTop = thread.scrollHeight;
+    }
+    function scheduleUpdate() {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(updateViewport);
+    }
+
+    updateViewport();
+    viewport?.addEventListener("resize", scheduleUpdate);
+    viewport?.addEventListener("scroll", scheduleUpdate);
+    window.addEventListener("resize", scheduleUpdate);
+    return () => {
+      cancelAnimationFrame(frame);
+      viewport?.removeEventListener("resize", scheduleUpdate);
+      viewport?.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+    };
+  }, []);
+
+  useEffect(() => {
+    const narrowScreen = window.matchMedia("(max-width: 1279px)");
+    let unlock: (() => void) | undefined;
+    function syncScrollLock() {
+      if (!narrowScreen.matches) {
+        unlock?.();
+        unlock = undefined;
+        return;
+      }
+      if (unlock) return;
+      const body = document.body;
+      const scrollY = window.scrollY;
+      const previous = {
+        position: body.style.position,
+        top: body.style.top,
+        width: body.style.width,
+        overflow: body.style.overflow,
+      };
+      Object.assign(body.style, {
+        position: "fixed",
+        top: `-${scrollY}px`,
+        width: "100%",
+        overflow: "hidden",
+      });
+      unlock = () => {
+        Object.assign(body.style, previous);
+        window.scrollTo({ top: scrollY, behavior: "instant" });
+      };
+    }
+    syncScrollLock();
+    narrowScreen.addEventListener("change", syncScrollLock);
+    return () => {
+      narrowScreen.removeEventListener("change", syncScrollLock);
+      unlock?.();
+    };
   }, []);
 
   useEffect(() => {
@@ -215,8 +290,11 @@ function FexiChatPanel({
 
   return (
     <aside
+      ref={panelRef}
       id="fexi-panel"
       className="fexi-panel"
+      tabIndex={-1}
+      data-has-messages={messages.length > 0}
       role="dialog"
       aria-modal="false"
       aria-labelledby="fexi-panel-title"
@@ -233,7 +311,9 @@ function FexiChatPanel({
             aria-label="Refresh conversation"
             onClick={() => {
               onRefresh();
-              inputRef.current?.focus();
+              if (window.matchMedia("(pointer: fine)").matches) {
+                inputRef.current?.focus({ preventScroll: true });
+              }
             }}
           >
             <RefreshIcon />
@@ -301,6 +381,7 @@ function FexiChatPanel({
             placeholder="Ask anything"
             aria-label="Ask anything"
             autoComplete="off"
+            enterKeyHint="send"
             onChange={(event) => onDraftChange(event.target.value)}
           />
           <button

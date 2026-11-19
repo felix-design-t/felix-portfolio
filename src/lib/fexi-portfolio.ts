@@ -3,10 +3,12 @@ import { expenseManagement } from "@/content/case-studies/expense-management";
 import { googleMaps } from "@/content/case-studies/google-maps";
 import { timeOffCopilot } from "@/content/case-studies/time-off-copilot";
 import type { CaseStudy } from "@/components/case-study/types";
+import { fexiProfile } from "@/content/fexi-profile";
+import { footerLinks, heroSkills, siteCopy } from "@/content/site";
 
 /**
  * The notes Fexi is allowed to answer from.
- * Each block is one case study page. The path is the page on this site.
+ * Includes the homepage, supplied biography, and all four case study pages.
  */
 const studies: { path: string; study: CaseStudy }[] = [
   { path: "/work/time-off-copilot", study: timeOffCopilot },
@@ -50,7 +52,18 @@ function collectLines(value: unknown, lines: string[]) {
 }
 
 export function portfolioNotes(): string {
-  return studies
+  const introduction = [
+    "Source: Portfolio homepage (/)",
+    siteCopy.name,
+    siteCopy.description,
+    `Skills: ${heroSkills.map((skill) => skill.label).join(", ")}`,
+    ...footerLinks.map((link) => `${link.label}: ${link.href}`),
+    "",
+    "Source: Felix's supplied biographical and project notes (Template.docx)",
+    ...Object.entries(fexiProfile).map(([topic, summary]) => `${topic}: ${summary}`),
+  ].join("\n");
+
+  const caseStudies = studies
     .map(({ path, study }) => {
       const lines: string[] = [];
       collectLines(
@@ -60,4 +73,6 @@ export function portfolioNotes(): string {
       return [`Page: ${path}`, `Title: ${study.title}`, ...lines].join("\n");
     })
     .join("\n\n");
+
+  return `${introduction}\n\n${caseStudies}`;
 }
