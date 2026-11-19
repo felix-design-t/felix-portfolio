@@ -1,0 +1,153 @@
+.writing-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: calc(var(--space-16) + var(--space-6)) var(--space-8);
+  text-align: center;
+}
+
+.writing-eyebrow {
+  align-self: flex-start;
+  color: var(--text-secondary);
+  font-family: var(--font-serif);
+  font-size: var(--text-section);
+  line-height: var(--leading-section);
+}
+
+.writing-draft {
+  position: relative;
+  width: min(280px, 100%);
+  margin-block: var(--space-6) var(--space-4);
+}
+
+.writing-sketch {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1;
+}
+
+.writing-back-sheet {
+  fill: var(--bg);
+  stroke: var(--border);
+}
+
+.writing-sheet {
+  fill: var(--surface);
+  stroke: var(--border-strong);
+}
+
+.writing-rule {
+  stroke: var(--border-strong);
+}
+
+.writing-crossout {
+  stroke: var(--text-secondary);
+}
+
+.writing-scribble {
+  stroke: var(--text-secondary);
+  stroke-dasharray: 100;
+  animation: writing-write 6s ease-in-out infinite;
+}
+
+.writing-pencil {
+  animation: writing-pencil 6s ease-in-out infinite;
+}
+
+.writing-pencil-body {
+  fill: var(--surface);
+  stroke: var(--text-secondary);
+}
+
+.writing-pencil-detail {
+  stroke: var(--text-secondary);
+}
+
+.writing-pencil-tip {
+  fill: var(--text-secondary);
+}
+
+.writing-copy h1 {
+  color: var(--text);
+  font-family: var(--font-serif);
+  font-size: var(--text-hero);
+  font-weight: 400;
+  letter-spacing: var(--tracking-hero);
+  line-height: var(--leading-hero);
+}
+
+.writing-dots span {
+  animation: writing-dot 2.4s ease-in-out infinite;
+}
+
+.writing-dots span:nth-child(2) { animation-delay: 200ms; }
+.writing-dots span:nth-child(3) { animation-delay: 400ms; }
+
+.writing-copy p {
+  margin-top: var(--space-2);
+  color: var(--text-secondary);
+  font-size: var(--text-section);
+  line-height: var(--leading-body);
+}
+
+.writing-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 44px;
+  margin-top: var(--space-4);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--text-footer);
+  line-height: var(--leading-footer);
+  text-decoration: none;
+  transition: background-color 180ms var(--ease-out), border-color 180ms var(--ease-out);
+}
+
+.writing-link:hover,
+.writing-link:focus-visible {
+  background: var(--fg-soft);
+  border-color: var(--border-strong);
+}
+
+.writing-link svg {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  stroke: none;
+}
+
+@keyframes writing-write {
+  0%, 12% { stroke-dashoffset: 100; }
+  65%, 90% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 100; }
+}
+
+@keyframes writing-pencil {
+  0%, 12% { transform: translate(-50px, 0); }
+  25% { transform: translate(-38px, -2px); }
+  38% { transform: translate(-26px, 1px); }
+  51% { transform: translate(-14px, -2px); }
+  65%, 80% { transform: translate(0, 0); }
+  90%, 100% { transform: translate(-50px, 0); }
+}
+
+@keyframes writing-dot {
+  0%, 70%, 100% { opacity: 1; }
+  35% { opacity: 0.25; }
+}
+
+@media (max-width: 639px) {
+  .writing-page { padding-top: var(--space-16); }
+  .writing-draft { margin-top: var(--space-4); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .writing-scribble, .writing-pencil, .writing-dots span { animation: none; }
+  .writing-link { transition: none; }
+}
