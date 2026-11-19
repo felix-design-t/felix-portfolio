@@ -21,11 +21,31 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.felix-teng.com"),
   title: {
     default: siteCopy.name,
     template: `%s · ${siteCopy.name}`,
   },
   description: siteCopy.description,
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: siteCopy.name,
+    title: "Felix Teng · Product designer",
+    description: siteCopy.description,
+    images: [{
+      url: "/social-preview.png",
+      width: 1200,
+      height: 630,
+      alt: "Felix Teng — Product designer through an engineering lens, on a soft teal, gold, and ivory gradient.",
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Felix Teng · Product designer",
+    description: siteCopy.description,
+    images: ["/social-preview.png"],
+  },
 };
 
 /**
