@@ -231,3 +231,41 @@
     transition: none;
   }
 }
+
+@media (max-width: 639px) {
+  .toc-product[data-visual="said-too-much"] {
+    aspect-ratio: auto;
+  }
+
+  .toc-product[data-visual="said-too-much"] .toc-stage {
+    flex: none;
+    height: 440px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .toc-product[data-visual="said-too-much"] .toc-doc {
+    position: relative;
+    bottom: auto;
+  }
+
+  .toc-product[data-visual="said-too-much"] .toc-dock {
+    position: relative;
+    margin-block: var(--space-1);
+  }
+}
+
+/* Reduced motion shows the complete document without an animation viewport. */
+@media (prefers-reduced-motion: reduce) {
+  .toc-product[data-visual="said-too-much"] {
+    aspect-ratio: auto;
+  }
+
+  .toc-product[data-visual="said-too-much"] .toc-stage {
+    flex: none;
+    height: auto;
+    overflow: visible;
+  }
+}

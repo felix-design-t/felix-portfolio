@@ -309,3 +309,36 @@
   }
 }
 
+
+/* The report and conversation must remain reachable in a stacked window. */
+.hto-report,
+.hto-feed {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.hto-feed {
+  justify-content: safe flex-end;
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+.hto-report > * {
+  flex-shrink: 0;
+}
+
+@media (max-width: 639px) {
+  .hto-product .dec-titlebar {
+    flex-wrap: wrap;
+    padding-block: 4px;
+  }
+
+  .hto-product .dec-titlebar-name {
+    white-space: normal;
+  }
+
+  .hto-message[data-state="current"] {
+    max-height: none;
+    overflow: visible;
+  }
+}

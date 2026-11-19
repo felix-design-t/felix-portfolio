@@ -452,3 +452,14 @@ a.case-study-stepper-link:active {
     scale: 1;
   }
 }
+
+@media (max-width: 1099px) {
+  /* Keep the last footer links above the floating study controls. */
+  body:has(.case-study-stepper) .site-footer {
+    padding-bottom: calc(var(--space-8) + env(safe-area-inset-bottom));
+  }
+
+  .case-study-stepper {
+    bottom: max(var(--space-3), env(safe-area-inset-bottom));
+  }
+}

@@ -272,3 +272,9 @@ html[data-theme="dark"] .case-study-frame:has(.blind-gap) {
     transition: none;
   }
 }
+
+@media (max-width: 639px) {
+  .blind-gap-legend {
+    flex-wrap: wrap;
+  }
+}

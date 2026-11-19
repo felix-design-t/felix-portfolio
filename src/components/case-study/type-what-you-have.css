@@ -609,3 +609,14 @@ html[data-theme="dark"] .toc-product {
     transform: none;
   }
 }
+
+@media (max-width: 639px) {
+  .toc-think-line {
+    white-space: normal;
+  }
+
+  .toc-product:not(.ntp-product):not(.hto-product) .toc-doc {
+    width: 100%;
+  }
+
+}

@@ -516,3 +516,14 @@
   border-radius: var(--radius-pill);
   background: var(--text);
 }
+
+@media (max-width: 639px) {
+  .xp-grid {
+    grid-template-columns: minmax(0, 1fr) repeat(2, minmax(0, 1fr));
+  }
+
+  .xp-grid-head,
+  .xp-group-label {
+    white-space: normal;
+  }
+}

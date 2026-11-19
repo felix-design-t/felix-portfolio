@@ -320,3 +320,18 @@
     white-space: normal;
   }
 }
+
+/* Keep earlier messages reachable while the demo advances. */
+.ntp-feed {
+  overflow-y: auto;
+  justify-content: safe flex-end;
+  overscroll-behavior: contain;
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+.ntp-feed .ofs-message[data-state="current"],
+.ntp-feed .eol-card[data-state="current"] {
+  max-height: none;
+  overflow: visible;
+}

@@ -146,3 +146,20 @@ html[data-theme="dark"] .case-study-frame:has(.analysis-diagram) {
 .testing-metric-dot[data-tone="good"] {
   background: var(--accent-emerald);
 }
+
+/* Preserve the chart's label size and geometry; swipe to inspect on phones. */
+@media (max-width: 639px) {
+  .case-study-frame:has(.analysis-diagram) {
+    overflow-x: auto;
+    place-items: start;
+  }
+
+  .analysis-diagram {
+    min-width: 560px;
+  }
+
+  .testing-metrics {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+  }
+}

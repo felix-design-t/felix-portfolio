@@ -296,3 +296,18 @@
     transition: none;
   }
 }
+
+@media (max-width: 639px) {
+  .ofs-bubble,
+  .ofs-card {
+    max-width: 100%;
+  }
+
+  .ofs-phrase {
+    white-space: normal;
+  }
+
+  .ofs-resolve-ask .ofs-options {
+    flex-wrap: wrap;
+  }
+}

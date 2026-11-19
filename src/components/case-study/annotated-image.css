@@ -9,6 +9,7 @@
 */
 
 .annotated-image {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -139,5 +140,19 @@
 @media (prefers-reduced-motion: reduce) {
   .annotated-image[data-has-active="true"] .annotated-pin {
     transition: none;
+  }
+}
+
+/* On phones the explanation belongs below the image, clear of every pin. */
+@media (max-width: 639px) {
+  .annotated-note,
+  .annotated-note[data-side="left"] {
+    position: relative;
+    left: auto !important;
+    top: auto !important;
+    width: 100%;
+    margin-top: var(--space-2);
+    transform: none;
+    overflow-wrap: anywhere;
   }
 }

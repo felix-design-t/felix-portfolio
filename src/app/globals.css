@@ -1648,3 +1648,52 @@ html[data-theme="dark"] .work-slot-shot[data-theme-image="dark"] {
     animation: none;
   }
 }
+
+/* Let narrow layouts wrap their content instead of widening the reading column. */
+.shell-inner,
+.work-slot,
+.work-slot-band-frame > * {
+  min-width: 0;
+}
+
+.work-page {
+  padding-top: calc(var(--space-3) + 38px + var(--space-8));
+}
+
+.work-page-header h1 {
+  overflow-wrap: anywhere;
+  line-height: 1.15;
+}
+
+@media (max-width: 639px) {
+  .work-slot-band-frame {
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  .work-slot-band-meta {
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  .pill-nav-tabs {
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  .pill-nav-shell:has(.pill-tabs-toggle:checked) .pill-nav-tabs {
+    max-height: 8rem;
+  }
+
+  .experience-clock {
+    left: 0;
+    translate: 0;
+    max-width: calc(100vw - var(--gutter) * 2);
+    gap: 0.2rem;
+  }
+
+  .experience-card {
+    width: clamp(1.8rem, 8vw, 2.55rem);
+  }
+}

@@ -219,3 +219,16 @@
     height: calc(min(calc(min(380px, 76.6cqw) * var(--flow-scale, 1)), 22.7cqw) * 1.1);
   }
 }
+
+/* Captions may need more than two lines when the reading column narrows. */
+.flow-carousel-captions {
+  display: grid;
+  height: auto;
+}
+
+.flow-carousel-caption {
+  position: relative;
+  grid-area: 1 / 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}

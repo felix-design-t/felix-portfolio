@@ -193,3 +193,43 @@ html[data-theme="dark"] .ideation-step[data-kind="social"] {
   border-radius: var(--radius-pill);
   background: var(--accent-emerald);
 }
+
+@media (max-width: 639px) {
+  .ideation-flow {
+    flex-direction: column;
+    gap: var(--space-1);
+    overflow: visible;
+  }
+
+  .ideation-flow > .ideation-step,
+  .ideation-pair,
+  .ideation-social-group {
+    flex: none;
+    width: 100%;
+  }
+
+  .ideation-pair {
+    flex-direction: row;
+  }
+
+  .ideation-pair .ideation-step {
+    flex: 1;
+    width: auto;
+  }
+
+  .ideation-fork {
+    width: 64px;
+    height: 24px;
+    transform: rotate(90deg);
+  }
+
+  .ideation-fork[data-merge="true"] {
+    transform: rotate(90deg) scaleX(-1);
+  }
+
+  .ideation-step {
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    padding: var(--space-1);
+  }
+}

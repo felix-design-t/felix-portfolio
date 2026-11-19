@@ -113,39 +113,39 @@ export function AnnotatedImage({
             {note.id}
           </button>
         ))}
-        {activeNote ? (
-          <div
-            className="annotated-note"
-            id="annotated-note"
-            role="note"
-            data-side={
-              activeNote.cardSide ?? (activeNote.x > 50 ? "left" : "right")
-            }
-            style={{ left: `${activeNote.x}%`, top: `${activeNote.y}%` }}
-          >
-            {activeNote.stat ? (
+      </div>
+      {activeNote ? (
+        <div
+          className="annotated-note"
+          id="annotated-note"
+          role="note"
+          data-side={
+            activeNote.cardSide ?? (activeNote.x > 50 ? "left" : "right")
+          }
+          style={{ left: `${activeNote.x}%`, top: `${activeNote.y}%` }}
+        >
+          {activeNote.stat ? (
             <p className="annotated-stat">{activeNote.stat}</p>
           ) : null}
-            {asList ? (
-              <ul className="annotated-points">
-                {[activeNote.label, activeNote.detail]
-                  .filter((line) => line.length > 0)
-                  .map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-              </ul>
-            ) : (
-              [activeNote.label, activeNote.detail]
+          {asList ? (
+            <ul className="annotated-points">
+              {[activeNote.label, activeNote.detail]
                 .filter((line) => line.length > 0)
                 .map((line) => (
-                  <p key={line} className="annotated-context">
-                    {line}
-                  </p>
-                ))
-            )}
-          </div>
-        ) : null}
-      </div>
+                  <li key={line}>{line}</li>
+                ))}
+            </ul>
+          ) : (
+            [activeNote.label, activeNote.detail]
+              .filter((line) => line.length > 0)
+              .map((line) => (
+                <p key={line} className="annotated-context">
+                  {line}
+                </p>
+              ))
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -267,3 +267,48 @@
     transform: none;
   }
 }
+
+/* Keep the sheet and its annotations readable without a desktop note column. */
+@media (max-width: 639px) {
+  .same-sheet {
+    aspect-ratio: auto;
+    height: 390px;
+    --sheet-left: 0px;
+    --sheet-step-x: 8px;
+    --sheet-step-y: 52px;
+    --sheet-top: 0px;
+    --sheet-inset-right: 0px;
+  }
+
+  .same-sheet-stage {
+    inset: var(--space-2);
+  }
+
+  .same-sheet-card {
+    padding-bottom: 4px;
+  }
+
+  .same-sheet-type {
+    padding-bottom: 22px;
+  }
+
+  .same-sheet-callout {
+    left: 10px;
+    top: 26px;
+    max-width: calc(100% - 20px);
+    white-space: normal;
+  }
+
+  .same-sheet-callout-stem {
+    display: none;
+  }
+
+  .same-sheet-row {
+    gap: var(--space-1);
+  }
+
+  .same-sheet-value {
+    white-space: normal;
+    text-align: right;
+  }
+}
