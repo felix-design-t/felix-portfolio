@@ -46,6 +46,7 @@ type ChatMessage = {
   id: number;
   role: "user" | "assistant";
   pieces: ReplyPiece[];
+  pending?: boolean;
 };
 
 /**
@@ -98,13 +99,17 @@ export function FexiChatRoot({ children }: { children: ReactNode }) {
         role: "user",
         pieces: [{ kind: "text", value: trimmed }],
       },
+      { id: answerId, role: "assistant", pieces: [], pending: true },
     ]);
     // The page path stays a link when the model writes it as plain text.
     void replyFromServer(trimmed, fallback).then((pieces) => {
-      setMessages((current) => [
-        ...current,
-        { id: answerId, role: "assistant", pieces },
-      ]);
+      // Replace this question's placeholder so concurrent replies stay in
+      // order. A refreshed thread has no matching ID and stays cleared.
+      setMessages((current) => current.map((message) =>
+        message.id === answerId
+          ? { id: answerId, role: "assistant", pieces }
+          : message,
+      ));
     });
   }
 
@@ -294,7 +299,6 @@ function FexiChatPanel({
       id="fexi-panel"
       className="fexi-panel"
       tabIndex={-1}
-      data-has-messages={messages.length > 0}
       role="dialog"
       aria-modal="false"
       aria-labelledby="fexi-panel-title"
@@ -331,7 +335,7 @@ function FexiChatPanel({
 
       <div className="fexi-thread" ref={threadRef} aria-live="polite">
         {messages.map((message) => (
-          <p
+          <div
             key={message.id}
             className={
               message.role === "user"
@@ -342,7 +346,12 @@ function FexiChatPanel({
             <span className="fexi-sr">
               {message.role === "user" ? "You" : "Fexi"}:{" "}
             </span>
-            {message.pieces.map((piece, index) =>
+            {message.pending ? (
+              <div className="fexi-thinking" role="status">
+                <div aria-hidden="true"><FexiMorph speed="loader" /></div>
+                <span>Thinking</span>
+              </div>
+            ) : message.pieces.map((piece, index) =>
               piece.kind === "link" ? (
                 <Link
                   key={`${message.id}-${index}`}
@@ -355,23 +364,25 @@ function FexiChatPanel({
                 <span key={`${message.id}-${index}`}>{piece.value}</span>
               ),
             )}
-          </p>
+          </div>
         ))}
       </div>
 
       <div className="fexi-dock">
-        <div className="fexi-chips" role="group" aria-label="Suggested questions">
-          {fexiChips.map((chip) => (
-            <button
-              key={chip.id}
-              type="button"
-              className="fexi-chip"
-              onClick={() => onChip(chip)}
-            >
-              {chip.label}
-            </button>
-          ))}
-        </div>
+        {messages.length === 0 && (
+          <div className="fexi-chips" role="group" aria-label="Suggested questions">
+            {fexiChips.map((chip) => (
+              <button
+                key={chip.id}
+                type="button"
+                className="fexi-chip"
+                onClick={() => onChip(chip)}
+              >
+                {chip.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         <form className="fexi-composer" onSubmit={onSubmit}>
           <input

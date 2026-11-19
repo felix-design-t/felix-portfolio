@@ -76,8 +76,7 @@
     outline: none;
   }
 
-  .fexi-panel:has(.fexi-input:focus) .fexi-chips,
-  .fexi-panel[data-has-messages="true"] .fexi-chips {
+  .fexi-panel:has(.fexi-input:focus) .fexi-chips {
     display: none;
   }
 
@@ -217,6 +216,8 @@
 }
 
 .fexi-message {
+  flex-shrink: 0;
+  min-width: 0;
   margin: 0;
   max-width: 100%;
   font-family: var(--font-body);
@@ -226,12 +227,15 @@
   overflow-wrap: anywhere;
 }
 
-/* Visitor text sits in a pill on the right, like a selected chip. */
+/* Content-sized bubbles keep the same inset on short and wrapped messages. */
 .fexi-message-user {
   align-self: flex-end;
+  box-sizing: border-box;
+  width: fit-content;
   max-width: 88%;
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-pill);
+  padding: var(--space-1) 0.75rem;
+  border-radius: var(--space-2);
+  white-space: pre-wrap;
   background: var(--mat);
   color: var(--text);
 }
@@ -239,6 +243,18 @@
 .fexi-message-assistant {
   align-self: stretch;
   color: var(--text-secondary);
+}
+
+.fexi-thinking {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--leading-footer);
+}
+
+.fexi-thinking > div:first-child {
+  display: inline-flex;
+  flex: none;
 }
 
 .fexi-reply-link {
